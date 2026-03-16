@@ -195,6 +195,27 @@ nav {
   transform: translateY(-1px);
 }
 
+.btn-feedback {
+  display: inline-block;
+  color: var(--text-muted);
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  font-weight: 400;
+  padding: 0.5rem 0;
+  transition: color 0.2s ease;
+}
+
+.btn-feedback:hover {
+  color: var(--text);
+}
+
+.game-cta {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
 /* =============================================
    GAME SECTION
    ============================================= */
