@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ritual &amp; Ruin — Prototype Feedback</title>
+  <meta name="description" content="Playtest feedback form for Ritual &amp; Ruin. Takes about 2 minutes." />
+  <meta name="robots" content="noindex" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    /* =============================================
+       DESIGN TOKENS — matches playinstigator.com
+       ============================================= */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg:           #0c0b0a;
+      --bg-surface:   #131211;
+      --bg-raised:    #1a1917;
+      --text:         #f2ede6;
+      --text-muted:   #7a7470;
+      --text-faint:   #3d3a37;
+      --accent:       #b91c1c;
+      --accent-hover: #dc2626;
+      --accent-dim:   rgba(185, 28, 28, 0.12);
+      --border:       #211f1d;
+      --border-focus: #b91c1c;
+      --success:      #1a3a1a;
+      --success-text: #4ade80;
+
+      --font-display: 'Syne', sans-serif;
+      --font-body:    'Inter', sans-serif;
+
+      --radius: 6px;
+      --gutter: clamp(1.25rem, 5vw, 2.5rem);
+      --form-max: 640px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 1rem;
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100svh;
+    }
+
+    /* =============================================
+       LAYOUT
+       ============================================= */
+    .page-wrap {
+      max-width: var(--form-max);
+      margin: 0 auto;
+      padding: 3rem var(--gutter) 5rem;
+    }
+
+    /* =============================================
+       HEADER
+       ============================================= */
+    .form-header {
+      margin-bottom: 2.5rem;
+      padding-bottom: 2rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .studio-name {
+      font-family: var(--font-display);
+      font-size: 0.8125rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.75rem;
+      display: block;
+    }
+
+    .form-title {
+      font-family: var(--font-display);
+      font-size: clamp(1.75rem, 6vw, 2.5rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+      color: var(--text);
+      margin-bottom: 1.5rem;
+    }
+
+    .form-intro {
+      font-size: 0.9375rem;
+      font-weight: 300;
+      color: var(--text-muted);
+      line-height: 1.75;
+      border-left: 2px solid var(--accent);
+      padding-left: 1.25rem;
+    }
+
+    .form-intro + .form-intro {
+      margin-top: 0.75rem;
+    }
+
+    .form-duration {
+      margin-top: 1.25rem;
+      font-size: 0.8125rem;
+      font-weight: 500;
+      color: var(--text-faint);
+      letter-spacing: 0.04em;
+    }
+
+    /* =============================================
+       FORM SECTIONS
+       ============================================= */
+    .form-section {
+      margin-bottom: 3rem;
+    }
+
+    .section-label {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 2rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .section-number {
+      font-family: var(--font-display);
+      font-size: 0.6875rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      background: var(--accent-dim);
+      padding: 0.2em 0.6em;
+      border-radius: 3px;
+    }
+
+    .section-title {
+      font-family: var(--font-display);
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-faint);
+    }
+
+    /* =============================================
+       QUESTION BLOCKS
+       ============================================= */
+    .question {
+      margin-bottom: 2.25rem;
+    }
+
+    .question:last-child {
+      margin-bottom: 0;
+    }
+
+    .question-label {
+      display: block;
+      font-family: var(--font-display);
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 0.375rem;
+      line-height: 1.35;
+    }
+
+    .question-required {
+      color: var(--accent);
+      margin-left: 0.2em;
+      font-size: 0.875em;
+    }
+
+    .question-hint {
+      font-size: 0.875rem;
+      font-weight: 300;
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+      line-height: 1.6;
+    }
+
+    /* =============================================
+       RADIO GROUPS
+       ============================================= */
+    .radio-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .radio-option {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 0.875rem 1rem;
+      cursor: pointer;
+      transition: border-color 0.15s ease, background 0.15s ease;
+      position: relative;
+    }
+
+    .radio-option:hover {
+      border-color: var(--text-faint);
+      background: var(--bg-raised);
+    }
+
+    .radio-option input[type="radio"] {
+      position: absolute;
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .radio-option input[type="radio"]:checked + .radio-visual {
+      border-color: var(--accent);
+      background: var(--accent);
+    }
+
+    .radio-option input[type="radio"]:checked + .radio-visual::after {
+      opacity: 1;
+    }
+
+    .radio-option:has(input[type="radio"]:checked) {
+      border-color: var(--accent);
+      background: var(--accent-dim);
+    }
+
+    .radio-visual {
+      flex-shrink: 0;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      border: 2px solid var(--text-faint);
+      margin-top: 1px;
+      position: relative;
+      transition: border-color 0.15s ease, background 0.15s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .radio-visual::after {
+      content: '';
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: white;
+      opacity: 0;
+      transition: opacity 0.15s ease;
+    }
+
+    .radio-text {
+      font-size: 0.9375rem;
+      font-weight: 400;
+      color: var(--text-muted);
+      line-height: 1.5;
+      transition: color 0.15s ease;
+    }
+
+    .radio-option:has(input[type="radio"]:checked) .radio-text {
+      color: var(--text);
+    }
+
+    /* =============================================
+       TEXT INPUTS
+       ============================================= */
+    textarea,
+    input[type="text"],
+    input[type="email"] {
+      width: 100%;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 0.9375rem;
+      font-weight: 300;
+      line-height: 1.6;
+      padding: 0.875rem 1rem;
+      resize: vertical;
+      transition: border-color 0.15s ease, background 0.15s ease;
+      outline: none;
+      -webkit-appearance: none;
+    }
+
+    textarea {
+      min-height: 100px;
+    }
+
+    input[type="text"],
+    input[type="email"] {
+      min-height: 48px;
+      resize: none;
+    }
+
+    textarea::placeholder,
+    input::placeholder {
+      color: var(--text-faint);
+    }
+
+    textarea:focus,
+    input[type="text"]:focus,
+    input[type="email"]:focus {
+      border-color: var(--border-focus);
+      background: var(--bg-raised);
+      outline: none;
+    }
+
+    .optional-badge {
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--text-faint);
+      letter-spacing: 0.04em;
+      margin-left: 0.5rem;
+    }
+
+    /* =============================================
+       SUBMIT
+       ============================================= */
+    .form-submit {
+      margin-top: 3rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .submit-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--accent);
+      color: var(--text);
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 1rem;
+      letter-spacing: 0.03em;
+      padding: 1rem 2.25rem;
+      border-radius: var(--radius);
+      border: none;
+      cursor: pointer;
+      transition: background 0.2s ease, transform 0.15s ease, opacity 0.2s ease;
+      width: 100%;
+      justify-content: center;
+    }
+
+    .submit-btn:hover:not(:disabled) {
+      background: var(--accent-hover);
+      transform: translateY(-1px);
+    }
+
+    .submit-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .submit-btn .arrow {
+      transition: transform 0.2s ease;
+    }
+
+    .submit-btn:hover:not(:disabled) .arrow {
+      transform: translateX(3px);
+    }
+
+    /* Spinner */
+    .spinner {
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      display: none;
+    }
+
+    .submit-btn.loading .spinner { display: block; }
+    .submit-btn.loading .btn-label { display: none; }
+    .submit-btn.loading .arrow { display: none; }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* =============================================
+       THANK YOU STATE
+       ============================================= */
+    #thank-you {
+      display: none;
+      text-align: center;
+      padding: 4rem 0;
+    }
+
+    #thank-you.visible {
+      display: block;
+    }
+
+    .ty-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1.5rem;
+      display: block;
+    }
+
+    .ty-title {
+      font-family: var(--font-display);
+      font-size: clamp(1.5rem, 5vw, 2.25rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      margin-bottom: 1rem;
+    }
+
+    .ty-message {
+      font-size: 1rem;
+      font-weight: 300;
+      color: var(--text-muted);
+      max-width: 36ch;
+      margin: 0 auto;
+      line-height: 1.75;
+    }
+
+    .ty-divider {
+      width: 32px;
+      height: 2px;
+      background: var(--accent);
+      margin: 1.5rem auto;
+    }
+
+    /* =============================================
+       ERROR STATE
+       ============================================= */
+    .form-error {
+      display: none;
+      margin-top: 1rem;
+      padding: 0.875rem 1rem;
+      background: rgba(185, 28, 28, 0.1);
+      border: 1px solid rgba(185, 28, 28, 0.3);
+      border-radius: var(--radius);
+      font-size: 0.875rem;
+      color: #fca5a5;
+    }
+
+    .form-error.visible { display: block; }
+
+    /* =============================================
+       FOOTER
+       ============================================= */
+    .form-footer {
+      margin-top: 4rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .footer-brand {
+      font-family: var(--font-display);
+      font-size: 0.875rem;
+      font-weight: 700;
+      color: var(--text-muted);
+    }
+
+    .footer-note {
+      font-size: 0.8125rem;
+      color: var(--text-faint);
+    }
+
+    /* =============================================
+       RESPONSIVE
+       ============================================= */
+    @media (max-width: 480px) {
+      .page-wrap {
+        padding-top: 2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="page-wrap">
+
+  <!-- FORM HEADER -->
+  <header class="form-header">
+    <span class="studio-name">Play Instigator</span>
+    <h1 class="form-title">Ritual &amp; Ruin<br />Prototype Feedback</h1>
+    <p class="form-intro">
+      Thanks for playing. What you just experienced is the very first playable version of this game — geometric placeholders, no art, no polish. I'm not testing if it's fun yet. I'm testing if the core idea works at all.
+    </p>
+    <p class="form-intro">
+      Ignore how it looks. Tell me if something clicked — or didn't.
+    </p>
+    <p class="form-duration">Takes about 2 minutes.</p>
+  </header>
+
+  <!-- FEEDBACK FORM -->
+  <form id="feedback-form" action="https://formspree.io/f/xjgaaeyn" method="POST" novalidate>
+
+    <!-- ── SECTION 1: THE CORE MECHANIC ── -->
+    <div class="form-section">
+      <div class="section-label">
+        <span class="section-number">01</span>
+        <span class="section-title">The Core Mechanic</span>
+      </div>
+
+      <!-- Q1 -->
+      <div class="question">
+        <label class="question-label">
+          Did the game make sense?<span class="question-required">*</span>
+        </label>
+        <p class="question-hint">At any point during the match, did you feel like you understood what you were supposed to be doing?</p>
+        <div class="radio-group" role="radiogroup" aria-required="true">
+          <label class="radio-option">
+            <input type="radio" name="q1_game_sense" value="Never — I had no idea what was happening" required />
+            <span class="radio-visual"></span>
+            <span class="radio-text">Never — I had no idea what was happening</span>
+          </label>
+          <label class="radio-option">
+            <input type="radio" name="q1_game_sense" value="Eventually — it took a while to click" />
+            <span class="radio-visual"></span>
+            <span class="radio-text">Eventually — it took a while to click</span>
+          </label>
+          <label class="radio-option">
+            <input type="radio" name="q1_game_sense" value="Mostly — understood the basics but got lost at points" />
+            <span class="radio-visual"></span>
+            <span class="radio-text">Mostly — understood the basics but got lost at points</span>
+          </label>
+          <label class="radio-option">
+            <input type="radio" name="q1_game_sense" value="Yes — understood what was happening" />
+            <span class="radio-visual"></span>
+            <span class="radio-text">Yes — understood what was happening</span>
+          </label>
+          <label class="radio-option">
+            <input type="radio" name="q1_game_sense" value="Completely — it was clear the whole time" />
+            <span class="radio-visual"></span>
+            <span class="radio-text">Completely — it was clear the whole time</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Q2 -->
+      <div class="question">
+        <label class="question-label">
+          Did the transform mechanic click?<span class="question-required">*</span>
+        </label>
+        <p class="question-hint">The main action is toggling between two modes: one to move freely, one to carry blood. Did that feel like it made sense as a mechanic?</p>
+        <div class="radio-group" role="radiogroup" aria-required="true">
+          <label class="radio-option">
+            <input type="radio" name="q2_transform" value="No — I didn't understand why I'd switch" required />
+            <span class="radio-visual"></span>
+            <span class="radio-text">No — I didn't understand why I'd switch</span>
+          </label>
+          <label class="radio-option">
+            <input type="radio" name="q2_transform" value="Sort of — understood it but didn't feel useful" />
+            <span class="radio-visual"></span>
+            <span class="radio-text">Sort of — understood it but didn't feel useful</span>
+          </label>
+          <label class="radio-option">
+            <input type="radio" name="q2_transform" value="Yes — it clicked and felt like a real decision" />
+            <span class="radio-visual"></span>
+            <span class="radio-text">Yes — it clicked and felt like a real decision</span>
+          </label>
+          <label class="radio-option">
+            <input type="radio" name="q2_transform" value="Yes — and it created interesting moments" />
+            <span class="radio-visual"></span>
+            <span class="radio-text">Yes — and it created interesting moments</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Q3 -->
+      <div class="question">
+        <label class="question-label">
+          Was there a moment where it felt like a game?<span class="question-required">*</span>
+        </label>
+        <p class="question-hint">Did anything happen during the match where you thought "oh, this is actually something"?</p>
+        <div class="radio-group" role="radiogroup" aria-required="true">
+          <label class="radio-option">
+            <input type="radio" name="q3_game_moment" value="No — it never felt like a game" required />
+            <span class="radio-visual"></span>
+            <span class="radio-text">No — it never felt like a game</span>
+          </label>
+          <label class="radio-option">
+            <input type="radio" name="q3_game_moment" value="Almost — I could see where it was going but not yet" />
+            <span class="radio-visual"></span>
+            <span class="radio-text">Almost — I could see where it was going but not yet</span>
+          </label>
+          <label class="radio-option">
+            <input type="radio" name="q3_game_moment" value="Yes — one moment" />
+            <span class="radio-visual"></span>
+            <span class="radio-text">Yes — one moment</span>
+          </label>
+          <label class="radio-option">
+            <input type="radio" name="q3_game_moment" value="Yes — multiple moments" />
+            <span class="radio-visual"></span>
+            <span class="radio-text">Yes — multiple moments</span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── SECTION 2: WHAT WORKED / WHAT DIDN'T ── -->
+    <div class="form-section">
+      <div class="section-label">
+        <span class="section-number">02</span>
+        <span class="section-title">What Worked / What Didn't</span>
+      </div>
+
+      <!-- Q4 -->
+      <div class="question">
+        <label class="question-label" for="q4_confusing">
+          What was the most confusing part?<span class="question-required">*</span>
+        </label>
+        <p class="question-hint">What left you unsure what to do, or why something happened?</p>
+        <textarea id="q4_confusing" name="q4_confusing" placeholder="Anything that left you unsure or lost…" required></textarea>
+      </div>
+
+      <!-- Q5 -->
+      <div class="question">
+        <label class="question-label" for="q5_good_moment">
+          Was there a moment that felt good?
+          <span class="optional-badge">optional</span>
+        </label>
+        <p class="question-hint">Anything — a mechanic landing, a chaotic moment, a close call — that felt like it had potential?</p>
+        <textarea id="q5_good_moment" name="q5_good_moment" placeholder="A moment, mechanic, or feeling that stood out…"></textarea>
+      </div>
+
+      <!-- Q6 -->
+      <div class="question">
+        <label class="question-label" for="q6_broken">
+          What felt broken or most needed?
+          <span class="optional-badge">optional</span>
+        </label>
+        <p class="question-hint">What's the one most important thing missing or wrong at this stage?</p>
+        <textarea id="q6_broken" name="q6_broken" placeholder="The one thing that needs fixing most…"></textarea>
+      </div>
+    </div>
+
+    <!-- ── SECTION 3: THE BIGGER PICTURE ── -->
+    <div class="form-section">
+      <div class="section-label">
+        <span class="section-number">03</span>
+        <span class="section-title">The Bigger Picture</span>
+      </div>
+
+      <!-- Q7 -->
+      <div class="question">
+        <label class="question-label">
+          How did the match length feel?<span class="question-required">*</span>
+        </label>
+        <p class="question-hint">The round was designed to last 5–10 minutes. How did it feel?</p>
+        <div class="radio-group" role="radiogroup" aria-required="true">
+          <label class="radio-option">
+            <input type="radio" name="q7_match_length" value="Way too short — ended before it got interesting" required />
+            <span class="radio-visual"></span>
+            <span class="radio-text">Way too short — ended before it got interesting</span>
+          </label>
+          <label class="radio-option">
+            <input type="radio" name="q7_match_length" value="A bit short" />
+            <span class="radio-visual"></span>
+            <span class="radio-text">A bit short</span>
+          </label>
+          <label class="radio-option">
+            <input type="radio" name="q7_match_length" value="About right" />
+            <span class="radio-visual"></span>
+            <span class="radio-text">About right</span>
+          </label>
+          <label class="radio-option">
+            <input type="radio" name="q7_match_length" value="A bit too long" />
+            <span class="radio-visual"></span>
+            <span class="radio-text">A bit too long</span>
+          </label>
+          <label class="radio-option">
+            <input type="radio" name="q7_match_length" value="Way too long — I lost interest before it ended" />
+            <span class="radio-visual"></span>
+            <span class="radio-text">Way too long — I lost interest before it ended</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Q8 -->
+      <div class="question">
+        <label class="question-label" for="q8_pitch">
+          In one sentence, how would you describe this to a friend?<span class="question-required">*</span>
+        </label>
+        <p class="question-hint">Pretend you're texting a friend about it right now. What would you say?</p>
+        <textarea id="q8_pitch" name="q8_pitch" placeholder="Just played this game where…" rows="2" required style="min-height: 72px;"></textarea>
+      </div>
+
+      <!-- Q9 -->
+      <div class="question">
+        <label class="question-label">
+          Is the core idea worth building on?<span class="question-required">*</span>
+        </label>
+        <p class="question-hint">Setting aside the missing art and polish — does the underlying game concept seem like something worth finishing?</p>
+        <div class="radio-group" role="radiogroup" aria-required="true">
+          <label class="radio-option">
+            <input type="radio" name="q9_worth_building" value="No — the core idea doesn't work for me" required />
+            <span class="radio-visual"></span>
+            <span class="radio-text">No — the core idea doesn't work for me</span>
+          </label>
+          <label class="radio-option">
+            <input type="radio" name="q9_worth_building" value="Maybe — hard to tell at this stage" />
+            <span class="radio-visual"></span>
+            <span class="radio-text">Maybe — hard to tell at this stage</span>
+          </label>
+          <label class="radio-option">
+            <input type="radio" name="q9_worth_building" value="Yes — the concept is there, needs execution" />
+            <span class="radio-visual"></span>
+            <span class="radio-text">Yes — the concept is there, needs execution</span>
+          </label>
+          <label class="radio-option">
+            <input type="radio" name="q9_worth_building" value="Definitely — I'd play the finished version" />
+            <span class="radio-visual"></span>
+            <span class="radio-text">Definitely — I'd play the finished version</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Q10 -->
+      <div class="question">
+        <label class="question-label" for="q10_followup">
+          Can we follow up with you?
+          <span class="optional-badge">optional</span>
+        </label>
+        <p class="question-hint">If you want updates on Ritual &amp; Ruin or to playtest future builds, leave your email or Instagram.</p>
+        <input type="text" id="q10_followup" name="q10_followup" placeholder="email or @instagram" />
+      </div>
+    </div>
+
+    <!-- SUBMIT -->
+    <div class="form-submit">
+      <button type="submit" class="submit-btn" id="submit-btn">
+        <span class="spinner"></span>
+        <span class="btn-label">Submit feedback</span>
+        <span class="arrow">→</span>
+      </button>
+      <div class="form-error" id="form-error">
+        Something went wrong. Please try again, or let us know at playinstigator@gmail.com.
+      </div>
+    </div>
+
+  </form>
+
+  <!-- THANK YOU STATE -->
+  <div id="thank-you">
+    <span class="ty-icon">🩸</span>
+    <h2 class="ty-title">Thank you.</h2>
+    <div class="ty-divider"></div>
+    <p class="ty-message">
+      This is exactly the feedback that shapes what gets built next. Genuinely — it matters.
+    </p>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="form-footer">
+    <span class="footer-brand">Play Instigator</span>
+    <span class="footer-note">Singapore · Dev &amp; Draft, March 21 2026</span>
+  </footer>
+
+</div>
+
+<script>
+  (function () {
+    var form = document.getElementById('feedback-form');
+    var submitBtn = document.getElementById('submit-btn');
+    var thankYou = document.getElementById('thank-you');
+    var formError = document.getElementById('form-error');
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      // Basic required-field validation
+      var requiredRadios = ['q1_game_sense', 'q2_transform', 'q3_game_moment', 'q7_match_length', 'q9_worth_building'];
+      var missingRadio = requiredRadios.some(function (name) {
+        return !form.querySelector('input[name="' + name + '"]:checked');
+      });
+
+      var q4 = form.querySelector('#q4_confusing').value.trim();
+      var q8 = form.querySelector('#q8_pitch').value.trim();
+
+      if (missingRadio || !q4 || !q8) {
+        // Scroll to first unanswered question
+        var firstMissing = null;
+        if (missingRadio) {
+          var missedName = requiredRadios.find(function (name) {
+            return !form.querySelector('input[name="' + name + '"]:checked');
+          });
+          firstMissing = form.querySelector('input[name="' + missedName + '"]');
+        } else if (!q4) {
+          firstMissing = form.querySelector('#q4_confusing');
+        } else if (!q8) {
+          firstMissing = form.querySelector('#q8_pitch');
+        }
+        if (firstMissing) {
+          firstMissing.closest('.question').scrollIntoView({ behavior: 'smooth', block: 'center' });
+          firstMissing.focus();
+        }
+        return;
+      }
+
+      // Submit
+      submitBtn.disabled = true;
+      submitBtn.classList.add('loading');
+      formError.classList.remove('visible');
+
+      var data = new FormData(form);
+
+      fetch(form.action, {
+        method: 'POST',
+        body: data,
+        headers: { 'Accept': 'application/json' }
+      })
+        .then(function (response) {
+          if (response.ok) {
+            form.style.display = 'none';
+            thankYou.classList.add('visible');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          } else {
+            throw new Error('Server error');
+          }
+        })
+        .catch(function () {
+          submitBtn.disabled = false;
+          submitBtn.classList.remove('loading');
+          formError.classList.add('visible');
+          formError.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        });
+    });
+  })();
+</script>
+
+</body>
+</html>
