@@ -1,33 +1,20 @@
 /* =============================================
-   KIT (ConvertKit) EMAIL FORM — Custom CSS
+   KIT — Custom CSS
    Play Instigator — playinstigator.com
-   =============================================
 
-   HOW TO USE:
-   Paste this entire file into:
-   Kit form builder → Styles → Custom CSS
-
-   FORM STYLE SETTING:
-   In the Kit form builder, select the "Inline" form style
-   so the input and button appear side by side.
+   Form type: Simple inline (email + button only)
+   Paste into: Kit form builder → Styles → Custom CSS
 
    FONT NOTE:
-   Fredoka, Plus Jakarta Sans, and Figtree are loaded by the
-   parent page via Google Fonts. Kit's iframe will NOT inherit
-   them automatically — if fonts fall back to sans-serif inside
-   the Kit embed, add the @import below (uncomment it).
-   If the form is embedded via Kit's standard <script> tag
-   (not an iframe), fonts from the parent page will apply and
-   the @import is unnecessary.
+   If fonts fall back to sans-serif, uncomment the @import below.
+   Not needed when Kit embeds via <script> tag (inherits parent fonts).
 
-   Uncomment if needed:
-   @import url('https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;600&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap');
-
+   @import url('https://fonts.googleapis.com/css2?family=Figtree:wght@400&family=Plus+Jakarta+Sans:wght@700&display=swap');
    ============================================= */
 
 
 /* -----------------------------------------
-   Outer wrapper — strip Kit's default card
+   Strip Kit's default card wrapper
    ----------------------------------------- */
 .formkit-form {
   background: transparent !important;
@@ -38,7 +25,6 @@
   max-width: 100% !important;
 }
 
-/* Remove any inner background panels Kit adds */
 .formkit-form [data-style="full"],
 .formkit-form .formkit-column {
   background: transparent !important;
@@ -48,43 +34,16 @@
 
 
 /* -----------------------------------------
-   Heading & Subheader
+   Inline layout: input + button as one pill
    ----------------------------------------- */
-h2.formkit-header,
-.formkit-header {
-  font-family: 'Plus Jakarta Sans', sans-serif !important;
-  font-weight: 800 !important;
-  font-size: clamp(1.5rem, 3.5vw, 2.25rem) !important;
-  letter-spacing: -0.02em !important;
-  line-height: 1.1 !important;
-  color: #F9F5F1 !important;
-  margin-bottom: 0.5rem !important;
-}
-
-.formkit-subheader,
-.formkit-subheader p {
-  font-family: 'Figtree', sans-serif !important;
-  font-size: 1rem !important;
-  font-weight: 300 !important;
-  color: #8a8480 !important;
-  line-height: 1.65 !important;
-  margin-bottom: 1.25rem !important;
-}
-
-
-/* -----------------------------------------
-   Inline layout: input + button side by side
-   ----------------------------------------- */
-.formkit-form[data-format="inline"] .formkit-fields,
 .formkit-fields {
   display: flex !important;
   flex-direction: row !important;
   align-items: stretch !important;
-  gap: 0.5rem !important;
+  gap: 0 !important;
   flex-wrap: nowrap !important;
 }
 
-/* Field wrapper — let input grow */
 .formkit-field {
   flex: 1 1 auto !important;
   min-width: 0 !important;
@@ -92,19 +51,19 @@ h2.formkit-header,
 
 
 /* -----------------------------------------
-   Email input
+   Email input — left half of the pill
    ----------------------------------------- */
 input.formkit-input {
   width: 100% !important;
   background: #2a2724 !important;
   border: 1px solid #2e2b28 !important;
-  border-radius: 4px !important;
+  border-right: none !important;
+  border-radius: 50px 0 0 50px !important;
   color: #F9F5F1 !important;
   font-family: 'Figtree', sans-serif !important;
   font-size: 0.9375rem !important;
   font-weight: 400 !important;
-  line-height: 1 !important;
-  padding: 0.875rem 1rem !important;
+  padding: 0.875rem 1.25rem !important;
   outline: none !important;
   box-shadow: none !important;
   transition: border-color 0.2s ease !important;
@@ -125,7 +84,7 @@ input.formkit-input:focus {
 
 
 /* -----------------------------------------
-   Submit button
+   Submit button — right half of the pill
    ----------------------------------------- */
 button.formkit-submit,
 .formkit-submit {
@@ -140,13 +99,13 @@ button.formkit-submit,
   font-size: 0.9375rem !important;
   letter-spacing: 0.02em !important;
   padding: 0.875rem 1.75rem !important;
-  border-radius: 50px !important;
+  border-radius: 0 50px 50px 0 !important;
   border: none !important;
   cursor: pointer !important;
   outline: none !important;
   box-shadow: none !important;
   white-space: nowrap !important;
-  transition: background 0.2s ease, transform 0.15s ease !important;
+  transition: background 0.2s ease !important;
   -webkit-appearance: none !important;
   appearance: none !important;
 }
@@ -154,15 +113,14 @@ button.formkit-submit,
 button.formkit-submit:hover,
 .formkit-submit:hover {
   background: #ff1a2e !important;
-  transform: translateY(-1px) !important;
 }
 
 button.formkit-submit:active,
 .formkit-submit:active {
-  transform: translateY(0) !important;
+  background: #e01f2e !important;
 }
 
-/* Kit wraps the button text in a span — inherit styles */
+/* Kit wraps button text in a span */
 button.formkit-submit span,
 .formkit-submit span {
   color: inherit !important;
@@ -173,50 +131,23 @@ button.formkit-submit span,
 
 
 /* -----------------------------------------
-   Guarantee / disclaimer / fine print
-   ----------------------------------------- */
-.formkit-guarantee,
-.formkit-guarantee p {
-  font-family: 'Figtree', sans-serif !important;
-  font-size: 0.75rem !important;
-  font-weight: 400 !important;
-  color: rgba(249, 245, 241, 0.3) !important;
-  line-height: 1.5 !important;
-  margin-top: 0.75rem !important;
-  text-align: left !important;
-}
-
-.formkit-guarantee a {
-  color: rgba(249, 245, 241, 0.5) !important;
-  text-decoration: underline !important;
-}
-
-.formkit-guarantee a:hover {
-  color: rgba(249, 245, 241, 0.7) !important;
-}
-
-
-/* -----------------------------------------
    Alert messages (success / error)
    ----------------------------------------- */
 .formkit-alert {
   font-family: 'Figtree', sans-serif !important;
-  font-size: 0.9375rem !important;
+  font-size: 0.875rem !important;
   font-weight: 400 !important;
   background: transparent !important;
   border: none !important;
   box-shadow: none !important;
-  padding: 0.75rem 0 !important;
-  margin-top: 0.5rem !important;
+  padding: 0.5rem 0 0 !important;
+  margin: 0 !important;
 }
 
-/* Success */
-.formkit-alert-success,
-.formkit-alert[data-element="errors"] ~ .formkit-alert-success {
+.formkit-alert-success {
   color: #81FDC1 !important;
 }
 
-/* Error */
 .formkit-alert-error,
 .formkit-alert[data-element="errors"] {
   color: #FF3344 !important;
@@ -227,7 +158,6 @@ button.formkit-submit span,
    Mobile: stack input above button
    ----------------------------------------- */
 @media (max-width: 560px) {
-  .formkit-form[data-format="inline"] .formkit-fields,
   .formkit-fields {
     flex-direction: column !important;
     gap: 0.625rem !important;
@@ -237,9 +167,15 @@ button.formkit-submit span,
     width: 100% !important;
   }
 
+  input.formkit-input {
+    border-right: 1px solid #2e2b28 !important;
+    border-radius: 50px !important;
+  }
+
   button.formkit-submit,
   .formkit-submit {
     width: 100% !important;
+    border-radius: 50px !important;
     justify-content: center !important;
   }
 }
