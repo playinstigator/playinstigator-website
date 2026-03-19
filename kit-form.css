@@ -1,0 +1,245 @@
+/* =============================================
+   KIT (ConvertKit) EMAIL FORM — Custom CSS
+   Play Instigator — playinstigator.com
+   =============================================
+
+   HOW TO USE:
+   Paste this entire file into:
+   Kit form builder → Styles → Custom CSS
+
+   FORM STYLE SETTING:
+   In the Kit form builder, select the "Inline" form style
+   so the input and button appear side by side.
+
+   FONT NOTE:
+   Fredoka, Plus Jakarta Sans, and Figtree are loaded by the
+   parent page via Google Fonts. Kit's iframe will NOT inherit
+   them automatically — if fonts fall back to sans-serif inside
+   the Kit embed, add the @import below (uncomment it).
+   If the form is embedded via Kit's standard <script> tag
+   (not an iframe), fonts from the parent page will apply and
+   the @import is unnecessary.
+
+   Uncomment if needed:
+   @import url('https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;600&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap');
+
+   ============================================= */
+
+
+/* -----------------------------------------
+   Outer wrapper — strip Kit's default card
+   ----------------------------------------- */
+.formkit-form {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  max-width: 100% !important;
+}
+
+/* Remove any inner background panels Kit adds */
+.formkit-form [data-style="full"],
+.formkit-form .formkit-column {
+  background: transparent !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+}
+
+
+/* -----------------------------------------
+   Heading & Subheader
+   ----------------------------------------- */
+h2.formkit-header,
+.formkit-header {
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+  font-weight: 800 !important;
+  font-size: clamp(1.5rem, 3.5vw, 2.25rem) !important;
+  letter-spacing: -0.02em !important;
+  line-height: 1.1 !important;
+  color: #F9F5F1 !important;
+  margin-bottom: 0.5rem !important;
+}
+
+.formkit-subheader,
+.formkit-subheader p {
+  font-family: 'Figtree', sans-serif !important;
+  font-size: 1rem !important;
+  font-weight: 300 !important;
+  color: #8a8480 !important;
+  line-height: 1.65 !important;
+  margin-bottom: 1.25rem !important;
+}
+
+
+/* -----------------------------------------
+   Inline layout: input + button side by side
+   ----------------------------------------- */
+.formkit-form[data-format="inline"] .formkit-fields,
+.formkit-fields {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: stretch !important;
+  gap: 0.5rem !important;
+  flex-wrap: nowrap !important;
+}
+
+/* Field wrapper — let input grow */
+.formkit-field {
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+}
+
+
+/* -----------------------------------------
+   Email input
+   ----------------------------------------- */
+input.formkit-input {
+  width: 100% !important;
+  background: #2a2724 !important;
+  border: 1px solid #2e2b28 !important;
+  border-radius: 4px !important;
+  color: #F9F5F1 !important;
+  font-family: 'Figtree', sans-serif !important;
+  font-size: 0.9375rem !important;
+  font-weight: 400 !important;
+  line-height: 1 !important;
+  padding: 0.875rem 1rem !important;
+  outline: none !important;
+  box-shadow: none !important;
+  transition: border-color 0.2s ease !important;
+  -webkit-appearance: none !important;
+  appearance: none !important;
+}
+
+input.formkit-input::placeholder {
+  color: #4a4745 !important;
+  font-family: 'Figtree', sans-serif !important;
+}
+
+input.formkit-input:focus {
+  border-color: #FF3344 !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+
+/* -----------------------------------------
+   Submit button
+   ----------------------------------------- */
+button.formkit-submit,
+.formkit-submit {
+  flex-shrink: 0 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: #FF3344 !important;
+  color: #F9F5F1 !important;
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+  font-weight: 700 !important;
+  font-size: 0.9375rem !important;
+  letter-spacing: 0.02em !important;
+  padding: 0.875rem 1.75rem !important;
+  border-radius: 50px !important;
+  border: none !important;
+  cursor: pointer !important;
+  outline: none !important;
+  box-shadow: none !important;
+  white-space: nowrap !important;
+  transition: background 0.2s ease, transform 0.15s ease !important;
+  -webkit-appearance: none !important;
+  appearance: none !important;
+}
+
+button.formkit-submit:hover,
+.formkit-submit:hover {
+  background: #ff1a2e !important;
+  transform: translateY(-1px) !important;
+}
+
+button.formkit-submit:active,
+.formkit-submit:active {
+  transform: translateY(0) !important;
+}
+
+/* Kit wraps the button text in a span — inherit styles */
+button.formkit-submit span,
+.formkit-submit span {
+  color: inherit !important;
+  font-family: inherit !important;
+  font-weight: inherit !important;
+  font-size: inherit !important;
+}
+
+
+/* -----------------------------------------
+   Guarantee / disclaimer / fine print
+   ----------------------------------------- */
+.formkit-guarantee,
+.formkit-guarantee p {
+  font-family: 'Figtree', sans-serif !important;
+  font-size: 0.75rem !important;
+  font-weight: 400 !important;
+  color: rgba(249, 245, 241, 0.3) !important;
+  line-height: 1.5 !important;
+  margin-top: 0.75rem !important;
+  text-align: left !important;
+}
+
+.formkit-guarantee a {
+  color: rgba(249, 245, 241, 0.5) !important;
+  text-decoration: underline !important;
+}
+
+.formkit-guarantee a:hover {
+  color: rgba(249, 245, 241, 0.7) !important;
+}
+
+
+/* -----------------------------------------
+   Alert messages (success / error)
+   ----------------------------------------- */
+.formkit-alert {
+  font-family: 'Figtree', sans-serif !important;
+  font-size: 0.9375rem !important;
+  font-weight: 400 !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0.75rem 0 !important;
+  margin-top: 0.5rem !important;
+}
+
+/* Success */
+.formkit-alert-success,
+.formkit-alert[data-element="errors"] ~ .formkit-alert-success {
+  color: #81FDC1 !important;
+}
+
+/* Error */
+.formkit-alert-error,
+.formkit-alert[data-element="errors"] {
+  color: #FF3344 !important;
+}
+
+
+/* -----------------------------------------
+   Mobile: stack input above button
+   ----------------------------------------- */
+@media (max-width: 560px) {
+  .formkit-form[data-format="inline"] .formkit-fields,
+  .formkit-fields {
+    flex-direction: column !important;
+    gap: 0.625rem !important;
+  }
+
+  .formkit-field {
+    width: 100% !important;
+  }
+
+  button.formkit-submit,
+  .formkit-submit {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+}
