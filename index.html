@@ -11,30 +11,247 @@
   <meta property="og:url" content="https://playinstigator.com" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Figtree:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
+  <style>
+    /* ── Hero section reset & layout ── */
+    #hero {
+      position: relative;
+      overflow: hidden;
+      min-height: 100svh;
+      background: #1C1917;
+    }
+
+    /* Nav */
+    .hero-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.25rem 2.5rem;
+      position: relative;
+      z-index: 10;
+    }
+
+    .hero-nav-logo {
+      font-size: 1.05rem;
+      letter-spacing: -0.02em;
+    }
+
+    .hero-nav-logo .play {
+      font-family: 'Fredoka', sans-serif;
+      font-weight: 600;
+      color: #FF3344;
+    }
+
+    .hero-nav-logo .instigator {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 800;
+      color: #F9F5F1;
+    }
+
+    .hero-nav-links {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+    }
+
+    .hero-nav-links a {
+      font-family: 'Figtree', sans-serif;
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: rgba(249,245,241,0.4);
+      text-decoration: none;
+    }
+
+    .nav-cta {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 700;
+      font-size: 0.72rem;
+      padding: 0.45rem 1.1rem;
+      border-radius: 50px;
+      border: none;
+      cursor: pointer;
+      letter-spacing: 0.02em;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .nav-cta.filled {
+      background: #F9F5F1;
+      color: #1C1917;
+    }
+
+    /* Structural shapes */
+    .struct-shape {
+      position: absolute;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    /* Floaters */
+    .floater {
+      position: absolute;
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    @keyframes floatA {
+      0%, 100% { transform: translateY(0) rotate(var(--rot)); }
+      50% { transform: translateY(-12px) rotate(var(--rot)); }
+    }
+    @keyframes floatB {
+      0%, 100% { transform: translateY(0) rotate(var(--rot)); }
+      50% { transform: translateY(10px) rotate(var(--rot)); }
+    }
+    @keyframes floatC {
+      0%, 100% { transform: translateY(0) rotate(var(--rot)); }
+      50% { transform: translateY(-8px) rotate(var(--rot)); }
+    }
+
+    .floater.fA { animation: floatA var(--dur) ease-in-out infinite; animation-delay: var(--delay); }
+    .floater.fB { animation: floatB var(--dur) ease-in-out infinite; animation-delay: var(--delay); }
+    .floater.fC { animation: floatC var(--dur) ease-in-out infinite; animation-delay: var(--delay); }
+
+    /* Headline */
+    .headline-word {
+      position: relative;
+      display: block;
+    }
+
+    .headline-outline {
+      font-family: 'Fredoka', sans-serif;
+      font-weight: 700;
+      line-height: 1.05;
+      letter-spacing: -0.01em;
+      display: block;
+      white-space: nowrap;
+      user-select: none;
+      color: transparent;
+      -webkit-text-stroke: 1.5px rgba(249,245,241,0.18);
+    }
+
+    .headline-fill {
+      position: absolute;
+      top: 0;
+      left: 0;
+      font-family: 'Fredoka', sans-serif;
+      font-weight: 700;
+      line-height: 1.05;
+      letter-spacing: -0.01em;
+      display: block;
+      white-space: nowrap;
+      user-select: none;
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      -webkit-text-stroke: 0px transparent;
+      background: none;
+    }
+
+    /* V2 hero content area */
+    .v2-hero {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding-left: 4rem;
+      height: calc(100svh - 65px);
+      position: relative;
+      z-index: 3;
+    }
+
+    .v2-hero .headline-outline,
+    .v2-hero .headline-fill {
+      font-size: 8rem;
+    }
+
+    .v2-hero .headline-word.word-instigator .headline-outline,
+    .v2-hero .headline-word.word-instigator .headline-fill {
+      font-size: 5rem;
+    }
+
+    .info-line {
+      font-family: 'Figtree', sans-serif;
+      font-size: 0.68rem;
+      color: rgba(249,245,241,0.3);
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      margin-top: 1rem;
+    }
+
+    .cta-row {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1.8rem;
+    }
+
+    .cta-btn {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 700;
+      font-size: 0.8rem;
+      padding: 0.65rem 1.6rem;
+      border-radius: 50px;
+      border: none;
+      cursor: pointer;
+      letter-spacing: 0.01em;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .cta-btn.accent {
+      background: #FF3344;
+      color: #F9F5F1;
+    }
+  </style>
 </head>
 <body>
 
-  <!-- NAV -->
-  <nav>
-    <span class="nav-logo">Play Instigator</span>
-    <div class="nav-links">
-      <a href="#game">Our Game</a>
-      <a href="#about">About</a>
-      <a href="#follow">Follow</a>
-    </div>
-  </nav>
-
   <!-- HERO -->
-  <section class="hero">
-    <div class="hero-inner">
-      <p class="hero-eyebrow">Play Instigator</p>
-      <h1 class="hero-headline">Your excuse<br />to make friends.</h1>
-      <p class="hero-sub">Making games in Singapore.<br />Games that give people a reason to connect.</p>
-      <a href="#game" class="btn-primary">See what we're making</a>
+  <section id="hero">
+    <div id="hero-site" style="position:relative;width:100%;height:100%;min-height:100svh;">
+
+      <!-- Structural shapes -->
+      <div class="struct-shape" style="width:160px;height:160px;border-radius:50%;background:#974DFF;top:-50px;left:-40px;opacity:0.4;"></div>
+      <div class="struct-shape" style="width:140px;height:140px;border-radius:4px;background:#FFF066;bottom:-40px;right:-30px;opacity:0.3;transform:rotate(13deg);"></div>
+
+      <!-- Floaters -->
+      <div class="floater fB" style="--rot:13deg;--dur:6s;--delay:0s;width:18px;height:18px;border-radius:3px;background:#FF3344;top:150px;right:20%;opacity:0.45;"></div>
+      <div class="floater fA" style="--rot:-5deg;--dur:7.5s;--delay:0.6s;width:12px;height:12px;border-radius:50%;background:#57E0FF;top:280px;right:12%;opacity:0.4;"></div>
+      <div class="floater fC" style="--rot:7deg;--dur:5s;--delay:1s;width:24px;height:10px;border-radius:5px;background:#81FDC1;bottom:180px;right:25%;opacity:0.35;"></div>
+      <div class="floater fB" style="--rot:-9deg;--dur:8.5s;--delay:0.2s;width:10px;height:10px;border-radius:50%;background:#FFF066;top:200px;left:60%;opacity:0.3;"></div>
+      <div class="floater fA" style="--rot:13deg;--dur:4.5s;--delay:1.3s;width:16px;height:6px;border-radius:3px;background:#974DFF;bottom:120px;left:45%;opacity:0.4;"></div>
+      <div class="floater fC" style="--rot:-7deg;--dur:6.5s;--delay:0.8s;width:14px;height:14px;border-radius:50%;background:#FF3344;bottom:200px;right:8%;opacity:0.3;"></div>
+
+      <!-- Nav -->
+      <nav class="hero-nav">
+        <div class="hero-nav-logo"><span class="play">Play</span> <span class="instigator">Instigator</span></div>
+        <div class="hero-nav-links">
+          <a href="#game">Games</a>
+          <a href="#about">About</a>
+          <a href="#follow">Follow</a>
+          <a href="#game" class="nav-cta filled">Wishlist</a>
+        </div>
+      </nav>
+
+      <!-- Hero content -->
+      <div class="v2-hero">
+        <div class="headline-container" id="hc-main">
+          <div class="headline-word word-play">
+            <span class="headline-outline">PLAY</span>
+            <span class="headline-fill">PLAY</span>
+          </div>
+          <div class="headline-word word-instigator">
+            <span class="headline-outline">INSTIGATOR</span>
+            <span class="headline-fill">INSTIGATOR</span>
+          </div>
+        </div>
+        <div class="info-line">Ritual &amp; Ruin · 2v2 · Steam · 5–10 min</div>
+        <div class="cta-row">
+          <a href="#game" class="cta-btn accent">Wishlist on Steam</a>
+        </div>
+      </div>
+
     </div>
-    <div class="hero-scroll-hint">↓</div>
   </section>
 
   <!-- GAME -->
@@ -42,12 +259,12 @@
     <div class="container">
       <div class="game-label">Now in Development</div>
       <h2 class="game-title">Ritual &amp; Ruin</h2>
-      <p class="game-tagline">2v2 co-op chaos. Carry blood. Evolve. Hunt.</p>
+      <p class="game-tagline">Can you outlast?</p>
       <p class="game-description">
-        Tiny creatures carry blood to forbidden altars. The altar empowers whoever stands closest — at a cost. Evolve into something terrifying. Then the hunt begins.
+        Tiny creatures hauling blood through forbidden rituals, evolving into something wrong, then hunting each other in their final moments. You work together to carry blood to altars, and the ritual grants you power. Power that transforms cute into something that shouldn't exist. Then the hunt begins.
       </p>
       <p class="game-description">
-        Ritual &amp; Ruin is a 2v2 local co-op competitive party game for PC. Five to ten minutes of chaos, coordination, and sudden betrayal. For friend groups that have exhausted everything else.
+        2v2 local co-op competitive party game for PC. 5–10 minutes per match. For friend groups that have exhausted everything else.
       </p>
       <div class="game-details">
         <div class="game-detail">
@@ -110,8 +327,19 @@
           <span class="follow-platform">Instagram</span>
           <span class="follow-handle">@playinstigator</span>
         </a>
+        <a href="https://www.youtube.com/@playinstigator" target="_blank" rel="noopener" class="follow-link">
+          <span class="follow-platform">YouTube</span>
+          <span class="follow-handle">@playinstigator</span>
+        </a>
+        <a href="https://x.com/playinstigator" target="_blank" rel="noopener" class="follow-link">
+          <span class="follow-platform">X</span>
+          <span class="follow-handle">@playinstigator</span>
+        </a>
+        <a href="https://bsky.app/profile/playinstigator.bsky.social" target="_blank" rel="noopener" class="follow-link">
+          <span class="follow-platform">Bluesky</span>
+          <span class="follow-handle">@playinstigator</span>
+        </a>
       </div>
-      <p class="follow-more">More platforms coming soon.</p>
     </div>
   </section>
 
@@ -123,6 +351,199 @@
       <span class="footer-tagline">Your excuse to make friends.</span>
     </div>
   </footer>
+
+<script>
+// ── Straight-Line Traveler Animation Engine ──
+// Shapes spawn off-screen, travel in a straight line at constant speed.
+// When a shape's path crosses a word's bounding box (vertical overlap),
+// the word fills with the shape's color, sweeping linearly in the travel direction.
+// Color exits the same way. Shape is always visible.
+
+const PALETTE = [
+  { color: '#FF3344', type: 'circle' },
+  { color: '#57E0FF', type: 'square' },
+  { color: '#FFF066', type: 'pill'   },
+  { color: '#974DFF', type: 'circle' },
+  { color: '#81FDC1', type: 'square' },
+];
+
+class SiteAnimator {
+  constructor(siteEl, headlineContainerId) {
+    this.site    = siteEl;
+    this.hc      = document.getElementById(headlineContainerId);
+    this.words   = Array.from(this.hc.querySelectorAll('.headline-word'));
+    this.shapes  = [];
+    this.lastNow = null;
+    this.tick    = this.tick.bind(this);
+  }
+
+  start(delay) {
+    setTimeout(() => {
+      // 4 shapes, staggered spawns
+      for (let i = 0; i < 4; i++) {
+        setTimeout(() => this._spawnShape(), i * 900);
+      }
+      requestAnimationFrame(this.tick);
+    }, delay);
+  }
+
+  _spawnShape() {
+    const def   = PALETTE[Math.floor(Math.random() * PALETTE.length)];
+    const speed = 85 + Math.random() * 55;        // 85-140 px/s
+    const size  = 13 + Math.floor(Math.random() * 17); // 13-29 px
+    const h     = def.type === 'pill' ? Math.round(size * 0.45) : size;
+
+    const W = this.site.clientWidth;
+    const H = this.site.clientHeight;
+
+    // Spawn on a random edge, travel toward a random interior target
+    const edge = Math.floor(Math.random() * 4);
+    let sx, sy;
+    if      (edge === 0) { sx = Math.random() * W; sy = -size; }           // top
+    else if (edge === 1) { sx = W + size;           sy = Math.random() * H; } // right
+    else if (edge === 2) { sx = Math.random() * W; sy = H + size; }         // bottom
+    else                 { sx = -size;              sy = Math.random() * H; } // left
+
+    // Aim toward a random point in the central 60% of the site
+    const tx  = W * 0.2 + Math.random() * W * 0.6;
+    const ty  = H * 0.2 + Math.random() * H * 0.6;
+    const len = Math.hypot(tx - sx, ty - sy) || 1;
+    const dx  = (tx - sx) / len;
+    const dy  = (ty - sy) / len;
+
+    const el = document.createElement('div');
+    const rot = Math.random() * 30 - 15;
+    Object.assign(el.style, {
+      position:      'absolute',
+      zIndex:        '5',
+      pointerEvents: 'none',
+      width:         size + 'px',
+      height:        h + 'px',
+      background:    def.color,
+      opacity:       '0.75',
+      borderRadius:  def.type === 'circle' ? '50%' : def.type === 'square' ? '4px' : '999px',
+      transform:     `rotate(${rot}deg)`,
+    });
+    this.site.appendChild(el);
+
+    this.shapes.push({ el, x: sx, y: sy, dx, dy, speed, size, color: def.color });
+  }
+
+  tick(now) {
+    const dt = this.lastNow ? Math.min((now - this.lastNow) / 1000, 0.05) : 0;
+    this.lastNow = now;
+
+    const W   = this.site.clientWidth;
+    const H   = this.site.clientHeight;
+    const sr  = this.site.getBoundingClientRect();
+    const PAD = 80; // recycle margin past edge
+
+    // Snapshot word rects (site-relative)
+    const wordData = this.words.map(w => {
+      const r = w.getBoundingClientRect();
+      return {
+        word: w,
+        fill: w.querySelector('.headline-fill'),
+        left:   r.left   - sr.left,
+        right:  r.right  - sr.left,
+        top:    r.top    - sr.top,
+        bottom: r.bottom - sr.top,
+        width:  r.width,
+        height: r.height,
+        // best candidate this frame
+        bestGrad:      null,
+        bestProximity: -Infinity,
+      };
+    });
+
+    // Move shapes and compute their influence on each word
+    for (let i = this.shapes.length - 1; i >= 0; i--) {
+      const s = this.shapes[i];
+
+      // Constant-velocity step
+      s.x += s.dx * s.speed * dt;
+      s.y += s.dy * s.speed * dt;
+
+      // Update DOM position (center-anchored)
+      s.el.style.left = (s.x - s.size / 2) + 'px';
+      s.el.style.top  = (s.y - s.size / 2) + 'px';
+
+      // Recycle when fully off-screen
+      if (s.x < -PAD || s.x > W + PAD || s.y < -PAD || s.y > H + PAD) {
+        s.el.remove();
+        this.shapes.splice(i, 1);
+        this._spawnShape();
+        continue;
+      }
+
+      // Check each word
+      for (const wd of wordData) {
+        // Vertical overlap: shape must be in word's Y band (with 10px tolerance)
+        const sy1 = s.y - s.size / 2;
+        const sy2 = s.y + s.size / 2;
+        if (sy2 < wd.top - 10 || sy1 > wd.bottom + 10) continue;
+
+        // --- Linear fill computation ---
+        // Treat word width as [0,1]. `rel` = shape center in word-normalized coords.
+        // rel=0: shape center at left edge, rel=1: center at right edge.
+        // Entering (dx>=0): fill grows from 0 to rel%
+        // Exiting  (dx>=0): fill shrinks, trailing = (rel-1)%, covering trailing->100%
+        // Mirror everything for dx<0.
+
+        let grad = null;
+        const goingRight = s.dx >= 0;
+
+        // Normalized position of shape center along word
+        const rel = goingRight
+          ? (s.x - wd.left)  / wd.width   // 0=at left edge, 1=at right edge
+          : (wd.right - s.x) / wd.width;  // mirrored for leftward
+
+        if (rel <= 0 || rel >= 2) {
+          // Before entry or fully exited -- no fill from this shape
+        } else if (rel <= 1) {
+          // Shape entering: fill covers 0 -> rel
+          const leadPct = (rel * 100).toFixed(1);
+          grad = goingRight
+            ? `linear-gradient(to right, ${s.color} ${leadPct}%, transparent ${leadPct}%)`
+            : `linear-gradient(to left,  ${s.color} ${leadPct}%, transparent ${leadPct}%)`;
+        } else {
+          // Shape exiting: trailing edge advances, fill covers trail -> 100%
+          const trailPct = ((rel - 1) * 100).toFixed(1);
+          grad = goingRight
+            ? `linear-gradient(to right, transparent ${trailPct}%, ${s.color} ${trailPct}%)`
+            : `linear-gradient(to left,  transparent ${trailPct}%, ${s.color} ${trailPct}%)`;
+        }
+
+        if (grad !== null) {
+          // Highest priority = shape whose center is deepest inside the word
+          const depth = Math.min(rel, 2 - rel); // peaks at rel=1 (center crossing)
+          if (depth > wd.bestProximity) {
+            wd.bestProximity = depth;
+            wd.bestGrad = grad;
+          }
+        }
+      }
+    }
+
+    // Apply fills
+    for (const wd of wordData) {
+      if (wd.bestGrad) {
+        wd.fill.style.background = wd.bestGrad;
+        wd.fill.style.webkitBackgroundClip = 'text';
+        wd.fill.style.backgroundClip = 'text';
+      } else {
+        wd.fill.style.background = 'none';
+      }
+    }
+
+    requestAnimationFrame(this.tick);
+  }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  new SiteAnimator(document.getElementById('hero-site'), 'hc-main').start(0);
+});
+</script>
 
 </body>
 </html>
