@@ -212,6 +212,71 @@
       margin-top: 1.8rem;
       max-width: 480px;
     }
+
+    /* ── Mobile overrides (must live here to override base inline styles above) ── */
+    @media (max-width: 768px) {
+      .hero-nav {
+        padding: 1rem 1.5rem;
+      }
+
+      .v2-hero {
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
+        height: auto;
+        min-height: calc(100svh - 56px);
+      }
+
+      .v2-hero .headline-outline,
+      .v2-hero .headline-fill {
+        font-size: 5rem;
+      }
+
+      .v2-hero .headline-word.word-instigator .headline-outline,
+      .v2-hero .headline-word.word-instigator .headline-fill {
+        font-size: 3.25rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .hero-nav {
+        padding: 1rem 1.25rem;
+      }
+
+      .hero-nav-links {
+        display: none;
+      }
+
+      .v2-hero {
+        padding-left: 1.25rem;
+        padding-right: 1.25rem;
+      }
+
+      .v2-hero .headline-outline,
+      .v2-hero .headline-fill {
+        font-size: 3.75rem;
+      }
+
+      .v2-hero .headline-word.word-instigator .headline-outline,
+      .v2-hero .headline-word.word-instigator .headline-fill {
+        font-size: 2.5rem;
+      }
+
+      .info-line {
+        font-size: 0.62rem;
+      }
+    }
+
+    @media (max-width: 360px) {
+      .v2-hero .headline-outline,
+      .v2-hero .headline-fill {
+        font-size: 3rem;
+      }
+
+      .v2-hero .headline-word.word-instigator .headline-outline,
+      .v2-hero .headline-word.word-instigator .headline-fill {
+        font-size: 2rem;
+      }
+    }
   </style>
 </head>
 <body>
