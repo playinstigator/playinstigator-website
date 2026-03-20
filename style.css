@@ -503,6 +503,11 @@ nav {
   margin-bottom: 2.5rem;
 }
 
+.follow-form {
+  max-width: 480px;
+  margin: 2rem 0 2.5rem;
+}
+
 .follow-links {
   display: flex;
   flex-wrap: wrap;
