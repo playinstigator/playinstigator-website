@@ -318,14 +318,14 @@ nav {
 
 .btn-feedback {
   display: inline-block;
-  background: #FFF066;
-  color: #1C1917;
+  background: #FFF066 !important;
+  color: #1C1917 !important;
   font-family: var(--font-display);
   font-size: 1rem;
   font-weight: 700;
   padding: 0.75rem 1.75rem;
   border-radius: 50px;
-  text-decoration: none;
+  text-decoration: none !important;
   letter-spacing: 0.01em;
   transition: background 0.2s ease, transform 0.15s ease;
 }
@@ -522,14 +522,34 @@ nav {
 
 .follow-link {
   display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
+  flex-direction: row;
+  align-items: center;
+  gap: 1rem;
   background: var(--bg-raised);
   border: 1px solid var(--border);
   border-radius: 6px;
   padding: 1.25rem 1.75rem;
   min-width: 220px;
+  text-decoration: none;
   transition: border-color 0.2s ease, transform 0.15s ease;
+}
+
+.follow-icon {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  color: var(--text-faint);
+  transition: color 0.2s ease;
+}
+
+.follow-link:hover .follow-icon {
+  color: var(--text);
+}
+
+.follow-link-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
 }
 
 .follow-link:hover {
