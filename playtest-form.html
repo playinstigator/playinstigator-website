@@ -8,7 +8,7 @@
   <meta name="robots" content="noindex" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Figtree:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
   <style>
     /* =============================================
        DESIGN TOKENS — matches playinstigator.com
@@ -20,24 +20,24 @@
     }
 
     :root {
-      --bg:           #0c0b0a;
-      --bg-surface:   #131211;
-      --bg-raised:    #1a1917;
-      --text:         #f2ede6;
-      --text-muted:   #7a7470;
-      --text-faint:   #3d3a37;
-      --accent:       #b91c1c;
-      --accent-hover: #dc2626;
-      --accent-dim:   rgba(185, 28, 28, 0.12);
-      --border:       #211f1d;
-      --border-focus: #b91c1c;
+      --bg:           #1C1917;
+      --bg-surface:   #242120;
+      --bg-raised:    #2a2724;
+      --text:         #F9F5F1;
+      --text-muted:   #8a8380;
+      --text-faint:   #4a4745;
+      --accent:       #FF3344;
+      --accent-hover: #ff1a2e;
+      --accent-dim:   rgba(255, 51, 68, 0.12);
+      --border:       #2e2b28;
+      --border-focus: #FF3344;
       --success:      #1a3a1a;
-      --success-text: #4ade80;
+      --success-text: #81FDC1;
 
-      --font-display: 'Syne', sans-serif;
-      --font-body:    'Inter', sans-serif;
+      --font-display: 'Fredoka', sans-serif;
+      --font-body:    'Figtree', sans-serif;
 
-      --radius: 6px;
+      --radius: 8px;
       --gutter: clamp(1.25rem, 5vw, 2.5rem);
       --form-max: 640px;
     }
@@ -73,7 +73,7 @@
     }
 
     .studio-name {
-      font-family: var(--font-display);
+      font-family: 'Plus Jakarta Sans', sans-serif;
       font-size: 0.8125rem;
       font-weight: 600;
       letter-spacing: 0.15em;
@@ -338,12 +338,12 @@
       gap: 0.5rem;
       background: var(--accent);
       color: var(--text);
-      font-family: var(--font-display);
-      font-weight: 600;
+      font-family: 'Fredoka', sans-serif;
+      font-weight: 700;
       font-size: 1rem;
       letter-spacing: 0.03em;
       padding: 1rem 2.25rem;
-      border-radius: var(--radius);
+      border-radius: 50px;
       border: none;
       cursor: pointer;
       transition: background 0.2s ease, transform 0.15s ease, opacity 0.2s ease;
@@ -482,9 +482,44 @@
         padding-top: 2rem;
       }
     }
+
+    /* =============================================
+       NAV
+       ============================================= */
+    .form-nav {
+      padding: 1.25rem 2.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .form-nav-logo {
+      font-size: 1.05rem;
+      letter-spacing: -0.02em;
+      text-decoration: none;
+    }
+    .form-nav-logo .play {
+      font-family: 'Fredoka', sans-serif;
+      font-weight: 600;
+      color: #FF3344;
+    }
+    .form-nav-logo .instigator {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 800;
+      color: #F9F5F1;
+    }
+
+    /* =============================================
+       FOOTER BRAND DUAL-FONT
+       ============================================= */
+    .footer-brand .play { font-family: 'Fredoka', sans-serif; color: #FF3344; }
+    .footer-brand .instigator { font-family: 'Plus Jakarta Sans', sans-serif; color: var(--text-muted); }
   </style>
 </head>
 <body>
+
+<nav class="form-nav">
+  <a href="/" class="form-nav-logo">
+    <span class="play">Play</span> <span class="instigator">Instigator</span>
+  </a>
+</nav>
 
 <div class="page-wrap">
 
@@ -762,7 +797,7 @@
 
   <!-- FOOTER -->
   <footer class="form-footer">
-    <span class="footer-brand">Play Instigator</span>
+    <span class="footer-brand"><span class="play">Play</span> <span class="instigator">Instigator</span></span>
     <span class="footer-note">Singapore · Dev &amp; Draft, March 21 2026</span>
   </footer>
 
