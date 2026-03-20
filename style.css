@@ -672,7 +672,7 @@ footer {
   }
 
   .v2-hero {
-    padding: 5rem 0 3rem 1.25rem;
+    padding: 5rem 1.25rem 3rem 1.25rem;
   }
 
   .v2-hero .headline-outline,
@@ -683,5 +683,21 @@ footer {
   .v2-hero .headline-word.word-instigator .headline-outline,
   .v2-hero .headline-word.word-instigator .headline-fill {
     font-size: 2.5rem;
+  }
+
+  .game-cta {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.875rem;
+  }
+
+  .btn-feedback,
+  .btn-secondary {
+    text-align: center;
+    width: 100%;
+  }
+
+  .follow-form {
+    margin-right: 0;
   }
 }
