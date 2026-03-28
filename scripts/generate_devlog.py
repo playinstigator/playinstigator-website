@@ -62,10 +62,17 @@ def parse_date_from_filename(name: str):
     return None
 
 
-def iso_week_key(d: date) -> str:
-    """'2026-W14' -- used as entry ID and grouping key."""
-    iso = d.isocalendar()
-    return f"{iso.year}-W{iso.week:02d}"
+def publication_week_key(d: date) -> str:
+    """
+    Returns 'YYYY-MM-DD' of the Sunday this file publishes on.
+    Mon-Sat files -> coming Sunday (same slot).
+    Sunday files -> the NEXT Sunday (script already ran at 9AM).
+    """
+    from datetime import timedelta
+    days_until_sunday = (6 - d.weekday()) % 7  # 0 if today is Sunday
+    if days_until_sunday == 0:
+        days_until_sunday = 7  # Sunday files go to next slot
+    return (d + timedelta(days=days_until_sunday)).isoformat()
 
 
 def week_date_range_label(dates: list) -> tuple:
@@ -294,7 +301,7 @@ def main():
         if d is None:
             print(f"  Skipping (no date in filename): {fname}")
             continue
-        wk = iso_week_key(d)
+        wk = publication_week_key(d)
         new_by_week.setdefault(wk, []).append({"date": d, "path": vf, "fname": fname})
 
     if not new_by_week:
