@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Blog — Play Instigator</title>
+  <meta name="description" content="Dev log and musings from the solo developer behind Ritual & Ruin. Automated weekly progress notes and personal thoughts on making games alone." />
+  <meta property="og:title" content="Blog — Play Instigator" />
+  <meta property="og:description" content="Weekly automated dev log and personal musings from the maker of Ritual & Ruin." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://playinstigator.com/blog.html" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Figtree:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* ── Blog page header ── */
+    .blog-header {
+      padding: 9rem 0 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .blog-header-label {
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1rem;
+    }
+
+    .blog-header h1 {
+      font-family: var(--font-sharp);
+      font-size: clamp(2.5rem, 6vw, 4.5rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      line-height: 1.05;
+      margin-bottom: 1rem;
+    }
+
+    .blog-header-desc {
+      font-size: 1.0625rem;
+      font-weight: 300;
+      color: var(--text-muted);
+      max-width: 52ch;
+      line-height: 1.7;
+    }
+
+    /* ── Blog content section ── */
+    .blog-content {
+      background: var(--bg-surface);
+      border-top: 1px solid var(--border);
+      padding: clamp(3rem, 8vw, 6rem) 0 clamp(4rem, 10vw, 8rem);
+    }
+
+    .blog-grid {
+      display: grid;
+      grid-template-columns: 3fr 2fr;
+      gap: clamp(2rem, 5vw, 5rem);
+      align-items: start;
+    }
+
+    /* ── Column headers ── */
+    .blog-col-header {
+      display: flex;
+      align-items: baseline;
+      gap: 0.875rem;
+      margin-bottom: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .blog-col-header h2 {
+      font-family: var(--font-sharp);
+      font-size: 1.375rem;
+      font-weight: 800;
+      letter-spacing: -0.01em;
+      color: var(--text);
+    }
+
+    .automated-badge {
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-faint);
+      border: 1px solid var(--border);
+      border-radius: 50px;
+      padding: 0.2rem 0.6rem;
+    }
+
+    .blog-col-desc {
+      font-size: 0.875rem;
+      font-weight: 300;
+      color: var(--text-muted);
+      line-height: 1.65;
+      margin-bottom: 2rem;
+      max-width: 54ch;
+    }
+
+    /* ── Entry cards ── */
+    .entry-card {
+      background: var(--bg-raised);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.75rem;
+      margin-bottom: 1.25rem;
+      transition: border-color 0.2s ease;
+    }
+
+    .entry-card:last-child {
+      margin-bottom: 0;
+    }
+
+    .entry-meta {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+    }
+
+    .entry-date {
+      font-size: 0.6875rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-faint);
+    }
+
+    .entry-week-tag {
+      font-size: 0.6875rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+      background: rgba(255, 51, 68, 0.1);
+      border-radius: 3px;
+      padding: 0.15rem 0.5rem;
+    }
+
+    .entry-body p {
+      font-size: 0.9375rem;
+      font-weight: 300;
+      color: var(--text-muted);
+      line-height: 1.75;
+      margin-bottom: 0.875rem;
+    }
+
+    .entry-body p:last-child {
+      margin-bottom: 0;
+    }
+
+    /* ── Expandable raw notes ── */
+    .entry-raw {
+      margin-top: 1.25rem;
+      border-top: 1px solid var(--border);
+      padding-top: 1rem;
+    }
+
+    .entry-raw summary {
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-faint);
+      cursor: pointer;
+      user-select: none;
+      list-style: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: color 0.2s ease;
+    }
+
+    .entry-raw summary::-webkit-details-marker { display: none; }
+
+    .entry-raw summary::before {
+      content: '▸';
+      font-size: 0.6rem;
+      transition: transform 0.2s ease;
+    }
+
+    .entry-raw[open] summary::before {
+      transform: rotate(90deg);
+    }
+
+    .entry-raw summary:hover {
+      color: var(--text-muted);
+    }
+
+    .raw-content {
+      margin-top: 1rem;
+      padding: 1rem 1.25rem;
+      background: var(--bg);
+      border-radius: 4px;
+      border: 1px solid var(--border);
+      font-size: 0.8125rem;
+      color: var(--text-faint);
+      line-height: 1.7;
+      font-family: var(--font-body);
+    }
+
+    .raw-content h3 {
+      font-family: var(--font-sharp);
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin: 1rem 0 0.35rem;
+    }
+
+    .raw-content h3:first-child {
+      margin-top: 0;
+    }
+
+    .raw-content p {
+      margin-bottom: 0.5rem;
+      color: var(--text-faint);
+    }
+
+    .raw-content ul {
+      padding-left: 1.25rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .raw-content li {
+      margin-bottom: 0.25rem;
+    }
+
+    /* ── Musings column ── */
+    .musing-title {
+      font-family: var(--font-sharp);
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: -0.01em;
+      margin-bottom: 0.875rem;
+      line-height: 1.35;
+    }
+
+    /* ── Empty state ── */
+    .empty-state {
+      background: var(--bg-raised);
+      border: 1px dashed var(--border);
+      border-radius: 8px;
+      padding: 2rem 1.75rem;
+      text-align: center;
+    }
+
+    .empty-state p {
+      font-size: 0.875rem;
+      color: var(--text-faint);
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 768px) {
+      .blog-grid {
+        grid-template-columns: 1fr;
+      }
+
+      /* On mobile: reorder so both headers show first, then entries */
+      .blog-col-top:nth-child(2) {
+        border-top: 1px solid var(--border);
+        padding-top: 1.5rem;
+        margin-top: 0.5rem;
+      }
+
+      #musing-entries {
+        border-top: 1px solid var(--border);
+        padding-top: clamp(2rem, 5vw, 3rem);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-logo">
+      <span class="play">Play</span> <span class="instigator">Instigator</span>
+    </div>
+    <div class="nav-links">
+      <a href="/#game">Games</a>
+      <a href="/#about">About</a>
+      <a href="/blog.html" style="color: var(--text);">Blog</a>
+      <a href="/#follow">Follow</a>
+      <a href="/#follow" class="nav-cta filled">Get updates</a>
+    </div>
+  </nav>
+
+  <!-- PAGE HEADER -->
+  <section class="blog-header">
+    <div class="floater fA" style="--rot:7deg;--dur:6s;--delay:0s;width:14px;height:14px;border-radius:50%;background:#FF3344;top:40%;right:8%;opacity:0.3;"></div>
+    <div class="floater fB" style="--rot:-11deg;--dur:8s;--delay:0.5s;width:22px;height:9px;border-radius:999px;background:#57E0FF;top:60%;right:18%;opacity:0.2;"></div>
+    <div class="floater fC" style="--rot:13deg;--dur:5.5s;--delay:1.1s;width:11px;height:11px;border-radius:3px;background:#FFF066;bottom:20%;left:5%;opacity:0.25;"></div>
+    <div class="floater fA" style="--rot:-6deg;--dur:7s;--delay:0.3s;width:16px;height:16px;border-radius:50%;background:#974DFF;top:30%;right:30%;opacity:0.2;"></div>
+    <div class="container">
+      <div class="blog-header-label">Play Instigator</div>
+      <h1>Blog</h1>
+      <p class="blog-header-desc">Dev progress on the left. Personal thoughts on the right.</p>
+    </div>
+  </section>
+
+  <!-- BLOG CONTENT -->
+  <section class="blog-content">
+    <div class="container">
+      <div class="blog-grid">
+
+        <!-- LEFT header -->
+        <div class="blog-col-top">
+          <div class="blog-col-header">
+            <h2>Dev Log</h2>
+            <span class="automated-badge">AI-generated · automated</span>
+          </div>
+          <p class="blog-col-desc">I'm a solo dev working part-time. No time for proper devlogs, so I automated them. Every week, a local AI reads my raw session notes and writes a summary. No editorial polish — just proof the game is alive.</p>
+        </div>
+
+        <!-- RIGHT header -->
+        <div class="blog-col-top">
+          <div class="blog-col-header">
+            <h2>Musings</h2>
+          </div>
+          <p class="blog-col-desc">Thoughts on making this game, running a studio alone, and whatever else comes up.</p>
+        </div>
+
+        <!-- LEFT: DEV LOG ENTRIES — auto-generated below this line -->
+        <div id="devlog-entries">
+
+          <!-- WEEKLY-GENERATED START -->
+          <!-- WEEKLY-GENERATED END -->
+
+            <article class="entry-card">
+              <div class="entry-meta">
+                <span class="entry-week-tag">Catch-up</span>
+                <span class="entry-date">22 &ndash; 28 March 2026</span>
+              </div>
+              <div class="entry-body">
+                <p>Players can now manually tilt the jellyfish bowl using the right stick, with the tilt range expanded significantly for more expressive play. Blood is stickier and less likely to spill during movement, and carrier mode slows movement slightly to reduce inertia. These changes make carrying blood feel more deliberate.</p>
+                <p>The settings system is now fully working. All sliders — volume, resolution, graphics quality, camera shake — are functional in both the main menu and during matches. The SFX volume slider previously had no effect because audio sources weren't wired to the mixer. Fixed. Camera shake toggle now works too.</p>
+                <p>Several memory leaks were resolved that caused performance to degrade over long sessions. Standalone build crashes were fixed — missing shaders caused visual elements not to spawn in builds at all. Unglamorous sessions, but necessary ones.</p>
+              </div>
+              <details class="entry-raw">
+                <summary>Raw session notes</summary>
+                <div class="raw-content">
+                  <h3>Mar 22 &mdash; Memory leaks &amp; outlast phase</h3>
+                  <p>Fixed duplicate event subscriptions, mesh asset leaks, static dictionary never cleared between matches, anonymous lambda closures keeping dead objects alive. Added OutlastPanel with 4&times; time scale drain.</p>
+                  <h3>Mar 23 &mdash; Tilt system, carrier speed, controller menus</h3>
+                  <p>Manual tilt via right stick (75&deg; range). Carrier mode 80% speed. ObiFluid viscosity increased. Per-player lobby settings panel via Start/Escape.</p>
+                  <h3>Mar 26 &mdash; Build fixes, pause menu</h3>
+                  <p>Fixed standalone crashes: missing shaders, GPU memory leak on restart, main menu buttons. Added Settings to Pause and Main Menu.</p>
+                  <h3>Mar 27&ndash;28 &mdash; Full settings system &amp; verification</h3>
+                  <p>Audio/video/graphics/gameplay settings, persisted via PlayerPrefs. SFX routing fixed. Camera shake toggle fixed. Resolution default fixed.</p>
+                </div>
+              </details>
+            </article>
+
+            <article class="entry-card">
+              <div class="entry-meta">
+                <span class="entry-week-tag">Catch-up</span>
+                <span class="entry-date">15 &ndash; 21 March 2026</span>
+              </div>
+              <div class="entry-body">
+                <p>Every action in a match now has sound. Countdown ticks, floor scroll, match start and end, player death, form transform, evolution, altar filling, blood hitting the floor, UI buttons — all wired in a single session. The game went from silent to fully voiced in one pass.</p>
+                <p>Visual feedback improved significantly. Glowing rings appear on floor tiles that have a blood emitter underneath, making it easier to know where blood will come from. Altars now turn red from the bottom up as they fill, so you can read altar progress at a glance without checking a number. Blood emitter fluid was tuned to behave more like blood.</p>
+                <p>Jellyfish creatures got animated tentacles. Player 4 controller disconnect and reconnect handling was fixed. Blood leaking through floors due to collider issues was resolved.</p>
+              </div>
+              <details class="entry-raw">
+                <summary>Raw session notes</summary>
+                <div class="raw-content">
+                  <h3>Mar 15&ndash;16 &mdash; Visuals &amp; controller fix</h3>
+                  <p>Emitter indicator glowing rings on tile surfaces. Jellyfish animated tentacles. Pouring mechanic first visual pass. Player 4 controller hotplug fix.</p>
+                  <h3>Mar 18&ndash;19 &mdash; Blood &amp; altar</h3>
+                  <p>Blood emitter fluid tuning. Altar fill visual shader (URP HLSL, red fill bottom-up). Obi fluid collider leak fix.</p>
+                  <h3>Mar 20 &mdash; Audio system</h3>
+                  <p>Full audio pass: 7 components, 18+ events covered. Countdown, scroll alarm, evolution sting, death sound, form swap, altar sounds, floor impact, UI audio.</p>
+                  <h3>Mar 21 &mdash; Player 4 controller</h3>
+                  <p>Controller disconnect/reconnect handling fixed for Player 4.</p>
+                </div>
+              </details>
+            </article>
+
+            <article class="entry-card">
+              <div class="entry-meta">
+                <span class="entry-week-tag">Catch-up</span>
+                <span class="entry-date">5 &ndash; 14 March 2026</span>
+              </div>
+              <div class="entry-body">
+                <p>All 13 core game systems were completed and wired up in Unity — the game could run a full match end-to-end for the first time. Spawn system, countdown, match flow, win/loss detection, onboarding overlays, pause menu, terminal phase where eliminated teams watch their bar drain out. Getting all of this connected was the majority of this period.</p>
+                <p>The match wasn't actually starting after all that. Countdown never appeared, blood never emitted. Root cause was a spawn timing issue on the first frame — fixed by moving spawn dispatch to a later update pass. Floor boundary walls were added, and floors without players now fade out so the active floor is easier to read. Pillars between the camera and players turn semi-transparent.</p>
+              </div>
+              <details class="entry-raw">
+                <summary>Raw session notes</summary>
+                <div class="raw-content">
+                  <h3>Mar 5&ndash;10 &mdash; Alpha systems complete &amp; scene wiring</h3>
+                  <p>All 13 systems implemented and wired in Unity editor. First full match runnable.</p>
+                  <h3>Mar 11 &mdash; Floor visibility &amp; boundary walls</h3>
+                  <p>Floor fades when no players present. Boundary walls added to arena edges.</p>
+                  <h3>Mar 14 &mdash; Match start fix &amp; pillar occlusion</h3>
+                  <p>Fixed match not starting (spawn timing on first frame). Added pillar transparency when occluding players.</p>
+                </div>
+              </details>
+            </article>
+
+            <article class="entry-card">
+              <div class="entry-meta">
+                <span class="entry-week-tag">Catch-up</span>
+                <span class="entry-date">January &ndash; February 2026</span>
+              </div>
+              <div class="entry-body">
+                <p>Players now have full control over their input setup &mdash; custom key bindings for keyboard and controller, with preset layouts (WASD, Arrows, IJKL, Numpad), conflict detection so two players can't claim the same keys, and swap confirmation when rebinding overlapping controls. Any combination of keyboards and controllers should just work.</p>
+                <p>The core arena mechanic was built: three floors stacked vertically, scrolling downward as altars are consumed. Blood emitters activate and deactivate by floor role. A vertical hazard descends from above. Visual proportions were overhauled after early testing showed everything looking wrong &mdash; platforms too thin, camera too far out, pillars piercing through multiple floors. All fixed.</p>
+                <p>The evolution bar was redesigned: instead of resetting when you evolve, the bar grows 30% wider and changes colour. Evolution feels like gaining something rather than starting over.</p>
+              </div>
+              <details class="entry-raw">
+                <summary>Raw session notes</summary>
+                <div class="raw-content">
+                  <h3>Jan 22&ndash;26 &mdash; Input rebinding system</h3>
+                  <p>Full controller/keyboard rebind UI. Shared keyboard/controller support. Presets, conflict detection, swap confirmation, startup validation.</p>
+                  <h3>Feb 5 &mdash; Scrolling floor system</h3>
+                  <p>3-floor stacked arena. Chunk grid, gap generation, emitter/altar placement, BFS path validation. Scroll trigger on altar consumption. Vertical hazard.</p>
+                  <h3>Feb 14 &mdash; Pillar fix &amp; visual overhaul</h3>
+                  <p>Fixed pillars piercing all floors. Floor spacing 10&rarr;5 units. Chunk thickness 0.2&rarr;1.0. Arena now looks proportional.</p>
+                  <h3>Feb 21 &mdash; Rename &amp; alpha plan</h3>
+                  <p>Form-toggle action renamed across codebase. 13-system alpha implementation plan written with dependency tiers.</p>
+                  <h3>Feb 26 &mdash; Evolution bar redesign</h3>
+                  <p>Bar grows 30% wider on evolution instead of resetting. Tier accent colours added.</p>
+                </div>
+              </details>
+            </article>
+
+        </div>
+        <!-- END DEV LOG ENTRIES -->
+
+        <!-- RIGHT: MUSING ENTRIES — manually written below this line -->
+        <div id="musing-entries">
+          <!-- MUSINGS-GENERATED START -->
+            <article class="entry-card">
+              <div class="entry-meta">
+                <span class="entry-date">28 March 2026</span>
+              </div>
+              <h3 class="musing-title">Why I automated my devlogs</h3>
+              <div class="entry-body">
+                <p>The honest answer is that I kept not writing them. Not because nothing was happening — the game is being worked on almost every day — but because after a session I just want to stop. The last thing I want to do is write about what I just spent three hours doing.</p>
+                <p>So the devlogs never got written, and from the outside it probably looked like the game was dead. It wasn't. It just had no voice.</p>
+                <p>The automated log isn't a replacement for real devlogs. It's a proof-of-life signal. A way for anyone following the project to see that work is happening, even when I'm too tired to say so myself.</p>
+              </div>
+              <div class="entry-meta" style="margin-top:0.75rem;gap:0.4rem;flex-wrap:wrap;"><span class="entry-week-tag">meta</span><span class="entry-week-tag">process</span></div>
+            </article>
+          <!-- MUSINGS-GENERATED END -->
+          </div>
+          <!-- END MUSING ENTRIES -->
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container footer-inner">
+      <span class="footer-logo">Play Instigator</span>
+      <span class="footer-location">Singapore</span>
+      <span class="footer-tagline">Your excuse to make friends.</span>
+    </div>
+  </footer>
+
+</body>
+</html>

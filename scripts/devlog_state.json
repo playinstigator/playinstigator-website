@@ -1,0 +1,126 @@
+{
+  "last_run": "2026-03-28T16:57:38.965235",
+  "entries": [],
+  "processed_files": {
+    "2026-01-22_ControllerInputBindingFix.md": {
+      "md5": "",
+      "entry_id": "catchup"
+    },
+    "2026-02-05_ScrollingFloorSystem_UnitySetupGuide.md": {
+      "md5": "",
+      "entry_id": "catchup"
+    },
+    "2026-02-05_ScrollingFloorSystem.md": {
+      "md5": "",
+      "entry_id": "catchup"
+    },
+    "2026-02-14_PillarFixAndHazardAlignment.md": {
+      "md5": "",
+      "entry_id": "catchup"
+    },
+    "2026-02-21_LiquidifyRenameAndAlphaPlan.md": {
+      "md5": "",
+      "entry_id": "catchup"
+    },
+    "2026-02-24_UIStyleDirectionAndTransformPlanFix.md": {
+      "md5": "",
+      "entry_id": "catchup"
+    },
+    "2026-02-26_UnifiedBarEvolutionGrowth.md": {
+      "md5": "",
+      "entry_id": "catchup"
+    },
+    "2026-03-05_AlphaPlanDocumentSplit.md": {
+      "md5": "",
+      "entry_id": "catchup"
+    },
+    "2026-03-10_AlphaEditorWiring_Complete.md": {
+      "md5": "",
+      "entry_id": "catchup"
+    },
+    "2026-03-11_FloorVisibilityAndBoundaryWalls.md": {
+      "md5": "",
+      "entry_id": "catchup"
+    },
+    "2026-03-14_MatchStartFix_VisualPolish.md": {
+      "md5": "",
+      "entry_id": "catchup"
+    },
+    "2026-03-15_EmitterIndicator_PlayerCrosshair.md": {
+      "md5": "",
+      "entry_id": "catchup"
+    },
+    "2026-03-15_JellyfishVisuals.md": {
+      "md5": "",
+      "entry_id": "catchup"
+    },
+    "2026-03-15_PouringMechanic_ImplementationPlan.md": {
+      "md5": "",
+      "entry_id": "catchup"
+    },
+    "2026-03-16_VisualPolish_ControllerFix.md": {
+      "md5": "",
+      "entry_id": "catchup"
+    },
+    "2026-03-18_BloodEmitterSettings.md": {
+      "md5": "",
+      "entry_id": "catchup"
+    },
+    "2026-03-19_AltarFillVisual_ObiColliderFix.md": {
+      "md5": "",
+      "entry_id": "catchup"
+    },
+    "2026-03-19_PlaytestPolishBatch3.md": {
+      "md5": "",
+      "entry_id": "catchup"
+    },
+    "2026-03-20_AudioSystem.md": {
+      "md5": "",
+      "entry_id": "catchup"
+    },
+    "2026-03-21_Player4ControllerFix.md": {
+      "md5": "",
+      "entry_id": "catchup"
+    },
+    "2026-03-22_MemoryLeaks_TerminalPhase_OutlastUI.md": {
+      "md5": "",
+      "entry_id": "catchup"
+    },
+    "2026-03-23_ManualTiltSystem_CarrierSpeed_MenuNavigation.md": {
+      "md5": "",
+      "entry_id": "catchup"
+    },
+    "2026-03-26_BuildFixes_ShaderNull_MemoryFlush_PauseMenu.md": {
+      "md5": "",
+      "entry_id": "catchup"
+    },
+    "2026-03-27_PinkMaterials_ShaderVariants.md": {
+      "md5": "",
+      "entry_id": "catchup"
+    },
+    "2026-03-27_PinkMaterialFix.md": {
+      "md5": "",
+      "entry_id": "catchup"
+    },
+    "2026-03-27_SettingsSystem.md": {
+      "md5": "",
+      "entry_id": "catchup"
+    },
+    "2026-03-28_SettingsVerification_AudioRouting_CLAUDERefactor.md": {
+      "md5": "",
+      "entry_id": "catchup"
+    },
+    "2026-03-28_BuildSystem_Versioning.md": {
+      "md5": "",
+      "entry_id": "catchup"
+    },
+    "2026-03-28_ObiFluid_MemoryLeak_DeepAnalysis.md": {
+      "md5": "",
+      "entry_id": "catchup"
+    },
+    "2026-03-28_ObiFluid_MemoryLeak_Fix.md": {
+      "md5": "",
+      "entry_id": "catchup"
+    }
+  }
+}
