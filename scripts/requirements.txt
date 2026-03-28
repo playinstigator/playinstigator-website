@@ -1,0 +1,3 @@
+# generate_devlog.py uses only stdlib -- no pip installs required.
+# Python 3.8+ (for walrus operator and date.fromisoformat)
+# External dependency: Ollama running locally at http://localhost:11434

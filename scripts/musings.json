@@ -1,0 +1,8 @@
+[
+  {
+    "date": "2026-03-28",
+    "title": "Why I automated my devlogs",
+    "body": "<p>The honest answer is that I kept not writing them. Not because nothing was happening — the game is being worked on almost every day — but because after a session I just want to stop. The last thing I want to do is write about what I just spent three hours doing.</p>\n                <p>So the devlogs never got written, and from the outside it probably looked like the game was dead. It wasn't. It just had no voice.</p>\n                <p>The automated log isn't a replacement for real devlogs. It's a proof-of-life signal. A way for anyone following the project to see that work is happening, even when I'm too tired to say so myself.</p>",
+    "tags": ["meta", "process"]
+  }
+]
