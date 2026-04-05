@@ -166,7 +166,7 @@ def call_ollama(content: str) -> str:
     req = urllib.request.Request(
         OLLAMA_URL, data=payload, headers={"Content-Type": "application/json"}
     )
-    with urllib.request.urlopen(req, timeout=180) as resp:
+    with urllib.request.urlopen(req, timeout=600) as resp:
         result = json.loads(resp.read())
     return result.get("response", "").strip()
 
