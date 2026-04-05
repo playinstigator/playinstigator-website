@@ -41,6 +41,11 @@ Do not claim "this week" or "recently" -- just describe what changed and why it 
 If the work is bug fixes or infrastructure, say so honestly: the game is getting more stable.
 Each paragraph should be a complete thought. No trailing "stay tuned" lines.
 
+IMPORTANT: Output plain prose only. No markdown formatting whatsoever.
+No headers (no #, ##, ###). No bold (no **). No bullet points (no -, *, 1.).
+No code blocks (no ```). No horizontal rules (no ---). No tables.
+Just plain sentences and paragraphs separated by blank lines.
+
 Dev log:
 {content}
 """
@@ -171,8 +176,33 @@ def call_ollama(content: str) -> str:
     return result.get("response", "").strip()
 
 
+def strip_markdown(text: str) -> str:
+    """Remove common markdown syntax from Ollama output before rendering as HTML."""
+    lines = []
+    for line in text.splitlines():
+        # Remove headers
+        line = re.sub(r"^#{1,6}\s+", "", line)
+        # Remove bold/italic markers
+        line = re.sub(r"\*{1,3}(.+?)\*{1,3}", r"\1", line)
+        # Remove inline code
+        line = re.sub(r"`(.+?)`", r"\1", line)
+        # Remove bullet points — convert to sentence fragment (keep text)
+        line = re.sub(r"^\s*[-*]\s+", "", line)
+        # Remove numbered list markers
+        line = re.sub(r"^\s*\d+\.\s+", "", line)
+        # Remove horizontal rules
+        if re.match(r"^\s*[-*_]{3,}\s*$", line):
+            continue
+        # Remove markdown table rows
+        if re.match(r"^\s*\|", line):
+            continue
+        lines.append(line)
+    return "\n".join(lines)
+
+
 def paragraphs_to_html(text: str) -> str:
-    """Wrap blank-line-separated paragraphs in <p> tags."""
+    """Strip markdown, then wrap blank-line-separated paragraphs in <p> tags."""
+    text = strip_markdown(text)
     paras = [p.strip() for p in re.split(r"\n{2,}", text) if p.strip()]
     indent = "\n                "
     return indent.join(f"<p>{p}</p>" for p in paras)
