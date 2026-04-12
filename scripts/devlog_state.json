@@ -1,6 +1,14 @@
 {
-  "last_run": "2026-04-05T22:43:09.263244",
+  "last_run": "2026-04-12T09:17:22.020930",
   "entries": [
+    {
+      "id": "2026-04-12",
+      "date_sort": "2026-04-07",
+      "week_tag": "Week of 7 Apr",
+      "date_label": "7 &ndash; 7 April 2026",
+      "summary_html": "<p>In the latest dev session, we made some cool tweaks to Ritual & Ruin that should brighten up your experience! The chunk floor shader got a much-needed fix for those annoying white streaks that used to appear when moving around. We shifted our shadow calculations to work on a per-pixel basis, meaning smoother and more seamless shadows across the game world—no more glaring stripes where they shouldn't be!</p>\n                <p>We've also pushed Ritual & Ruin further into its dark kawaii aesthetic, which you might recognize as having that distinct anime vibe. The floor tiles now have a more dramatic contrast with near-white tops accented by violet hints, and darker sides bordered in dim purple grout. It's all about striking a balance between the cute and the mysterious.</p>\n                <p>On top of these changes, we've polished up the jellyfish players. They're sporting longer tentacles that extend their reach within matches, making every move more pronounced. Plus, they've become more visible against darker floors with increased opacity—so no more squinting to spot your jellyfish on the battlefield! All these tweaks aim to make the visuals pop while ensuring everything looks sharp and cohesive. Can't wait for you all to see how it turns out in action!</p>",
+      "raw_html": "<h3>2026-04-07 — Chunk Floor Shader, Shadow Fix, Visual Polish</h3>\n                  <h3>Summary</h3>\n                  <p>Fixed a persistent white-streak artifact on the chunk floor shader, iterated on the dark kawaii visual direction, and polished jellyfish player visuals.</p>\n                  <h3>Dark Kawaii Visual Direction</h3>\n                  <p>Iterated the ChunkFloorTile shader toward a dark kawaii / anime aesthetic:</p>\n                  <ul>\n                    <li><strong>Top face</strong>: near-white tiles with violet hint (<code>0.93, 0.90, 1.00</code>) + neon lavender grout (<code>0.72, 0.38, 0.95</code>) with glow emission</li>\n                    <li><strong>Side faces</strong>: near-black tiles (<code>0.05, 0.05, 0.09</code>) + dim purple grout (<code>0.48, 0.36, 0.70</code>)</li>\n                    <li><strong>Face detection</strong>: branchless <code>yDom = step(absNorm.x, absNorm.y) * step(absNorm.z, absNorm.y)</code> drives both color palettes</li>\n                    <li><strong>Degradation</strong>: Voronoi crack lines with pink/magenta glow (<code>0.95, 0.18, 0.62</code>), FBM staining, mold growth</li>\n                    <li><strong>Crack scale</strong>: lowered <code>_CrackScale</code> to 0.5 (few large cracks rather than fine network)</li>\n                    <li><strong>Tile scale</strong>: doubled <code>_TileScale</code> to 1.0 (larger tiles)</li>\n                    <li><strong>Cel shading</strong>: <code>floor(NdotL * bands) / (bands - 1)</code> quantized diffuse, 3 bands</li>\n                  </ul>\n                  <p>---</p>\n                  <h3>Visual Polish</h3>\n                  <h3>Jellyfish Tentacles — Longer</h3>\n                  <ul>\n                    <li><code>segmentLength</code>: <code>0.15</code> → <code>0.35</code> (scale=1 normalized, auto-scaled at runtime)</li>\n                    <li>At match scale=0.25: total tentacle reach ≈ 0.525 world units (was 0.225)</li>\n                  </ul>\n                  <h3>Jellyfish Body — More Opaque</h3>\n                  <ul>\n                    <li><code>_Opacity</code> in <code>JellyfishBody.mat</code>: <code>0.18</code> → <code>0.65</code></li>\n                    <li>Players are now clearly visible against the dark floor</li>\n                  </ul>\n                  <p>---</p>\n                  <h3>Files Changed</h3>\n                  <ul>\n                    <li><code>Assets/ProtoV2/Shaders/ChunkFloorTile.shader</code> — per-fragment shadow coord, dark kawaii style</li>\n                    <li><code>Assets/ProtoV2/Materials/ChunkFloorTile.mat</code> — color values for dark kawaii look</li>\n                    <li><code>Assets/ProtoV2/Scripts/JellyfishVisuals.cs</code> — segmentLength 0.15→0.35</li>\n                    <li><code>Assets/ProtoV2/Materials/JellyfishBody.mat</code> — _Opacity 0.18→0.65</li>\n                  </ul>"
+    },
     {
       "id": "2026-04-05",
       "date_sort": "2026-04-04",
@@ -170,6 +178,10 @@
     "2026-04-04_TiltControl_RebindUI_MenuHints.md": {
       "md5": "4cbd68183676a366aea552a3a609676b",
       "entry_id": "2026-04-05"
+    },
+    "2026-04-07_ChunkShader_ShadowFix_VisualPolish.md": {
+      "md5": "2e6063660fbc194bb5b20c349190b666",
+      "entry_id": "2026-04-12"
     }
   }
 }
