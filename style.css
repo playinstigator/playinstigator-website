@@ -606,9 +606,21 @@ footer {
 }
 
 .footer-location::before,
-.footer-tagline::before {
+.footer-tagline::before,
+.footer-privacy::before {
   content: '·';
   margin-right: 1.5rem;
+}
+
+.footer-privacy {
+  font-size: 0.875rem;
+  color: var(--text-faint);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.footer-privacy:hover {
+  color: var(--text-muted);
 }
 
 /* =============================================
@@ -647,7 +659,8 @@ footer {
   }
 
   .footer-location::before,
-  .footer-tagline::before {
+  .footer-tagline::before,
+  .footer-privacy::before {
     display: none;
   }
 

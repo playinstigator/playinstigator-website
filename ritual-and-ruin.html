@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ritual & Ruin — 2v2 Co-op Competitive Party Game</title>
+  <meta name="description" content="Ritual & Ruin is a 2v2 co-op competitive party game where tiny creatures carry blood to forbidden altars, evolve into something terrifying, and hunt each other down. Coming to Steam." />
+  <meta property="og:title" content="Ritual & Ruin" />
+  <meta property="og:description" content="Tiny creatures hauling blood through forbidden rituals, evolving into something wrong, then hunting each other. 2v2 co-op competitive party game for PC." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://playinstigator.com/ritual-and-ruin.html" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Figtree:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* ── Game page hero ── */
+    .game-hero {
+      position: relative;
+      overflow: hidden;
+      min-height: 100svh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      background: var(--bg);
+    }
+
+    .game-hero-nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.25rem var(--gutter);
+      background: rgba(12, 11, 10, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .game-hero-nav-logo {
+      font-size: 1rem;
+      letter-spacing: 0.02em;
+      text-decoration: none;
+    }
+
+    .game-hero-nav-logo .play {
+      font-family: 'Fredoka', sans-serif;
+      font-weight: 600;
+      color: #FF3344;
+    }
+
+    .game-hero-nav-logo .instigator {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 800;
+      color: #F9F5F1;
+    }
+
+    .game-hero-nav-links {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+    }
+
+    .game-hero-nav-links a {
+      font-family: 'Figtree', sans-serif;
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    .game-hero-nav-links a:hover {
+      color: var(--text);
+    }
+
+    .game-hero-content {
+      padding: 8rem var(--gutter) 4rem;
+      max-width: var(--max-w);
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .game-hero-label {
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1.25rem;
+    }
+
+    .game-hero-title {
+      font-family: var(--font-display);
+      font-size: clamp(3rem, 8vw, 6rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: var(--text);
+      line-height: 1.0;
+      margin-bottom: 0.75rem;
+    }
+
+    .game-hero-tagline {
+      font-family: var(--font-display);
+      font-size: clamp(1.125rem, 2.5vw, 1.5rem);
+      font-weight: 400;
+      color: var(--text-muted);
+      margin-bottom: 2rem;
+    }
+
+    .game-hero-description {
+      font-size: 1.125rem;
+      font-weight: 300;
+      color: var(--text-muted);
+      max-width: 58ch;
+      line-height: 1.8;
+      margin-bottom: 2.5rem;
+    }
+
+    .game-hero-details {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0 3rem;
+      padding: 1.5rem 0;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .game-hero-detail {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      min-width: 120px;
+      padding: 0.5rem 0;
+    }
+
+    .game-hero-detail-label {
+      font-size: 0.6875rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-faint);
+    }
+
+    .game-hero-detail-value {
+      font-family: var(--font-display);
+      font-size: 0.9375rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    /* ── Signup section ── */
+    .game-signup {
+      background: var(--bg-surface);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: clamp(3rem, 8vw, 5rem) 0;
+    }
+
+    .game-signup h2 {
+      font-family: var(--font-display);
+      font-size: clamp(1.5rem, 3.5vw, 2.25rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+    }
+
+    .game-signup-sub {
+      font-size: 1rem;
+      font-weight: 300;
+      color: var(--text-muted);
+      margin-bottom: 2rem;
+      max-width: 48ch;
+    }
+
+    .game-signup-form {
+      max-width: 480px;
+      margin-bottom: 2rem;
+    }
+
+    .game-signup-cta {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    /* ── Follow section ── */
+    .game-follow {
+      padding: clamp(3rem, 8vw, 5rem) 0;
+    }
+
+    .game-follow h2 {
+      font-family: var(--font-display);
+      font-size: clamp(1.5rem, 3.5vw, 2rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+    }
+
+    .game-follow-sub {
+      font-size: 1rem;
+      font-weight: 300;
+      color: var(--text-muted);
+      margin-bottom: 2rem;
+    }
+
+    .game-follow-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .game-follow-link {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 1rem;
+      background: var(--bg-raised);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 1.25rem 1.75rem;
+      min-width: 220px;
+      text-decoration: none;
+      transition: border-color 0.2s ease, transform 0.15s ease;
+    }
+
+    .game-follow-link:hover {
+      border-color: var(--text-faint);
+      transform: translateY(-2px);
+    }
+
+    .game-follow-icon {
+      width: 24px;
+      height: 24px;
+      flex-shrink: 0;
+      color: var(--text-faint);
+      transition: color 0.2s ease;
+    }
+
+    .game-follow-link:hover .game-follow-icon {
+      color: var(--text);
+    }
+
+    .game-follow-link-text {
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+
+    .game-follow-platform {
+      font-size: 0.6875rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-faint);
+    }
+
+    .game-follow-handle {
+      font-family: var(--font-display);
+      font-size: 1.0625rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    /* ── Floaters ── */
+    @keyframes floatA {
+      0%, 100% { transform: translateY(0) rotate(var(--rot)); }
+      50% { transform: translateY(-12px) rotate(var(--rot)); }
+    }
+    @keyframes floatB {
+      0%, 100% { transform: translateY(0) rotate(var(--rot)); }
+      50% { transform: translateY(10px) rotate(var(--rot)); }
+    }
+    @keyframes floatC {
+      0%, 100% { transform: translateY(0) rotate(var(--rot)); }
+      50% { transform: translateY(-8px) rotate(var(--rot)); }
+    }
+
+    .floater { position: absolute; z-index: 1; pointer-events: none; }
+    .floater.fA { animation: floatA var(--dur) ease-in-out infinite; animation-delay: var(--delay); }
+    .floater.fB { animation: floatB var(--dur) ease-in-out infinite; animation-delay: var(--delay); }
+    .floater.fC { animation: floatC var(--dur) ease-in-out infinite; animation-delay: var(--delay); }
+
+    /* ── Mobile ── */
+    @media (max-width: 768px) {
+      .game-hero-details {
+        gap: 0 2rem;
+      }
+
+      .game-follow-link {
+        min-width: 100%;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .game-hero-nav-links {
+        display: none;
+      }
+
+      .game-signup-cta {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.875rem;
+      }
+
+      .game-signup-cta .btn-feedback,
+      .game-signup-cta .btn-secondary {
+        text-align: center;
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="game-hero-nav">
+    <a href="/" class="game-hero-nav-logo"><span class="play">Play</span> <span class="instigator">Instigator</span></a>
+    <div class="game-hero-nav-links">
+      <a href="/">Studio</a>
+      <a href="/blog.html">Blog</a>
+      <a href="#signup">Get updates</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="game-hero" style="position:relative;">
+    <div class="floater fA" style="--rot:7deg;--dur:6s;--delay:0s;width:14px;height:14px;border-radius:50%;background:#FF3344;top:15%;right:8%;opacity:0.35;"></div>
+    <div class="floater fB" style="--rot:-11deg;--dur:8s;--delay:0.5s;width:22px;height:9px;border-radius:999px;background:#57E0FF;top:35%;right:18%;opacity:0.3;"></div>
+    <div class="floater fC" style="--rot:13deg;--dur:5.5s;--delay:1.1s;width:11px;height:11px;border-radius:3px;background:#FFF066;bottom:28%;left:5%;opacity:0.3;"></div>
+    <div class="floater fA" style="--rot:-6deg;--dur:7s;--delay:0.3s;width:16px;height:16px;border-radius:50%;background:#974DFF;bottom:18%;right:10%;opacity:0.35;"></div>
+    <div class="floater fB" style="--rot:9deg;--dur:9s;--delay:1.4s;width:20px;height:8px;border-radius:999px;background:#81FDC1;top:55%;left:4%;opacity:0.28;"></div>
+
+    <div class="game-hero-content">
+      <div class="game-hero-label">Now in Development</div>
+      <h1 class="game-hero-title">Ritual &amp; Ruin</h1>
+      <p class="game-hero-tagline">Can you outlast?</p>
+      <p class="game-hero-description">
+        Tiny creatures hauling blood through forbidden rituals, evolving into something wrong, then hunting each other in their final moments. You work together to carry blood to altars, and the ritual grants you power. Power that transforms cute into something that shouldn't exist. Then the hunt begins.
+      </p>
+      <div class="game-hero-details">
+        <div class="game-hero-detail">
+          <span class="game-hero-detail-label">Format</span>
+          <span class="game-hero-detail-value">2v2 / Local Co-op</span>
+        </div>
+        <div class="game-hero-detail">
+          <span class="game-hero-detail-label">Platform</span>
+          <span class="game-hero-detail-value">PC — Steam</span>
+        </div>
+        <div class="game-hero-detail">
+          <span class="game-hero-detail-label">Session</span>
+          <span class="game-hero-detail-value">5-10 minutes</span>
+        </div>
+        <div class="game-hero-detail">
+          <span class="game-hero-detail-label">Status</span>
+          <span class="game-hero-detail-value">Alpha Prototype</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SIGNUP -->
+  <section class="game-signup" id="signup" style="position:relative;overflow:hidden;">
+    <div class="floater fC" style="--rot:-8deg;--dur:7s;--delay:0.2s;width:13px;height:13px;border-radius:50%;background:#974DFF;top:20%;right:6%;opacity:0.3;"></div>
+    <div class="floater fA" style="--rot:12deg;--dur:5.5s;--delay:0.9s;width:18px;height:7px;border-radius:999px;background:#FFF066;bottom:25%;left:4%;opacity:0.28;"></div>
+    <div class="container">
+      <h2>Stay in the loop</h2>
+      <p class="game-signup-sub">Get development updates, playtesting invitations, and release news. No spam.</p>
+      <div class="game-signup-form">
+        <script async data-uid="fc14091ca0" src="https://playinstigator.kit.com/fc14091ca0/index.js"></script>
+      </div>
+      <div class="game-signup-cta">
+        <a href="/playtest-form.html" class="btn-feedback">Played at a playtest? Leave feedback →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOLLOW -->
+  <section class="game-follow" id="follow" style="position:relative;overflow:hidden;">
+    <div class="floater fB" style="--rot:11deg;--dur:6.5s;--delay:0s;width:16px;height:16px;border-radius:50%;background:#FF3344;top:18%;left:4%;opacity:0.3;"></div>
+    <div class="floater fA" style="--rot:-7deg;--dur:8s;--delay:0.6s;width:22px;height:9px;border-radius:3px;background:#57E0FF;bottom:30%;right:5%;opacity:0.28;"></div>
+    <div class="container">
+      <h2>Follow the journey</h2>
+      <p class="game-follow-sub">We're building in public. Rough edges and all.</p>
+      <div class="game-follow-links">
+        <a href="https://www.instagram.com/playinstigator" target="_blank" rel="noopener" class="game-follow-link">
+          <svg class="game-follow-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+          <span class="game-follow-link-text">
+            <span class="game-follow-platform">Instagram</span>
+            <span class="game-follow-handle">@playinstigator</span>
+          </span>
+        </a>
+        <a href="https://www.youtube.com/@playinstigator" target="_blank" rel="noopener" class="game-follow-link">
+          <svg class="game-follow-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+          <span class="game-follow-link-text">
+            <span class="game-follow-platform">YouTube</span>
+            <span class="game-follow-handle">@playinstigator</span>
+          </span>
+        </a>
+        <a href="https://x.com/playinstigator" target="_blank" rel="noopener" class="game-follow-link">
+          <svg class="game-follow-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"/></svg>
+          <span class="game-follow-link-text">
+            <span class="game-follow-platform">X</span>
+            <span class="game-follow-handle">@playinstigator</span>
+          </span>
+        </a>
+        <a href="https://bsky.app/profile/playinstigator.bsky.social" target="_blank" rel="noopener" class="game-follow-link">
+          <svg class="game-follow-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 10.8c-1.087-2.114-4.046-6.053-6.798-7.995C2.566.944 1.561 1.266.902 1.565.139 1.908 0 3.08 0 3.768c0 .69.378 5.65.624 6.479.815 2.736 3.713 3.66 6.383 3.364.136-.02.275-.039.415-.056-.138.022-.276.04-.415.056-3.912.58-7.387 2.005-2.83 7.078 5.013 5.19 6.87-1.113 7.823-4.308.953 3.195 2.05 9.271 7.733 4.308 4.267-4.308 1.172-6.498-2.74-7.078a8.741 8.741 0 0 1-.415-.056c.14.017.279.036.415.056 2.67.297 5.568-.628 6.383-3.364.246-.828.624-5.79.624-6.478 0-.69-.139-1.861-.902-2.204-.659-.299-1.664-.62-4.3 1.24C16.046 4.748 13.087 8.687 12 10.8Z"/></svg>
+          <span class="game-follow-link-text">
+            <span class="game-follow-platform">Bluesky</span>
+            <span class="game-follow-handle">@playinstigator</span>
+          </span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT US -->
+  <section style="padding:clamp(3rem,8vw,5rem) 0;border-top:1px solid var(--border);">
+    <div class="container">
+      <a href="/" class="about-us-btn">Learn more about <span style="color:#FF3344;white-space:nowrap">Play</span>&nbsp;Instigator →</a>
+    </div>
+  </section>
+
+  <style>
+    .about-us-btn {
+      display: block;
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: clamp(1.25rem, 3vw, 1.75rem);
+      color: var(--text);
+      background: var(--bg-raised);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.5rem 3rem;
+      text-decoration: none;
+      text-align: center;
+      transition: border-color 0.2s ease, transform 0.15s ease, background 0.2s ease;
+      width: 100%;
+    }
+
+    .about-us-btn:hover {
+      border-color: var(--text-faint);
+      background: var(--bg-surface);
+      transform: translateY(-2px);
+    }
+  </style>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container footer-inner">
+      <span class="footer-logo">Play Instigator</span>
+      <span class="footer-location">Singapore</span>
+      <span class="footer-tagline">Your excuse to make friends.</span>
+      <a href="/privacy.html" class="footer-privacy">Privacy Policy</a>
+    </div>
+  </footer>
+
+</body>
+</html>
