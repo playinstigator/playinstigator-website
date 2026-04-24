@@ -268,6 +268,38 @@
       color: var(--text);
     }
 
+    /* ── Hero art grid ── */
+    .game-hero-grid {
+      display: grid;
+      grid-template-columns: 1fr 240px;
+      gap: 3rem;
+      align-items: start;
+    }
+
+    .game-hero-title-img {
+      display: block;
+      max-width: 460px;
+      width: 100%;
+      mix-blend-mode: screen;
+      margin-bottom: 0.5rem;
+    }
+
+    .game-hero-art {
+      display: flex;
+      align-items: flex-start;
+      justify-content: flex-end;
+      padding-top: 2rem;
+    }
+
+    .game-hero-characters-img {
+      width: 100%;
+      max-width: 240px;
+      border-radius: 10px;
+      display: block;
+      transform: rotate(-2deg);
+      box-shadow: 0 8px 40px rgba(0, 0, 0, 0.6);
+    }
+
     /* ── Floaters ── */
     @keyframes floatA {
       0%, 100% { transform: translateY(0) rotate(var(--rot)); }
@@ -289,6 +321,20 @@
 
     /* ── Mobile ── */
     @media (max-width: 768px) {
+      .game-hero-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .game-hero-art {
+        order: -1;
+        justify-content: flex-start;
+        padding-top: 0;
+      }
+
+      .game-hero-characters-img {
+        max-width: 200px;
+      }
+
       .game-hero-details {
         gap: 0 2rem;
       }
@@ -338,28 +384,35 @@
     <div class="floater fB" style="--rot:9deg;--dur:9s;--delay:1.4s;width:20px;height:8px;border-radius:999px;background:#81FDC1;top:55%;left:4%;opacity:0.28;"></div>
 
     <div class="game-hero-content">
-      <div class="game-hero-label">Now in Development</div>
-      <h1 class="game-hero-title">Ritual &amp; Ruin</h1>
-      <p class="game-hero-tagline">Can you outlast?</p>
-      <p class="game-hero-description">
-        Tiny creatures hauling blood through forbidden rituals, evolving into something wrong, then hunting each other in their final moments. You work together to carry blood to altars, and the ritual grants you power. Power that transforms cute into something that shouldn't exist. Then the hunt begins.
-      </p>
-      <div class="game-hero-details">
-        <div class="game-hero-detail">
-          <span class="game-hero-detail-label">Format</span>
-          <span class="game-hero-detail-value">2v2 / Local Co-op</span>
+      <div class="game-hero-grid">
+        <div class="game-hero-text">
+          <div class="game-hero-label">Now in Development</div>
+          <img src="images/Title.png" alt="Ritual &amp; Ruin" class="game-hero-title-img">
+          <p class="game-hero-tagline">Can you outlast?</p>
+          <p class="game-hero-description">
+            Tiny creatures hauling blood through forbidden rituals, evolving into something wrong, then hunting each other in their final moments. You work together to carry blood to altars, and the ritual grants you power. Power that transforms cute into something that shouldn't exist. Then the hunt begins.
+          </p>
+          <div class="game-hero-details">
+            <div class="game-hero-detail">
+              <span class="game-hero-detail-label">Format</span>
+              <span class="game-hero-detail-value">2v2 / Local Co-op</span>
+            </div>
+            <div class="game-hero-detail">
+              <span class="game-hero-detail-label">Platform</span>
+              <span class="game-hero-detail-value">PC — Steam</span>
+            </div>
+            <div class="game-hero-detail">
+              <span class="game-hero-detail-label">Session</span>
+              <span class="game-hero-detail-value">5–10 minutes</span>
+            </div>
+            <div class="game-hero-detail">
+              <span class="game-hero-detail-label">Status</span>
+              <span class="game-hero-detail-value">Alpha Prototype</span>
+            </div>
+          </div>
         </div>
-        <div class="game-hero-detail">
-          <span class="game-hero-detail-label">Platform</span>
-          <span class="game-hero-detail-value">PC — Steam</span>
-        </div>
-        <div class="game-hero-detail">
-          <span class="game-hero-detail-label">Session</span>
-          <span class="game-hero-detail-value">5-10 minutes</span>
-        </div>
-        <div class="game-hero-detail">
-          <span class="game-hero-detail-label">Status</span>
-          <span class="game-hero-detail-value">Alpha Prototype</span>
+        <div class="game-hero-art">
+          <img src="images/Characters.png" alt="Ritual &amp; Ruin — character art" class="game-hero-characters-img">
         </div>
       </div>
     </div>
