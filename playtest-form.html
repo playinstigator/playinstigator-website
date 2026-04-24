@@ -24,8 +24,8 @@
       --bg-surface:   #242120;
       --bg-raised:    #2a2724;
       --text:         #F9F5F1;
-      --text-muted:   #8a8380;
-      --text-faint:   #4a4745;
+      --text-muted:   #c8c3be;
+      --text-faint:   #7a7573;
       --accent:       #FF3344;
       --accent-hover: #ff1a2e;
       --accent-dim:   rgba(255, 51, 68, 0.12);
@@ -261,7 +261,7 @@
     .radio-text {
       font-size: 0.9375rem;
       font-weight: 400;
-      color: var(--text-muted);
+      color: var(--text);
       line-height: 1.5;
       transition: color 0.15s ease;
     }
@@ -480,6 +480,33 @@
     @media (max-width: 480px) {
       .page-wrap {
         padding-top: 2rem;
+      }
+
+      body {
+        font-size: 1.0625rem;
+      }
+
+      .question-label {
+        font-size: 1.125rem;
+      }
+
+      .question-hint {
+        font-size: 1rem;
+      }
+
+      .radio-text {
+        font-size: 1rem;
+      }
+
+      textarea,
+      input[type="text"],
+      input[type="email"] {
+        font-size: 1rem;
+      }
+
+      .submit-btn {
+        font-size: 1.125rem;
+        padding: 1.125rem 2rem;
       }
     }
 
@@ -798,7 +825,7 @@
   <!-- FOOTER -->
   <footer class="form-footer">
     <span class="footer-brand"><span class="play">Play</span> <span class="instigator">Instigator</span></span>
-    <span class="footer-note">Singapore · Dev &amp; Draft, March 21 2026</span>
+    <span class="footer-note">Singapore · Playtest Party, April 2026</span>
   </footer>
 
 </div>
