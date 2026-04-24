@@ -429,10 +429,58 @@ nav {
   margin-bottom: 1.5rem;
 }
 
-.game-alpha-note {
-  font-size: 0.875rem;
+/* Game section — art layout */
+.game-grid {
+  display: grid;
+  grid-template-columns: 1fr 240px;
+  gap: 3rem;
+  align-items: start;
+}
+
+.game-title-img {
+  display: block;
+  max-width: 460px;
+  width: 100%;
+  mix-blend-mode: screen;
+  margin-bottom: 0.5rem;
+}
+
+.game-art-col {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-end;
+}
+
+.game-characters-img {
+  width: 100%;
+  max-width: 240px;
+  border-radius: 10px;
+  display: block;
+  transform: rotate(-2deg);
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.6);
+}
+
+.game-capsule-wrap {
+  margin-top: 3rem;
+  padding-top: 2.5rem;
+  border-top: 1px solid var(--border);
+}
+
+.game-capsule-label {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
   color: var(--text-faint);
-  font-style: italic;
+  margin-bottom: 0.875rem;
+}
+
+.game-capsule-img {
+  display: block;
+  max-width: 616px;
+  width: 100%;
+  border-radius: 6px;
+  border: 1px solid var(--border);
 }
 
 /* =============================================
@@ -642,6 +690,19 @@ footer {
 
   .about-left h2 {
     position: static;
+  }
+
+  .game-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .game-art-col {
+    order: -1;
+    justify-content: flex-start;
+  }
+
+  .game-characters-img {
+    max-width: 200px;
   }
 
   .game-details {
