@@ -460,28 +460,6 @@ nav {
   box-shadow: 0 8px 40px rgba(0, 0, 0, 0.6);
 }
 
-.game-capsule-wrap {
-  margin-top: 3rem;
-  padding-top: 2.5rem;
-  border-top: 1px solid var(--border);
-}
-
-.game-capsule-label {
-  font-size: 0.6875rem;
-  font-weight: 600;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: var(--text-faint);
-  margin-bottom: 0.875rem;
-}
-
-.game-capsule-img {
-  display: block;
-  max-width: 616px;
-  width: 100%;
-  border-radius: 6px;
-  border: 1px solid var(--border);
-}
 
 /* =============================================
    ABOUT SECTION
