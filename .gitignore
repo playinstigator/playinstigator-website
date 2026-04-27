@@ -1,0 +1,16 @@
+# Runtime artifacts
+scripts/devlog_update.log
+
+# OMC tooling state
+.omc/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
