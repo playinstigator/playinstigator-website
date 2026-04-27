@@ -262,7 +262,7 @@ def inject_between(html: str, start_marker: str, end_marker: str, content: str) 
         replacement = start_marker + "\n" + content + "\n          " + end_marker
     else:
         replacement = start_marker + "\n          " + end_marker
-    result = re.sub(pattern, replacement, html, flags=re.DOTALL)
+    result = re.sub(pattern, lambda _m: replacement, html, flags=re.DOTALL)
     if result == html and start_marker not in html:
         print(f"  WARNING: marker not found in blog.html: {start_marker!r}")
     return result
