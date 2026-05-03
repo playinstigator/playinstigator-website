@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light" data-lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#F9F5F1" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1C1917" media="(prefers-color-scheme: dark)">
+<title data-en="Transmedia Collective — Play Instigator" data-zh="跨媒介共创团体 — Play Instigator">Transmedia Collective — Play Instigator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Figtree:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700;800&family=Noto+Serif+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body data-page="collective">
+
+<div class="shape shape-1" aria-hidden="true"></div>
+<div class="shape shape-2" aria-hidden="true"></div>
+<div class="shape shape-3" aria-hidden="true"></div>
+
+<div class="page">
+
+  <div class="topbar">
+    <a class="studio-mark" href="start-here.html">
+      <span class="play">Play</span>
+      <span class="dot"></span>
+      <span class="inst">Instigator</span>
+    </a>
+    <div class="toggles">
+      <button class="pill-btn lang-toggle" id="langToggle" aria-label="Switch language">
+        <span class="globe" aria-hidden="true"></span>
+        <span class="label" id="langLabel">中文</span>
+      </button>
+      <button class="pill-btn theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+        <span class="icon" aria-hidden="true"></span>
+        <span class="label" id="themeLabel">Dark</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="ai-disclaimer lang-zh">
+    <span class="bang" aria-hidden="true">!</span>
+    <span>本页中文内容由 AI 翻译，可能存在不准确或不自然的表达。原文以英文版本为准。</span>
+  </div>
+
+  <nav class="pack-nav" aria-label="Collaborator pack">
+    <a href="start-here.html" data-page="index"><span class="num">00</span><span class="lang-en">Start</span><span class="lang-zh">起点</span></a>
+    <a href="audio-composer-briefing.html" data-page="audio"><span class="num">01</span><span class="lang-en">Audio World Brief</span><span class="lang-zh">音频世界简报</span></a>
+    <a href="coexistence-song-brief.html" data-page="song"><span class="num">02</span><span class="lang-en">Coexistence Song Brief</span><span class="lang-zh">共存歌曲简报</span></a>
+    <a href="ip-is-experience.html" data-page="ip"><span class="num">03</span><span class="lang-en">IP is Experience</span><span class="lang-zh">IP 即体验</span></a>
+    <a href="transmedia-collective.html" data-page="collective"><span class="num">04</span><span class="lang-en">Transmedia Collective</span><span class="lang-zh">跨媒介共创团体</span></a>
+    <a href="revenue-sharing.html" data-page="revenue"><span class="num">05</span><span class="lang-en">Revenue Sharing</span><span class="lang-zh">收益分配结构</span></a>
+    <a href="entertainment-for-transformation.html" data-page="entertainment"><span class="num">06</span><span class="lang-en">Entertainment for Transformation</span><span class="lang-zh">为转化而做的娱乐</span></a>
+  </nav>
+
+  <header class="mast">
+    <p class="eyebrow lang-en">04 · The Collaboration Model</p>
+    <p class="eyebrow lang-zh">04 · 协作模型</p>
+    <h1 class="title">
+      <span class="lang-en">The Transmedia <span class="accent">Collective.</span></span>
+      <span class="lang-zh"><span class="accent">跨媒介</span>共创团体。</span>
+    </h1>
+  </header>
+
+  <p class="lede lang-en">
+    You've read <a href="ip-is-experience.html">IP is Experience</a>. This document explains what you'd actually be joining — what the collective is, why it's structured the way it is, what it means for your medium, and how the work happens.
+  </p>
+  <p class="lede lang-zh">
+    你已经读过<a href="ip-is-experience.html">IP 即体验</a>。这份文档解释的是：你实际上要加入的是什么——这个共创团体是什么、为什么是这样被结构起来的、对你这门媒介意味着什么、以及实际工作是怎么发生的。
+  </p>
+
+  <main>
+
+    <div class="callout warn">
+      <p>
+        <strong><span class="lang-en">Working draft</span><span class="lang-zh">工作草案</span></strong>
+        <span class="lang-en">This structure is still a draft. What follows is what we've implemented as our best attempt to make collaboration as fair as possible for everyone — but the details are open for renegotiation with the primary cohort of collaborators. If something here doesn't fit how you'd want to work, that's a conversation we want to have.</span>
+        <span class="lang-zh">这套结构仍然是一份草案。下面所写的，是我们目前所实施的、希望"对每个人都尽可能公平"的最好尝试——但当我们找到第一批合作者时，所有细节都向他们开放、可以一起重新协商。如果这里有任何东西与你期望的工作方式不合，那正是我们想要展开的对话。</span>
+      </p>
+    </div>
+
+    <h2><span class="lang-en">Why This Model Doesn't Exist Yet</span><span class="lang-zh">为什么这种模型还不存在</span></h2>
+
+    <div class="lang-en">
+      <p>IP is Experience established the problem clearly: almost every transmedia IP starts from one anchor medium and <em>adapts</em> outward. The film gets a game tie-in. The game gets a manga. The soundtrack is composed after the product is finished. Each subsequent medium is downstream — constrained by creative decisions made in the originating medium, by a team that was not thinking about your medium when they made them. The result always feels like adaptation, because it is.</p>
+      <p>The best consultancies in the space — firms like Starlight Runner Entertainment — are world-class at what they do. We give them their own case study below, because their methodology is the right thing to compare ourselves against. But the short version: even the gold standard of conventional transmedia is called in <em>after</em> the IP already exists in one medium, with a primary medium that every other medium orbits.</p>
+      <p>The major studios use small pilots — usually films — as a way to <em>verify</em> an IP can succeed before committing to expand it across mediums. Disney's pattern is the clearest example: <em>Frozen</em> succeeds as a film, and only then does the IP move into theme parks, merchandise, stage shows, and sequels. The pilot is a financial de-risking step, not a co-creation step. The structure underneath remains unchanged: one originating medium does the creative work, and every subsequent medium adapts.</p>
+      <p>The structural problem isn't lack of awareness. The major studios know transmedia works. They just always adapt, because they're organized by medium: separate film divisions, game studios, publishing imprints — each with its own hierarchy, deals, and incentives. And every successful studio has <em>sunk cost identity</em>. A game studio <em>is</em> a game studio. Asking them to be a co-equal node in a multi-medium collective means surrendering the thing that makes them legible to their own ecosystem.</p>
+    </div>
+
+    <div class="lang-zh">
+      <p>《IP 即体验》已经把问题说清楚了：几乎所有跨媒介 IP 都是从某一个"锚定媒介"起步，再向外<em>改编</em>。电影出了游戏联动版。游戏出了漫画。原声带是在产品完成之后才被作曲的。每一个后续媒介都是下游——被起源媒介里所做的创作决定限制，而做那些决定的团队当初根本没有在想你的媒介。结果永远让人感觉像"改编"，因为它就是改编。</p>
+      <p>这个领域里最好的顾问公司——比如 Starlight Runner Entertainment——在他们所做的事情上是世界级的。我们会在下文用一个独立的案例研究来讲他们，因为他们的方法论正是我们用来对照自己的最合适对象。简短版本是：即便是传统跨媒介的黄金标准，也是在某个 IP 已经在某个媒介里存在<em>之后</em>才被请进来的；总有一个所有其他媒介都围绕着旋转的主导媒介。</p>
+      <p>大型工作室会用小型试播——通常是电影——作为<em>验证</em> IP 是否能成立的方式，再决定是否真的把它扩展到其他媒介。迪士尼的模式是最清晰的例子：<em>《冰雪奇缘》</em>作为电影成立了，然后这个 IP 才扩展进主题乐园、周边、舞台剧、续集。那个试播是一个财务上"降低风险"的步骤，不是共创步骤。底下的结构没有变：一个起源媒介做完所有创作工作，所有后续媒介进行改编。</p>
+      <p>结构性问题不在于缺乏认知。大型工作室都知道跨媒介行得通。他们只是永远走改编，因为他们就是按媒介组织起来的：独立的电影部门、游戏工作室、出版品牌——每一个都有自己的层级、合约和激励。而且每一家成功的工作室都背着<em>"沉没成本式的身份"</em>。一家游戏工作室<em>就是</em>一家游戏工作室。让它去做一个跨媒介共创团体里的"对等节点"，意味着放弃那个让它在它自己的生态里"被读懂"的身份。</p>
+    </div>
+
+    <div class="callout">
+      <p>
+        <strong><span class="lang-en">The window</span><span class="lang-zh">这个窗口期</span></strong>
+        <span class="lang-en">This is why the model has to be built with indie studios and creators who are just starting out — not as a consolation prize, but as a structural advantage. Someone who hasn't had a hit yet has no sunk cost identity to defend. The collective can become <em>part of</em> their identity from the start: they're known by their own work, <em>and</em> as part of the collective, both at once — neither replaces the other. And the way they create <em>as part of the collective</em> is very different from the traditional creation process inside their vertical. That difference is the entire point of joining.</span>
+        <span class="lang-zh">这就是为什么这种模型必须和"刚刚起步的独立工作室和创作者"一起搭建——不是作为退而求其次，而是作为一种结构性优势。一个还没有出过爆款的人，没有需要去捍卫的沉没成本式身份。这个共创团体可以从一开始就成为他们身份的<em>一部分</em>：他们既因自己的作品而被认识，<em>同时</em>也作为这个共创团体的一员而被认识——这两者不是互相替代的关系。而他们<em>作为共创团体一员</em>去创作的方式，与各自垂直领域里的传统创作过程会非常不同。那种不同，正是加入这件事的全部意义所在。</span>
+      </p>
+    </div>
+
+    <h2><span class="lang-en">What You're Joining</span><span class="lang-zh">你要加入的是什么</span></h2>
+
+    <p class="lang-en">The transmedia collective is not a studio. It is not a publisher. It is not a work-for-hire arrangement.</p>
+    <p class="lang-zh">这个跨媒介共创团体不是一家工作室。不是一家发行商。也不是一种受雇为他人创作的安排。</p>
+
+    <p class="lang-en">It is a creative collective of experts in their own mediums, co-creating an IP world through cross-medium dialogue, with shared ownership of what they build together.</p>
+    <p class="lang-zh">它是一个由各自媒介的专家组成的创作团体，通过跨媒介对话共同创造一个 IP 世界，并对所共同建造的东西共享所有权。</p>
+
+    <h3><span class="lang-en">The founding document is the facilitator's contribution. The world is co-created together.</span><span class="lang-zh">"创立文档"是召集人的贡献。世界是大家一起共创的。</span></h3>
+
+    <p class="lang-en">Play Instigator's role is to have developed this model — the structure, the philosophy, the collaboration framework, the financial architecture. Beyond that, our ongoing role is to <em>facilitate</em> the collaboration itself — making sure it actually happens, and that the IP that comes out of it is coherent. The more creatives you bring into a discussion, the harder it is to align everyone in the same direction. Holding that alignment is critical to whether the collaboration succeeds at all. The world the collective builds belongs to everyone who builds it. You're not joining someone else's project. You're authoring something that doesn't exist yet.</p>
+    <p class="lang-zh">Play Instigator 的角色，是把这套模型搭建出来——结构、哲学、协作框架、财务架构。除此之外，我们持续的角色是<em>召集</em>这场协作本身——确保它真的发生，并且从中产生出来的 IP 是连贯的。你把越多创作者拉进同一场讨论，就越难让大家朝同一个方向对齐。维系住这种对齐，对协作能不能成功来说，是关键中的关键。这个共创团体所建造的世界，属于每一个建造它的人。你不是在加入别人的项目。你在共同创作一个还不存在的东西。</p>
+
+    <h3><span class="lang-en">You're still doing what you'd do anyway — but with a seat in other mediums' design rooms.</span><span class="lang-zh">你做的依然是你本来就会做的事——但你在其他媒介的设计室里也有一个座位。</span></h3>
+
+    <p class="lang-en">A composer will still be making music. A game designer will still be making games. What changes is the creative context, the potential scale, and the ownership. One of the genuinely rare things this collective offers is a seat in the design discussions of <em>other</em> mediums — especially around how your medium might collaborate with theirs. This almost never happens in the entertainment landscape. When crossovers happen, it's usually one side commissioning work from the other. Co-designing something from the ground up across mediums is something almost no one gets to do.</p>
+    <p class="lang-zh">作曲人依然在做音乐。游戏设计师依然在做游戏。变的是创作语境、潜在的规模、以及所有权。这个共创团体所提供的真正稀有的东西之一，就是在<em>其他</em>媒介的设计讨论里也有一个座位——尤其是围绕"你的媒介如何与他们的媒介协作"的讨论。这在整个娱乐产业里几乎从不发生。所谓的跨界合作，大多数时候是其中一方"委托"另一方去做。从地基开始跨媒介地共同设计一个东西，几乎没有人有机会去做。</p>
+
+    <h3><span class="lang-en">The downside is real and should be named.</span><span class="lang-zh">不利的那一面是真实的，必须被点出来。</span></h3>
+
+    <p class="lang-en">Shared ownership means less control than making your own thing. Deferred revenue is a consequence of the limited resources we have starting out — but it's no different from what any indie studio faces when it tries to do its own thing without knowing whether it'll succeed. We <em>are</em> indies. We started this in order to do our own things. We know the risk and we are willing to take it. The collective is just a way of pooling our risk together so we have a shot at making something bigger than any one of us could alone. This is an experimental model — the first time it's being done.</p>
+    <p class="lang-zh">共享所有权意味着比"做自己的东西"少一些控制。收入延后，是我们起步时资源有限带来的结果——但这和任何一家独立工作室在做自己的东西、还不确定它会不会成立时所面对的，没什么两样。我们<em>就是</em>独立创作者。我们做这件事，本来就是为了做自己的东西。我们知道风险，我们愿意承担。这个共创团体只是把我们的风险汇集到一起，让我们有机会做出任何一个人单独都做不出来的更大的东西。这是一种实验性模型——还是第一次被尝试。</p>
+
+    <h2><span class="lang-en">Why This Is a Good Bet</span><span class="lang-zh">为什么这个赌注值得下</span></h2>
+
+    <div class="lang-en">
+      <p>The traditional path means competing with everyone in your medium. The noise is enormous. Most games, albums, comics, and films are never discovered by the audience that would love them.</p>
+      <p>This model means there is no competition. No one else is building transmedia IP this way. The structural difficulty of doing it is exactly what makes it a moat. The harder it is to build, the harder it is to replicate.</p>
+    </div>
+
+    <div class="lang-zh">
+      <p>传统路径意味着你要在你这门媒介里和所有人竞争。噪音极大。大多数游戏、专辑、漫画和电影，永远没有被那些会爱它们的观众发现。</p>
+      <p>这种模型意味着没有竞争。没有别人在用这种方式建造跨媒介 IP。它结构上很难做，正是这一点让它成为护城河。越难建，越难复制。</p>
+    </div>
+
+    <ol class="concept-list">
+      <li>
+        <strong><span class="lang-en">Your medium is primary, not derivative.</span><span class="lang-zh">你的媒介是主体，不是衍生品。</span></strong>
+        <span class="lang-en">Your medium would never be "the game based on the anime" or "the soundtrack to the film." It is an original expression of a world you helped author, built simultaneously with every other medium. There is no hierarchy of canon.</span>
+        <span class="lang-zh">你的媒介不会是"那部动画的游戏改编"或"那部电影的原声带"。它是一个你共同创作的世界的原创表达，与其他所有媒介同步被建造。这里没有"正典等级制度"。</span>
+      </li>
+      <li>
+        <strong><span class="lang-en">Multiple warm audiences from day one.</span><span class="lang-zh">从第一天起就有多个温暖的受众群。</span></strong>
+        <span class="lang-en">Every member of the collective brings their own audience — even a small one. None of those audiences fully overlap. The collective's first release launches into multiple warm communities simultaneously. That's distribution that money can't easily buy.</span>
+        <span class="lang-zh">共创团体的每一位成员都带着自己的受众——哪怕只有一小群。这些受众群之间没有任何一组是完全重合的。共创团体的第一个发布，会同时在多个已经"温暖"的社群里登场。这是用钱不容易买到的分发渠道。</span>
+      </li>
+      <li>
+        <strong><span class="lang-en">Your medium gets pushed forward.</span><span class="lang-zh">你的媒介本身会被往前推。</span></strong>
+        <span class="lang-en">A game designer gets asked "what does <em>persistence</em> feel like mechanically?" by a composer who has already answered the same question musically. That conversation changes what you make — not toward compromise, but toward capability you wouldn't have reached alone.</span>
+        <span class="lang-zh">一位作曲人——已经在音乐上回答了"<em>坚持</em>是什么感觉"这个问题——会反过来问游戏设计师："那在机制上，坚持是什么感觉？" 这种对话改变你所做的东西——不是走向妥协，而是走向你独自一人本不会抵达的能力。</span>
+      </li>
+    </ol>
+
+    <h2><span class="lang-en">How the IP World Gets Built</span><span class="lang-zh">IP 世界是如何被建造的</span></h2>
+
+    <p class="lang-en">The key principle: <strong>no medium is downstream</strong>. The world emerges from the dialogue between mediums, not from one medium's logic being translated into others.</p>
+    <p class="lang-zh">关键原则：<strong>没有任何媒介是下游</strong>。世界从媒介之间的对话中浮现，而不是从某一种媒介的逻辑被翻译进其他媒介里浮现。</p>
+
+    <div class="compare">
+      <div>
+        <h4><span class="lang-en">Conventional production</span><span class="lang-zh">传统制作</span></h4>
+        <p class="lang-en">Vertical. A creative director specifies what a section needs to do ("this moment should feel tense"), and each collaborator executes that specification in their medium. The direction flows one way.</p>
+        <p class="lang-zh">是纵向的。一位创意总监指定某个段落需要做到什么（"这个时刻应该让人感到紧张"），每一位合作者在自己的媒介里执行这个指定。方向只朝一个方向流动。</p>
+      </div>
+      <div>
+        <h4><span class="lang-en">Cross-medium integration</span><span class="lang-zh">跨媒介整合</span></h4>
+        <p class="lang-en">Horizontal. Collaborators are in genuine dialogue about what the world <em>is</em>. A composer's exploration of a theme can reshape how a game mechanic is designed. A manga artist's panel structure can suggest a new interaction model. Each retains full creative control over their own medium.</p>
+        <p class="lang-zh">是横向的。合作者们在围绕"这个世界<em>是什么</em>"进行真正的对话。一位作曲人对某个主题的探索，可以重塑某个游戏机制如何被设计。一位漫画家的分镜结构，可以提示出一种新的交互模型。每一位都完全保留对自己那门媒介的创作主导权。</p>
+      </div>
+    </div>
+
+    <p class="lang-en">In practice: the music sketch inspires the comic artist, whose storyboard inspires the spatial designer, whose floor plan surfaces a question the narrative writer hadn't considered. This is what "transmedia by design, not by adaptation" looks like in a room.</p>
+    <p class="lang-zh">在实际工作中：一段音乐草稿启发了漫画家，漫画家的故事板启发了空间设计师，空间设计师的平面图浮出一个叙事编剧之前没考虑过的问题。这就是"按设计跨媒介，不是靠改编跨媒介"在房间里看起来的样子。</p>
+
+    <div class="callout">
+      <p>
+        <strong><span class="lang-en">The world carries medium-native fingerprints</span><span class="lang-zh">这个世界带着各种媒介自身的指纹</span></strong>
+        <span class="lang-en">Because the world is built from medium-native communication — a composer's sketch, a storyboard, a floor plan — the foundation has the specific texture of how these people talked to each other. A different founding team with the same brief would produce a different world. The IP is unreproducible because the process that made it is unreproducible. That is an ontological moat.</span>
+        <span class="lang-zh">因为这个世界是用各种媒介本身的语言被建造的——作曲家的草稿、故事板、空间平面图——它的根基里就带着这群人当初是怎么互相交谈的那种特定质感。另一个不同的创始班底用同样的简报，会做出不一样的世界。这个 IP 之所以无法被复制，是因为做出它的那个过程本身就无法被复制。这是一种本体论意义上的护城河。</span>
+      </p>
+    </div>
+
+    <p class="lang-en"><strong>Canon is structural, not designated.</strong> If a game mechanic was co-designed with the composer and the narrative writer in the same room, the mechanic <em>is</em> canon in the same way the music <em>is</em> canon. The cross-medium connections are load-bearing, not decorative.</p>
+    <p class="lang-zh"><strong>正典是结构性的，不是被指定的。</strong>如果某个游戏机制是和作曲人、叙事编剧在同一个房间里共同设计出来的，那这个机制<em>就是</em>正典，跟那段音乐<em>是</em>正典是一样的方式。跨媒介之间的连结是承重的，不是装饰性的。</p>
+
+    <h2><span class="lang-en">Case Study — Starlight Runner Entertainment</span><span class="lang-zh">案例研究 — Starlight Runner Entertainment</span></h2>
+
+    <p class="lang-en">To understand where our model differs from the industry's, the cleanest comparison is the leading transmedia consultancy: Starlight Runner Entertainment, founded by Jeff Gomez. Their methodology is the gold standard of the conventional approach.</p>
+    <p class="lang-zh">要理解我们的模式与业界的差别究竟在哪里，最干净的对照对象，就是这个领域最领先的跨媒介顾问公司：由 Jeff Gomez 创立的 Starlight Runner Entertainment。他们的方法论是传统做法的黄金标准。</p>
+
+    <div class="lang-en">
+      <p>They produce what they call <em>mythology documents</em> — sometimes called transmedia bibles — for properties like Halo, Transformers, Spider-Man, Pirates of the Caribbean, and James Cameron's Avatar. These are not light briefs. The Halo bible reportedly ran to four binders of hundreds of pages each, with custom design and illustration, encoding canonical facts — weapons systems, alien races, cultures, characters — so that downstream writers, game designers, comic creators, and filmmakers can stay continuous across mediums. Gomez's own stated philosophy is to "give them the facts" rather than fill every blank, leaving room for new creators to invent inside an established world. That approach is excellent at what it is.</p>
+      <p>But Starlight Runner is called in <em>after</em> the IP already exists in one medium. There's an anchor property — the original game, the original film — and the mythology document's job is to record and extend it so every other medium can adapt it consistently. The structural assumption baked into the model is that the IP already exists in one form, narratively, before all the others. The medium managers downstream of the bible are skilled implementers working from a reference document; they are not co-authors of the world itself.</p>
+      <p>This is the gold standard for transmedia coherence in the industry today. It is also the model whose ceiling is the starting point of ours.</p>
+    </div>
+
+    <div class="lang-zh">
+      <p>他们为《光环》《变形金刚》《蜘蛛侠》《加勒比海盗》、詹姆斯·卡梅隆的《阿凡达》这样的项目制作他们所谓的<em>"神话文档"（mythology documents）</em>——有时也称作"跨媒介圣经"。这些不是轻量级的简报。据报道，《光环》的圣经共四本活页夹、每本数百页，配有定制的设计与插图，把所有正典事实——武器系统、外星种族、文化、角色——都编码下来，让下游的作家、游戏设计师、漫画创作者、电影创作者在不同媒介之间能保持前后一致。Gomez 自己明确表达过的理念是："给他们事实"，而不是把每一个空白都填上——给新的创作者留出空间，去在一个已经被建立起来的世界里发明新的东西。这种做法在它自己的范畴里非常出色。</p>
+      <p>但是 Starlight Runner 是在某个 IP 已经在某个媒介里存在<em>之后</em>才被请进来的。总有一个锚定作品——最初的那款游戏、最初的那部电影——而神话文档的工作，是把它记录下来、扩展开来，让其他每一种媒介都可以一致地去改编。这个模型里被预设进去的结构性假设是：这个 IP 在所有其他形式之前，已经先以一种叙事性的方式存在了。位于神话文档下游的那些媒介负责人是熟练的执行者，他们从一份参考资料里工作——但他们并不是这个世界本身的共同作者。</p>
+      <p>这是当今业界做"跨媒介一致性"的黄金标准。它同时也正是那个"天花板恰好成为我们起点"的模型。</p>
+    </div>
+
+    <h2><span class="lang-en">What the World's Foundation Actually Is</span><span class="lang-zh">这个世界的根基实际上是什么</span></h2>
+
+    <div class="lang-en">
+      <p>The Starlight Runner approach above is the industry-standard tool for transmedia coherence. Its job is to ensure the story stays coherent across every medium — so future installments don't get the facts wrong, so a comic adaptation doesn't contradict the lore of the games, so the toy line and the film and the novel all line up. That works because it assumes the IP <em>is</em> the story: a narrative thing that can be documented in prose and reference materials, then handed to other creators.</p>
+      <p>But by our definition (see <a href="ip-is-experience.html">IP is Experience</a>), the IP is not the story. The IP is the experience. And you cannot write down an experience in a bible. How would you document, in prose, what a piece of music actually sounds like? What an outfit feels like to wear? How a spatial exhibition lands as you walk through it? What a particular visual texture does to the eye? These mediums don't operate narratively — they don't have facts to be kept consistent. They have feelings to be produced. A document of canonical facts is the wrong instrument entirely for them.</p>
+      <p>So the foundation of this world cannot be a bunch of documents. <strong>The foundation has to be the cross-medium creative process itself.</strong> The conversations between mediums during ideation. The samples and sketches each contributor brings into those conversations — a composer's musical sketch, a comic artist's storyboard, a game designer's mechanic, a visual artist's reference, a writer's emotional beat. The world emerges from those interactions and from what each medium produces in dialogue with the others. The process <em>is</em> the foundation.</p>
+      <p>Anything that gets written down — a description of how the world feels, a record of what the medium dialogue resolved, a set of agreed sensory or emotional reference points — accretes <em>from</em> the process as residue. Useful as reference. Captured incidentally as the work happens. It is never the source.</p>
+      <p>That residue, when collected and organised, takes a form roughly like a <strong>phenomenological constitution</strong>: a description of what the world <em>feels like to be inside</em>, expressed in terms each medium can translate into its own native logic. It is built collectively during ideation, and it has three components:</p>
+    </div>
+
+    <div class="lang-zh">
+      <p>上面那一节里 Starlight Runner 的做法，就是业界做"跨媒介一致性"的标准工具。它的工作是确保故事在每一种媒介之间都保持连贯——好让后续作品不要把事实搞错、好让漫画改编不要与游戏里的设定相违背、好让玩具产品线、电影、小说都能彼此对得上。这种做法之所以成立，是因为它默认 IP <em>就是</em>故事：一个可以用散文与参考资料记录下来、然后交给其他创作者的叙事性的东西。</p>
+      <p>但是，按照我们的定义（详见<a href="ip-is-experience.html">IP 即体验</a>），IP 不是故事。IP 是体验。而你没办法把一种体验"写"进一本圣经里。你要怎么用文字去记录一段音乐听起来到底是什么感觉？记录一件衣服穿在身上是什么触感？记录一个空间装置在你走过它的时候是怎么落在你身上的？记录一种特定的视觉质地在眼睛里发生什么作用？这些媒介不是按叙事方式运作的——它们没有"需要保持一致的事实"。它们要产出的是"感受"。一份"正典事实"文档对它们来说是完全错误的工具。</p>
+      <p>所以这个世界的地基不能是一堆文档。<strong>这个地基必须是跨媒介的创作过程本身。</strong>构思阶段里媒介之间的那些对话。每一位贡献者带进这些对话里的样本和草稿——作曲人的一段音乐草稿、漫画家的故事板、游戏设计师的一个机制、视觉艺术家的参考图、编剧的一个情感节点。这个世界从这些互动里浮现，从每一种媒介在与其他媒介对话时所产出的东西里浮现。过程<em>就是</em>地基。</p>
+      <p>任何被写下来的东西——对世界感觉的某种描述、对媒介对话所达成结论的记录、被达成共识的感官或情感参照点——都是<em>从</em>过程里"沉淀下来的残留物"。作为参考是有用的。它在工作发生的同时被附带地记下来。但它从来都不是源头。</p>
+      <p>这些残留物，在被收集、整理之后，大致会呈现为一种类似于<strong>"现象学宪章"</strong>的形态：用每一种媒介都能翻译成自身原生逻辑的方式，去描述"身处这个世界里<em>是什么感觉</em>"。它是在构思阶段由整个团体一起搭建出来的，由三个部分组成：</p>
+    </div>
+
+    <ol class="concept-list">
+      <li>
+        <strong><span class="lang-en">Emotional states, described phenomenologically — not narratively.</span><span class="lang-zh">情感状态，用现象学的方式描述——不是用叙事的方式。</span></strong>
+        <span class="lang-en">Not "the protagonist feels loss." Instead: "the specific texture of something beautiful that cannot be held." The composer asks: what does that texture <em>sound like</em> structurally? — a phrase that almost arrives, resolution withheld. The visual artist asks: what does it look like? — negative space, a subject near the frame's edge. The game designer asks: what does it <em>feel like</em> mechanically? — a resource that exists only while being spent. Different formal outputs, same underlying feeling.</span>
+        <span class="lang-zh">不是"主角感到失去"。而是："某种美而无法被握住之物的那种具体质感"。作曲人会问：这种质感在结构上<em>听起来</em>是什么样？——一个几乎要落下却被悬住、不给出解决的乐句。视觉艺术家会问：它看起来是什么样？——一片留白，主体靠近画面边缘。游戏设计师会问：它在机制上<em>感觉</em>起来是什么样？——一种"只有在被花掉的时候才存在"的资源。形式上的产出不同，底下的那个感觉是同一个。</span>
+      </li>
+      <li>
+        <strong><span class="lang-en">Tensions — the irresolvable contradictions the IP lives inside.</span><span class="lang-zh">张力——IP 所栖居其中的、无法解决的那些矛盾。</span></strong>
+        <span class="lang-en">Active forces in conflict that each medium expresses through its formal properties. The game expresses a tension through mechanics of control and loss of control. The composer expresses it through harmonic resolution withheld. The narrative writer expresses it through a character who cannot do both things that matter.</span>
+        <span class="lang-zh">是处于冲突中的活的力量，每一种媒介都通过它自己的形式属性来表达它。游戏通过"控制与失控"的机制来表达一种张力。作曲人通过悬而未决的和声解决来表达它。叙事编剧通过一个"两件重要事情不能同时去做"的角色来表达它。</span>
+      </li>
+      <li>
+        <strong><span class="lang-en">Sensory axioms — the specific colors, frequencies, textures, and spatial relationships that <em>are</em> the world</span><span class="lang-zh">感官公理——那些具体的颜色、频率、质地、空间关系，它们<em>就是</em>这个世界本身</span></strong>
+        <span class="lang-en">, not represent it. Not a mood board or style guide. Sensory axioms are formal properties that feel like the world's own substance. A collaborator who has absorbed them can make a decision in a context no one anticipated, and it will feel like it came from the same place.</span>
+        <span class="lang-zh">，而不是"代表"这个世界。不是情绪板，也不是风格指南。感官公理是那种"感觉起来就是这个世界自身的物质"的形式属性。一位真正吸收了它们的合作者，可以在没人预见过的情境下做出某个决定，而那个决定会让人觉得"这是从同一个地方来的"。</span>
+      </li>
+    </ol>
+
+    <h2><span class="lang-en">Creative Architecture — What's Shared, What's Yours</span><span class="lang-zh">创作架构——什么是共享的，什么是你自己的</span></h2>
+
+    <p class="lang-en">Three-tier structure for creative decisions. The closer something is to the world's core identity, the harder it is to change. The closer it is to expression, the more autonomy each medium has.</p>
+    <p class="lang-zh">创作决策采用三层结构。越靠近世界的核心身份，越难被改变。越靠近表达层，每个媒介自身的自治权越大。</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th><span class="lang-en">Layer</span><span class="lang-zh">层</span></th>
+          <th><span class="lang-en">Scope</span><span class="lang-zh">范围</span></th>
+          <th><span class="lang-en">Who decides</span><span class="lang-zh">谁来决定</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <strong><span class="lang-en">1 · Immutable</span><span class="lang-zh">1 · 不可变</span></strong><br>
+            <em><span class="lang-en">The world's soul</span><span class="lang-zh">世界的灵魂</span></em>
+          </td>
+          <td>
+            <span class="lang-en">Emotional logic, core tensions, sensory axioms. The phenomenological constitution.</span>
+            <span class="lang-zh">情感逻辑、核心张力、感官公理。整套现象学宪章。</span>
+          </td>
+          <td>
+            <span class="lang-en">Built by the founding cohort. Cannot be changed unilaterally by anyone, including the facilitator.</span>
+            <span class="lang-zh">由创始班底共同搭建。任何人都不能单方面更改，包括召集人。</span>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <strong><span class="lang-en">2 · Governed</span><span class="lang-zh">2 · 受管辖</span></strong><br>
+            <em><span class="lang-en">The world's bones</span><span class="lang-zh">世界的骨架</span></em>
+          </td>
+          <td>
+            <span class="lang-en">Aesthetic direction, canonical facts, character truths.</span>
+            <span class="lang-zh">美学方向、正典事实、角色真相。</span>
+          </td>
+          <td>
+            <span class="lang-en">Any member can propose. Changes require collective ratification.</span>
+            <span class="lang-zh">任何成员都可以提议。任何变更需要共创团体共同批准。</span>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <strong><span class="lang-en">3 · Sovereign</span><span class="lang-zh">3 · 主权</span></strong><br>
+            <em><span class="lang-en">Your domain</span><span class="lang-zh">你的领域</span></em>
+          </td>
+          <td>
+            <span class="lang-en">Pacing, structure, portrayal style, narrative sequencing, format-specific mechanics.</span>
+            <span class="lang-zh">节奏、结构、呈现风格、叙事顺序、特定格式的机制。</span>
+          </td>
+          <td>
+            <span class="lang-en">Completely owned by the medium manager. No one else has a vote.</span>
+            <span class="lang-zh">完全归该媒介负责人所有。任何其他人都没有投票权。</span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p class="lang-en">The genius of this structure is that it solves the auteur problem without replacing it with a committee problem. You don't need one person to control everything. You need Layer 1 to be deeply internalized by everyone — and then sovereign creative freedom beneath it. Coherence comes from the foundation, not from a gatekeeper.</p>
+    <p class="lang-zh">这种结构最妙的地方在于，它解决了"作者问题"，又没有把它换成"委员会问题"。你不需要一个人去控制所有东西。你需要的是让"第 1 层"被每一位成员深深内化——然后在它之下，是完全主权式的创作自由。连贯性来自地基，不来自把关人。</p>
+
+    <h2><span class="lang-en">How Creative Decisions Stay Coherent</span><span class="lang-zh">创作决策如何保持连贯</span></h2>
+
+    <p class="lang-en">The philosophy filter is the mechanism by which the collective stays coherent without the facilitator being present in every creative decision. Two levels:</p>
+    <p class="lang-zh">"哲学过滤器"，就是这个共创团体在召集人不出席每一个创作决定的情况下，依然能保持连贯的机制。它有两个层级：</p>
+
+    <div class="callout">
+      <p>
+        <strong><span class="lang-en">Macro</span><span class="lang-zh">宏观层</span></strong>
+        <span class="lang-en">Does this creative decision genuinely help people face their real lives? A mechanic that trivialises consequence fails it. A narrative arc that flatters the audience fails it. An aesthetic choice that produces cheap emotional release rather than genuine engagement fails it.</span>
+        <span class="lang-zh">这个创作决定，真的能帮助人去面对他们真实的生活吗？一个让"后果变得无关紧要"的机制，过不了。一段在讨好观众的叙事弧，过不了。一个产出"廉价的情感宣泄而不是真正投入"的美学选择，过不了。</span>
+      </p>
+    </div>
+
+    <div class="callout">
+      <p>
+        <strong><span class="lang-en">IP-specific</span><span class="lang-zh">IP 特定层</span></strong>
+        <span class="lang-en">Does this serve the core claim of this specific IP? Each IP makes a specific philosophical claim — not a theme, but a testable claim. Every creative decision in any medium should be traceable back to it.</span>
+        <span class="lang-zh">这件事，服务于这一个具体 IP 的核心主张吗？每一个 IP 都做出一个具体的哲学主张——不是主题，而是一个可被检验的主张。任何媒介里的任何创作决定，都应该能被追溯回到这个主张上。</span>
+      </p>
+    </div>
+
+    <div class="lang-en">
+      <p>The filter only works when concrete enough to be applied independently. "Be meaningful" is not a filter. "Does this require the audience to pay a real cost?" is a filter — it's testable. When the moral spine of the IP is concrete enough, it propagates without the facilitator in the room.</p>
+      <p>The filter also changes what creative conflict is about. When two collaborators disagree, the question is not "whose preference wins?" or "who has seniority?" — it is "which option better serves the philosophy we've agreed on?" Conflicts become investigations of the philosophy rather than tests of social power.</p>
+    </div>
+
+    <div class="lang-zh">
+      <p>过滤器只有在足够具体到"可以被独立应用"时才会真的起作用。"要有意义"不是一个过滤器。"这件事需要观众付出真实的代价吗？"才是一个过滤器——它可以被检验。当 IP 的道德脊柱足够具体时，它可以在召集人不在场的情况下自我传播。</p>
+      <p>过滤器也改变了"创作冲突"是关于什么的。当两位合作者意见相反时，问题不是"谁的偏好赢"或者"谁资历更老"——问题是"哪一个选项更好地服务我们已经一起同意的那套哲学？" 冲突变成了对哲学的调查，而不是社交权力的较量。</p>
+    </div>
+
+    <h2><span class="lang-en">Conflict Resolution</span><span class="lang-zh">冲突解决</span></h2>
+
+    <div class="lang-en">
+      <p>Creative conflict is inevitable. The model treats it as a diagnostic signal rather than a problem to adjudicate. When two collaborators pull in opposite directions, it almost always means the shared vision isn't concrete enough yet — not that one person is wrong.</p>
+      <p>The first response to conflict is investigation, not resolution. Both sides present what they're trying to accomplish. The discussion explores whether a third option achieves both goals better than either alternative. When two valid options remain, voting or audience feedback resolves the tie.</p>
+      <p>Membership in this collective requires accepting something specific: your creative process now has more moving parts than working in a single medium. The willingness to investigate alignment when conflict emerges — rather than defend a position and wait for authority — is a prerequisite. Collaborators who treat creative conflict as something to be won are not compatible with the model, regardless of skill level.</p>
+    </div>
+
+    <div class="lang-zh">
+      <p>创作冲突是不可避免的。这个模型把冲突当作"诊断信号"，而不是"需要被裁决的问题"。当两位合作者向相反方向用力时，几乎总是意味着共同的愿景还不够具体——而不是说其中一个人是错的。</p>
+      <p>对冲突的第一反应是调查，不是解决。双方都说出自己想达成的是什么。讨论会去探索：是否有第三个选项，能比已经摆在桌面上的任何一个更好地达成双方的目标。当确实只剩两个都同样有效的选项时，再用投票或观众反馈来打破平局。</p>
+      <p>加入这个共创团体需要接受一件具体的事情：你的创作过程现在比独自在一种媒介里工作时，有更多的活动部件。在冲突浮现时愿意去调查"我们到底有没有对齐"，而不是先去捍卫立场然后等权威来裁决——这是先决条件。把创作冲突当作"必须赢的东西"的合作者，与这个模型不兼容，跟技术水平无关。</p>
+    </div>
+
+    <h2><span class="lang-en">The Facilitator's Role</span><span class="lang-zh">召集人的角色</span></h2>
+
+    <p class="lang-en">The facilitator is not a director. A director holds aesthetic authority — they decide. The facilitator holds the conditions under which decisions get made well.</p>
+    <p class="lang-zh">召集人不是导演。导演持有美学权威——他们做决定。召集人持有的是"让决定能够被做得好"的那些条件。</p>
+
+    <p class="lang-en">Two functions that must coexist:</p>
+    <p class="lang-zh">两种必须同时存在的职能：</p>
+
+    <h3><span class="lang-en">Vision holder and philosophical guardian</span><span class="lang-zh">愿景守持者与哲学守护者</span></h3>
+
+    <div class="lang-en">
+      <p>Keeper of the philosophical framework and the cross-medium vision. This requires understanding each collaborator's discipline well enough to translate between them. When a composer says a section feels "unresolved," the facilitator's job is to translate: what does "unresolved" mean mechanically? What would it look like visually? Is the feeling of irresolution something the narrative wants to hold onto, or resolve?</p>
+      <p>The facilitator must hold the vision without owning it. The vision belongs to the collective. The failure mode in one direction is rigidity: refusing incoming ideas before they can improve the world. The failure mode in the other is accommodation: absorbing everything until the vision loses its backbone.</p>
+    </div>
+
+    <div class="lang-zh">
+      <p>哲学框架与跨媒介愿景的守持者。这需要召集人对每一位合作者所处学科有足够的理解，足以在它们之间进行翻译。当一位作曲人说某段感觉"未被解决"时，召集人的工作是去翻译：在机制上，"未被解决"意味着什么？在视觉上会是什么样？那种"不解决感"是叙事想保留的，还是想最终解决掉的？</p>
+      <p>召集人必须"守持"愿景，但不"拥有"它。愿景属于整个共创团体。一个方向上的失败模式是僵硬：在新进来的想法还没机会改进世界之前就拒绝它们。另一个方向上的失败模式是无原则接纳：把所有东西都吸收进来，直到愿景失去脊梁。</p>
+    </div>
+
+    <h3><span class="lang-en">Operational</span><span class="lang-zh">运营性</span></h3>
+
+    <p class="lang-en">Running meetings, managing agreements, financial reporting, coordinating timelines. This is not an afterthought. The operational function is what creates the structure inside which creative collaboration can happen without constant friction.</p>
+    <p class="lang-zh">主持会议、管理协议、财务报告、协调时间线。这部分不是"附带的杂事"。运营职能创造的，正是那个让创作协作得以在不被持续摩擦消耗的情况下发生的结构。</p>
+
+    <h2><span class="lang-en">How Work Happens Over Time</span><span class="lang-zh">工作随时间是如何展开的</span></h2>
+
+    <p class="lang-en">The collaboration cadence changes across the project's life.</p>
+    <p class="lang-zh">协作的节奏会随着项目生命周期变化。</p>
+
+    <p class="lang-en"><strong>Ideation phase — heavy cadence.</strong> Cross-medium sessions are frequent. The goal is to build the phenomenological constitution together. This phase is generative and energising — every session surfaces discoveries that reshape the collective's understanding.</p>
+    <p class="lang-zh"><strong>构思阶段——节奏密集。</strong> 跨媒介会议很频繁。目标是一起搭建那份现象学宪章。这个阶段是生成性的、令人振奋的——每一次会议都会浮现出能够重塑整个团体理解的发现。</p>
+
+    <p class="lang-en"><strong>Production phase — targeted cadence.</strong> Collaborators move into medium-specific work. Cross-medium touchpoints happen at specific integration decisions, not on a standing schedule. This is where the philosophy filter works autonomously.</p>
+    <p class="lang-zh"><strong>制作阶段——节奏定向化。</strong> 合作者们各自进入自己媒介内部的工作。跨媒介的接触点只在具体的整合决策上发生，不是按固定时间表进行。这就是哲学过滤器自主运作的阶段。</p>
+
+    <p class="lang-en">A predictable psychological shift happens: the cross-medium dialogue that was energising in month one becomes overhead by month six. This isn't a sign the collaboration is failing — it's a sign the ideation phase did its job.</p>
+    <p class="lang-zh">这里会出现一个可预期的心理变化：在第一个月让人振奋的跨媒介对话，到第六个月会感觉像额外开销。这不是协作失败的信号——这是构思阶段干完了它的活的信号。</p>
+
+    <p class="lang-en"><strong>Different mediums ship at different cadences — by design.</strong> Music can release a track monthly. A game can't. An anime can't. This is a feature: faster mediums keep the IP alive between major releases from slower ones. The IP is never quiet. All of it is canonical.</p>
+    <p class="lang-zh"><strong>不同媒介按不同节奏发布——这是有意为之的设计。</strong> 音乐可以每月发一首。游戏不行。动画也不行。这是一个特性：节奏更快的媒介让 IP 在那些节奏更慢的媒介的两次大型发布之间保持活着。IP 永远不沉默。所有这一切都是正典。</p>
+
+    <h2><span class="lang-en">Scope Management</span><span class="lang-zh">范围管理</span></h2>
+
+    <div class="lang-en">
+      <p>The cross-medium integration model structurally expands scope. A good idea surfaced in music becomes a mechanic, which becomes a narrative arc, which becomes a visual system. This is the source of the model's creative power and the mechanism by which projects become unshippable.</p>
+      <p>The primary tool is the <strong>icebox</strong>: every idea that is genuinely good but doesn't fit the current scope is documented in full, attributed, and held for future rounds. The icebox is a celebrated place — not a graveyard. "This is a great idea that doesn't fit now" is not the same as "this idea is rejected."</p>
+      <p>The second tool is the <strong>timeboxed ideation phase</strong>: the cross-medium dialogue has a defined start and end. After ideation closes, scope is locked. New ideas during production go to the icebox.</p>
+    </div>
+
+    <div class="lang-zh">
+      <p>跨媒介整合模型在结构上就会扩大范围。一个在音乐里浮现出来的好点子变成一个机制，变成一段叙事弧，变成一套视觉系统。这正是这种模型创作力的来源，也是项目变得"做不完"的机制本身。</p>
+      <p>主要的工具是<strong>"冰盒"</strong>：每一个真正不错但与当前范围不匹配的点子，都会被完整记录、注明出处、保留到未来回合再用。冰盒在文化里是一个被礼遇的地方——不是坟墓。"这是一个很棒的点子，但现在还放不进来"和"这个点子被否决了"，不是同一回事。</p>
+      <p>第二个工具是<strong>"被时间盒约束的构思阶段"</strong>：跨媒介对话有明确的开始和明确的结束。构思阶段一旦结束，范围就被锁定。制作阶段里出现的新点子，进入冰盒。</p>
+    </div>
+
+    <h2><span class="lang-en">Shipping</span><span class="lang-zh">发布</span></h2>
+
+    <div class="lang-en">
+      <p>The quality gate is defined by the philosophy criteria, not by individual taste. "Does this meet the standard we collectively defined?" can be answered without reference to anyone's preferences. This removes ego from the shipping decision.</p>
+      <p>The facilitator's release veto is deliberately narrow: philosophical grounds only. Using it because a composition doesn't match the facilitator's aesthetic preferences is a misuse of the role.</p>
+      <p>Before shipping, the collective conducts a structured review where every collaborator can raise unresolved objections. The goal isn't unanimous enthusiasm — it's the absence of major unresolved objections grounded in the philosophy.</p>
+    </div>
+
+    <div class="lang-zh">
+      <p>品质关卡是由哲学标准定义的，不是由个人品味定义的。"这件作品达到了我们共同定义的标准吗？"这个问题，可以在不参照任何人偏好的情况下回答。这把"自我"从发布决定里剥离出来。</p>
+      <p>召集人的"发布否决权"是被刻意缩窄过的：仅限哲学层面的理由。因为一段作品不符合召集人的美学偏好就动用否决权，是对这个角色的滥用。</p>
+      <p>在发布之前，整个团体会进行一次结构化的评审，每一位合作者都可以提出仍未解决的异议。目标不是"全体一致地热情"——而是"没有任何重大的、扎根在那套哲学之上的、未解决的异议"。</p>
+    </div>
+
+    <h2><span class="lang-en">Building in Public</span><span class="lang-zh">公开建造</span></h2>
+
+    <div class="lang-en">
+      <p>The cross-medium integration model produces genuinely novel <em>process</em>, not just novel output. The story of how a composer's exploration of a theme reshaped a game mechanic is interesting content — not behind-the-scenes trivia, but a demonstration of creative process that almost no one is showing publicly.</p>
+      <p>Building in public seeds the audience during development. By the time the first product ships, there is already a community that understands the IP and the philosophy behind it. The building process itself could become our best marketing tool — not a campaign run alongside the work, but the work being made visible as it happens.</p>
+    </div>
+
+    <div class="lang-zh">
+      <p>跨媒介整合模型产生的是真正新颖的<em>过程</em>，而不只是新颖的产出。"一位作曲人对某个主题的探索是如何反过来重塑一个游戏机制的"这种故事，本身就是有趣的内容——不是幕后花絮，而是一种几乎没有人公开展示过的创作过程演示。</p>
+      <p>公开建造让我们在开发阶段就开始播种受众。当第一个产品发布时，已经存在一个理解这个 IP 及其背后哲学的社群。建造过程本身可以成为我们最好的营销工具——不是和作品平行运行的一场活动，而是作品在被制作的同时被展现出来。</p>
+    </div>
+
+    <h2><span class="lang-en">Ownership and Revenue</span><span class="lang-zh">所有权与收益</span></h2>
+
+    <div class="lang-en">
+      <p>The financial model is built around shared ownership and cycles rather than upfront fees. The full structure is documented in <a href="revenue-sharing.html">Revenue Sharing Structure</a>. The short version:</p>
+      <p>Work is measured in cycles. Each cycle, each medium manager's contribution is estimated in work units based on deliverables. Revenue is distributed according to contribution, with a goal of moving toward equal distribution between mediums as the model matures. The IP is co-owned by the collective — no single member can sell, license, or take exclusive rights to the full IP. A member who departs can't take the world with them; what they produced for the collective remains part of the collective's IP. The world belongs to everyone who built it together, and no one can unilaterally dismember it.</p>
+      <p>For decisions important enough that no individual should hold final say — major strategic shifts, changes to Layer 1 of the creative architecture, structural changes to the collective itself — the model uses a supermajority vote (working assumption: 80–90% agreement).</p>
+    </div>
+
+    <div class="lang-zh">
+      <p>财务模型建立在共享所有权与周期之上，而不是建立在前期付款之上。完整结构记录在<a href="revenue-sharing.html">收益分配结构</a>里。简短版：</p>
+      <p>工作以周期为单位被衡量。每一个周期里，每一位媒介负责人的贡献会基于其交付物，被估算为工作单位。收益按贡献分配，目标是随着模型成熟，向"各媒介之间趋于均等分配"靠拢。IP 由整个共创团体共同持有——没有任何单一成员可以独自出售、授权或对完整的 IP 主张排他性权利。离开的成员也带不走这个世界；他为共创团体做出的产出，仍然是这个共创团体 IP 的一部分。这个世界属于所有共同建造它的人，没有任何一个人可以单方面把它拆解。</p>
+      <p>对于那些重要到任何个人都不应单独拥有最终决定权的事——重大战略转向、对创作架构第 1 层的改动、对共创团体本身的结构性改动——模型采用超级多数票（工作假设：80–90% 一致）。</p>
+    </div>
+
+    <h2><span class="lang-en">Who This Is For</span><span class="lang-zh">这是为谁准备的</span></h2>
+
+    <p class="lang-en">The right collaborator profile is specific. Long-term philosophical and transmedia alignment matters far more than current talent or skill level. Talent and skills can be trained. What we're looking for is harder to teach: people willing to grow with us, who see the long-term potential in the collective, and who are willing to bet their time, energy, and effort on it.</p>
+    <p class="lang-zh">合适的合作者画像是非常具体的。长期上的哲学对齐和跨媒介对齐，远比当下的天赋或技术水平重要。天赋和技术可以被训练。我们要找的，是更难教的东西：愿意和我们一起成长的人、看得到这个共创团体长期潜力的人、愿意把自己的时间、精力、努力押在上面的人。</p>
+
+    <ol class="concept-list">
+      <li>
+        <strong><span class="lang-en">Willing to take this risk with us.</span><span class="lang-zh">愿意和我们一起承担这份风险。</span></strong>
+        <span class="lang-en">Not about career stage. The collective is at its earliest possible stage and the risk is genuinely real — what matters is whether you're choosing it knowingly, alongside us. Both ends of the experience spectrum can fit: skilled, senior creators who want a way out of how their medium is conventionally practised, and people relatively new to their craft who are seriously dedicated to going deep on it. What matters is the willingness to take the bet, and the dedication to the craft itself — wherever you are on the curve.</span>
+        <span class="lang-zh">这与职业生涯所处的阶段无关。共创团体本身正处在最早期的阶段，风险是真实的——重要的是你是否在<em>清楚知道这一切</em>的前提下，选择和我们一起承担它。经验光谱的两端其实都可以契合：既包括技艺高超、资历深厚、想跳出自身媒介常规做法的创作者，也包括相对新手、但对深耕这门手艺充满决心的人。重要的是你是否愿意承担这份赌注，以及对自身手艺本身的投入——无论你目前在这条曲线上的哪一段。</span>
+      </li>
+      <li>
+        <strong><span class="lang-en">Philosophically aligned, not just skill-aligned.</span><span class="lang-zh">在哲学上对齐，不只是在技术上对齐。</span></strong>
+        <span class="lang-en">They have to actually believe in what the IP is trying to do, and in why a transmedia collective is worth building this way. Skill we can grow alongside. Belief either is or isn't. Philosophical alignment is what sustains a collaborator through the hard periods — when the cross-medium dialogue is friction rather than fuel, when the icebox feels like it contains their best ideas, when deferred revenue is still deferred.</span>
+        <span class="lang-zh">他们必须真的相信这个 IP 想做的事情，以及"为什么值得用这种方式搭建一个跨媒介共创团体"这件事。技术可以一起成长。相信与否，是要么有要么没有的。哲学上的对齐，正是支撑一位合作者度过艰难期的东西——当跨媒介对话从燃料变成摩擦时、当冰盒里仿佛装着他们最好的点子时、当被延后的收益继续被延后时。</span>
+      </li>
+      <li>
+        <strong><span class="lang-en">Willing to explore beyond the conventional limits of their medium.</span><span class="lang-zh">愿意去探索自己媒介的传统边界之外。</span></strong>
+        <span class="lang-en">Curiosity about what their medium could do differently, rather than defensiveness about how it's "supposed" to be done. The cross-medium dialogue will ask things of your medium that the conventional path inside it would never ask — and that conversation only works with someone genuinely curious about those questions.</span>
+        <span class="lang-zh">对"自己的媒介还可以以怎样不同的方式被使用"抱有好奇心，而不是对"它'应该'怎么被做"抱有防御心。跨媒介对话会向你的媒介提出一些"那个媒介内部的传统路径"永远不会提的问题——而那场对话只有在你真心对那些问题感到好奇时，才会真的成立。</span>
+      </li>
+      <li>
+        <strong><span class="lang-en">Capable of growing into the work — and willing to drive that growth yourself.</span><span class="lang-zh">能够成长进这份工作里——并且愿意自己去推动这份成长。</span></strong>
+        <span class="lang-en">Raw skill matters less than trajectory. The bet is on growth and alignment, not on a portfolio that's already complete. But the growth has to be self-driven. The collective can challenge how your craft meets the rest of the world — the story, the visuals, the mechanics, the room — but no one here can teach you the craft itself. If you're the music person, nobody else here will help you become a better composer; that part is on you. We're trusting you to do your own growing.</span>
+        <span class="lang-zh">原始技能比"轨迹"次要。我们押的是成长与对齐，而不是一份已经完整的作品集。但这种成长必须是由你自己驱动的。这个共创团体可以挑战"你这门手艺如何与世界其他部分相遇"——故事、画面、机制、房间——但这里没有任何人能教你这门手艺本身。如果你是做音乐的那个人，团队里没有任何其他人会帮你变成一个更好的作曲人；那部分必须由你自己来。我们信任你，会自己去推动你自己的成长。</span>
+      </li>
+      <li>
+        <strong><span class="lang-en">Wired for ownership, not wages.</span><span class="lang-zh">为"共同持有"而生，不为"按时计酬"而生。</span></strong>
+        <span class="lang-en">Where item 1 is about sitting with the risk, this is about fitting the structure. We don't pay for time worked. Your time and craft are your capital contribution; equity in what we build — medium manager share, earned contribution, rolling units (see <a href="revenue-sharing.html">Revenue Sharing</a>) — is your return. The collective is built for people who'd rather own a share than be paid hourly.</span>
+        <span class="lang-zh">如果说第 1 点关注的是"能不能与这份风险共处"，那这一点关注的就是"你这个人是否与这套结构匹配"。我们不按你工作的时间付薪水。你的时间和你的手艺是你的资本贡献；你在共同建造之物里累积的股权——媒介负责人份额、贡献份额、滚动单位（详见<a href="revenue-sharing.html">收益分配结构</a>）——才是你的回报。这个共创团体是为"宁愿拥有一份股权，也不要按小时拿钱"的人而建的。</span>
+      </li>
+    </ol>
+
+  </main>
+
+  <nav class="foot-nav" aria-label="Continue reading">
+    <a class="prev" href="ip-is-experience.html">
+      <span class="arrow lang-en">← Previous</span>
+      <span class="arrow lang-zh">← 上一篇</span>
+      <span class="ttl lang-en">03 · IP is Experience</span>
+      <span class="ttl lang-zh">03 · IP 即体验</span>
+    </a>
+    <a class="next" href="revenue-sharing.html">
+      <span class="arrow lang-en">Next →</span>
+      <span class="arrow lang-zh">下一篇 →</span>
+      <span class="ttl lang-en">05 · Revenue Sharing</span>
+      <span class="ttl lang-zh">05 · 收益分配结构</span>
+    </a>
+  </nav>
+
+  <footer class="foot">
+    <span class="lang-en">Play Instigator · Singapore</span>
+    <span class="lang-zh">Play Instigator · 新加坡</span>
+    <span class="dot-row" aria-hidden="true">
+      <i class="d1"></i><i class="d2"></i><i class="d3"></i>
+    </span>
+    <span class="lang-en">Transmedia Collective</span>
+    <span class="lang-zh">跨媒介共创团体</span>
+  </footer>
+
+</div>
+
+<button class="back-to-top" id="backToTop" aria-label="Back to top" type="button">↑</button>
+
+<script src="nav.js"></script>
+</body>
+</html>
