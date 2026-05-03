@@ -331,6 +331,199 @@
           <!-- WEEKLY-GENERATED START -->
           <article class="entry-card">
               <div class="entry-meta">
+                <span class="entry-week-tag">Week of 27 Apr</span>
+                <span class="entry-date">27 &ndash; 29 April 2026</span>
+              </div>
+              <div class="entry-body">
+                <p>Certainly! Below is a structured summary of the provided technical update and actions related to upgrading Obi Fluid 7.1.0 to 7.1.1, along with addressing issues and verification steps:</p>
+                <p>Upgrade Summary</p>
+                <p>What Changed:
+Obi Fluid Version: Upgraded from version 7.1.0 to 7.1.1 on April 22, 2026.
+Workarounds Removed: 
+ObiLeakWorkaround.cs and its corresponding .meta file were deleted as the upgrade resolved a memory leak issue.
+Scene Modifications:
+In MatchScene.unity, removed the ObiLeakWorkaround MonoBehaviour reference from the ObiSolver GameObject’s component list.</p>
+                <p>Documentation Updates:
+Updated MEMORY.md to reflect the version change and deprecated previous leak-fix entries, redirecting them to new documentation.
+A pre-existing document (docs/OBI_UPGRADE_7_1_1.md) was confirmed accurate post-upgrade.</p>
+                <p>Reasons for Changes</p>
+                <p>The upgrade primarily addressed two key issues:
+Memory Leak: Version 7.1.1 fixed a memory leak in ObiFluidRendererFeature, which was the exact issue previously patched by ObiLeakWorkaround.cs.
+Collider World Issue: Fixed an unrelated problem with particle reactivity to colliders that did not affect the current implementation.</p>
+                <p>Verification Process</p>
+                <p>Static Code Analysis:
+Conducted a grep search for references to ObiLeakWorkaround and its GUID, confirming no residual code existed.
+Ensured all Obi types/methods in use were compatible with version 7.1.1.</p>
+                <p>Compilation Check:
+Verified zero errors and seven warnings during live compilation within the Unity Editor. The warnings pertained to deprecated methods used by Obi’s sample scripts, not user code.</p>
+                <p>Batch-mode Compile Attempt:
+Faced a failure due to project lock but relied on successful live editor compilation as verification of no introduced issues.</p>
+                <p>Files Modified</p>
+                <p>Deleted:
+ObiLeakWorkaround.cs and its .meta file.
+Modified:
+MatchScene.unity: Removed obsolete component reference related to the workaround.
+Documentation Updated:
+Added entry in MEMORY.md.
+Verified existing upgrade documentation (docs/OBI_UPGRADE_7_1_1.md).</p>
+                <p>Follow-Up Actions</p>
+                <p>Conduct a play session of MatchScene for at least 5 minutes to ensure that fluid rendering functions correctly and native memory usage remains stable.
+Consider potential performance improvements unlocked by the new version, such as utilizing solver boundary limits or optimizing blood attribution tracking.</p>
+                <p>This summary captures the essence of the technical changes, rationale, verification efforts, and next steps following the Obi Fluid upgrade.</p>
+              </div>
+              <details class="entry-raw">
+                <summary>Raw session notes</summary>
+                <div class="raw-content">
+                  <h3>2026-04-27 — Lobby Mouse Cursor Dies on Gamepad Connect (Missing EventSystem)</h3>
+                  <h3>Symptom</h3>
+                  <p>In <code>LobbyScene</code> (rebinder UI), the mouse cursor stopped dispatching click/hover events to the UI Toolkit panel the moment a gamepad was connected. Disconnecting the gamepad restored mouse dispatch. Reproducible regardless of whether any player was set to Controller mode. <code>MainMenu</code> and <code>MatchScene</code> were unaffected — mouse worked fine there even with multiple gamepads connected and characters being driven by them.</p>
+                  <p>A workaround was already shipped at <code>InputRebindUIController.cs:2870-2891</code> (gamepad Start button / Enter key advances scene without needing the mouse). The actual cause remained unidentified until this session.</p>
+                  <h3>Investigation that led nowhere</h3>
+                  <p>Three failed hypotheses, each ruled out via runtime diagnostics dumping <code>InputUser.all</code> state:</p>
+                  <p>1. <strong>Player-<code>InputUser</code> scheme filter (Option E test)</strong> — commented out <code>user.ActivateControlScheme("Gamepad")</code> in <code>PlayerSetup.PairWithGamepad</code> and <code>ReapplyDevicePairing</code>. Mouse still broken on gamepad-connect. Diagnostic confirmed Player 1's user stayed on <code>'Keyboard&Mouse'</code> scheme — never flipped to Gamepad — so scheme-based device filtering wasn't the cause.</p>
+                  <p>2. <strong>Mouse paired to player blocking UI</strong> — diagnostic showed <code>paired=[Keyboard,Xbox Controller]</code> for Player 1; no Mouse in any user's paired-device list. <code>ReleaseMouseToUI()</code> was already working correctly. Mouse was globally free.</p>
+                  <p>3. <strong>Legacy input fallback dying on gamepad-connect</strong> — checked <code>ProjectSettings/ProjectSettings.asset</code>; <code>activeInputHandler: 1</code> (New Input System only, no legacy). No fallback to die.</p>
+                  <h3>Root cause</h3>
+                  <p><code>UnityEngine.EventSystems.EventSystem.current</code> was <code>null</code> throughout the session — no EventSystem GameObject existed in <code>LobbyScene.unity</code>. With no explicit EventSystem present, <strong>UI Toolkit's runtime panel auto-creates an internal <code>DefaultEventSystem</code></strong> (a different class from <code>UnityEngine.EventSystems.EventSystem</code>) to dispatch input. That <code>DefaultEventSystem</code> has a documented gamepad-takeover behavior: when a gamepad is connected, it switches to gamepad-navigation mode and suppresses pointer-event dispatch. So the cursor dies the moment a gamepad is detected, regardless of pairing.</p>
+                  <p>Confirmed by grepping all scenes:</p>
+                  <p>| Scene | EventSystem GO | Mouse + gamepad |</p>
+                  <p>|---|---|---|</p>
+                  <p>| <code>MainMenu.unity</code> | yes (line 134) | works |</p>
+                  <p>| <code>MatchScene.unity</code> | yes (line 4484) | works (dev panel clickable while character is on a gamepad) |</p>
+                  <p>| <code>LobbyScene.unity</code> | <strong>missing</strong> | <strong>broken</strong> |</p>
+                  <p>| <code>ExperimentBriefScene.unity</code> | missing | not tested — assumed broken |</p>
+                  <p>| <code>ObjectiveBriefScene.unity</code> | missing | not tested — assumed broken |</p>
+                  <p>The earlier <code>StripGamepadNavigationFromUIModule()</code> in <code>InputBindingPersistenceManager.cs:107-118</code> (which nulls out <code>move</code>/<code>submit</code>/<code>cancel</code> on the EventSystem's UI module after every scene load) had been a no-op in these three scenes — it short-circuits when <code>EventSystem.current == null</code>.</p>
+                  <h3>Fix</h3>
+                  <p>Added an <code>EventSystem</code> GameObject to each of the three scenes lacking one. Each has:</p>
+                  <ul>
+                    <li><code>UnityEngine.EventSystems.EventSystem</code> (defaults: <code>sendNavigationEvents=true</code>, <code>dragThreshold=10</code>)</li>
+                    <li><code>UnityEngine.InputSystem.UI.InputSystemUIInputModule</code> with <code>actionsAsset</code> wired to <code>Assets/InputSystem_Actions.inputactions</code> (GUID <code>ca9f5fa95ffab41fb9a615ab714db018</code>) — same wiring as MatchScene's existing EventSystem at <code>MatchScene.unity:4490-4520</code>.</li>
+                  </ul>
+                  <p>Files modified (Unity scenes):</p>
+                  <ul>
+                    <li><code>Assets/ProtoV2/Scenes/LobbyScene.unity</code> — EventSystem added</li>
+                    <li><code>Assets/ProtoV2/Scenes/ExperimentBriefScene.unity</code> — EventSystem added</li>
+                    <li><code>Assets/ProtoV2/Scenes/ObjectiveBriefScene.unity</code> — EventSystem added</li>
+                  </ul>
+                  <p>With an explicit <code>EventSystem</code> present, UI Toolkit stops creating its internal <code>DefaultEventSystem</code> and routes pointer events through ours instead — and the existing <code>StripGamepadNavigationFromUIModule()</code> now actually runs, nulling out gamepad-nav action references on the lobby UI module so the panel only responds to mouse.</p>
+                  <p>Diagnostic instrumentation added during the investigation was reverted in the same change:</p>
+                  <ul>
+                    <li><code>PlayerSetup.cs:477, 523</code> — restored <code>user.ActivateControlScheme("Gamepad")</code> calls</li>
+                    <li><code>PlayerSetup.cs</code> — deleted <code>DumpInputState</code> method</li>
+                    <li><code>InputRebindUIController.cs:121</code> — deleted <code>_diagNextDumpTime</code> field</li>
+                    <li><code>InputRebindUIController.cs</code> Update — deleted throttled <code>[INPUT_DIAG/Update]</code> log block; kept the gamepad-Start / Enter-key fallback as a safety net (low cost, useful if mouse ever regresses)</li>
+                  </ul>
+                  <p>Compile: 0 errors, 0 warnings.</p>
+                  <h3>Verification</h3>
+                  <ul>
+                    <li>Pre-fix runtime diagnostic confirmed <code>EventSystem.current=null</code> in <code>LobbyScene</code> while mouse was working (pre-gamepad), establishing UI Toolkit was using its <code>DefaultEventSystem</code> — and confirmed <code>mouse.pos</code> continued updating post-gamepad-connect (so the bug was at the dispatch layer, not the device layer).</li>
+                    <li>Post-fix scene grep confirms all three target scenes now contain an <code>EventSystem</code> MonoBehaviour entry.</li>
+                    <li><strong>In-Editor playtest confirmed working ✅</strong> — user verified mouse cursor responds to clicks in <code>LobbyScene</code> rebinder UI with one or more gamepads connected. Brief scenes (ExperimentBriefScene, ObjectiveBriefScene) not interactively tested but should follow the same path.</li>
+                  </ul>
+                  <h3>Follow-ups</h3>
+                  <ul>
+                    <li><strong>TODO:</strong> Verify in Play Mode that mouse cursor responds to clicks in <code>LobbyScene</code> rebinder UI when one or more gamepads are connected. Then repeat for <code>ExperimentBriefScene</code> and <code>ObjectiveBriefScene</code> if either has interactive UI.</li>
+                    <li><strong>TODO (optional):</strong> Once verified, consider removing the gamepad-Start / Enter workaround in <code>InputRebindUIController.Update()</code> since the underlying bug is fixed. Or keep it as a deliberate redundancy — the cost is negligible and it covers any future scene that ships without an EventSystem.</li>
+                    <li><strong>Convention to enforce going forward:</strong> any new scene that hosts a UIDocument / UI Toolkit panel <strong>must</strong> include an EventSystem GameObject with an <code>InputSystemUIInputModule</code>. Without it, the scene will silently work without gamepads attached and break the moment any user connects one. Worth adding to the project setup wizard or a scene-validation editor script eventually.</li>
+                    <li><strong>No impact on MatchScene gameplay.</strong> Player input routing (gamepad-driven character control) is independent of UI dispatch and unchanged.</li>
+                  </ul>
+                  <h3>2026-04-29 — All technical docs migrated to PlayInstigator Docs</h3>
+                  <h3>Decision</h3>
+                  <p>All documentation now lives in PlayInstigator Docs. The Unity project's <code>docs/</code> folder has been removed. New rule: <strong>every doc — technical, design, content — goes to <code>playinstigator_docs/Games/Ritual & Ruin/</code>. There is no <code>docs/</code> folder in the project repo anymore.</strong></p>
+                  <h3>What moved</h3>
+                  <p>7 files from <code>E:/Unity/Projects/PrototypeV2/docs/</code> → <code>playinstigator_docs/Games/Ritual & Ruin/Confirmed/tech/</code> (renamed to Title Case to match existing tech folder convention):</p>
+                  <p>| Old | New |</p>
+                  <p>|---|---|</p>
+                  <p>| <code>docs/SYSTEMS.md</code> | <code>Confirmed/tech/Core Systems Reference.md</code> |</p>
+                  <p>| <code>docs/SETTINGS.md</code> | <code>Confirmed/tech/Settings System Reference.md</code> |</p>
+                  <p>| <code>docs/INPUT.md</code> | <code>Confirmed/tech/Input System Reference.md</code> |</p>
+                  <p>| <code>docs/WORKFLOW.md</code> | <code>Confirmed/tech/Workflow and Conventions.md</code> |</p>
+                  <p>| <code>docs/UI_PIXEL_PERFECT.md</code> | <code>Confirmed/tech/UI Pixel-Perfect Canvas.md</code> |</p>
+                  <p>| <code>docs/OBI_UPGRADE_7_1_1.md</code> | <code>Confirmed/tech/Obi Fluid 7.1.1 Upgrade.md</code> |</p>
+                  <p>| <code>docs/CONTROLLER_PAIRING_ANALYSIS.md</code> | <code>Confirmed/tech/Controller Pairing Analysis.md</code> |</p>
+                  <h3>Cross-references updated</h3>
+                  <ul>
+                    <li><code>CLAUDE.md</code> (project) — Detailed References table rewritten with new paths; "Where to create new documents" rule changed to require ALL docs in PlayInstigator Docs; inline rule mentions for Settings (rule 6), Workflow (rule 8), Pixel-Perfect (rule 9) all repointed.</li>
+                    <li><code>Assets/ProtoV2/Scripts/UI/UIBuilder.cs:34</code> — header comment repointed.</li>
+                    <li><code>Assets/ProtoV2/Scripts/MainMenuController.cs:62</code> — comment repointed.</li>
+                    <li><code>MEMORY.md:12</code> — OBI_UPGRADE link repointed.</li>
+                    <li><code>Confirmed/tech/UI Pixel-Perfect Canvas.md</code> — sibling cross-ref to SYSTEMS.md normalized to sibling form.</li>
+                    <li><code>Confirmed/tech/UI Prefab Structure.md</code> — pre-existing stale ref to <code>docs/UI_PIXEL_PERFECT.md</code> fixed to sibling form.</li>
+                  </ul>
+                  <h3>Cleanup</h3>
+                  <ul>
+                    <li><code>E:/Unity/Projects/PrototypeV2/docs/</code> deleted.</li>
+                    <li>No orphaned <code>docs.meta</code> (folder wasn't tracked as Unity asset).</li>
+                  </ul>
+                  <h3>Not touched</h3>
+                  <ul>
+                    <li><code>.claude/settings.local.json</code> — auto-generated permission allowlist contains historical command paths; not load-bearing for behaviour.</li>
+                    <li><code>.omc/plans/input-rebinder-uitk-restyle.md</code> — archived planning artifact from a prior session; references the old doc paths but is not consulted by current workflows.</li>
+                  </ul>
+                  <h3>Verification</h3>
+                  <ul>
+                    <li><code>mcp__mcp-for-unity__refresh_unity</code> with <code>compile=request</code> — clean, zero errors. Source-file changes were comment-only.</li>
+                    <li>Grep for <code>docs/SYSTEMS|docs/SETTINGS|docs/INPUT|docs/WORKFLOW|docs/UI_PIXEL_PERFECT|docs/OBI_UPGRADE|docs/CONTROLLER_PAIRING</code> across project + memory: only the two non-load-bearing locations above remain.</li>
+                  </ul>
+                  <h3>Why this matters for future sessions</h3>
+                  <ul>
+                    <li>Searching for technical docs: look in <code>playinstigator_docs/Games/Ritual & Ruin/Confirmed/tech/</code> first.</li>
+                    <li>Creating a new technical doc: drop it in <code>Confirmed/tech/</code> with Title Case naming. Don't create a <code>docs/</code> folder in the project repo.</li>
+                    <li>The CLAUDE.md "Where to create new documents" table now lists all sub-destinations under PlayInstigator Docs.</li>
+                  </ul>
+                  <p>---</p>
+                  <h3>Obi Fluid 7.1.0 → 7.1.1 Upgrade</h3>
+                  <h3>What changed</h3>
+                  <ul>
+                    <li><strong>Asset:</strong> Virtual Method — Obi Fluid (Asset Store id 63067), 7.1.0 → 7.1.1 (released 2026-04-22). User imported via Package Manager.</li>
+                    <li><strong><code>Assets/ProtoV2/Scripts/BloodSystem/ObiLeakWorkaround.cs</code> deleted</strong> (script + .meta).</li>
+                    <li><strong><code>MatchScene.unity</code></strong>: stripped the <code>ObiLeakWorkaround</code> MonoBehaviour (fileID <code>1820732523</code>) and its entry in the ObiSolver GameObject's <code>m_Component</code> list (around line 8285). The ObiSolver GameObject (<code>&1820732520</code>) now has only Transform + ObiSolver components — no other state altered.</li>
+                    <li><strong><code>MEMORY.md</code></strong> (auto-memory index): added 2026-04-29 entry recording the upgrade and superseded leak-fix entry from 2026-03-29 with a pointer to the new state.</li>
+                    <li><strong><code>docs/OBI_UPGRADE_7_1_1.md</code></strong> (already authored 2026-04-28 in pre-upgrade analysis pass) — content remains accurate.</li>
+                  </ul>
+                  <h3>Why</h3>
+                  <p>Obi 7.1.1's official changelog (<code>Assets/Obi/CHANGELOG_fluid.txt</code>) reads:</p>
+                  <p>Fix #1 is <strong>the exact bug</strong> <code>ObiLeakWorkaround.cs</code> patched around (originally documented in <code>MEMORY.md</code> → <code>project_obi_memory_fix.md</code>, dev log <code>2026-03-29</code> D3D12 pool leak). Symptom matches exactly: many instances of <code>Hidden/AccumulateTransmissionURP</code>, <code>Hidden/IndirectSurfaceURP</code>, <code>Hidden/IndirectThicknessURP</code> materials accumulating over time, originating from <code>ObiFluidRendererFeature</code>. With the upstream fix the workaround is dead code — keeping it would just waste a <code>Resources.UnloadUnusedAssets()</code> GC pass every 30s for nothing.</p>
+                  <p>Fix #2 (<code>ObiColliderWorld</code> re-instantiate-in-same-frame) doesn't observably affect us — the floor system pools chunks (<code>FloorGenerator.GetChunkFromPool</code>/<code>ReturnChunkToPool</code>) and <code>Floor.DestroyFloor</code> → next-floor <code>GenerateFloor</code> happen on different objects across frames, not "same prefab destroyed and re-instantiated in the same frame." Free safety net, no action needed.</p>
+                  <h3>Verification</h3>
+                  <ul>
+                    <li><strong>Static</strong>: <code>grep ObiLeakWorkaround Assets/</code> → 0 hits. <code>grep 3e7b0f80e232b5a429de5e3e21fc2c3e Assets/</code> (script GUID) → 0 hits. <code>grep "m_Script: {fileID: 0, guid: 00000000..." Assets/ProtoV2/</code> → 0 hits (no orphaned script refs).</li>
+                    <li><strong>API surface compatibility</strong>: every Obi type/method our code uses verified to exist in 7.1.1 with matching signatures —</li>
+                    <li><code>ObiSolver.OnCollision</code> event (<code>Common/Solver/ObiSolver.cs:116</code>)</li>
+                    <li><code>ObiNativeContactList</code>, <code>solver.simplexCounts.GetSimplexStartAndSize(int, out int)</code> (<code>Common/DataStructures/SimplexCounts.cs:25</code>)</li>
+                    <li><code>solver.simplices</code>, <code>colors</code>, <code>positions</code>, <code>velocities</code>, <code>particleToActor</code> (<code>ObiSolver.cs:481</code>)</li>
+                    <li><code>Oni.Contact</code> struct with <code>bodyA</code>, <code>bodyB</code>, <code>distance</code> (<code>Oni.cs:234</code>)</li>
+                    <li><code>ObiColliderWorld.GetInstance()</code>, <code>colliderHandles[].owner</code> (<code>Common/Collisions/ObiColliderWorld.cs:98, 64</code>)</li>
+                    <li><code>ObiCollider.Thickness</code></li>
+                    <li><code>ObiEmitter.speed</code>, <code>KillParticle(int)</code> (<code>Fluid/Actors/ObiEmitter.cs:445</code>)</li>
+                    <li><code>ObiActor.DeactivateParticle(int)</code> virtual (<code>Common/Actors/ObiActor.cs:677</code>)</li>
+                    <li><code>ObiSoftbody</code>, <code>ObiSoftbodySurfaceBlueprint</code>, <code>ObiParticleAttachment</code> (used by <code>JellyfishSoftCore.cs</code>) — unchanged.</li>
+                    <li><strong>Compile</strong>: live Unity Editor (which auto-refreshed and recompiled after the asset import + the YAML/script changes) reports <strong>0 errors, 7 warnings</strong> — all 7 warnings are in <code>Assets/Obi/Samples/Common/SampleResources/Scripts/CharacterController/ObiCharacter.cs</code> for Obi's own sample using the deprecated <code>Rigidbody.velocity</code> API. None originate in our code, none are caused by the upgrade, all predate it.</li>
+                    <li><strong>Batch-mode compile attempt</strong> failed early (return code 1 in log) because the editor was holding the project lock — but the live editor's clean compile is a stronger signal.</li>
+                    <li><strong>What was NOT verified in this session</strong>: a Play-mode session in MatchScene to confirm fluid renders, particles emit/pool/are consumed by altars, and native memory stays flat over 5–10 minutes (the original leak signature). The asset author identifies the same root-cause we patched, so the fix is expected to hold, but the user should run a play session to confirm.</li>
+                  </ul>
+                  <h3>Files touched</h3>
+                  <ul>
+                    <li><code>Assets/ProtoV2/Scripts/BloodSystem/ObiLeakWorkaround.cs</code> — DELETED</li>
+                    <li><code>Assets/ProtoV2/Scripts/BloodSystem/ObiLeakWorkaround.cs.meta</code> — DELETED</li>
+                    <li><code>Assets/ProtoV2/Scenes/MatchScene.unity</code> — removed component reference (line ~8285) and MonoBehaviour block (was lines 8458–8470)</li>
+                    <li><code>C:/Users/ReconUnPro/.claude/projects/E--Unity-Projects-PrototypeV2/memory/MEMORY.md</code> — added 2026-04-29 entry; appended supersession note to 2026-03-29 entry</li>
+                    <li><code>docs/OBI_UPGRADE_7_1_1.md</code> — pre-existing analysis still accurate (no edits this session)</li>
+                  </ul>
+                  <h3>Follow-ups</h3>
+                  <ul>
+                    <li><strong>Play MatchScene for ≥5 min</strong> and watch native memory / D3D12 pool usage. If it climbs, restore <code>ObiLeakWorkaround</code> from git history and post on the Obi forum with our solver config.</li>
+                    <li><strong>Optional improvements unlocked since 7.1</strong> (already available, not pursued in this upgrade):</li>
+                    <li>Solver <code>boundaryLimits</code> could replace fluid-side ObiCollider walls in <code>BoundaryWalls.cs</code> (PhysX walls still needed for the player Rigidbody).</li>
+                    <li><code>diffusionMask</code> parameter on ObiSolver could let <code>BloodAttributionTracker</code> move team-attribution into a per-particle user-data channel instead of a managed dictionary.</li>
+                    <li>Confirm static <code>ObiCollider</code>s on <code>FloorObiSurface</code> / <code>BoundaryWalls</code> are flagged as such so they benefit from "static colliders not processed during <code>ObiSolver.Update()</code>" perf change.</li>
+                  </ul>
+                </div>
+              </details>
+            </article>
+          <article class="entry-card">
+              <div class="entry-meta">
                 <span class="entry-week-tag">Week of 20 Apr</span>
                 <span class="entry-date">20 &ndash; 23 April 2026</span>
               </div>
