@@ -140,8 +140,8 @@
           zh: "Type 1 创作驱动媒介——游戏、音乐、小说、原声带。观众为创作本身付费。IP 是它所处的那个世界，而不是他们购买的理由。回收期内，负责人拿到净收入的 80% 用于回收制作资本（引擎授权、软件、DAW、插件、录音棚时间、外包工作）。资本回收完成后进入稳态：负责人 50%，塑形了这部作品的跨媒介合作者 50%。"
         },
         "animation": {
-          en: "A Type 2 medium — YouTube ad revenue is platform-driven and not tied to direct product sales. There is no capital at risk the way there is for games or merchandise. After the operating fund cut, the full net routes to the collective pool and distributes monthly via rolling contribution units.",
-          zh: "Type 2 媒介——YouTube 广告收入由平台驱动，不与直接产品销售挂钩。没有像游戏或周边那样处于风险中的资本。扣除运营基金之后，净额全部进入共同池，按每月通过滚动贡献单位分配。"
+          en: "A Type 2 medium — animation builds IP value and audience, but has no direct product revenue to recoup against. Production is funded by the collective operating fund (sourced from Type 1 revenue and grants). Any incidental revenue the animation earns — YouTube ad revenue, Patreon support — reduces the operating fund subsidy first (offset-first), not the animator's personal income. The animator's IP earnings come through rolling 12-month contribution units and earned contribution shares on Type 1 work they helped shape.",
+          zh: "Type 2 媒介——动画建造 IP 价值与受众，但没有可用于回收成本的直接产品收入。制作由共同运营基金资助（来源于 Type 1 收入与资助）。动画产生的任何零星收入——YouTube 广告收入、Patreon 支持——优先抵减运营基金补贴（抵扣优先），而不是动画制作人的个人收入。动画制作人的 IP 收益来自滚动 12 个月贡献单位，以及他们参与塑形的 Type 1 作品的贡献份额。"
         },
         "plushie": {
           en: "A Type 1 IP-Leveraged medium. During recoup, the plushie manager gets 80% of net to recover capital — manufacturing MOQs, tooling, prototypes, initial inventory. After recoup, steady state honestly reflects that the IP is doing most of the selling: 25% manager, 25% earned contribution, 50% IP equity routing to the collective pool.",
@@ -223,18 +223,25 @@
           }
         },
         "animation": {
-          type: "collective",
-          splits: [
+          type: "type2",
+          items: [
             {
-              role: "collective", pct: 100,
-              name_en: "Collective Pool",
-              name_zh: "共同池",
-              concern_en: "YouTube ad revenue is driven by the IP's audience, not by direct product sales. There is no capital at risk the way there is for games or merchandise — the infrastructure is the platform. The animation manager's return comes through their rolling contribution units, not a separate manager split.",
-              concern_zh: "YouTube 广告收入由 IP 的受众驱动，而非直接的产品销售。没有像游戏或周边那样处于风险中的资本——基础设施就是平台本身。动画负责人的回报通过其滚动贡献单位获得，而非独立的负责人分成。",
-              how_en: "100% of net animation ad revenue enters the collective pool.",
-              how_zh: "动画广告净收入的 100% 进入共同池。",
-              who_en: "All collective members, distributed monthly via the rolling 12-month units mechanism.",
-              who_zh: "整个共创团体的全体成员，每月通过滚动 12 个月单位机制分配。"
+              label_en: "Production budget",
+              label_zh: "制作预算",
+              desc_en: "Funded from the collective operating fund — sourced from Type 1 revenue and grants. Budget is agreed upfront with the collective. No recoup mechanism applies because there is no direct revenue stream to recoup against.",
+              desc_zh: "由共同运营基金资助——来源于 Type 1 收入与资助。预算与团体提前商定。不适用回收机制，因为没有直接收入来源可以拿来回收。"
+            },
+            {
+              label_en: "Incidental revenue (YouTube ads / Patreon)",
+              label_zh: "零星收入（YouTube 广告 / Patreon）",
+              desc_en: "Offset-first: any incidental revenue reduces the operating fund subsidy by the same amount — the collective only covers the net cost. If incidental revenue exceeds the funded production budget, the surplus is personal income to the animation manager.",
+              desc_zh: "抵扣优先：任何零星收入都会等额减少运营基金补贴——团体只承担净成本。如果零星收入超过了已资助的制作预算，超出部分归动画负责人作为个人收入。"
+            },
+            {
+              label_en: "Animation manager's IP earnings",
+              label_zh: "动画负责人的 IP 收益",
+              desc_en: "Rolling 12-month contribution units (a share of collective revenue from IP-Leveraged mediums, licensing, and brand deals) plus earned contribution shares on any Type 1 deliverables the manager helped shape.",
+              desc_zh: "滚动 12 个月贡献单位（从 IP 借力媒介、授权与品牌合作的共同收入中获得一份），加上他们参与塑形的 Type 1 交付物上的贡献份额。"
             }
           ]
         },
@@ -405,6 +412,19 @@
         var netName = lang === "zh" ? "可分配净额" : "Net distributable";
 
         var html = descriptionBlock(key, lang);
+
+        if (scenario.type === "type2") {
+          html += '<div class="mf-type2">';
+          scenario.items.forEach(function (item) {
+            html += '<div class="mf-type2-item">';
+            html += '<div class="mf-type2-label">' + escapeHtml(item["label_" + lang] || item.label_en) + '</div>';
+            html += '<div class="mf-type2-desc">' + escapeHtml(item["desc_" + lang] || item.desc_en) + '</div>';
+            html += '</div>';
+          });
+          html += '</div>';
+          diagram.innerHTML = html;
+          return;
+        }
 
         // CSS Grid: both stage-1 bar and all sub-bars share the same 2-column grid.
         // Stage-1 spans both columns (full width). Sub-bars live in column 2 only.
