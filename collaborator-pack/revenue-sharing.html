@@ -105,10 +105,9 @@
         <div class="mf-control">
           <label class="mf-control-label" for="mfScenario"><span class="lang-en">Example</span><span class="lang-zh">例子</span></label>
           <select class="mf-select" id="mfScenario">
-            <option value="game-recoup">Game · Recoup phase</option>
-            <option value="animation-steady" selected>YouTube animation · Steady state</option>
-            <option value="plushie-recoup">Plushie · Recoup phase (initial production)</option>
-            <option value="plushie-steady">Plushie · Steady state (after recoup)</option>
+            <option value="game">Game / Music</option>
+            <option value="animation" selected>YouTube Animation</option>
+            <option value="plushie">Plushie</option>
             <option value="collective">Patreon to the IP / Grants</option>
           </select>
         </div>
@@ -129,33 +128,28 @@
       var diagram = document.getElementById("mfDiagram");
 
       var SCENARIO_LABELS = {
-        "game-recoup":      { en: "Game · Recoup phase",                          zh: "游戏 · 回收期" },
-        "animation-steady": { en: "YouTube animation · Steady state",             zh: "YouTube 动画 · 稳态" },
-        "plushie-recoup":   { en: "Plushie · Recoup phase (initial production)",  zh: "毛绒玩具 · 回收期（首批生产）" },
-        "plushie-steady":   { en: "Plushie · Steady state (after recoup)",        zh: "毛绒玩具 · 稳态（回收之后）" },
-        "collective":       { en: "Patreon to the IP / Grants",                   zh: "面向 IP 的 Patreon / 资助" }
+        "game":       { en: "Game / Music",                  zh: "游戏 / 音乐" },
+        "animation":  { en: "YouTube Animation",          zh: "YouTube 动画" },
+        "plushie":    { en: "Plushie",                    zh: "毛绒玩具" },
+        "collective": { en: "Patreon to the IP / Grants", zh: "面向 IP 的 Patreon / 资助" }
       };
 
       var SCENARIO_DESC = {
-        "game-recoup": {
-          en: "A Type 1 Craft-Driven medium during recoup. The game designer fronted production capital — engine licences, software, outsourced art and audio, hardware. Until that capital is recovered, 80% of net revenue goes to the manager. Audiences are buying the game itself; the IP is the world it is set in.",
-          zh: "处于回收期的 Type 1 创作驱动媒介。游戏设计师垫付了制作资本——引擎授权、软件、外包美术与音频、硬件。在这笔资本被收回之前，80% 的净收入归负责人。观众购买的是这款游戏本身；IP 是它所处的那个世界。"
+        "game": {
+          en: "Type 1 Craft-Driven mediums — games, music, novels, original soundtracks. Audiences pay for the craft itself. The IP is the world it is set in, not the reason they buy. During recoup, the manager gets 80% of net to recover production capital (engine licences, software, DAW, plugins, studio time, outsourced work). Once recovered, steady state: 50% to the manager, 50% to the cross-medium contributors who shaped the work.",
+          zh: "Type 1 创作驱动媒介——游戏、音乐、小说、原声带。观众为创作本身付费。IP 是它所处的那个世界，而不是他们购买的理由。回收期内，负责人拿到净收入的 80% 用于回收制作资本（引擎授权、软件、DAW、插件、录音棚时间、外包工作）。资本回收完成后进入稳态：负责人 50%，塑形了这部作品的跨媒介合作者 50%。"
         },
-        "animation-steady": {
-          en: "A Type 1 Craft-Driven medium past recoup. Audiences are watching for the animation — the storytelling, the craft, the voice acting. The IP is what makes them click in the first place; the craft is what keeps them. After recoup, the manager and the cross-medium contributors who shaped the work split the net 50/50.",
-          zh: "已经过了回收期的 Type 1 创作驱动媒介。观众观看的是动画本身——故事讲述、创作工艺、配音表演。IP 让他们一开始愿意点进来，但留下他们的是工艺。回收期之后，负责人与塑形了这部作品的跨媒介合作者按 50/50 分享净额。"
+        "animation": {
+          en: "A Type 1 Craft-Driven medium. During recoup, the animation manager gets 80% of net to recover production costs. After recoup, steady state: 50% to the manager, 50% to the cross-medium contributors who shaped the animation.",
+          zh: "Type 1 创作驱动媒介。回收期内，动画负责人拿到净收入的 80% 用于回收制作成本。回收完成后进入稳态：负责人 50%，塑形了这部动画的跨媒介合作者 50%。"
         },
-        "plushie-recoup": {
-          en: "A Type 1 IP-Leveraged medium during recoup. The plushie manager fronted real capital — manufacturing MOQs, tooling, prototypes, initial inventory. Until that capital is recovered, 80% of net revenue goes to them. IP equity routing is paused: the person who took the financial risk is paid back first.",
-          zh: "处于回收期的 Type 1 IP 借力媒介。毛绒玩具负责人垫付了真实资本——生产最低起订量、模具、样品、初始库存。在这笔资本被收回之前，80% 的净收入归他们。IP 资产分流被暂停：承担了财务风险的人被优先偿付。"
-        },
-        "plushie-steady": {
-          en: "A Type 1 IP-Leveraged medium after recoup. People buy the plushie because they love the character and the world — value built across every medium. The split honestly reflects this: 25% to the manager whose craft made a good plushie, 25% to cross-medium contributors who shaped this product line, 50% routed to the collective for the IP value everyone built together.",
-          zh: "回收期之后的 Type 1 IP 借力媒介。人们购买这个毛绒玩具，是因为他们喜爱这个角色和这个世界——这是各个媒介共同建造起来的价值。分配诚实地反映了这一点：25% 给做出一个好毛绒玩具的负责人，25% 给塑形了这条产品线的跨媒介合作者，50% 流向共同池，对应大家共同建造起来的 IP 价值。"
+        "plushie": {
+          en: "A Type 1 IP-Leveraged medium. During recoup, the plushie manager gets 80% of net to recover capital — manufacturing MOQs, tooling, prototypes, initial inventory. After recoup, steady state honestly reflects that the IP is doing most of the selling: 25% manager, 25% earned contribution, 50% IP equity routing to the collective pool.",
+          zh: "Type 1 IP 借力媒介。回收期内，毛绒玩具负责人拿到净收入的 80% 用于回收资本——生产最低起订量、模具、样品、初始库存。回收完成后进入稳态，诚实地反映了 IP 在卖东西：负责人 25%，贡献份额 25%，IP 资产分流 50% 进入共同池。"
         },
         "collective": {
-          en: "Revenue that doesn't belong to any single medium. A Patreon for the IP itself, a grant awarded to the collective, an IP-wide licensing deal, a brand partnership, convention payouts. After the operating fund cut, 100% goes into the collective pool and is distributed monthly via the rolling 12-month units mechanism — paid to everyone whose mediums were producing during the past year.",
-          zh: "不属于任何单一媒介的收入。面向 IP 本身的 Patreon、授予整个共创团体的资助、全 IP 范围的授权交易、品牌合作、展会分账。扣除运营基金之后，100% 进入共同池，按每月通过 12 个月滚动单位机制分配——支付给过去一年里媒介有在产出的所有人。"
+          en: "Revenue that doesn't belong to any single medium. A Patreon for the IP itself, a grant awarded to the collective, an IP-wide licensing deal, a brand partnership, convention payouts. After the operating fund cut, 100% goes into the collective pool and is distributed monthly via the rolling 12-month units mechanism.",
+          zh: "不属于任何单一媒介的收入。面向 IP 本身的 Patreon、授予整个共创团体的资助、全 IP 范围的授权交易、品牌合作、展会分账。扣除运营基金之后，100% 进入共同池，按每月通过 12 个月滚动单位机制分配。"
         }
       };
 
@@ -173,122 +167,184 @@
       };
 
       var SCENARIOS = {
-        "game-recoup": {
-          splits: [
-            {
-              role: "manager", pct: 80,
-              name_en: "Game Designer (Manager · Recoup)",
-              name_zh: "游戏设计师（负责人 · 回收期）",
-              concern_en: "The game designer personally fronted production capital — engine licences, software, outsourced art and audio, hardware — and bears 100% of the capital risk until it is recovered.",
-              concern_zh: "游戏设计师亲自垫付了制作资本——引擎授权、软件、外包美术与音频、硬件——并在资本被收回之前承担 100% 的资本风险。",
-              how_en: "A structurally large share (80% of net) of game sales revenue while the recoup balance is non-zero.",
-              how_zh: "在回收余额非零期间，游戏销售净收入中结构性较大的份额（80%）。",
-              who_en: "The game designer who funded the game's production.",
-              who_zh: "为游戏制作出资的游戏设计师本人。"
-            },
-            {
-              role: "earned", pct: 20,
-              name_en: "Earned Contribution Pool",
-              name_zh: "贡献份额池",
-              concern_en: "Cross-medium contributors helped shape the game — composers, writers, artists from outside the game medium. Their contribution should be acknowledged immediately, not only after recoup.",
-              concern_zh: "跨媒介合作者参与塑形了这款游戏——来自游戏媒介之外的作曲人、作者、艺术家。他们的贡献应当立即被承认，而不是等到回收期结束之后。",
-              how_en: "20% of net game revenue, distributed via the retrospective earned-contribution conversation governed by the Three Tests and the Cross-Medium Collaboration Log.",
-              how_zh: "游戏净收入的 20%，根据「三道测试」与跨媒介协作日志驱动的回顾性贡献对话来分配。",
-              who_en: "Cross-medium contributors named in the earned-contribution conversation for this game.",
-              who_zh: "在这款游戏的贡献对话中被点名的跨媒介合作者。"
-            }
-          ]
+        "game": {
+          type: "direct",
+          recoup: {
+            splits: [
+              {
+                role: "manager", pct: 80,
+                name_en: "Game Designer (Manager · Recoup)",
+                name_zh: "游戏设计师（负责人 · 回收期）",
+                concern_en: "The game designer personally fronted production capital — engine licences, software, outsourced art and audio, hardware — and bears 100% of the capital risk until it is recovered.",
+                concern_zh: "游戏设计师亲自垫付了制作资本——引擎授权、软件、外包美术与音频、硬件——并在资本被收回之前承担 100% 的资本风险。",
+                how_en: "80% of net game revenue while the recoup balance is non-zero.",
+                how_zh: "在回收余额非零期间，游戏销售净收入的 80%。",
+                who_en: "The game designer who funded the game's production.",
+                who_zh: "为游戏制作出资的游戏设计师本人。"
+              },
+              {
+                role: "earned", pct: 20,
+                name_en: "Earned Contribution Pool",
+                name_zh: "贡献份额池",
+                concern_en: "Cross-medium contributors helped shape the game — composers, writers, artists from outside the game medium. Their contribution should be acknowledged immediately, not only after recoup.",
+                concern_zh: "跨媒介合作者参与塑形了这款游戏——来自游戏媒介之外的作曲人、作者、艺术家。他们的贡献应当立即被承认，而不是等到回收期结束之后。",
+                how_en: "20% of net game revenue, distributed via the earned-contribution conversation.",
+                how_zh: "游戏净收入的 20%，通过贡献对话来分配。",
+                who_en: "Cross-medium contributors named in the earned-contribution conversation for this game.",
+                who_zh: "在这款游戏的贡献对话中被点名的跨媒介合作者。"
+              }
+            ]
+          },
+          steady: {
+            splits: [
+              {
+                role: "manager", pct: 50,
+                name_en: "Game Designer (Manager)",
+                name_zh: "游戏设计师（负责人）",
+                concern_en: "After capital is recovered, the game designer remains the primary creator of what audiences are playing. Their craft and ongoing output continues to drive sales.",
+                concern_zh: "资本回收之后，游戏设计师仍然是观众正在游玩的内容的主要创作者。他们的工艺与持续产出推动着持续的销售。",
+                how_en: "50% of net game revenue (Craft-Driven steady state).",
+                how_zh: "游戏净收入的 50%（创作驱动稳态）。",
+                who_en: "The game designer.",
+                who_zh: "游戏设计师本人。"
+              },
+              {
+                role: "earned", pct: 50,
+                name_en: "Earned Contribution Pool",
+                name_zh: "贡献份额池",
+                concern_en: "Cross-medium contributors who shaped the game — composers, writers, artists — deserve an equal share once the manager's capital has been recovered.",
+                concern_zh: "塑形了这款游戏的跨媒介合作者——作曲人、作者、艺术家——在负责人的资本回收完成后，应当获得同等份额。",
+                how_en: "50% of net game revenue, distributed via the earned-contribution conversation.",
+                how_zh: "游戏净收入的 50%，通过贡献对话来分配。",
+                who_en: "Cross-medium contributors named in the conversation.",
+                who_zh: "在贡献对话中被点名的跨媒介合作者。"
+              }
+            ]
+          }
         },
-        "animation-steady": {
-          splits: [
-            {
-              role: "manager", pct: 50,
-              name_en: "Animation Manager",
-              name_zh: "动画负责人",
-              concern_en: "Even after capital is recovered, the animator remains the primary creator of what audiences are watching. Their craft and ongoing oversight is what got the animation shipped.",
-              concern_zh: "即使资本已经收回，动画作者仍然是观众正在观看的内容的主要创作者。他们的工艺与持续监督，是动画得以发布的原因。",
-              how_en: "50% of net animation revenue (Craft-Driven steady state). Net revenue here means YouTube payouts, channel sponsorships, etc., after the operating fund cut.",
-              how_zh: "动画净收入的 50%（创作驱动稳态）。这里的净收入指 YouTube 分成、与频道绑定的赞助等，在扣除运营基金之后。",
-              who_en: "The animation manager.",
-              who_zh: "动画负责人本人。"
-            },
-            {
-              role: "earned", pct: 50,
-              name_en: "Earned Contribution Pool",
-              name_zh: "贡献份额池",
-              concern_en: "Cross-medium contributors meaningfully shaped the animation — voice work, music, story input from across the IP. That contribution deserves an equal share post-recoup.",
-              concern_zh: "跨媒介合作者切实塑形了这部动画——来自 IP 各处的配音、音乐、故事输入。回收期之后，这种贡献应当获得同等份额。",
-              how_en: "50% of net revenue, distributed via the earned-contribution conversation.",
-              how_zh: "净收入的 50%，通过贡献对话来分配。",
-              who_en: "Cross-medium contributors named in the conversation. If no one was meaningfully involved cross-medium, the share routes to the orphan pool → collective revenue.",
-              who_zh: "在贡献对话中被点名的跨媒介合作者。如果没有任何被认可的跨媒介参与者，这一份会进入「无主池」→ 共同收入。"
-            }
-          ]
+        "animation": {
+          type: "direct",
+          recoup: {
+            splits: [
+              {
+                role: "manager", pct: 80,
+                name_en: "Animation Manager (Recoup)",
+                name_zh: "动画负责人（回收期）",
+                concern_en: "The animation manager fronted production capital — software, equipment, voice acting, outsourced work — and bears 100% of the capital risk until it is recovered.",
+                concern_zh: "动画负责人垫付了制作资本——软件、设备、配音、外包工作——并在资本被收回之前承担 100% 的资本风险。",
+                how_en: "80% of net animation revenue while the recoup balance is non-zero.",
+                how_zh: "在回收余额非零期间，动画净收入的 80%。",
+                who_en: "The animation manager who funded production.",
+                who_zh: "为制作出资的动画负责人本人。"
+              },
+              {
+                role: "earned", pct: 20,
+                name_en: "Earned Contribution Pool",
+                name_zh: "贡献份额池",
+                concern_en: "Cross-medium contributors who shaped the animation should be acknowledged immediately, not only after recoup.",
+                concern_zh: "塑形了这部动画的跨媒介合作者应当立即被承认，而不是等到回收期结束之后。",
+                how_en: "20% of net animation revenue, distributed via the earned-contribution conversation.",
+                how_zh: "动画净收入的 20%，通过贡献对话来分配。",
+                who_en: "Cross-medium contributors named in the earned-contribution conversation.",
+                who_zh: "在贡献对话中被点名的跨媒介合作者。"
+              }
+            ]
+          },
+          steady: {
+            splits: [
+              {
+                role: "manager", pct: 50,
+                name_en: "Animation Manager",
+                name_zh: "动画负责人",
+                concern_en: "Even after capital is recovered, the animator remains the primary creator of what audiences are watching. Their craft and ongoing oversight is what got the animation shipped.",
+                concern_zh: "即使资本已经收回，动画作者仍然是观众正在观看的内容的主要创作者。他们的工艺与持续监督，是动画得以发布的原因。",
+                how_en: "50% of net animation revenue (Craft-Driven steady state).",
+                how_zh: "动画净收入的 50%（创作驱动稳态）。",
+                who_en: "The animation manager.",
+                who_zh: "动画负责人本人。"
+              },
+              {
+                role: "earned", pct: 50,
+                name_en: "Earned Contribution Pool",
+                name_zh: "贡献份额池",
+                concern_en: "Cross-medium contributors meaningfully shaped the animation — voice work, music, story input from across the IP. That contribution deserves an equal share post-recoup.",
+                concern_zh: "跨媒介合作者切实塑形了这部动画——来自 IP 各处的配音、音乐、故事输入。回收期之后，这种贡献应当获得同等份额。",
+                how_en: "50% of net revenue, distributed via the earned-contribution conversation.",
+                how_zh: "净收入的 50%，通过贡献对话来分配。",
+                who_en: "Cross-medium contributors named in the conversation. If no one was meaningfully involved cross-medium, the share routes to the orphan pool → collective revenue.",
+                who_zh: "在贡献对话中被点名的跨媒介合作者。如果没有任何被认可的跨媒介参与者，这一份会进入「无主池」→ 共同收入。"
+              }
+            ]
+          }
         },
-        "plushie-recoup": {
-          splits: [
-            {
-              role: "manager", pct: 80,
-              name_en: "Plushie Manager (Recoup)",
-              name_zh: "毛绒玩具负责人（回收期）",
-              concern_en: "The plushie manager fronted real capital — manufacturing MOQs, tooling, prototypes, initial inventory, shipping infrastructure. They bear 100% of the capital risk until it is recovered. IP equity routing is paused during recoup.",
-              concern_zh: "毛绒玩具负责人垫付了真实资本——生产最低起订量、模具、样品、初始库存、发货基础设施。在资本被收回之前，他们承担 100% 的资本风险。IP 资产分流在回收期内暂停。",
-              how_en: "80% of net plushie revenue while the recoup balance is non-zero.",
-              how_zh: "在回收余额非零期间，毛绒玩具净收入的 80%。",
-              who_en: "The plushie manager who funded the initial production run.",
-              who_zh: "为首批毛绒玩具生产出资的负责人。"
-            },
-            {
-              role: "earned", pct: 20,
-              name_en: "Earned Contribution Pool",
-              name_zh: "贡献份额池",
-              concern_en: "Cross-medium contributors who shaped the plushie — character designer, illustrator, IP-canon contributors — still get recognised during recoup, just at a smaller share than steady state.",
-              concern_zh: "塑形了这只毛绒玩具的跨媒介合作者——角色设计师、插画师、为 IP 正典做贡献的人——在回收期仍然被认可，只是份额比稳态时更小。",
-              how_en: "20% of net plushie revenue, distributed via the earned-contribution conversation.",
-              how_zh: "毛绒玩具净收入的 20%，通过贡献对话来分配。",
-              who_en: "Cross-medium contributors who shaped this plushie line.",
-              who_zh: "塑形了这条毛绒玩具产品线的跨媒介合作者。"
-            }
-          ]
-        },
-        "plushie-steady": {
-          splits: [
-            {
-              role: "manager", pct: 25,
-              name_en: "Plushie Manager",
-              name_zh: "毛绒玩具负责人",
-              concern_en: "The manager's craft still matters — bad plushie design kills a product line — but the IP is doing most of the selling. A reduced share recognises the craft contribution honestly without overpaying for value others built.",
-              concern_zh: "负责人的工艺仍然重要——糟糕的毛绒设计会让产品线垮掉——但卖东西的主要还是 IP。较低的份额诚实地承认了工艺贡献，又不为别人建造起来的价值多付钱。",
-              how_en: "25% of net plushie revenue (IP-Leveraged steady state).",
-              how_zh: "毛绒玩具净收入的 25%（IP 借力稳态）。",
-              who_en: "The plushie manager.",
-              who_zh: "毛绒玩具负责人本人。"
-            },
-            {
-              role: "earned", pct: 25,
-              name_en: "Earned Contribution Pool",
-              name_zh: "贡献份额池",
-              concern_en: "Cross-medium contributors who shaped the plushie's craft — character art, design input, the artist whose illustrations the plushie is based on — get recognised proportionally to their actual contribution.",
-              concern_zh: "塑形了毛绒玩具工艺的跨媒介合作者——角色美术、设计输入、毛绒玩具所依据的插画作者——按其真实贡献的比例获得认可。",
-              how_en: "25% of net plushie revenue, distributed via the earned-contribution conversation.",
-              how_zh: "毛绒玩具净收入的 25%，通过贡献对话来分配。",
-              who_en: "Cross-medium contributors named in the conversation for this plushie line.",
-              who_zh: "在这条毛绒玩具产品线的贡献对话中被点名的跨媒介合作者。"
-            },
-            {
-              role: "ip-equity", pct: 50,
-              name_en: "IP Equity Routing → Collective Pool",
-              name_zh: "IP 资产分流 → 共同池",
-              concern_en: "A plushie sale primarily monetises IP equity built across the entire collective — the character, the world, the recognition. A pure manager+contribution split would overpay the plushie line for value other mediums generated.",
-              concern_zh: "毛绒玩具的销售主要变现的是整个共创团体共同建造起来的 IP 资产——角色、世界、辨识度。如果只走「负责人 + 贡献」的分配，等于让毛绒玩具线为其他媒介所产生的价值多拿了钱。",
-              how_en: "50% of net plushie revenue routed off the top into the collective revenue pool.",
-              how_zh: "在毛绒玩具净收入中先抽出 50%，进入共同收入池。",
-              who_en: "All collective members, distributed monthly via the rolling 12-month units mechanism (see below).",
-              who_zh: "整个共创团体的全体成员，每月通过滚动 12 个月单位机制分配（见下文）。"
-            }
-          ]
+        "plushie": {
+          type: "direct",
+          recoup: {
+            splits: [
+              {
+                role: "manager", pct: 80,
+                name_en: "Plushie Manager (Recoup)",
+                name_zh: "毛绒玩具负责人（回收期）",
+                concern_en: "The plushie manager fronted real capital — manufacturing MOQs, tooling, prototypes, initial inventory, shipping infrastructure. They bear 100% of the capital risk until it is recovered. IP equity routing is paused during recoup.",
+                concern_zh: "毛绒玩具负责人垫付了真实资本——生产最低起订量、模具、样品、初始库存、发货基础设施。在资本被收回之前，他们承担 100% 的资本风险。IP 资产分流在回收期内暂停。",
+                how_en: "80% of net plushie revenue while the recoup balance is non-zero.",
+                how_zh: "在回收余额非零期间，毛绒玩具净收入的 80%。",
+                who_en: "The plushie manager who funded the initial production run.",
+                who_zh: "为首批毛绒玩具生产出资的负责人。"
+              },
+              {
+                role: "earned", pct: 20,
+                name_en: "Earned Contribution Pool",
+                name_zh: "贡献份额池",
+                concern_en: "Cross-medium contributors who shaped the plushie — character designer, illustrator, IP-canon contributors — still get recognised during recoup, just at a smaller share than steady state.",
+                concern_zh: "塑形了这只毛绒玩具的跨媒介合作者——角色设计师、插画师、为 IP 正典做贡献的人——在回收期仍然被认可，只是份额比稳态时更小。",
+                how_en: "20% of net plushie revenue, distributed via the earned-contribution conversation.",
+                how_zh: "毛绒玩具净收入的 20%，通过贡献对话来分配。",
+                who_en: "Cross-medium contributors who shaped this plushie line.",
+                who_zh: "塑形了这条毛绒玩具产品线的跨媒介合作者。"
+              }
+            ]
+          },
+          steady: {
+            splits: [
+              {
+                role: "manager", pct: 25,
+                name_en: "Plushie Manager",
+                name_zh: "毛绒玩具负责人",
+                concern_en: "The manager's craft still matters — bad plushie design kills a product line — but the IP is doing most of the selling. A reduced share recognises the craft contribution honestly without overpaying for value others built.",
+                concern_zh: "负责人的工艺仍然重要——糟糕的毛绒设计会让产品线垮掉——但卖东西的主要还是 IP。较低的份额诚实地承认了工艺贡献，又不为别人建造起来的价值多付钱。",
+                how_en: "25% of net plushie revenue (IP-Leveraged steady state).",
+                how_zh: "毛绒玩具净收入的 25%（IP 借力稳态）。",
+                who_en: "The plushie manager.",
+                who_zh: "毛绒玩具负责人本人。"
+              },
+              {
+                role: "earned", pct: 25,
+                name_en: "Earned Contribution Pool",
+                name_zh: "贡献份额池",
+                concern_en: "Cross-medium contributors who shaped the plushie's craft — character art, design input, the artist whose illustrations the plushie is based on — get recognised proportionally to their actual contribution.",
+                concern_zh: "塑形了毛绒玩具工艺的跨媒介合作者——角色美术、设计输入、毛绒玩具所依据的插画作者——按其真实贡献的比例获得认可。",
+                how_en: "25% of net plushie revenue, distributed via the earned-contribution conversation.",
+                how_zh: "毛绒玩具净收入的 25%，通过贡献对话来分配。",
+                who_en: "Cross-medium contributors named in the conversation for this plushie line.",
+                who_zh: "在这条毛绒玩具产品线的贡献对话中被点名的跨媒介合作者。"
+              },
+              {
+                role: "ip-equity", pct: 50,
+                name_en: "IP Equity Routing → Collective Pool",
+                name_zh: "IP 资产分流 → 共同池",
+                concern_en: "A plushie sale primarily monetises IP equity built across the entire collective — the character, the world, the recognition. A pure manager+contribution split would overpay the plushie line for value other mediums generated.",
+                concern_zh: "毛绒玩具的销售主要变现的是整个共创团体共同建造起来的 IP 资产——角色、世界、辨识度。如果只走「负责人 + 贡献」的分配，等于让毛绒玩具线为其他媒介所产生的价值多拿了钱。",
+                how_en: "50% of net plushie revenue routed off the top into the collective revenue pool.",
+                how_zh: "在毛绒玩具净收入中先抽出 50%，进入共同收入池。",
+                who_en: "All collective members, distributed monthly via the rolling 12-month units mechanism (see below).",
+                who_zh: "整个共创团体的全体成员，每月通过滚动 12 个月单位机制分配（见下文）。"
+              }
+            ]
+          }
         },
         "collective": {
+          type: "collective",
           splits: [
             {
               role: "collective", pct: 100,
@@ -365,6 +421,10 @@
         return '<div class="mf-scenario-desc">' + escapeHtml(text) + '</div>';
       }
 
+      function phaseDivider(label) {
+        return '<div class="mf-phase-divider">' + escapeHtml(label) + '</div>';
+      }
+
       function render() {
         var lang = getLang();
         var key = scenarioSelect.value;
@@ -377,37 +437,78 @@
         if (revenue < 0) revenue = 0;
         var operatingAmount = revenue * OPERATING.pct / 100;
         var net = revenue - operatingAmount;
+        var netPct = 100 - OPERATING.pct;
+        var subStyle = "width: " + netPct + "%; margin-left: " + OPERATING.pct + "%;";
+        var arrowStyle = "margin-left: " + OPERATING.pct + "%; width: " + netPct + "%;";
 
         var stage1Label = lang === "zh" ? "1 · 收入扣除运营基金" : "1 · Revenue minus Operating Fund";
-        var stage2Label = lang === "zh" ? "2 · 净额如何分配" : "2 · How the net is split";
         var opName = lang === "zh" ? "运营基金" : "Operating Fund";
         var netName = lang === "zh" ? "可分配净额" : "Net distributable";
 
         var html = "";
         html += descriptionBlock(key, lang);
+
         html += '<div class="mf-stage-label">' + stage1Label + '</div>';
         html += '<div class="mf-bar">';
         html += segment("operating", OPERATING.pct, operatingAmount, opName);
-        html += segment("net", 100 - OPERATING.pct, net, netName);
-        html += '</div>';
-        html += '<div class="mf-arrow">↓</div>';
-
-        html += '<div class="mf-stage-label">' + stage2Label + '</div>';
-        html += '<div class="mf-bar">';
-        scenario.splits.forEach(function (s) {
-          var amount = net * s.pct / 100;
-          var label = s["name_" + lang] || s.name_en;
-          html += segment(s.role, s.pct, amount, label);
-        });
+        html += segment("net", netPct, net, netName);
         html += '</div>';
 
-        html += '<div class="mf-explanations">';
-        html += explainCard(OPERATING, operatingAmount, lang);
-        scenario.splits.forEach(function (s) {
-          var amount = net * s.pct / 100;
-          html += explainCard(s, amount, lang);
-        });
-        html += '</div>';
+        if (scenario.type === "direct") {
+          var recoupLabel     = lang === "zh" ? "2 · 第 1 阶段 — 回收期" : "2 · Phase 1 — Recoup";
+          var steadyLabel     = lang === "zh" ? "3 · 第 2 阶段 — 稳态" : "3 · Phase 2 — Steady State";
+          var recoupCardLabel = lang === "zh" ? "第 1 阶段 — 回收期" : "Phase 1 — Recoup";
+          var steadyCardLabel = lang === "zh" ? "第 2 阶段 — 稳态" : "Phase 2 — Steady State";
+
+          html += '<div class="mf-arrow" style="' + arrowStyle + '">↓</div>';
+          html += '<div class="mf-stage-label" style="margin-left: ' + OPERATING.pct + '%;">' + recoupLabel + '</div>';
+          html += '<div class="mf-bar" style="' + subStyle + '">';
+          scenario.recoup.splits.forEach(function (s) {
+            var amount = net * s.pct / 100;
+            html += segment(s.role, s.pct, amount, s["name_" + lang] || s.name_en);
+          });
+          html += '</div>';
+
+          html += '<div class="mf-arrow" style="' + arrowStyle + '">↓</div>';
+          html += '<div class="mf-stage-label" style="margin-left: ' + OPERATING.pct + '%;">' + steadyLabel + '</div>';
+          html += '<div class="mf-bar" style="' + subStyle + '">';
+          scenario.steady.splits.forEach(function (s) {
+            var amount = net * s.pct / 100;
+            html += segment(s.role, s.pct, amount, s["name_" + lang] || s.name_en);
+          });
+          html += '</div>';
+
+          html += '<div class="mf-explanations">';
+          html += explainCard(OPERATING, operatingAmount, lang);
+          html += phaseDivider(recoupCardLabel);
+          scenario.recoup.splits.forEach(function (s) {
+            html += explainCard(s, net * s.pct / 100, lang);
+          });
+          html += phaseDivider(steadyCardLabel);
+          scenario.steady.splits.forEach(function (s) {
+            html += explainCard(s, net * s.pct / 100, lang);
+          });
+          html += '</div>';
+
+        } else {
+          var splitLabel = lang === "zh" ? "2 · 净额如何分配" : "2 · How the net is split";
+
+          html += '<div class="mf-arrow" style="' + arrowStyle + '">↓</div>';
+          html += '<div class="mf-stage-label" style="margin-left: ' + OPERATING.pct + '%;">' + splitLabel + '</div>';
+          html += '<div class="mf-bar" style="' + subStyle + '">';
+          scenario.splits.forEach(function (s) {
+            var amount = net * s.pct / 100;
+            html += segment(s.role, s.pct, amount, s["name_" + lang] || s.name_en);
+          });
+          html += '</div>';
+
+          html += '<div class="mf-explanations">';
+          html += explainCard(OPERATING, operatingAmount, lang);
+          scenario.splits.forEach(function (s) {
+            html += explainCard(s, net * s.pct / 100, lang);
+          });
+          html += '</div>';
+        }
 
         diagram.innerHTML = html;
       }
