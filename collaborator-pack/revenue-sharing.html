@@ -439,32 +439,21 @@
         var net = revenue - operatingAmount;
         var netPct = 100 - OPERATING.pct;
 
-        // Flex-wrapper approach: spacer + bar use the same flex ratios as stage 1 segments,
-        // giving pixel-perfect alignment without percentage-margin rounding issues.
-        function subRow(labelText, splitsHtml) {
-          return '<div class="mf-stage-label">' + labelText + '</div>' +
-            '<div style="display:flex;align-items:stretch;">' +
-            '<div class="mf-bar-spacer" style="flex:' + OPERATING.pct + ' 1 0;min-width:0;"></div>' +
-            '<div class="mf-bar" style="flex:' + netPct + ' 1 0;min-width:0;">' + splitsHtml + '</div>' +
-            '</div>';
-        }
-
-        function subArrow() {
-          return '<div style="display:flex;">' +
-            '<div style="flex:' + OPERATING.pct + ' 1 0;min-width:0;"></div>' +
-            '<div class="mf-arrow" style="flex:' + netPct + ' 1 0;min-width:0;">↓</div>' +
-            '</div>';
-        }
-
         var stage1Label = lang === "zh" ? "1 · 收入扣除运营基金" : "1 · Revenue minus Operating Fund";
         var opName = lang === "zh" ? "运营基金" : "Operating Fund";
         var netName = lang === "zh" ? "可分配净额" : "Net distributable";
 
-        var html = "";
-        html += descriptionBlock(key, lang);
+        var html = descriptionBlock(key, lang);
 
-        html += '<div class="mf-stage-label">' + stage1Label + '</div>';
-        html += '<div class="mf-bar">';
+        // CSS Grid: both stage-1 bar and all sub-bars share the same 2-column grid.
+        // Stage-1 spans both columns (full width). Sub-bars live in column 2 only.
+        // Grid column widths match the operating/net flex ratios, so left edges align exactly.
+        var gridCols = OPERATING.pct + "fr " + netPct + "fr";
+        html += '<div style="display:grid;grid-template-columns:' + gridCols + ';">';
+
+        // Stage 1 (full width — spans both columns)
+        html += '<div class="mf-stage-label" style="grid-column:1/3;">' + stage1Label + '</div>';
+        html += '<div class="mf-bar" style="grid-column:1/3;">';
         html += segment("operating", OPERATING.pct, operatingAmount, opName);
         html += segment("net", netPct, net, netName);
         html += '</div>';
@@ -475,47 +464,50 @@
           var recoupCardLabel = lang === "zh" ? "第 1 阶段 — 回收期" : "Phase 1 — Recoup";
           var steadyCardLabel = lang === "zh" ? "第 2 阶段 — 稳态" : "Phase 2 — Steady State";
 
-          var recoupSplitsHtml = "";
+          // Arrow + recoup (column 2 only; empty div fills column 1)
+          html += '<div></div><div class="mf-arrow">↓</div>';
+          html += '<div></div><div class="mf-stage-label">' + recoupLabel + '</div>';
+          html += '<div></div><div class="mf-bar">';
           scenario.recoup.splits.forEach(function (s) {
-            recoupSplitsHtml += segment(s.role, s.pct, net * s.pct / 100, s["name_" + lang] || s.name_en);
+            html += segment(s.role, s.pct, net * s.pct / 100, s["name_" + lang] || s.name_en);
           });
-          html += subArrow();
-          html += subRow(recoupLabel, recoupSplitsHtml);
+          html += '</div>';
 
-          var steadySplitsHtml = "";
+          // Arrow + steady (column 2 only)
+          html += '<div></div><div class="mf-arrow">↓</div>';
+          html += '<div></div><div class="mf-stage-label">' + steadyLabel + '</div>';
+          html += '<div></div><div class="mf-bar">';
           scenario.steady.splits.forEach(function (s) {
-            steadySplitsHtml += segment(s.role, s.pct, net * s.pct / 100, s["name_" + lang] || s.name_en);
+            html += segment(s.role, s.pct, net * s.pct / 100, s["name_" + lang] || s.name_en);
           });
-          html += subArrow();
-          html += subRow(steadyLabel, steadySplitsHtml);
+          html += '</div>';
+
+          html += '</div>'; // close grid
 
           html += '<div class="mf-explanations">';
           html += explainCard(OPERATING, operatingAmount, lang);
           html += phaseDivider(recoupCardLabel);
-          scenario.recoup.splits.forEach(function (s) {
-            html += explainCard(s, net * s.pct / 100, lang);
-          });
+          scenario.recoup.splits.forEach(function (s) { html += explainCard(s, net * s.pct / 100, lang); });
           html += phaseDivider(steadyCardLabel);
-          scenario.steady.splits.forEach(function (s) {
-            html += explainCard(s, net * s.pct / 100, lang);
-          });
+          scenario.steady.splits.forEach(function (s) { html += explainCard(s, net * s.pct / 100, lang); });
           html += '</div>';
 
         } else {
           var splitLabel = lang === "zh" ? "2 · 净额如何分配" : "2 · How the net is split";
 
-          var collectiveSplitsHtml = "";
+          html += '<div></div><div class="mf-arrow">↓</div>';
+          html += '<div></div><div class="mf-stage-label">' + splitLabel + '</div>';
+          html += '<div></div><div class="mf-bar">';
           scenario.splits.forEach(function (s) {
-            collectiveSplitsHtml += segment(s.role, s.pct, net * s.pct / 100, s["name_" + lang] || s.name_en);
+            html += segment(s.role, s.pct, net * s.pct / 100, s["name_" + lang] || s.name_en);
           });
-          html += subArrow();
-          html += subRow(splitLabel, collectiveSplitsHtml);
+          html += '</div>';
+
+          html += '</div>'; // close grid
 
           html += '<div class="mf-explanations">';
           html += explainCard(OPERATING, operatingAmount, lang);
-          scenario.splits.forEach(function (s) {
-            html += explainCard(s, net * s.pct / 100, lang);
-          });
+          scenario.splits.forEach(function (s) { html += explainCard(s, net * s.pct / 100, lang); });
           html += '</div>';
         }
 
