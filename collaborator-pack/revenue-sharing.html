@@ -438,8 +438,23 @@
         var operatingAmount = revenue * OPERATING.pct / 100;
         var net = revenue - operatingAmount;
         var netPct = 100 - OPERATING.pct;
-        var subStyle = "width: " + netPct + "%; margin-left: " + OPERATING.pct + "%;";
-        var arrowStyle = "margin-left: " + OPERATING.pct + "%; width: " + netPct + "%;";
+
+        // Flex-wrapper approach: spacer + bar use the same flex ratios as stage 1 segments,
+        // giving pixel-perfect alignment without percentage-margin rounding issues.
+        function subRow(labelText, splitsHtml) {
+          return '<div class="mf-stage-label">' + labelText + '</div>' +
+            '<div style="display:flex;align-items:stretch;">' +
+            '<div class="mf-bar-spacer" style="flex:' + OPERATING.pct + ' 1 0;min-width:0;"></div>' +
+            '<div class="mf-bar" style="flex:' + netPct + ' 1 0;min-width:0;">' + splitsHtml + '</div>' +
+            '</div>';
+        }
+
+        function subArrow() {
+          return '<div style="display:flex;">' +
+            '<div style="flex:' + OPERATING.pct + ' 1 0;min-width:0;"></div>' +
+            '<div class="mf-arrow" style="flex:' + netPct + ' 1 0;min-width:0;">↓</div>' +
+            '</div>';
+        }
 
         var stage1Label = lang === "zh" ? "1 · 收入扣除运营基金" : "1 · Revenue minus Operating Fund";
         var opName = lang === "zh" ? "运营基金" : "Operating Fund";
@@ -460,23 +475,19 @@
           var recoupCardLabel = lang === "zh" ? "第 1 阶段 — 回收期" : "Phase 1 — Recoup";
           var steadyCardLabel = lang === "zh" ? "第 2 阶段 — 稳态" : "Phase 2 — Steady State";
 
-          html += '<div class="mf-arrow" style="' + arrowStyle + '">↓</div>';
-          html += '<div class="mf-stage-label" style="margin-left: ' + OPERATING.pct + '%;">' + recoupLabel + '</div>';
-          html += '<div class="mf-bar" style="' + subStyle + '">';
+          var recoupSplitsHtml = "";
           scenario.recoup.splits.forEach(function (s) {
-            var amount = net * s.pct / 100;
-            html += segment(s.role, s.pct, amount, s["name_" + lang] || s.name_en);
+            recoupSplitsHtml += segment(s.role, s.pct, net * s.pct / 100, s["name_" + lang] || s.name_en);
           });
-          html += '</div>';
+          html += subArrow();
+          html += subRow(recoupLabel, recoupSplitsHtml);
 
-          html += '<div class="mf-arrow" style="' + arrowStyle + '">↓</div>';
-          html += '<div class="mf-stage-label" style="margin-left: ' + OPERATING.pct + '%;">' + steadyLabel + '</div>';
-          html += '<div class="mf-bar" style="' + subStyle + '">';
+          var steadySplitsHtml = "";
           scenario.steady.splits.forEach(function (s) {
-            var amount = net * s.pct / 100;
-            html += segment(s.role, s.pct, amount, s["name_" + lang] || s.name_en);
+            steadySplitsHtml += segment(s.role, s.pct, net * s.pct / 100, s["name_" + lang] || s.name_en);
           });
-          html += '</div>';
+          html += subArrow();
+          html += subRow(steadyLabel, steadySplitsHtml);
 
           html += '<div class="mf-explanations">';
           html += explainCard(OPERATING, operatingAmount, lang);
@@ -493,14 +504,12 @@
         } else {
           var splitLabel = lang === "zh" ? "2 · 净额如何分配" : "2 · How the net is split";
 
-          html += '<div class="mf-arrow" style="' + arrowStyle + '">↓</div>';
-          html += '<div class="mf-stage-label" style="margin-left: ' + OPERATING.pct + '%;">' + splitLabel + '</div>';
-          html += '<div class="mf-bar" style="' + subStyle + '">';
+          var collectiveSplitsHtml = "";
           scenario.splits.forEach(function (s) {
-            var amount = net * s.pct / 100;
-            html += segment(s.role, s.pct, amount, s["name_" + lang] || s.name_en);
+            collectiveSplitsHtml += segment(s.role, s.pct, net * s.pct / 100, s["name_" + lang] || s.name_en);
           });
-          html += '</div>';
+          html += subArrow();
+          html += subRow(splitLabel, collectiveSplitsHtml);
 
           html += '<div class="mf-explanations">';
           html += explainCard(OPERATING, operatingAmount, lang);
