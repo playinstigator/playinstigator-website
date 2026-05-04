@@ -823,11 +823,6 @@ tbody tr:first-child td { border-top: none; }
 .mf-segment[data-role="ip-equity"]  { background: var(--play-blue); color: var(--charcoal); }
 .mf-segment[data-role="collective"] { background: var(--mint); color: var(--charcoal); }
 
-.mf-sub-bar {
-  border-radius: 0 10px 10px 0;
-  border-left: none;
-}
-
 .mf-explanations {
   margin-top: 22px;
   display: flex;
