@@ -140,8 +140,8 @@
           zh: "Type 1 创作驱动媒介——游戏、音乐、小说、原声带。观众为创作本身付费。IP 是它所处的那个世界，而不是他们购买的理由。回收期内，负责人拿到净收入的 80% 用于回收制作资本（引擎授权、软件、DAW、插件、录音棚时间、外包工作）。资本回收完成后进入稳态：负责人 50%，塑形了这部作品的跨媒介合作者 50%。"
         },
         "animation": {
-          en: "A Type 1 Craft-Driven medium. During recoup, the animation manager gets 80% of net to recover production costs. After recoup, steady state: 50% to the manager, 50% to the cross-medium contributors who shaped the animation.",
-          zh: "Type 1 创作驱动媒介。回收期内，动画负责人拿到净收入的 80% 用于回收制作成本。回收完成后进入稳态：负责人 50%，塑形了这部动画的跨媒介合作者 50%。"
+          en: "A Type 2 medium — YouTube ad revenue is platform-driven and not tied to direct product sales. There is no capital at risk the way there is for games or merchandise. After the operating fund cut, the full net routes to the collective pool and distributes monthly via rolling contribution units.",
+          zh: "Type 2 媒介——YouTube 广告收入由平台驱动，不与直接产品销售挂钩。没有像游戏或周边那样处于风险中的资本。扣除运营基金之后，净额全部进入共同池，按每月通过滚动贡献单位分配。"
         },
         "plushie": {
           en: "A Type 1 IP-Leveraged medium. During recoup, the plushie manager gets 80% of net to recover capital — manufacturing MOQs, tooling, prototypes, initial inventory. After recoup, steady state honestly reflects that the IP is doing most of the selling: 25% manager, 25% earned contribution, 50% IP equity routing to the collective pool.",
@@ -223,59 +223,20 @@
           }
         },
         "animation": {
-          type: "direct",
-          recoup: {
-            splits: [
-              {
-                role: "manager", pct: 80,
-                name_en: "Animation Manager (Recoup)",
-                name_zh: "动画负责人（回收期）",
-                concern_en: "The animation manager fronted production capital — software, equipment, voice acting, outsourced work — and bears 100% of the capital risk until it is recovered.",
-                concern_zh: "动画负责人垫付了制作资本——软件、设备、配音、外包工作——并在资本被收回之前承担 100% 的资本风险。",
-                how_en: "80% of net animation revenue while the recoup balance is non-zero.",
-                how_zh: "在回收余额非零期间，动画净收入的 80%。",
-                who_en: "The animation manager who funded production.",
-                who_zh: "为制作出资的动画负责人本人。"
-              },
-              {
-                role: "earned", pct: 20,
-                name_en: "Earned Contribution Pool",
-                name_zh: "贡献份额池",
-                concern_en: "Cross-medium contributors who shaped the animation should be acknowledged immediately, not only after recoup.",
-                concern_zh: "塑形了这部动画的跨媒介合作者应当立即被承认，而不是等到回收期结束之后。",
-                how_en: "20% of net animation revenue, distributed via the earned-contribution conversation.",
-                how_zh: "动画净收入的 20%，通过贡献对话来分配。",
-                who_en: "Cross-medium contributors named in the earned-contribution conversation.",
-                who_zh: "在贡献对话中被点名的跨媒介合作者。"
-              }
-            ]
-          },
-          steady: {
-            splits: [
-              {
-                role: "manager", pct: 50,
-                name_en: "Animation Manager",
-                name_zh: "动画负责人",
-                concern_en: "Even after capital is recovered, the animator remains the primary creator of what audiences are watching. Their craft and ongoing oversight is what got the animation shipped.",
-                concern_zh: "即使资本已经收回，动画作者仍然是观众正在观看的内容的主要创作者。他们的工艺与持续监督，是动画得以发布的原因。",
-                how_en: "50% of net animation revenue (Craft-Driven steady state).",
-                how_zh: "动画净收入的 50%（创作驱动稳态）。",
-                who_en: "The animation manager.",
-                who_zh: "动画负责人本人。"
-              },
-              {
-                role: "earned", pct: 50,
-                name_en: "Earned Contribution Pool",
-                name_zh: "贡献份额池",
-                concern_en: "Cross-medium contributors meaningfully shaped the animation — voice work, music, story input from across the IP. That contribution deserves an equal share post-recoup.",
-                concern_zh: "跨媒介合作者切实塑形了这部动画——来自 IP 各处的配音、音乐、故事输入。回收期之后，这种贡献应当获得同等份额。",
-                how_en: "50% of net revenue, distributed via the earned-contribution conversation.",
-                how_zh: "净收入的 50%，通过贡献对话来分配。",
-                who_en: "Cross-medium contributors named in the conversation. If no one was meaningfully involved cross-medium, the share routes to the orphan pool → collective revenue.",
-                who_zh: "在贡献对话中被点名的跨媒介合作者。如果没有任何被认可的跨媒介参与者，这一份会进入「无主池」→ 共同收入。"
-              }
-            ]
-          }
+          type: "collective",
+          splits: [
+            {
+              role: "collective", pct: 100,
+              name_en: "Collective Pool",
+              name_zh: "共同池",
+              concern_en: "YouTube ad revenue is driven by the IP's audience, not by direct product sales. There is no capital at risk the way there is for games or merchandise — the infrastructure is the platform. The animation manager's return comes through their rolling contribution units, not a separate manager split.",
+              concern_zh: "YouTube 广告收入由 IP 的受众驱动，而非直接的产品销售。没有像游戏或周边那样处于风险中的资本——基础设施就是平台本身。动画负责人的回报通过其滚动贡献单位获得，而非独立的负责人分成。",
+              how_en: "100% of net animation ad revenue enters the collective pool.",
+              how_zh: "动画广告净收入的 100% 进入共同池。",
+              who_en: "All collective members, distributed monthly via the rolling 12-month units mechanism.",
+              who_zh: "整个共创团体的全体成员，每月通过滚动 12 个月单位机制分配。"
+            }
+          ]
         },
         "plushie": {
           type: "direct",
