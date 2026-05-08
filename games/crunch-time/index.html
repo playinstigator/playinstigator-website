@@ -1,0 +1,1912 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Crunch Time — Game Dev Icebreaker</title>
+<style>
+  :root {
+    --bg: #0a0a14;
+    --panel: #14142a;
+    --text: #e8e8f0;
+    --dim: #888;
+    --p1: #00e5ff;
+    --p2: #ff4081;
+    --p3: #ffd54f;
+    --p4: #69f0ae;
+    --accent: #b388ff;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 100%;
+    height: 100%;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'JetBrains Mono', 'Consolas', monospace;
+    overflow: hidden;
+    user-select: none;
+  }
+
+  #app {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+  }
+
+  .screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 32px;
+    text-align: center;
+  }
+  .screen.active { display: flex; }
+
+  h1 { font-size: 42px; letter-spacing: 4px; margin-bottom: 8px; }
+  h2 { font-size: 24px; color: var(--dim); margin-bottom: 32px; font-weight: normal; letter-spacing: 2px; }
+  p  { color: var(--dim); margin-bottom: 16px; line-height: 1.6; max-width: 600px; text-align: center; }
+  .accent { color: var(--accent); }
+
+  button {
+    background: var(--accent);
+    color: var(--bg);
+    border: none;
+    padding: 14px 32px;
+    font-family: inherit;
+    font-size: 18px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    cursor: pointer;
+    border-radius: 4px;
+    margin-top: 16px;
+    transition: transform 0.1s;
+  }
+  button:hover { transform: scale(1.05); }
+  button.secondary { background: transparent; color: var(--dim); border: 1px solid var(--dim); }
+
+  /* SETUP */
+  .player-slots {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    width: 100%;
+    max-width: 800px;
+    margin: 24px 0;
+  }
+  .slot {
+    background: var(--panel);
+    border: 2px solid transparent;
+    border-radius: 8px;
+    padding: 24px 16px;
+    text-align: center;
+    transition: border 0.2s;
+  }
+  .slot.p1 { border-color: var(--p1); }
+  .slot.p2 { border-color: var(--p2); }
+  .slot.p3 { border-color: var(--p3); }
+  .slot.p4 { border-color: var(--p4); }
+  .slot.binding { animation: pulse 1s infinite; }
+  @keyframes pulse {
+    0%, 100% { box-shadow: 0 0 0 0 currentColor; }
+    50% { box-shadow: 0 0 24px 4px currentColor; }
+  }
+  .slot .label { font-size: 14px; color: var(--dim); margin-bottom: 8px; letter-spacing: 2px; }
+  .slot .key {
+    font-size: 36px;
+    font-weight: bold;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .slot.p1 .key { color: var(--p1); }
+  .slot.p2 .key { color: var(--p2); }
+  .slot.p3 .key { color: var(--p3); }
+  .slot.p4 .key { color: var(--p4); }
+  .slot .key.empty { color: var(--dim); font-size: 18px; font-weight: normal; }
+
+  /* PLAY */
+  #playfield {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+  }
+  .note {
+    position: absolute;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 16px currentColor;
+    pointer-events: none;
+  }
+  .note.p1 { background: var(--p1); color: var(--p1); }
+  .note.p2 { background: var(--p2); color: var(--p2); }
+  .note.p3 { background: var(--p3); color: var(--p3); }
+  .note.p4 { background: var(--p4); color: var(--p4); }
+
+  .target {
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    border: 4px solid currentColor;
+    transform: translate(-50%, -50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    font-weight: bold;
+    transition: transform 0.05s, box-shadow 0.1s;
+  }
+  .target.p1 { color: var(--p1); }
+  .target.p2 { color: var(--p2); }
+  .target.p3 { color: var(--p3); }
+  .target.p4 { color: var(--p4); }
+  .target.hit { transform: translate(-50%, -50%) scale(1.2); box-shadow: 0 0 32px currentColor; }
+
+  .score-hud {
+    position: absolute;
+    top: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 24px;
+    background: rgba(20, 20, 42, 0.6);
+    padding: 12px 24px;
+    border-radius: 8px;
+    backdrop-filter: blur(4px);
+    z-index: 10;
+  }
+  .score-hud .ps { display: flex; flex-direction: column; align-items: center; min-width: 60px; }
+  .score-hud .ps .name { font-size: 12px; color: var(--dim); letter-spacing: 1px; }
+  .score-hud .ps .val { font-size: 24px; font-weight: bold; }
+  .score-hud .ps.p1 .val { color: var(--p1); }
+  .score-hud .ps.p2 .val { color: var(--p2); }
+  .score-hud .ps.p3 .val { color: var(--p3); }
+  .score-hud .ps.p4 .val { color: var(--p4); }
+
+  #countdown {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 180px;
+    font-weight: bold;
+    color: var(--accent);
+    z-index: 20;
+    text-shadow: 0 0 32px var(--accent);
+  }
+
+  .feedback {
+    position: absolute;
+    font-size: 16px;
+    font-weight: bold;
+    pointer-events: none;
+    animation: floatUp 0.5s forwards;
+  }
+  @keyframes floatUp {
+    0%   { opacity: 1; transform: translate(-50%, -50%); }
+    100% { opacity: 0; transform: translate(-50%, -120%); }
+  }
+
+  /* REVEAL */
+  .ranking {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+    max-width: 500px;
+    margin-top: 24px;
+  }
+  .rank-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: var(--panel);
+    padding: 16px 24px;
+    border-radius: 8px;
+    border-left: 6px solid;
+    opacity: 0;
+    animation: slideIn 0.4s forwards;
+  }
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateX(-20px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+  .rank-row .place { font-size: 32px; font-weight: bold; min-width: 60px; color: var(--dim); }
+  .rank-row .who { flex: 1; font-size: 24px; font-weight: bold; }
+  .rank-row .val { font-size: 24px; color: var(--dim); }
+  .rank-row.p1 { border-color: var(--p1); }
+  .rank-row.p2 { border-color: var(--p2); }
+  .rank-row.p3 { border-color: var(--p3); }
+  .rank-row.p4 { border-color: var(--p4); }
+  .rank-row.p1 .who { color: var(--p1); }
+  .rank-row.p2 .who { color: var(--p2); }
+  .rank-row.p3 .who { color: var(--p3); }
+  .rank-row.p4 .who { color: var(--p4); }
+
+  /* QUESTION */
+  .question-card {
+    background: var(--panel);
+    padding: 48px;
+    border-radius: 12px;
+    max-width: 800px;
+    text-align: center;
+    border-top: 6px solid var(--accent);
+  }
+  .question-card .who-now {
+    font-size: 18px;
+    color: var(--dim);
+    letter-spacing: 2px;
+    margin-bottom: 16px;
+  }
+  .question-card .who-now .name { font-weight: bold; font-size: 22px; }
+  .question-card .who-now.p1 .name { color: var(--p1); }
+  .question-card .who-now.p2 .name { color: var(--p2); }
+  .question-card .who-now.p3 .name { color: var(--p3); }
+  .question-card .who-now.p4 .name { color: var(--p4); }
+  .question-card .q-text {
+    font-size: 32px;
+    line-height: 1.4;
+    margin: 24px 0;
+  }
+  .question-card .order-dots {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 24px;
+  }
+  .order-dots .dot { width: 16px; height: 16px; border-radius: 50%; background: var(--dim); opacity: 0.3; }
+  .order-dots .dot.done { opacity: 1; }
+  .order-dots .dot.active { opacity: 1; box-shadow: 0 0 12px currentColor; transform: scale(1.3); }
+
+  .round-indicator {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    color: var(--dim);
+    font-size: 14px;
+    letter-spacing: 2px;
+  }
+
+  .hint { font-size: 13px; color: var(--dim); margin-top: 32px; letter-spacing: 1px; }
+
+  /* TRACK CONFIG (title screen) */
+  .track-config {
+    width: 100%;
+    max-width: 560px;
+    margin: 8px 0 4px;
+  }
+  .file-drop {
+    display: block;
+    border: 2px dashed var(--accent);
+    border-radius: 8px;
+    padding: 18px;
+    text-align: center;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s;
+  }
+  .file-drop:hover, .file-drop.drag { background: rgba(179, 136, 255, 0.1); border-color: var(--text); }
+  .file-drop input { display: none; }
+  .file-drop span { color: var(--accent); font-weight: bold; letter-spacing: 2px; font-size: 14px; }
+  .track-status {
+    margin-top: 8px;
+    font-size: 12px;
+    color: var(--dim);
+    letter-spacing: 1px;
+    min-height: 18px;
+    text-align: center;
+  }
+  .track-options {
+    margin-top: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background: var(--panel);
+    padding: 14px 16px;
+    border-radius: 8px;
+  }
+  .track-options .opt {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 12px;
+    color: var(--dim);
+    letter-spacing: 1px;
+  }
+  .track-options .opt > label.lbl { min-width: 90px; text-align: left; }
+  .track-options select,
+  .track-options input[type=range] {
+    flex: 1;
+    background: var(--bg);
+    color: var(--text);
+    border: 1px solid var(--dim);
+    border-radius: 4px;
+    padding: 5px;
+    font-family: inherit;
+    font-size: 12px;
+  }
+  .track-options input[type=checkbox] { transform: scale(1.3); margin-right: 6px; }
+  .track-options .opt.cb label { display: flex; align-items: center; cursor: pointer; min-width: 0; }
+  .track-options .val-readout { color: var(--text); min-width: 32px; text-align: right; }
+
+  .dev-options { width: 100%; max-width: 560px; margin: 8px 0 0; }
+  .dev-options summary {
+    cursor: pointer;
+    color: var(--dim);
+    font-size: 12px;
+    letter-spacing: 1px;
+    padding: 6px;
+    text-align: center;
+    list-style: none;
+  }
+  .dev-options summary::-webkit-details-marker { display: none; }
+  .dev-options[open] summary { color: var(--text); }
+  .dim { color: var(--dim); }
+  button:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+  button:disabled:hover { transform: none; }
+
+  /* Sections table (dev mode) */
+  .sections-header { justify-content: space-between; }
+  .sections-table {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-top: 4px;
+  }
+  .section-row {
+    display: grid;
+    grid-template-columns: 28px 60px 12px 60px 18px 56px 12px 56px 1fr;
+    gap: 6px;
+    align-items: center;
+    font-size: 11px;
+  }
+  .section-row input[type=number] {
+    width: 100%;
+    background: var(--bg);
+    color: var(--text);
+    border: 1px solid var(--dim);
+    border-radius: 3px;
+    padding: 3px 4px;
+    font-family: inherit;
+    font-size: 11px;
+    text-align: center;
+  }
+  .section-row .s-label { color: var(--accent); font-weight: bold; text-align: left; }
+  .section-row .sep { color: var(--dim); text-align: center; }
+  .section-row .dur-readout { font-size: 10px; text-align: right; color: var(--dim); }
+  .sections-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 6px;
+    justify-content: flex-end;
+  }
+  .sections-actions button {
+    padding: 4px 10px;
+    font-size: 11px;
+    margin-top: 0;
+    letter-spacing: 1px;
+  }
+  .sections-legend {
+    font-size: 10px;
+    color: var(--dim);
+    text-align: center;
+    margin-top: 2px;
+    letter-spacing: 0.5px;
+  }
+
+  /* Beat-indicator (debug mode) */
+  #beat-indicator {
+    position: absolute;
+    top: 92px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: none;
+    gap: 16px;
+    background: rgba(20, 20, 42, 0.5);
+    padding: 6px 14px;
+    border-radius: 6px;
+    z-index: 8;
+    align-items: center;
+  }
+  #beat-indicator.active { display: flex; }
+  #beat-indicator .lane {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+  }
+  #beat-indicator .lbl {
+    font-size: 10px;
+    color: var(--dim);
+    letter-spacing: 1.5px;
+  }
+  #beat-indicator .dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: #333;
+    transition: background 60ms, box-shadow 60ms, transform 60ms;
+  }
+  #beat-indicator .dot.flash { transform: scale(1.4); }
+  #beat-indicator .dot.low.flash  { background: var(--p1); box-shadow: 0 0 14px var(--p1); }
+  #beat-indicator .dot.high.flash { background: var(--p2); box-shadow: 0 0 14px var(--p2); }
+
+  /* Pause overlay */
+  #pause-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(10, 10, 20, 0.85);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    z-index: 30;
+    backdrop-filter: blur(6px);
+  }
+  #pause-overlay.active { display: flex; }
+  #pause-overlay h1 {
+    font-size: 72px;
+    letter-spacing: 8px;
+    color: var(--accent);
+    text-shadow: 0 0 32px var(--accent);
+  }
+  #pause-overlay p { margin-top: 16px; font-size: 14px; }
+</style>
+</head>
+<body>
+<div id="app">
+
+  <!-- TITLE -->
+  <div id="screen-title" class="screen active">
+    <h1>CRUNCH TIME</h1>
+    <h2>game dev icebreaker</h2>
+    <p>Four devs. Four keys. One rhythm. Lowest score answers first.</p>
+    <p>Five rounds, five questions, fifteen minutes. Get to know each other.</p>
+    <button id="btn-start" disabled>LOADING…</button>
+    <p class="hint" id="title-hint">analyzing track…</p>
+
+    <details class="dev-options" id="dev-options">
+      <summary>dev mode <span class="dim">(click to expand)</span></summary>
+      <div class="track-options">
+        <div class="opt">
+          <label class="lbl">LANES</label>
+          <select id="opt-lane-mode">
+            <option value="unison" selected>Unison — all 4 hit together</option>
+            <option value="sequential">Sequential — rotate 1→2→3→4</option>
+            <option value="musical">Musical split — bass→P1/P3, treble→P2/P4 (balanced)</option>
+          </select>
+        </div>
+        <div class="opt">
+          <label class="lbl">FILTER</label>
+          <select id="opt-beat-filter">
+            <option value="raw">Raw — every detected onset</option>
+            <option value="musical" selected>Musical — merge/fills/ornament/density rules</option>
+          </select>
+          <span class="val-readout" id="filter-readout">—</span>
+        </div>
+        <div class="opt">
+          <label class="lbl">DENSITY</label>
+          <input type="range" id="opt-density" min="20" max="200" value="80">
+          <span class="val-readout" id="density-val">80</span>
+        </div>
+        <div class="opt sections-header">
+          <label class="lbl">SECTIONS</label>
+          <span class="dim" id="sections-bpm-hint">— · audio range × speed</span>
+        </div>
+        <div class="sections-table" id="sections-table"></div>
+        <div class="sections-legend">audio start → audio end · start× → end× speed multiplier · wall-clock duration</div>
+        <div class="sections-actions">
+          <button class="secondary" id="btn-reset-sections">RESET SECTIONS</button>
+        </div>
+        <div class="opt">
+          <label class="lbl">PER-LANE</label>
+          <span id="per-lane-readout" class="dim">—</span>
+        </div>
+        <div class="opt cb">
+          <label><input type="checkbox" id="opt-debug"> DEBUG: flash beat indicator + log presses to console</label>
+        </div>
+      </div>
+    </details>
+  </div>
+
+  <!-- SETUP -->
+  <div id="screen-setup" class="screen">
+    <h1>BIND YOUR KEYS</h1>
+    <h2 id="setup-prompt">Player 1, press a key</h2>
+    <div class="player-slots" id="player-slots"></div>
+    <button id="btn-confirm">CONFIRM</button>
+    <button id="btn-reset-keys" class="secondary">RESET</button>
+    <p class="hint">defaults: A · F · J · ' (apostrophe) — press your key to override</p>
+  </div>
+
+  <!-- PLAY -->
+  <div id="screen-play" class="screen" style="padding: 0;">
+    <div class="round-indicator" id="round-indicator">ROUND 1 / 5</div>
+    <div class="score-hud" id="score-hud"></div>
+    <div id="playfield"></div>
+    <div id="beat-indicator">
+      <div class="lane"><span class="lbl">LOW</span><div class="dot low" id="beat-dot-low"></div></div>
+      <div class="lane"><span class="lbl">HIGH</span><div class="dot high" id="beat-dot-high"></div></div>
+    </div>
+    <div id="countdown" style="display:none"></div>
+    <div id="pause-overlay">
+      <h1>PAUSED</h1>
+      <p class="dim">press ESC to resume</p>
+    </div>
+  </div>
+
+  <!-- REVEAL -->
+  <div id="screen-reveal" class="screen">
+    <h1>RESULTS</h1>
+    <h2 id="reveal-subtitle">round 1</h2>
+    <div class="ranking" id="ranking"></div>
+    <button id="btn-to-question">CONTINUE</button>
+  </div>
+
+  <!-- QUESTION -->
+  <div id="screen-question" class="screen">
+    <div class="round-indicator" id="question-round">ROUND 1 / 5</div>
+    <div class="question-card">
+      <div class="who-now" id="who-now"><span class="label">NEXT UP:</span> <span class="name"></span></div>
+      <div class="q-text" id="q-text"></div>
+      <div class="order-dots" id="order-dots"></div>
+    </div>
+    <button id="btn-next-answer">NEXT</button>
+    <p class="hint">answer in 30-60 seconds, pass to the next dev</p>
+  </div>
+
+  <!-- END -->
+  <div id="screen-end" class="screen">
+    <h1>GG</h1>
+    <h2>nice to meet you</h2>
+    <p>Now go make games.</p>
+    <button id="btn-restart">PLAY AGAIN</button>
+  </div>
+
+</div>
+
+<script>
+// -----------------------------------------------------------------------------
+// CONFIG
+// -----------------------------------------------------------------------------
+const TRACK_AUDIO_URL = './mr-saxobeat.mp3';   // null to disable embedded track and use synth fallback
+
+const PLAYERS = [
+  { id: 0, name: 'PLAYER 1', color: 'p1', defaultKey: 'a' },
+  { id: 1, name: 'PLAYER 2', color: 'p2', defaultKey: 'f' },
+  { id: 2, name: 'PLAYER 3', color: 'p3', defaultKey: 'j' },
+  { id: 3, name: 'PLAYER 4', color: 'p4', defaultKey: "'" },
+];
+
+// Round = { song pattern, question }
+// Pattern is an array of 60 beats; each entry is array of lane indices that fire on that beat.
+// 30 seconds at 120 BPM = 60 quarter-beats.
+function genPattern(seed) {
+  // Deterministic-ish patterns; keeps things fair (same for all players) and varied across rounds.
+  const all = [0,1,2,3];
+  const pat = [];
+  for (let i = 0; i < 60; i++) {
+    const beat = i + 1;
+    let notes = [];
+    if (beat <= 4) {
+      notes = [(beat - 1 + seed) % 4];          // intro: each player solos
+    } else if (beat <= 8) {
+      notes = (beat % 2 === 0) ? [0,2] : [1,3]; // alternating pairs
+    } else if (beat % 16 === 0) {
+      notes = all;                               // every 16th beat: all 4
+    } else if (beat % 4 === 0) {
+      notes = [(beat / 4 + seed) % 4, ((beat / 4 + seed) + 2) % 4]; // pairs
+    } else if (beat % 2 === 0) {
+      notes = [(beat + seed) % 4];               // solos on even
+    } else if (beat % 3 === 0) {
+      notes = [(beat + seed * 2) % 4];           // syncopation
+    }
+    pat.push(notes);
+  }
+  return pat;
+}
+
+const ROUNDS = [
+  { pattern: genPattern(0), bpm: 110, question: "What's a game you've been playing recently — and why are you into it?" },
+  { pattern: genPattern(1), bpm: 120, question: "Favorite game soundtrack of all time?" },
+  { pattern: genPattern(2), bpm: 130, question: "First game you remember playing as a kid?" },
+  { pattern: genPattern(3), bpm: 140, question: "A game mechanic from another game you wish you'd designed?" },
+  { pattern: genPattern(4), bpm: 150, question: "What are you working on this session — and what's one thing you'd love feedback on?" },
+];
+
+const HIT_WINDOW_MS = 180;     // ± window for a successful hit
+const NOTE_TRAVEL_MS = 1800;   // visual travel time from spawn to target
+
+// -----------------------------------------------------------------------------
+// STATE
+// -----------------------------------------------------------------------------
+const state = {
+  bindings: PLAYERS.map(p => p.defaultKey),
+  bindingIndex: 0,         // which slot is currently being rebound (-1 = done)
+  currentRound: 0,
+  scores: [0, 0, 0, 0],
+  totalNotesThisRound: 0,
+  rankingThisRound: [],    // [{playerId, score}, ...] lowest to highest
+  answerCursor: 0,         // which player in ranking is answering now
+  cumulativeScores: [0, 0, 0, 0],
+};
+
+// -----------------------------------------------------------------------------
+// AUDIO (synthesized clicks; replace with real track later)
+// -----------------------------------------------------------------------------
+let audioCtx = null;
+function ensureAudio() {
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  if (audioCtx.state === 'suspended') audioCtx.resume();
+}
+function tick(time, freq = 440, dur = 0.05) {
+  if (!audioCtx) return;
+  const osc = audioCtx.createOscillator();
+  const gain = audioCtx.createGain();
+  osc.frequency.value = freq;
+  osc.type = 'square';
+  gain.gain.setValueAtTime(0.18, time);
+  gain.gain.exponentialRampToValueAtTime(0.001, time + dur);
+  osc.connect(gain).connect(audioCtx.destination);
+  osc.start(time);
+  osc.stop(time + dur + 0.02);
+}
+
+// -----------------------------------------------------------------------------
+// TRACK ANALYSIS + PLAYBACK (real audio mode)
+// -----------------------------------------------------------------------------
+// Per-section config: each round plays a custom audio window with a linear
+// playback-rate ramp from startMult → endMult. Defaults give 5 × 25s windows
+// that span ~125s of source audio with progressive speed-up.
+const DEFAULT_SECTIONS = [
+  { startSec:   0, endSec:  25, startMult: 1.0, endMult: 1.0 },
+  { startSec:  30, endSec:  55, startMult: 1.0, endMult: 1.0 },
+  { startSec:  60, endSec:  85, startMult: 1.0, endMult: 1.0 },
+  { startSec:  90, endSec: 115, startMult: 1.0, endMult: 1.0 },
+  { startSec: 120, endSec: 145, startMult: 1.0, endMult: 1.0 },
+];
+
+const track = {
+  buffer: null,
+  detectedBpm: null,
+  onsets: [],          // [{tSec, band: 0|3, strength}] — raw detector output
+  beatmaps: null,      // per-round [{hits, sectionOnsets, startMult, endMult, audioStartSec, audioDurationSec, wallDurationMs}]
+  laneMode: 'unison',
+  density: 80,
+  sections: DEFAULT_SECTIONS.map(s => ({ ...s })),
+  debug: false,
+  beatFilter: 'musical',   // 'raw' | 'musical' — which onset selector to feed to rebuildBeatmaps
+};
+let currentSource = null;
+
+function setTrackStatus(text) {
+  const el = document.getElementById('track-status');
+  if (el) el.textContent = text;
+}
+
+async function loadTrackFile(file) {
+  ensureAudio();
+  setTrackStatus('Decoding audio…');
+  try {
+    const arr = await file.arrayBuffer();
+    const buf = await audioCtx.decodeAudioData(arr);
+    track.buffer = buf;
+    setTrackStatus('Analyzing onsets…');
+    // Yield to the UI before heavy work so the status text can paint
+    await new Promise(r => setTimeout(r, 30));
+    const { onsets, bpm } = await analyzeTrack(buf);
+    track.detectedBpm = bpm;
+    track.onsets = onsets;
+    rebuildBeatmaps();
+    document.getElementById('track-options').style.display = '';
+    setTrackStatus(`✓ ${file.name} · ${bpm.toFixed(0)} BPM detected · ${onsets.length} onsets · ${buf.duration.toFixed(0)}s`);
+  } catch (err) {
+    console.error(err);
+    setTrackStatus('Error: ' + err.message);
+  }
+}
+
+async function analyzeTrack(buffer) {
+  const sr = buffer.sampleRate;
+  const HOP = Math.max(256, Math.floor(sr * 0.011));   // ~11ms hop
+  const FRAME = HOP * 2;
+  // Two band-filtered renders, in parallel
+  const [lowBuf, highBuf] = await Promise.all([
+    renderFiltered(buffer, 'lowpass', 250),
+    renderFiltered(buffer, 'highpass', 2500),
+  ]);
+  const eL = energyCurve(lowBuf.getChannelData(0), FRAME, HOP);
+  const eH = energyCurve(highBuf.getChannelData(0), FRAME, HOP);
+  const novL = noveltyCurve(eL);
+  const novH = noveltyCurve(eH);
+  const novTotal = new Float32Array(novL.length);
+  for (let i = 0; i < novL.length; i++) novTotal[i] = novL[i] + (novH[i] || 0);
+  const peaks = pickPeaks(novTotal, sr, HOP, 0.08);    // min 80ms between peaks
+  const onsets = peaks.map(idx => ({
+    tSec: idx * HOP / sr,
+    band: novL[idx] >= novH[idx] ? 0 : 3,
+    strength: novTotal[idx],
+  }));
+  // Autocorrelation on the novelty curve gives a more reliable BPM than inter-onset intervals,
+  // because pop tracks have many sub-beat hits that fool interval-histogram methods.
+  const bpm = estimateBpmAutocorr(novTotal, sr, HOP);
+  return { onsets, bpm };
+}
+
+function estimateBpmAutocorr(novelty, sr, hop) {
+  const minBpm = 70, maxBpm = 180;          // restrict to typical pop range
+  const minLag = Math.max(1, Math.floor((60 / maxBpm) * sr / hop));
+  const maxLag = Math.min(novelty.length - 1, Math.floor((60 / minBpm) * sr / hop));
+  if (maxLag <= minLag) return 120;
+  let best = -Infinity;
+  let bestLag = minLag;
+  for (let lag = minLag; lag <= maxLag; lag++) {
+    let sum = 0;
+    const N = novelty.length - lag;
+    for (let i = 0; i < N; i++) sum += novelty[i] * novelty[i + lag];
+    const score = sum / Math.max(1, N);
+    if (score > best) { best = score; bestLag = lag; }
+  }
+  return 60 / (bestLag * hop / sr);
+}
+
+async function renderFiltered(buffer, type, freq) {
+  const ctx = new OfflineAudioContext(1, buffer.length, buffer.sampleRate);
+  const src = ctx.createBufferSource();
+  src.buffer = buffer;
+  const filt = ctx.createBiquadFilter();
+  filt.type = type;
+  filt.frequency.value = freq;
+  src.connect(filt).connect(ctx.destination);
+  src.start();
+  return ctx.startRendering();
+}
+
+function energyCurve(samples, frame, hop) {
+  const N = Math.max(0, Math.floor((samples.length - frame) / hop));
+  const out = new Float32Array(N);
+  for (let i = 0; i < N; i++) {
+    let e = 0;
+    const s = i * hop;
+    for (let j = 0; j < frame; j++) { const v = samples[s + j]; e += v * v; }
+    out[i] = Math.log(1 + e * 100);
+  }
+  return out;
+}
+
+function noveltyCurve(energy) {
+  const out = new Float32Array(energy.length);
+  for (let i = 1; i < energy.length; i++) {
+    const d = energy[i] - energy[i-1];
+    out[i] = d > 0 ? d : 0;
+  }
+  return out;
+}
+
+function pickPeaks(curve, sr, hop, minIntervalSec) {
+  const minIdxGap = Math.max(1, Math.floor(minIntervalSec * sr / hop));
+  let sum = 0;
+  for (let i = 0; i < curve.length; i++) sum += curve[i];
+  const mean = sum / Math.max(1, curve.length);
+  const threshold = mean * 1.4;
+  const peaks = [];
+  for (let i = 1; i < curve.length - 1; i++) {
+    if (curve[i] < threshold) continue;
+    if (curve[i] <= curve[i-1] || curve[i] <= curve[i+1]) continue;
+    if (peaks.length && i - peaks[peaks.length-1] < minIdxGap) {
+      if (curve[i] > curve[peaks[peaks.length-1]]) peaks[peaks.length-1] = i;
+      continue;
+    }
+    peaks.push(i);
+  }
+  return peaks;
+}
+
+function estimateBpm(onsets) {
+  if (onsets.length < 8) return 120;
+  let bestBpm = 120;
+  let bestScore = 0;
+  for (let bpm = 60; bpm <= 200; bpm++) {
+    const beatSec = 60 / bpm;
+    let score = 0;
+    for (let i = 1; i < onsets.length; i++) {
+      const dt = onsets[i].tSec - onsets[i-1].tSec;
+      if (dt < 0.1 || dt > 2.5) continue;
+      const r = dt / beatSec;
+      const k = Math.round(r);
+      if (k >= 1 && k <= 4) {
+        const err = Math.abs(r - k);
+        if (err < 0.08) score += (1 - err * 12) / k;
+      }
+    }
+    if (score > bestScore) { bestScore = score; bestBpm = bpm; }
+  }
+  return bestBpm;
+}
+
+// Convert audio-local time t_a (s) to wall-clock time (s) under a linear rate ramp
+// r(wall) that goes from r0 at wall=0 to r1 at wall=D_w. D_w is derived from D_a.
+// Audio consumed: A(wall) = r0*wall + (r1-r0)/(2*D_w) * wall². Solve A = t_a.
+function audioToWallSec(tAudioSec, r0, r1, dWallSec) {
+  if (Math.abs(r1 - r0) < 1e-6) return tAudioSec / r0;
+  const a = (r1 - r0) / (2 * dWallSec);
+  // wall = (-r0 + sqrt(r0² + 4*a*t_a)) / (2*a)
+  const disc = r0 * r0 + 4 * a * tAudioSec;
+  return (-r0 + Math.sqrt(Math.max(0, disc))) / (2 * a);
+}
+
+// Filter raw onsets to "musical" beats: merge tight pairs, suppress fills,
+// drop high-band ornaments that decorate a kick groove, cap density per second.
+// Tunable; defaults match the analysis we did against the player tap log.
+function selectMusicalBeats(rawOnsets, opts = {}) {
+  const mergeMs            = opts.mergeMs            ?? 100;
+  const mergeWeakRatio     = opts.mergeWeakRatio     ?? 0.7;
+  const fillWindowMs       = opts.fillWindowMs       ?? 400;
+  const fillCount          = opts.fillCount          ?? 3;
+  const ornamentLowProxMs  = opts.ornamentLowProxMs  ?? 100;
+  const ornamentNeighborMs = opts.ornamentNeighborMs ?? 350;
+  const maxPerSec          = opts.maxPerSec          ?? 4;
+
+  let beats = rawOnsets.slice().sort((a, b) => a.tSec - b.tSec)
+    .map(o => ({ tMs: o.tSec * 1000, tSec: o.tSec, band: o.band, strength: o.strength }));
+
+  // 1. Suppress detector echo / resonance fires — but PRESERVE genuine
+  //    double-notes (e.g. saxophone phrasing, sixteenth-note pairs).
+  //    Heuristic: only merge when the pair is same-band, very tightly spaced,
+  //    AND the second is clearly weaker than the first (i.e. it's the body
+  //    resonance of the same percussive event). Two comparable-strength close
+  //    onsets are a real musical double — keep both.
+  {
+    const out = [];
+    for (const b of beats) {
+      const last = out[out.length - 1];
+      if (last && b.tMs - last.tMs < mergeMs && b.band === last.band) {
+        const ratio = b.strength / last.strength;
+        if (ratio < mergeWeakRatio) {
+          // Second is the echo of the first — drop it.
+          continue;
+        }
+        if (ratio > 1 / mergeWeakRatio) {
+          // First was the attack ramp; second is the actual hit. Replace.
+          out[out.length - 1] = b;
+          continue;
+        }
+        // Comparable strength → real double. Fall through and keep both.
+      }
+      out.push(b);
+    }
+    beats = out;
+  }
+
+  // 2. Fill detection — when fillCount+ onsets fit in fillWindowMs, replace
+  //    the cluster with just the strongest one (keeps the resolving hit).
+  {
+    const dropped = new Set();
+    for (let i = 0; i < beats.length; i++) {
+      if (dropped.has(i)) continue;
+      const winEnd = beats[i].tMs + fillWindowMs;
+      let runEnd = i;
+      while (runEnd + 1 < beats.length && beats[runEnd + 1].tMs <= winEnd && !dropped.has(runEnd + 1)) runEnd++;
+      if (runEnd - i + 1 >= fillCount) {
+        let strongestIdx = i;
+        for (let j = i + 1; j <= runEnd; j++) {
+          if (beats[j].strength > beats[strongestIdx].strength) strongestIdx = j;
+        }
+        for (let j = i; j <= runEnd; j++) {
+          if (j !== strongestIdx) dropped.add(j);
+        }
+      }
+    }
+    beats = beats.filter((_, i) => !dropped.has(i));
+  }
+
+  // 3. Demote isolated high-band ornaments. A high-band onset is kept if it
+  //    coincides (±ornamentLowProxMs) with a low-band hit, OR if it's
+  //    isolated (no neighbor within ±ornamentNeighborMs) — those are
+  //    standalone accents. Otherwise it's an ornament inside a groove and
+  //    gets dropped.
+  {
+    const dropped = new Set();
+    for (let i = 0; i < beats.length; i++) {
+      const b = beats[i];
+      if (b.band !== 3) continue;
+      let coLow = false;
+      let neighbor = false;
+      for (let j = 0; j < beats.length; j++) {
+        if (j === i || dropped.has(j)) continue;
+        const dt = Math.abs(beats[j].tMs - b.tMs);
+        if (dt <= ornamentLowProxMs && beats[j].band === 0) { coLow = true; break; }
+        if (dt <= ornamentNeighborMs) neighbor = true;
+      }
+      if (!coLow && neighbor) dropped.add(i);
+    }
+    beats = beats.filter((_, i) => !dropped.has(i));
+  }
+
+  // 4. Density cap — max maxPerSec onsets per 1-second sliding window;
+  //    when over, drop the weakest beyond maxPerSec.
+  {
+    const dropped = new Set();
+    for (let i = 0; i < beats.length; i++) {
+      if (dropped.has(i)) continue;
+      const winEnd = beats[i].tMs + 1000;
+      const windowIdx = [];
+      for (let j = i; j < beats.length && beats[j].tMs <= winEnd; j++) {
+        if (!dropped.has(j)) windowIdx.push(j);
+      }
+      if (windowIdx.length > maxPerSec) {
+        const sorted = windowIdx.slice().sort((a, b) => beats[b].strength - beats[a].strength);
+        for (let k = maxPerSec; k < sorted.length; k++) dropped.add(sorted[k]);
+      }
+    }
+    beats = beats.filter((_, i) => !dropped.has(i));
+  }
+
+  return beats.map(b => ({ tSec: b.tSec, band: b.band, strength: b.strength }));
+}
+
+function effectiveOnsets() {
+  if (!track.onsets || !track.onsets.length) return [];
+  return track.beatFilter === 'raw'
+    ? track.onsets
+    : selectMusicalBeats(track.onsets);
+}
+
+function rebuildBeatmaps() {
+  if (!track.buffer || !track.onsets.length) { track.beatmaps = null; return; }
+  const dur = track.buffer.duration;
+  const sourceOnsets = effectiveOnsets();
+  const beatmaps = [];
+  for (let r = 0; r < ROUNDS.length; r++) {
+    const sec = track.sections[r];
+    const startSec = Math.max(0, Math.min(sec.startSec, dur));
+    const endSec   = Math.max(startSec + 0.5, Math.min(sec.endSec, dur));
+    const r0 = Math.max(0.1, sec.startMult);
+    const r1 = Math.max(0.1, sec.endMult);
+    const audioDur = endSec - startSec;
+    // Wall-clock duration: D_w = 2*D_a / (r0 + r1)  (avg-rate identity)
+    const wallDurSec = 2 * audioDur / (r0 + r1);
+
+    let inSec = sourceOnsets
+      .filter(o => o.tSec >= startSec && o.tSec < endSec)
+      .map(o => ({ ...o, tSecLocal: o.tSec - startSec }));
+    if (inSec.length > track.density) {
+      inSec = [...inSec].sort((a, b) => b.strength - a.strength).slice(0, track.density);
+      inSec.sort((a, b) => a.tSecLocal - b.tSecLocal);
+    }
+
+    const hits = assignLanes(inSec, track.laneMode);
+    const wallHits = hits.map(h => ({
+      tMs: audioToWallSec(h.tSecLocal, r0, r1, wallDurSec) * 1000,
+      lane: h.lane,
+    }));
+    const sectionOnsets = inSec.map(o => ({
+      tSecLocal: o.tSecLocal,
+      tSecAudio: o.tSec,
+      tMsWall: audioToWallSec(o.tSecLocal, r0, r1, wallDurSec) * 1000,
+      band: o.band,
+      strength: o.strength,
+    }));
+    beatmaps.push({
+      hits: wallHits,
+      sectionOnsets,
+      startMult: r0,
+      endMult: r1,
+      audioStartSec: startSec,
+      audioDurationSec: audioDur,
+      wallDurationMs: wallDurSec * 1000,
+    });
+  }
+  track.beatmaps = beatmaps;
+}
+
+function assignLanes(onsets, mode) {
+  if (mode === 'unison') {
+    const out = [];
+    for (const o of onsets) for (let l = 0; l < 4; l++) out.push({ tSecLocal: o.tSecLocal, lane: l });
+    return out;
+  }
+  if (mode === 'sequential') {
+    return onsets.map((o, i) => ({ tSecLocal: o.tSecLocal, lane: i % 4 }));
+  }
+  // musical: low-band (kicks) → P1/P3, high-band (hats/snares) → P2/P4. Then balance counts.
+  const counts = [0,0,0,0];
+  const out = [];
+  for (const o of onsets) {
+    const pref = (o.band === 0) ? [0, 2] : [1, 3];
+    const lane = counts[pref[0]] <= counts[pref[1]] ? pref[0] : pref[1];
+    out.push({ tSecLocal: o.tSecLocal, lane });
+    counts[lane]++;
+  }
+  // Rebalance until any two lanes differ by at most 1
+  let safety = 4 * onsets.length;
+  while (safety-- > 0) {
+    let maxL = 0, minL = 0;
+    for (let i = 1; i < 4; i++) {
+      if (counts[i] > counts[maxL]) maxL = i;
+      if (counts[i] < counts[minL]) minL = i;
+    }
+    if (counts[maxL] - counts[minL] <= 1) break;
+    const idx = out.findIndex(h => h.lane === maxL);
+    if (idx === -1) break;
+    out[idx].lane = minL;
+    counts[maxL]--; counts[minL]++;
+  }
+  return out;
+}
+
+function beginPlayWithTrack() {
+  const bm = track.beatmaps[state.currentRound];
+  const startWall = performance.now();
+  const NOTE_LEAD_IN_MS = NOTE_TRAVEL_MS + 400;
+  const PRE_ROLL_MS = 2500;   // music starts this many ms before the first hittable note
+  const POST_ROLL_MS = 2500;  // music keeps playing this long after the last hittable note
+  const FADE_MS = 1500;       // gain ramp duration on either end
+  // First-note hit happens at startWall + effectiveLeadInMs. We need at least
+  // NOTE_LEAD_IN_MS for the first note's travel, and PRE_ROLL_MS so the music
+  // can fade in and breathe before the section.
+  const effectiveLeadInMs = Math.max(NOTE_LEAD_IN_MS, PRE_ROLL_MS);
+
+  // HUD label
+  const avgMult = (bm.startMult + bm.endMult) / 2;
+  const avgBpm = track.detectedBpm ? track.detectedBpm * avgMult : null;
+  const speedTxt = avgBpm
+    ? `~${Math.round(avgBpm)} BPM (${bm.startMult.toFixed(2)}×→${bm.endMult.toFixed(2)}×)`
+    : `${bm.startMult.toFixed(2)}×→${bm.endMult.toFixed(2)}×`;
+  document.getElementById('round-indicator').textContent =
+    `ROUND ${state.currentRound + 1} / ${ROUNDS.length} · ${speedTxt}`;
+
+  if (currentSource) { try { currentSource.stop(); } catch(e){} currentSource = null; }
+
+  const r0 = bm.startMult, r1 = bm.endMult;
+  const wallDurSec = bm.wallDurationMs / 1000;
+
+  // Pre-roll plays at the section's start rate; post-roll continues at end rate.
+  const wantPreAudioSec = (PRE_ROLL_MS / 1000) * r0;
+  const wantPostAudioSec = (POST_ROLL_MS / 1000) * r1;
+  const bufferStart = Math.max(0, bm.audioStartSec - wantPreAudioSec);
+  const actualPreAudioSec = bm.audioStartSec - bufferStart;
+  const remainingAudioSec = Math.max(0, track.buffer.duration - (bm.audioStartSec + bm.audioDurationSec));
+  const actualPostAudioSec = Math.min(wantPostAudioSec, remainingAudioSec);
+  const actualPreWallMs  = (actualPreAudioSec  / r0) * 1000;
+  const actualPostWallMs = (actualPostAudioSec / r1) * 1000;
+  const bufferDur = actualPreAudioSec + bm.audioDurationSec + actualPostAudioSec;
+
+  // Audio-context time anchors
+  const musicStartCtx   = audioCtx.currentTime + (effectiveLeadInMs - actualPreWallMs) / 1000;
+  const sectionStartCtx = musicStartCtx + actualPreWallMs / 1000;
+  const sectionEndCtx   = sectionStartCtx + wallDurSec;
+  const musicEndCtx     = sectionEndCtx + actualPostWallMs / 1000;
+
+  // Source + gain
+  const source = audioCtx.createBufferSource();
+  source.buffer = track.buffer;
+  const gain = audioCtx.createGain();
+  source.connect(gain).connect(audioCtx.destination);
+
+  // Playback rate: hold r0 through pre-roll + section-start, ramp r0→r1 across
+  // the section, hold r1 through post-roll.
+  source.playbackRate.cancelScheduledValues(musicStartCtx);
+  source.playbackRate.setValueAtTime(r0, musicStartCtx);
+  source.playbackRate.setValueAtTime(r0, sectionStartCtx);
+  source.playbackRate.linearRampToValueAtTime(r1, sectionEndCtx);
+
+  // Fades: clip fade durations to actual roll lengths if the song boundaries truncate.
+  const fadeIn  = Math.min(FADE_MS / 1000, Math.max(0.01, actualPreWallMs / 1000));
+  const fadeOut = Math.min(FADE_MS / 1000, Math.max(0.01, actualPostWallMs / 1000));
+  gain.gain.cancelScheduledValues(musicStartCtx);
+  gain.gain.setValueAtTime(actualPreWallMs > 50 ? 0 : 1, musicStartCtx);
+  if (actualPreWallMs > 50) gain.gain.linearRampToValueAtTime(1, musicStartCtx + fadeIn);
+  if (actualPostWallMs > 50) {
+    gain.gain.setValueAtTime(1, musicEndCtx - fadeOut);
+    gain.gain.linearRampToValueAtTime(0.0001, musicEndCtx);
+  }
+
+  source.start(musicStartCtx, bufferStart, bufferDur + 0.05);
+  try { source.stop(musicEndCtx + 0.1); } catch (e) {}
+  currentSource = source;
+
+  state.totalNotesThisRound = bm.hits.length;
+  for (const h of bm.hits) {
+    scheduleNote(h.lane, startWall + effectiveLeadInMs + h.tMs);
+  }
+
+  // Debug instrumentation
+  roundStartWall = startWall + effectiveLeadInMs;
+  currentSectionOnsets = bm.sectionOnsets;
+  pressLog = [];
+  pendingBeats = bm.sectionOnsets
+    .map(o => ({ fireAt: roundStartWall + o.tMsWall, band: o.band }))
+    .sort((a, b) => a.fireAt - b.fireAt);
+  beatCursor = 0;
+  document.getElementById('beat-indicator').classList.toggle('active', !!track.debug);
+
+  // End round after both notes have exited AND post-roll has finished.
+  const noteFinishMs  = effectiveLeadInMs + bm.wallDurationMs + NOTE_TRAVEL_MS + 400;
+  const audioFinishMs = effectiveLeadInMs + bm.wallDurationMs + actualPostWallMs + 200;
+  scheduleRoundEnd(Math.max(noteFinishMs, audioFinishMs));
+  playLoop = requestAnimationFrame(tickPlayLoop);
+}
+
+function flashBeat(band) {
+  const id = band === 0 ? 'beat-dot-low' : 'beat-dot-high';
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.classList.add('flash');
+  setTimeout(() => el.classList.remove('flash'), 90);
+}
+
+function dumpDebugLog() {
+  const round = state.currentRound + 1;
+  const onsets = currentSectionOnsets.map(o => ({
+    tMsWall: Math.round(o.tMsWall),
+    tSecAudio: o.tSecAudio.toFixed(3),
+    band: o.band === 0 ? 'low' : 'high',
+    strength: +o.strength.toFixed(3),
+  }));
+  const presses = pressLog.slice();
+  const N = presses.length;
+  const stats = N ? (() => {
+    const within = presses.filter(p => Math.abs(p.deltaMs) <= 150).length;
+    const meanAbs = presses.reduce((s,p) => s + Math.abs(p.deltaMs), 0) / N;
+    const meanSigned = presses.reduce((s,p) => s + p.deltaMs, 0) / N;
+    return {
+      presses: N,
+      hits: presses.filter(p => p.hit).length,
+      withinPlusMinus150ms: `${within}/${N} (${((within/N)*100).toFixed(0)}%)`,
+      meanAbsOffsetMs: +meanAbs.toFixed(1),
+      meanSignedOffsetMs: +meanSigned.toFixed(1),  // - = early, + = late
+      bandBreakdown: {
+        low: presses.filter(p => p.band === 'low').length,
+        high: presses.filter(p => p.band === 'high').length,
+      },
+    };
+  })() : { presses: 0 };
+  console.group(`Round ${round} debug log · ${onsets.length} onsets, ${N} presses`);
+  console.log('Stats:', stats);
+  if (N) console.table(presses);
+  console.log('Detected onsets:', onsets);
+  console.groupEnd();
+}
+
+function stopTrackPlayback() {
+  if (currentSource) {
+    try { currentSource.stop(); } catch (e) {}
+    currentSource = null;
+  }
+}
+
+// -----------------------------------------------------------------------------
+// SCREENS
+// -----------------------------------------------------------------------------
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+// -----------------------------------------------------------------------------
+// SETUP SCREEN
+// -----------------------------------------------------------------------------
+function renderSlots() {
+  const wrap = document.getElementById('player-slots');
+  wrap.innerHTML = '';
+  PLAYERS.forEach((p, i) => {
+    const div = document.createElement('div');
+    div.className = `slot ${p.color}` + (i === state.bindingIndex ? ' binding' : '');
+    div.style.color = `var(--${p.color})`;
+    div.innerHTML = `
+      <div class="label">${p.name}</div>
+      <div class="key">${displayKey(state.bindings[i])}</div>
+    `;
+    wrap.appendChild(div);
+  });
+}
+
+function displayKey(k) {
+  if (!k) return '—';
+  if (k === ' ') return 'SPACE';
+  return k.toUpperCase();
+}
+
+function startSetup() {
+  state.bindingIndex = 0;
+  state.bindings = PLAYERS.map(p => p.defaultKey);
+  document.getElementById('setup-prompt').textContent = 'Player 1, press a key to override (or CONFIRM to accept defaults)';
+  renderSlots();
+  showScreen('screen-setup');
+}
+
+function captureKey(e) {
+  if (state.bindingIndex < 0) return;
+  if (e.key === 'Enter') return;            // Enter is reserved for confirm
+  e.preventDefault();
+  const k = e.key.toLowerCase();
+  if (k.length !== 1 && k !== ' ') return;  // accept printables + space
+  // disallow duplicates with already-bound earlier slots
+  if (state.bindings.slice(0, state.bindingIndex).includes(k)) return;
+  state.bindings[state.bindingIndex] = k;
+  advanceBinding();
+}
+
+function advanceBinding() {
+  state.bindingIndex++;
+  if (state.bindingIndex >= 4) {
+    state.bindingIndex = -1;
+    document.getElementById('setup-prompt').textContent = 'All set. Press CONFIRM or hit ENTER.';
+  } else {
+    document.getElementById('setup-prompt').textContent =
+      `Player ${state.bindingIndex + 1}, press a key to override (or CONFIRM)`;
+  }
+  renderSlots();
+}
+
+// -----------------------------------------------------------------------------
+// PLAY SCREEN
+// -----------------------------------------------------------------------------
+function targetPos(lane, w, h) {
+  // Targets fan out toward the screen edges in a semi-circle "smile":
+  // outer lanes hug the side edges, inner lanes sit lower-center.
+  const positions = [
+    { x: 0.10, y: 0.78 },  // P1 — bottom-left edge
+    { x: 0.36, y: 0.90 },  // P2 — lower-mid-left
+    { x: 0.64, y: 0.90 },  // P3 — lower-mid-right
+    { x: 0.90, y: 0.78 },  // P4 — bottom-right edge
+  ];
+  return { x: positions[lane].x * w, y: positions[lane].y * h };
+}
+
+function spawnPos(w, h) {
+  return { x: w / 2, y: h * 0.12 };
+}
+
+const NOTE_SIZE_SPAWN = 8;    // px at t=0
+const NOTE_SIZE_HIT   = 80;   // px at t=1 (target)
+const NOTE_SIZE_EXIT  = 120;  // px at t=1.3 (off the edge)
+
+let playLoop = null;
+let activeNotes = [];   // {lane, hitTimeMs, el, hit:false}
+let lastHitTimes = [];  // per player, ms since round start (for stats)
+let roundEndTimer = null;
+let roundEndAtMs = 0;
+let paused = false;
+let pauseStartWall = 0;
+// Debug-mode state
+let pendingBeats = [];  // [{fireAt, band}] sorted by fireAt
+let beatCursor = 0;
+let pressLog = [];      // [{playerId, pressMs, nearestMs, deltaMs, band, hit}]
+let roundStartWall = 0; // performance.now() when audio actually starts
+let currentSectionOnsets = []; // copy of beatmap onsets for nearest-onset lookup
+
+function buildScoreHud() {
+  const hud = document.getElementById('score-hud');
+  hud.innerHTML = '';
+  PLAYERS.forEach((p, i) => {
+    const div = document.createElement('div');
+    div.className = `ps ${p.color}`;
+    div.innerHTML = `<div class="name">${displayKey(state.bindings[i])}</div><div class="val" id="hud-val-${i}">0</div>`;
+    hud.appendChild(div);
+  });
+}
+
+function buildTargets() {
+  const pf = document.getElementById('playfield');
+  pf.querySelectorAll('.target').forEach(n => n.remove());
+  const { width: w, height: h } = pf.getBoundingClientRect();
+  PLAYERS.forEach((p, i) => {
+    const { x, y } = targetPos(i, w, h);
+    const el = document.createElement('div');
+    el.className = `target ${p.color}`;
+    el.id = `target-${i}`;
+    el.style.left = x + 'px';
+    el.style.top = y + 'px';
+    el.textContent = displayKey(state.bindings[i]);
+    pf.appendChild(el);
+  });
+}
+
+function startRound() {
+  ensureAudio();
+  state.scores = [0, 0, 0, 0];
+  activeNotes = [];
+
+  document.getElementById('round-indicator').textContent = `ROUND ${state.currentRound + 1} / ${ROUNDS.length}`;
+  buildScoreHud();
+  showScreen('screen-play');
+  // Targets need the playfield to have real dimensions, which only happens after the
+  // screen is visible. requestAnimationFrame ensures the layout has resolved.
+  requestAnimationFrame(() => {
+    buildTargets();
+    runCountdown(() => beginPlay());
+  });
+}
+
+function runCountdown(done) {
+  const el = document.getElementById('countdown');
+  el.style.display = '';
+  let n = 3;
+  el.textContent = n;
+  const iv = setInterval(() => {
+    n--;
+    if (n === 0) {
+      el.textContent = 'GO';
+      setTimeout(() => { el.style.display = 'none'; clearInterval(iv); done(); }, 400);
+    } else {
+      el.textContent = n;
+    }
+  }, 700);
+}
+
+function beginPlay() {
+  if (track.buffer && track.beatmaps) return beginPlayWithTrack();
+  const round = ROUNDS[state.currentRound];
+  const beatMs = 60000 / round.bpm;
+  const startTime = performance.now();
+  const audioStart = audioCtx.currentTime;
+
+  // Schedule notes — lead-in must give the first note its full travel time
+  const LEAD_IN_MS = NOTE_TRAVEL_MS + 400;
+  state.totalNotesThisRound = 0;
+  round.pattern.forEach((lanes, beatIdx) => {
+    const hitTimeMs = startTime + beatIdx * beatMs + LEAD_IN_MS;
+    const audioTime = audioStart + (hitTimeMs - startTime) / 1000;
+    if (lanes && lanes.length) {
+      tick(audioTime, 440 + lanes[0] * 60);
+      lanes.forEach(lane => {
+        state.totalNotesThisRound++;
+        scheduleNote(lane, hitTimeMs);
+      });
+    }
+  });
+
+  // End of round
+  const totalDuration = round.pattern.length * beatMs + LEAD_IN_MS + NOTE_TRAVEL_MS;
+  scheduleRoundEnd(totalDuration + 400);
+
+  playLoop = requestAnimationFrame(tickPlayLoop);
+}
+
+function scheduleNote(lane, hitTimeMs) {
+  const pf = document.getElementById('playfield');
+  const el = document.createElement('div');
+  el.className = `note ${PLAYERS[lane].color}`;
+  pf.appendChild(el);
+  activeNotes.push({ lane, hitTimeMs, el, hit: false, missed: false });
+}
+
+function tickPlayLoop(now) {
+  const pf = document.getElementById('playfield');
+  const { width: w, height: h } = pf.getBoundingClientRect();
+  const sp = spawnPos(w, h);
+
+  // Debug: fire any onset flashes whose time has arrived.
+  if (track.debug) {
+    while (beatCursor < pendingBeats.length && now >= pendingBeats[beatCursor].fireAt) {
+      flashBeat(pendingBeats[beatCursor].band);
+      beatCursor++;
+    }
+  }
+
+  for (let i = activeNotes.length - 1; i >= 0; i--) {
+    const n = activeNotes[i];
+    const dt = n.hitTimeMs - now; // ms until hit
+    const t = 1 - dt / NOTE_TRAVEL_MS; // 0 = spawn, 1 = at target
+
+    if (t > 1.3) {
+      // past the screen edge — cleanup (counts as miss if never hit)
+      n.el.remove();
+      if (!n.hit && !n.missed) {
+        n.missed = true;
+      }
+      activeNotes.splice(i, 1);
+      continue;
+    }
+    if (t < 0) {
+      // not yet visible (still in lead-in)
+      n.el.style.display = 'none';
+      continue;
+    }
+    n.el.style.display = '';
+    const tp = targetPos(n.lane, w, h);
+    const x = sp.x + (tp.x - sp.x) * t;
+    const y = sp.y + (tp.y - sp.y) * t;
+    // Size scales with travel: tiny at spawn → big at target → biggest at exit
+    let size;
+    if (t <= 1) {
+      size = NOTE_SIZE_SPAWN + (NOTE_SIZE_HIT - NOTE_SIZE_SPAWN) * t;
+    } else {
+      const k = (t - 1) / 0.3; // 0..1 in the exit phase
+      size = NOTE_SIZE_HIT + (NOTE_SIZE_EXIT - NOTE_SIZE_HIT) * k;
+      n.el.style.opacity = String(1 - k * 0.5);
+    }
+    n.el.style.left = x + 'px';
+    n.el.style.top = y + 'px';
+    n.el.style.width = size + 'px';
+    n.el.style.height = size + 'px';
+  }
+  playLoop = requestAnimationFrame(tickPlayLoop);
+}
+
+function handlePlayKey(playerId) {
+  const now = performance.now();
+  // find earliest unhit note in this lane within hit window
+  let best = null;
+  let bestDelta = Infinity;
+  for (const n of activeNotes) {
+    if (n.lane !== playerId || n.hit) continue;
+    const delta = Math.abs(now - n.hitTimeMs);
+    if (delta < HIT_WINDOW_MS && delta < bestDelta) {
+      best = n;
+      bestDelta = delta;
+    }
+  }
+  if (best) {
+    best.hit = true;
+    const accuracy = 1 - bestDelta / HIT_WINDOW_MS; // 0..1
+    const points = Math.round(50 + 50 * accuracy);  // 50..100
+    state.scores[playerId] += points;
+    document.getElementById(`hud-val-${playerId}`).textContent = state.scores[playerId];
+    flashTarget(playerId);
+    showFeedback(playerId, accuracy > 0.7 ? 'PERFECT' : 'HIT');
+    // remove note visually
+    best.el.remove();
+  } else {
+    // wrong-time tap → small penalty so flailing isn't free
+    state.scores[playerId] = Math.max(0, state.scores[playerId] - 10);
+    document.getElementById(`hud-val-${playerId}`).textContent = state.scores[playerId];
+    flashTarget(playerId, true);
+  }
+
+  // Debug log (regardless of hit/miss): when did the player press, and what was
+  // the closest detected onset?
+  if (track.debug && currentSectionOnsets.length) {
+    const pressMs = now - roundStartWall;
+    let near = null;
+    let nearDelta = Infinity;
+    for (const o of currentSectionOnsets) {
+      const d = pressMs - o.tMsWall;
+      if (Math.abs(d) < Math.abs(nearDelta)) { nearDelta = d; near = o; }
+    }
+    pressLog.push({
+      playerId,
+      pressMs: Math.round(pressMs),
+      nearestMs: near ? Math.round(near.tMsWall) : null,
+      deltaMs: near ? Math.round(nearDelta) : null,
+      band: near ? (near.band === 0 ? 'low' : 'high') : null,
+      hit: !!best,
+    });
+  }
+}
+
+function flashTarget(playerId, miss = false) {
+  const t = document.getElementById(`target-${playerId}`);
+  if (!t) return;
+  t.classList.add('hit');
+  setTimeout(() => t.classList.remove('hit'), 100);
+}
+
+function showFeedback(playerId, text) {
+  const pf = document.getElementById('playfield');
+  const { width: w, height: h } = pf.getBoundingClientRect();
+  const tp = targetPos(playerId, w, h);
+  const f = document.createElement('div');
+  f.className = 'feedback';
+  f.textContent = text;
+  f.style.color = `var(--${PLAYERS[playerId].color})`;
+  f.style.left = tp.x + 'px';
+  f.style.top = (tp.y - 50) + 'px';
+  pf.appendChild(f);
+  setTimeout(() => f.remove(), 500);
+}
+
+function scheduleRoundEnd(remainingMs) {
+  if (roundEndTimer) { clearTimeout(roundEndTimer); roundEndTimer = null; }
+  roundEndAtMs = performance.now() + remainingMs;
+  roundEndTimer = setTimeout(() => endRound(), remainingMs);
+}
+
+function togglePause() {
+  if (!document.getElementById('screen-play').classList.contains('active')) return;
+  if (!playLoop && !paused) return;     // not actually mid-round
+  const overlay = document.getElementById('pause-overlay');
+  if (paused) {
+    // RESUME
+    const pauseDur = performance.now() - pauseStartWall;
+    activeNotes.forEach(n => { n.hitTimeMs += pauseDur; });
+    pendingBeats.forEach(b => { b.fireAt += pauseDur; });
+    roundStartWall += pauseDur;
+    const remaining = Math.max(0, roundEndAtMs + pauseDur - performance.now());
+    scheduleRoundEnd(remaining);
+    if (audioCtx) audioCtx.resume();
+    paused = false;
+    overlay.classList.remove('active');
+    playLoop = requestAnimationFrame(tickPlayLoop);
+  } else {
+    // PAUSE
+    pauseStartWall = performance.now();
+    paused = true;
+    if (roundEndTimer) { clearTimeout(roundEndTimer); roundEndTimer = null; }
+    if (playLoop) { cancelAnimationFrame(playLoop); playLoop = null; }
+    if (audioCtx) audioCtx.suspend();
+    overlay.classList.add('active');
+  }
+}
+
+function endRound() {
+  if (roundEndTimer) { clearTimeout(roundEndTimer); roundEndTimer = null; }
+  if (playLoop) cancelAnimationFrame(playLoop);
+  playLoop = null;
+  paused = false;
+  document.getElementById('pause-overlay').classList.remove('active');
+  document.getElementById('beat-indicator').classList.remove('active');
+  if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+  stopTrackPlayback();
+  activeNotes.forEach(n => n.el.remove());
+  activeNotes = [];
+
+  if (track.debug) dumpDebugLog();
+
+  // accumulate scores
+  state.scores.forEach((s, i) => state.cumulativeScores[i] += s);
+
+  // build ranking lowest -> highest
+  state.rankingThisRound = state.scores
+    .map((score, playerId) => ({ playerId, score }))
+    .sort((a, b) => a.score - b.score);
+  state.answerCursor = 0;
+
+  showRevealScreen();
+}
+
+// -----------------------------------------------------------------------------
+// REVEAL SCREEN
+// -----------------------------------------------------------------------------
+function showRevealScreen() {
+  document.getElementById('reveal-subtitle').textContent = `round ${state.currentRound + 1}`;
+  const wrap = document.getElementById('ranking');
+  wrap.innerHTML = '';
+  // reveal highest first → lowest last for drama
+  const revealOrder = [...state.rankingThisRound].sort((a, b) => b.score - a.score);
+  revealOrder.forEach((entry, idx) => {
+    const place = state.rankingThisRound.findIndex(r => r.playerId === entry.playerId) + 1;
+    const p = PLAYERS[entry.playerId];
+    const row = document.createElement('div');
+    row.className = `rank-row ${p.color}`;
+    row.style.animationDelay = (idx * 0.4) + 's';
+    row.innerHTML = `
+      <div class="place">#${place}</div>
+      <div class="who">${p.name}</div>
+      <div class="val">${entry.score} pts</div>
+    `;
+    wrap.appendChild(row);
+  });
+  showScreen('screen-reveal');
+}
+
+// -----------------------------------------------------------------------------
+// QUESTION SCREEN
+// -----------------------------------------------------------------------------
+function showQuestionScreen() {
+  document.getElementById('question-round').textContent = `ROUND ${state.currentRound + 1} / ${ROUNDS.length}`;
+  document.getElementById('q-text').textContent = ROUNDS[state.currentRound].question;
+  renderAnswerCursor();
+  showScreen('screen-question');
+}
+
+function renderAnswerCursor() {
+  const cur = state.rankingThisRound[state.answerCursor];
+  const p = PLAYERS[cur.playerId];
+  const whoNow = document.getElementById('who-now');
+  whoNow.className = `who-now ${p.color}`;
+  whoNow.querySelector('.name').textContent = p.name;
+  // dots
+  const dots = document.getElementById('order-dots');
+  dots.innerHTML = '';
+  state.rankingThisRound.forEach((r, i) => {
+    const d = document.createElement('div');
+    let cls = 'dot';
+    if (i < state.answerCursor) cls += ' done';
+    if (i === state.answerCursor) cls += ' active';
+    d.className = cls;
+    d.style.background = `var(--${PLAYERS[r.playerId].color})`;
+    d.style.color = `var(--${PLAYERS[r.playerId].color})`;
+    dots.appendChild(d);
+  });
+  // button label
+  const btn = document.getElementById('btn-next-answer');
+  btn.textContent = state.answerCursor < 3 ? 'NEXT' : (state.currentRound < ROUNDS.length - 1 ? 'NEXT ROUND' : 'FINISH');
+}
+
+function advanceAnswer() {
+  state.answerCursor++;
+  if (state.answerCursor < 4) {
+    renderAnswerCursor();
+  } else {
+    // round done; advance
+    state.currentRound++;
+    if (state.currentRound >= ROUNDS.length) {
+      showScreen('screen-end');
+    } else {
+      startRound();
+    }
+  }
+}
+
+// -----------------------------------------------------------------------------
+// GLOBAL KEY HANDLER
+// -----------------------------------------------------------------------------
+window.addEventListener('keydown', (e) => {
+  const setupActive = document.getElementById('screen-setup').classList.contains('active');
+  const playActive  = document.getElementById('screen-play').classList.contains('active');
+
+  if (setupActive && state.bindingIndex >= 0) {
+    captureKey(e);
+    return;
+  }
+  if (setupActive && e.key === 'Enter') {
+    confirmSetup();
+    return;
+  }
+
+  if (playActive) {
+    if (e.key === 'Escape') {
+      e.preventDefault();
+      togglePause();
+      return;
+    }
+    if (paused) return;   // swallow taps during pause
+    if (e.repeat) return; // ignore key-hold auto-repeat so holding ≠ free hits
+    const k = e.key.toLowerCase();
+    const playerId = state.bindings.indexOf(k);
+    if (playerId >= 0) {
+      e.preventDefault(); // stop Firefox Quick Find on ' / browser shortcuts
+      handlePlayKey(playerId);
+    }
+  }
+});
+
+// -----------------------------------------------------------------------------
+// WIRING
+// -----------------------------------------------------------------------------
+function confirmSetup() {
+  state.currentRound = 0;
+  state.cumulativeScores = [0,0,0,0];
+  startRound();
+}
+
+document.getElementById('btn-start').addEventListener('click', () => {
+  ensureAudio();
+  startSetup();
+});
+document.getElementById('btn-confirm').addEventListener('click', confirmSetup);
+document.getElementById('btn-reset-keys').addEventListener('click', startSetup);
+document.getElementById('btn-to-question').addEventListener('click', showQuestionScreen);
+document.getElementById('btn-next-answer').addEventListener('click', advanceAnswer);
+document.getElementById('btn-restart').addEventListener('click', () => location.reload());
+
+// resize redraws targets if mid-play
+window.addEventListener('resize', () => {
+  if (document.getElementById('screen-play').classList.contains('active')) {
+    buildTargets();
+  }
+});
+
+// -----------------------------------------------------------------------------
+// EMBEDDED TRACK AUTO-LOAD
+// -----------------------------------------------------------------------------
+function applyUrlParamOverrides() {
+  const p = new URLSearchParams(location.search);
+  const lanes = p.get('lanes');
+  if (lanes && ['unison','sequential','musical'].includes(lanes)) track.laneMode = lanes;
+  const density = parseInt(p.get('density') || '', 10);
+  if (Number.isFinite(density) && density >= 20 && density <= 200) track.density = density;
+}
+
+function syncDevControls() {
+  const sel = document.getElementById('opt-lane-mode');
+  if (sel) sel.value = track.laneMode;
+  const dens = document.getElementById('opt-density');
+  if (dens) { dens.value = track.density; document.getElementById('density-val').textContent = track.density; }
+  const dbg = document.getElementById('opt-debug');
+  if (dbg) dbg.checked = !!track.debug;
+  const filt = document.getElementById('opt-beat-filter');
+  if (filt) filt.value = track.beatFilter;
+  renderSectionsTable();
+  updateSectionsBpmHint();
+  updatePerLaneReadout();
+  updateFilterReadout();
+}
+
+function updateFilterReadout() {
+  const el = document.getElementById('filter-readout');
+  if (!el) return;
+  const raw = track.onsets ? track.onsets.length : 0;
+  if (!raw) { el.textContent = '—'; return; }
+  const filtered = effectiveOnsets().length;
+  el.textContent = track.beatFilter === 'raw'
+    ? `${raw} onsets`
+    : `${filtered} / ${raw} (${Math.round((filtered/raw)*100)}%)`;
+}
+
+function updateSectionsBpmHint() {
+  const el = document.getElementById('sections-bpm-hint');
+  if (!el) return;
+  const bpm = track.detectedBpm ? `track ${track.detectedBpm.toFixed(0)} BPM` : '—';
+  el.textContent = `${bpm} · audio range × speed`;
+}
+
+function renderSectionsTable() {
+  const wrap = document.getElementById('sections-table');
+  if (!wrap) return;
+  wrap.innerHTML = '';
+  track.sections.forEach((sec, i) => {
+    const row = document.createElement('div');
+    row.className = 'section-row';
+    row.innerHTML = `
+      <span class="s-label">R${i + 1}</span>
+      <input type="number" min="0" step="0.5" data-idx="${i}" data-field="startSec" value="${sec.startSec}">
+      <span class="sep">→</span>
+      <input type="number" min="0" step="0.5" data-idx="${i}" data-field="endSec" value="${sec.endSec}">
+      <span class="sep">@</span>
+      <input type="number" min="0.3" max="3" step="0.05" data-idx="${i}" data-field="startMult" value="${sec.startMult.toFixed(2)}">
+      <span class="sep">→</span>
+      <input type="number" min="0.3" max="3" step="0.05" data-idx="${i}" data-field="endMult" value="${sec.endMult.toFixed(2)}">
+      <span class="dur-readout" id="sec-dur-${i}">—</span>
+    `;
+    wrap.appendChild(row);
+  });
+  updateSectionDurations();
+}
+
+function updateSectionDurations() {
+  const bpm = track.detectedBpm;
+  for (let i = 0; i < track.sections.length; i++) {
+    const el = document.getElementById(`sec-dur-${i}`);
+    if (!el) continue;
+    if (track.beatmaps && track.beatmaps[i]) {
+      const bm = track.beatmaps[i];
+      const wallSec = bm.wallDurationMs / 1000;
+      const hits = bm.hits.length;
+      const txt = bpm
+        ? `${wallSec.toFixed(1)}s · ${hits}♪`
+        : `${wallSec.toFixed(1)}s · ${hits}♪`;
+      el.textContent = txt;
+    } else {
+      const sec = track.sections[i];
+      const audioDur = Math.max(0, sec.endSec - sec.startSec);
+      const avgMult = (sec.startMult + sec.endMult) / 2;
+      const wallSec = avgMult > 0 ? audioDur / avgMult : 0;
+      el.textContent = `~${wallSec.toFixed(1)}s`;
+    }
+  }
+}
+
+function updatePerLaneReadout() {
+  const el = document.getElementById('per-lane-readout');
+  if (!el || !track.beatmaps) return;
+  // Aggregate per-lane counts across all rounds
+  const counts = [0,0,0,0];
+  for (const bm of track.beatmaps) {
+    for (const h of bm.hits) counts[h.lane]++;
+  }
+  el.textContent = `P1:${counts[0]} · P2:${counts[1]} · P3:${counts[2]} · P4:${counts[3]}`;
+}
+
+async function loadEmbeddedTrack() {
+  if (!TRACK_AUDIO_URL) {
+    setTitleHint('huddle around the laptop · pick your keys · play together');
+    enableStartButton();
+    return;
+  }
+  setTitleHint('fetching track…');
+  try {
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const res = await fetch(TRACK_AUDIO_URL);
+    if (!res.ok) throw new Error(`fetch ${res.status}`);
+    const arr = await res.arrayBuffer();
+    setTitleHint('decoding audio…');
+    const buf = await audioCtx.decodeAudioData(arr);
+    track.buffer = buf;
+    setTitleHint('analyzing onsets…');
+    await new Promise(r => setTimeout(r, 30));
+    const { onsets, bpm } = await analyzeTrack(buf);
+    track.detectedBpm = bpm;
+    track.onsets = onsets;
+    rebuildBeatmaps();
+    syncDevControls();
+    setTitleHint(`✓ track ready · ${bpm.toFixed(0)} BPM detected · ${onsets.length} onsets`);
+    enableStartButton();
+  } catch (err) {
+    console.error('Track load failed:', err);
+    setTitleHint(`(synth fallback — ${err.message})`);
+    enableStartButton();
+  }
+}
+
+function setTitleHint(text) {
+  const el = document.getElementById('title-hint');
+  if (el) el.textContent = text;
+}
+
+function enableStartButton() {
+  const btn = document.getElementById('btn-start');
+  btn.disabled = false;
+  btn.textContent = 'START';
+}
+
+// Dev variations panel — change live, beatmap rebuilds immediately
+function wireDevOptions() {
+  document.getElementById('opt-lane-mode').addEventListener('change', (e) => {
+    track.laneMode = e.target.value;
+    rebuildBeatmaps();
+    updatePerLaneReadout();
+    updateSectionDurations();
+  });
+  const dens = document.getElementById('opt-density');
+  dens.addEventListener('input', (e) => {
+    track.density = parseInt(e.target.value, 10);
+    document.getElementById('density-val').textContent = track.density;
+  });
+  dens.addEventListener('change', () => {
+    rebuildBeatmaps();
+    updatePerLaneReadout();
+    updateSectionDurations();
+  });
+
+  const sectionsTable = document.getElementById('sections-table');
+  sectionsTable.addEventListener('change', (e) => {
+    const t = e.target;
+    if (t.tagName !== 'INPUT') return;
+    const idx = parseInt(t.dataset.idx, 10);
+    const field = t.dataset.field;
+    const val = parseFloat(t.value);
+    if (!Number.isFinite(idx) || !field || !Number.isFinite(val)) return;
+    track.sections[idx][field] = val;
+    rebuildBeatmaps();
+    updatePerLaneReadout();
+    updateSectionDurations();
+  });
+
+  document.getElementById('btn-reset-sections').addEventListener('click', (e) => {
+    e.preventDefault();
+    track.sections = DEFAULT_SECTIONS.map(s => ({ ...s }));
+    rebuildBeatmaps();
+    renderSectionsTable();
+    updatePerLaneReadout();
+  });
+
+  document.getElementById('opt-debug').addEventListener('change', (e) => {
+    track.debug = e.target.checked;
+    document.getElementById('beat-indicator').classList.toggle(
+      'active',
+      track.debug && document.getElementById('screen-play').classList.contains('active')
+    );
+  });
+
+  document.getElementById('opt-beat-filter').addEventListener('change', (e) => {
+    track.beatFilter = e.target.value;
+    rebuildBeatmaps();
+    updatePerLaneReadout();
+    updateSectionDurations();
+    updateFilterReadout();
+  });
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  applyUrlParamOverrides();
+  wireDevOptions();
+  syncDevControls();
+  loadEmbeddedTrack();
+});
+</script>
+</body>
+</html>
