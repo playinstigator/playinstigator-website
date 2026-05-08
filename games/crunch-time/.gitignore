@@ -1,0 +1,8 @@
+# Audio files are loaded locally for dev only — drop your tracks next to
+# index.html and the page will fetch them via TRACK_AUDIO_URL.
+# Don't commit copyrighted audio to a public repo.
+*.mp3
+*.wav
+*.ogg
+*.m4a
+*.flac
