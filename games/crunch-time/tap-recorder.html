@@ -149,6 +149,17 @@
     font-family: inherit;
   }
   .tap-del:hover { color: var(--text); }
+  .tsec-input {
+    background: none; border: none; border-bottom: 1px solid transparent;
+    color: inherit; font-family: inherit; font-size: 13px;
+    width: 80px; padding: 1px 2px;
+    transition: border-color 0.15s;
+  }
+  .tsec-input:focus {
+    outline: none; border-bottom-color: var(--accent);
+    color: var(--text);
+  }
+  .tsec-input:hover { border-bottom-color: var(--dim); }
   #empty-msg { padding: 24px 14px; color: var(--dim); font-size: 12px; letter-spacing: 1px; }
 
   /* ---- actions ---- */
@@ -247,8 +258,6 @@
       <thead><tr>
         <th>#</th>
         <th>tSec</th>
-        <th>band</th>
-        <th>strength</th>
         <th></th>
       </tr></thead>
       <tbody id="tap-tbody"></tbody>
@@ -632,13 +641,35 @@ function renderTaps() {
   taps.forEach((tap, i) => {
     const tr = document.createElement('tr');
     if (i === latest) tr.className = 'latest';
-    tr.innerHTML = `
-      <td>${i + 1}</td>
-      <td>${tap.tSec.toFixed(4)}</td>
-      <td>${tap.band}</td>
-      <td>${tap.strength.toFixed(1)}</td>
-      <td><button class="tap-del" data-i="${i}" title="delete">×</button></td>
-    `;
+
+    const numTd  = document.createElement('td');
+    numTd.textContent = i + 1;
+
+    const secTd  = document.createElement('td');
+    const input  = document.createElement('input');
+    input.type      = 'text';
+    input.className = 'tsec-input';
+    input.value     = tap.tSec.toFixed(4);
+    input.dataset.i = i;
+    input.addEventListener('change', e => {
+      const val = parseFloat(e.target.value);
+      if (isNaN(val) || val < 0) { e.target.value = taps[i].tSec.toFixed(4); return; }
+      taps = taps.map((t, idx) => idx === parseInt(e.target.dataset.i, 10) ? { ...t, tSec: parseFloat(val.toFixed(4)) } : t);
+      taps = [...taps].sort((a, b) => a.tSec - b.tSec);
+      renderTaps();
+    });
+    input.addEventListener('keydown', e => { if (e.key === 'Enter') input.blur(); if (e.key === ' ') e.stopPropagation(); });
+    secTd.appendChild(input);
+
+    const delTd = document.createElement('td');
+    const btn   = document.createElement('button');
+    btn.className    = 'tap-del';
+    btn.dataset.i    = i;
+    btn.title        = 'delete';
+    btn.textContent  = '×';
+    delTd.appendChild(btn);
+
+    tr.append(numTd, secTd, delTd);
     tapTbody.appendChild(tr);
   });
 
@@ -839,8 +870,6 @@ const STRINGS = {
     tapHint:       'press SPACE to tap a beat',
     sectionTaps:   'recorded taps',
     emptyMsg:      'no taps yet · load a track and press play, then tap spacebar',
-    thBand:        'band',
-    thStrength:    'strength',
     btnUndo:       'UNDO LAST',
     btnExport:     'EXPORT CSV',
     btnCopy:       'COPY CSV',
@@ -867,8 +896,6 @@ const STRINGS = {
     tapHint:       '按空格键录入节拍',
     sectionTaps:   '已录制节拍',
     emptyMsg:      '暂无节拍 · 加载音轨并按播放，然后按空格键',
-    thBand:        '频段',
-    thStrength:    '强度',
     btnUndo:       '撤销最后一个',
     btnExport:     '导出 CSV',
     btnCopy:       '复制 CSV',
@@ -900,9 +927,6 @@ function applyLang(l) {
     Object.assign(document.createElement('span'), { id: 'tap-count', textContent: String(taps.length) })
   );
   document.getElementById('empty-msg').textContent = s.emptyMsg;
-  const ths = document.querySelectorAll('#tap-list th');
-  if (ths[2]) ths[2].textContent = s.thBand;
-  if (ths[3]) ths[3].textContent = s.thStrength;
   btnUndo.textContent   = s.btnUndo;
   btnExport.textContent = s.btnExport;
   btnCopy.textContent   = s.btnCopy;
