@@ -27,7 +27,27 @@
   h1 { font-size: 22px; letter-spacing: 3px; }
   h2 { font-size: 13px; color: var(--dim); font-weight: normal; letter-spacing: 2px; margin-top: 4px; }
 
-  .page { max-width: 760px; margin: 0 auto; padding: 32px 24px; }
+  .page {
+    max-width: 960px; margin: 0 auto; padding: 32px 24px;
+    display: flex; gap: 24px; align-items: flex-start;
+  }
+  .main-col { flex: 1; min-width: 0; }
+
+  /* ---- visualizer ---- */
+  .viz-col {
+    flex: 0 0 140px;
+    position: sticky; top: 24px;
+  }
+  .viz-label {
+    font-size: 11px; color: var(--dim); letter-spacing: 2px;
+    text-transform: uppercase; margin-bottom: 8px; text-align: center;
+  }
+  #viz-canvas {
+    display: block;
+    width: 140px;
+    border-radius: 8px;
+    background: var(--panel);
+  }
 
   /* ---- header ---- */
   .header { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 28px; }
@@ -184,6 +204,7 @@
 <body>
 <div id="tap-flash"></div>
 <div class="page">
+<div class="main-col">
 
   <div class="header">
     <div>
@@ -254,7 +275,14 @@
     </div>
   </div>
 
+</div><!-- .main-col -->
+
+<div class="viz-col">
+  <div class="viz-label" id="viz-label">preview</div>
+  <canvas id="viz-canvas"></canvas>
 </div>
+
+</div><!-- .page -->
 
 <script>
 // ---------------------------------------------------------------------------
@@ -548,6 +576,7 @@ function raf() {
   const t = Math.max(0, currentAudioTime());
   timeDisplay.textContent = t.toFixed(3);
   drawWaveform(t);
+  drawViz();
   requestAnimationFrame(raf);
 }
 requestAnimationFrame(raf);
@@ -702,6 +731,95 @@ btnImport.addEventListener('click', () => {
 });
 
 // ---------------------------------------------------------------------------
+// Visualizer — vertical single-lane note preview
+// ---------------------------------------------------------------------------
+const VIZ_TRAVEL_MS  = 1800;  // matches Crunch Time NOTE_TRAVEL_MS
+const VIZ_SPAWN_FRAC = 0.08;  // note spawns at 8% from top
+const VIZ_HIT_FRAC   = 0.85;  // hit zone at 85% from top
+const VIZ_SPAWN_SIZE = 6;
+const VIZ_HIT_SIZE   = 52;
+const VIZ_EXIT_SIZE  = 76;
+
+const vizCanvas = document.getElementById('viz-canvas');
+
+function resizeVizCanvas() {
+  const dpr = window.devicePixelRatio || 1;
+  const W = 140, H = Math.round(window.innerHeight * 0.72);
+  vizCanvas.style.height = H + 'px';
+  if (vizCanvas.width !== W * dpr || vizCanvas.height !== H * dpr) {
+    vizCanvas.width  = W * dpr;
+    vizCanvas.height = H * dpr;
+  }
+}
+resizeVizCanvas();
+window.addEventListener('resize', resizeVizCanvas);
+
+function drawViz() {
+  resizeVizCanvas();
+  const dpr  = window.devicePixelRatio || 1;
+  const W    = vizCanvas.width  / dpr;
+  const H    = vizCanvas.height / dpr;
+  const ctx  = vizCanvas.getContext('2d');
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  ctx.clearRect(0, 0, W, H);
+
+  const cx      = W / 2;
+  const spawnY  = H * VIZ_SPAWN_FRAC;
+  const hitY    = H * VIZ_HIT_FRAC;
+  const nowSec  = currentAudioTime();
+
+  // Track rail
+  ctx.strokeStyle = 'rgba(255,255,255,0.06)';
+  ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(cx, spawnY); ctx.lineTo(cx, hitY); ctx.stroke();
+
+  // Hit zone ring
+  const ringR = VIZ_HIT_SIZE / 2 + 6;
+  ctx.strokeStyle = 'rgba(179,136,255,0.4)';
+  ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.arc(cx, hitY, ringR, 0, Math.PI * 2); ctx.stroke();
+
+  // Notes
+  const travelSec = VIZ_TRAVEL_MS / 1000;
+  for (const tap of taps) {
+    const t = 1 - (tap.tSec - nowSec) / travelSec; // 0=spawn, 1=hit
+    if (t < 0 || t > 1.35) continue;
+
+    const y = spawnY + (hitY - spawnY) * Math.min(t, 1);
+    let size, alpha;
+    if (t <= 1) {
+      size  = VIZ_SPAWN_SIZE + (VIZ_HIT_SIZE  - VIZ_SPAWN_SIZE)  * t;
+      alpha = 0.4 + 0.6 * t;
+    } else {
+      const k = (t - 1) / 0.35;
+      size  = VIZ_HIT_SIZE  + (VIZ_EXIT_SIZE  - VIZ_HIT_SIZE)   * k;
+      alpha = 1 - k * 0.8;
+    }
+    const r = size / 2;
+
+    // Glow
+    const grd = ctx.createRadialGradient(cx, y, 0, cx, y, r * 1.6);
+    grd.addColorStop(0, `rgba(179,136,255,${(alpha * 0.5).toFixed(2)})`);
+    grd.addColorStop(1, 'rgba(179,136,255,0)');
+    ctx.fillStyle = grd;
+    ctx.beginPath(); ctx.arc(cx, y, r * 1.6, 0, Math.PI * 2); ctx.fill();
+
+    // Core
+    ctx.fillStyle = `rgba(179,136,255,${alpha.toFixed(2)})`;
+    ctx.beginPath(); ctx.arc(cx, y, r, 0, Math.PI * 2); ctx.fill();
+  }
+
+  // "no taps" hint
+  if (taps.length === 0) {
+    ctx.fillStyle = 'rgba(136,136,136,0.4)';
+    ctx.font = '10px Consolas, monospace';
+    ctx.textAlign = 'center';
+    ctx.fillText('tap beats', cx, H / 2);
+    ctx.fillText('to preview', cx, H / 2 + 16);
+  }
+}
+
+// ---------------------------------------------------------------------------
 // i18n
 // ---------------------------------------------------------------------------
 let lang = 'en';
@@ -730,6 +848,7 @@ const STRINGS = {
     sectionImport: 'import csv',
     importPH:      'paste CSV here (tSec,band,strength — one row per beat, header optional)',
     btnImport:     'IMPORT',
+    vizLabel:      'preview',
     confirmClear:  'Clear all taps?',
     noRows:        'no valid rows found',
     imported:      n => `✓ imported ${n} taps`,
@@ -757,6 +876,7 @@ const STRINGS = {
     sectionImport: '导入 CSV',
     importPH:      '粘贴 CSV（tSec,band,strength — 每行一个节拍，表头可选）',
     btnImport:     '导入',
+    vizLabel:      '预览',
     confirmClear:  '清除所有节拍？',
     noRows:        '未找到有效行',
     imported:      n => `✓ 已导入 ${n} 个节拍`,
@@ -789,6 +909,7 @@ function applyLang(l) {
   document.querySelector('#import-wrap .section-label').textContent = s.sectionImport;
   importTA.placeholder  = s.importPH;
   document.getElementById('btn-import').textContent = s.btnImport;
+  document.getElementById('viz-label').textContent  = s.vizLabel;
 }
 
 document.getElementById('btn-lang').addEventListener('click', () => {
