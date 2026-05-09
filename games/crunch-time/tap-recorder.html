@@ -549,7 +549,8 @@ function stopPlay() {
 }
 
 function syncTransport() {
-  btnPlay.textContent = isPlaying ? 'PAUSE' : 'PLAY';
+  const s = STRINGS[lang];
+  btnPlay.textContent = isPlaying ? s.btnPause : s.btnPlay;
   btnStop.disabled = !isPlaying && playStartOffset === 0;
 }
 
@@ -918,13 +919,6 @@ document.getElementById('btn-lang').addEventListener('click', () => {
   document.getElementById('btn-lang').blur();
 });
 
-// Patch syncTransport to use translated play/pause label
-const _origSyncTransport = syncTransport;
-function syncTransport() {
-  _origSyncTransport();
-  const s = STRINGS[lang];
-  btnPlay.textContent = isPlaying ? s.btnPause : s.btnPlay;
-}
 </script>
 </body>
 </html>
