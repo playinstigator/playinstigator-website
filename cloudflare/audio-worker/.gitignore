@@ -1,0 +1,8 @@
+node_modules/
+.wrangler/
+.dev.vars
+
+# Embedded audio: bundled into the deployed Worker, NOT committed to the public repo.
+# Regenerate locally before each deploy from games/gamedev-beats/26.5.9.mp3.
+src/audio.b64.js
+src/audio.mp3
