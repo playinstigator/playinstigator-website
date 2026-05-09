@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Crunch Time — Tap Recorder</title>
+<title>Game Dev Beats — Tap Recorder</title>
 <style>
   :root {
     --bg: #0a0a14;
@@ -251,7 +251,7 @@
   <div class="header">
     <div>
       <h1>TAP RECORDER</h1>
-      <h2>crunch time · dev tool</h2>
+      <h2>game dev beats · dev tool</h2>
     </div>
     <div style="display:flex;align-items:center;gap:0">
       <a href="index.html" id="link-back">← back to game</a>
@@ -818,7 +818,7 @@ btnExport.addEventListener('click', () => {
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
-  a.download = 'crunchtime-beats.csv';
+  a.download = 'gamedev-beats.csv';
   a.click();
   URL.revokeObjectURL(url);
 });
@@ -851,7 +851,7 @@ btnImport.addEventListener('click', () => {
 // ---------------------------------------------------------------------------
 // Visualizer — vertical single-lane note preview
 // ---------------------------------------------------------------------------
-const VIZ_TRAVEL_MS  = 1800;  // matches Crunch Time NOTE_TRAVEL_MS
+const VIZ_TRAVEL_MS  = 1800;  // matches Game Dev Beats NOTE_TRAVEL_MS
 const VIZ_SPAWN_FRAC = 0.08;  // note spawns at 8% from top
 const VIZ_HIT_FRAC   = 0.85;  // hit zone at 85% from top
 const VIZ_SPAWN_SIZE = 6;
@@ -947,7 +947,7 @@ let lang = 'en';
 const STRINGS = {
   en: {
     h1:            'TAP RECORDER',
-    h2:            'crunch time · dev tool',
+    h2:            'game dev beats · dev tool',
     linkBack:      '← back to game',
     btnLang:       '简体中文',
     dropLabel:     'DROP MP3 HERE · or click to browse',
@@ -976,7 +976,7 @@ const STRINGS = {
   },
   zh: {
     h1:            '点击录制器',
-    h2:            '加班时间 · 开发工具',
+    h2:            'Game Dev Beats · 开发工具',
     linkBack:      '← 返回游戏',
     btnLang:       'English',
     dropLabel:     '拖放 MP3 到此处 · 或点击浏览',
