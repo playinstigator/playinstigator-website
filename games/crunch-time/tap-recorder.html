@@ -160,6 +160,37 @@
     color: var(--text);
   }
   .tsec-input:hover { border-bottom-color: var(--dim); }
+
+  /* ---- layer selector ---- */
+  .layer-selector {
+    display: flex; align-items: center; gap: 8px;
+    margin-bottom: 14px;
+  }
+  .layer-selector .lbl {
+    font-size: 11px; color: var(--dim); letter-spacing: 2px; margin-right: 4px;
+  }
+  .layer-btn {
+    background: transparent;
+    border: 2px solid transparent;
+    border-radius: 4px;
+    padding: 5px 14px;
+    font-family: inherit; font-size: 12px; font-weight: bold;
+    letter-spacing: 2px; cursor: pointer;
+    transition: background 0.15s, border-color 0.15s, color 0.15s;
+    opacity: 0.45;
+  }
+  .layer-btn.active { opacity: 1; }
+  .layer-btn[data-layer="1"] { color: #00e5ff; border-color: #00e5ff; }
+  .layer-btn[data-layer="2"] { color: #ffd54f; border-color: #ffd54f; }
+  .layer-btn[data-layer="3"] { color: #ff4081; border-color: #ff4081; }
+  .layer-btn[data-layer="1"].active { background: rgba(0,229,255,0.12); }
+  .layer-btn[data-layer="2"].active { background: rgba(255,213,79,0.12); }
+  .layer-btn[data-layer="3"].active { background: rgba(255,64,129,0.12); }
+  .layer-badge {
+    display: inline-block; width: 10px; height: 10px;
+    border-radius: 50%; margin-right: 4px; vertical-align: middle;
+    cursor: pointer;
+  }
   #empty-msg { padding: 24px 14px; color: var(--dim); font-size: 12px; letter-spacing: 1px; }
 
   /* ---- actions ---- */
@@ -236,6 +267,15 @@
   </label>
   <div id="file-status"></div>
 
+  <!-- Layer selector -->
+  <div class="layer-selector">
+    <span class="lbl" id="lbl-layer">LAYER</span>
+    <button class="layer-btn active" data-layer="1">1</button>
+    <button class="layer-btn"        data-layer="2">2</button>
+    <button class="layer-btn"        data-layer="3">3</button>
+    <span id="layer-hint" style="font-size:11px;color:var(--dim);margin-left:6px;letter-spacing:1px">keys 1 · 2 · 3 to switch</span>
+  </div>
+
   <!-- Waveform -->
   <div id="waveform-wrap">
     <canvas id="waveform"></canvas>
@@ -258,6 +298,7 @@
       <thead><tr>
         <th>#</th>
         <th>tSec</th>
+        <th id="th-layer">layer</th>
         <th></th>
       </tr></thead>
       <tbody id="tap-tbody"></tbody>
@@ -362,10 +403,10 @@ function drawWaveform(playheadSec) {
     ctx.fillRect(px, mid - amp, 1, amp * 2);
   }
 
-  // Tap markers
+  // Tap markers (colored by layer)
   for (const tap of taps) {
     const x = (tap.tSec / dur) * W;
-    ctx.fillStyle = 'rgba(105,240,174,0.9)';
+    ctx.fillStyle = layerColor(tap.layer) + 'cc';
     ctx.fillRect(x - 0.5, 0, 1, H);
   }
 
@@ -466,7 +507,30 @@ waveWrap.addEventListener('mouseleave', () => {
 });
 
 // ---------------------------------------------------------------------------
-// Taps state  [ {tSec, band, strength} ]
+// Layer system
+// ---------------------------------------------------------------------------
+const LAYER_COLORS = ['#00e5ff', '#ffd54f', '#ff4081'];
+function layerColor(layer) { return LAYER_COLORS[(layer ?? 1) - 1] || LAYER_COLORS[0]; }
+function hexToRgb(hex) {
+  const r = parseInt(hex.slice(1,3),16), g = parseInt(hex.slice(3,5),16), b = parseInt(hex.slice(5,7),16);
+  return `${r},${g},${b}`;
+}
+
+let activeLayer = 1;
+
+function setActiveLayer(n) {
+  activeLayer = n;
+  document.querySelectorAll('.layer-btn').forEach(b => {
+    b.classList.toggle('active', parseInt(b.dataset.layer, 10) === n);
+  });
+}
+
+document.querySelectorAll('.layer-btn').forEach(b => {
+  b.addEventListener('click', () => { setActiveLayer(parseInt(b.dataset.layer, 10)); b.blur(); });
+});
+
+// ---------------------------------------------------------------------------
+// Taps state  [ {tSec, band, strength, layer} ]
 // ---------------------------------------------------------------------------
 let taps = [];
 
@@ -597,7 +661,7 @@ requestAnimationFrame(raf);
 function recordTap() {
   if (!isPlaying) return;
   const t = currentAudioTime();
-  taps = [...taps, { tSec: parseFloat(t.toFixed(4)), band: 0, strength: 1.0 }];
+  taps = [...taps, { tSec: parseFloat(t.toFixed(4)), band: 0, strength: 1.0, layer: activeLayer }];
   flashScreen();
   renderTaps();
 }
@@ -610,10 +674,15 @@ function flashScreen() {
 }
 
 document.addEventListener('keydown', e => {
+  const tag = e.target.tagName;
+  if (tag === 'INPUT' || tag === 'TEXTAREA') return;
   if (e.code === 'Space' && !e.repeat) {
     e.preventDefault();
     if (isPlaying) recordTap();
     else if (audioBuffer) { ensureCtx(); startPlay(playStartOffset); }
+  }
+  if (!e.repeat && (e.key === '1' || e.key === '2' || e.key === '3')) {
+    setActiveLayer(parseInt(e.key, 10));
   }
 });
 
@@ -661,6 +730,14 @@ function renderTaps() {
     input.addEventListener('keydown', e => { if (e.key === 'Enter') input.blur(); if (e.key === ' ') e.stopPropagation(); });
     secTd.appendChild(input);
 
+    const layerTd   = document.createElement('td');
+    const badge     = document.createElement('span');
+    badge.className = 'layer-badge';
+    badge.style.background = layerColor(tap.layer);
+    badge.title     = `layer ${tap.layer} — click to cycle`;
+    badge.dataset.i = i;
+    layerTd.appendChild(badge);
+
     const delTd = document.createElement('td');
     const btn   = document.createElement('button');
     btn.className    = 'tap-del';
@@ -669,7 +746,7 @@ function renderTaps() {
     btn.textContent  = '×';
     delTd.appendChild(btn);
 
-    tr.append(numTd, secTd, delTd);
+    tr.append(numTd, secTd, layerTd, delTd);
     tapTbody.appendChild(tr);
   });
 
@@ -679,11 +756,19 @@ function renderTaps() {
 }
 
 tapTbody.addEventListener('click', e => {
-  const btn = e.target.closest('.tap-del');
-  if (!btn) return;
-  const i = parseInt(btn.dataset.i, 10);
-  taps = taps.filter((_, idx) => idx !== i);
-  renderTaps();
+  const del = e.target.closest('.tap-del');
+  if (del) {
+    const i = parseInt(del.dataset.i, 10);
+    taps = taps.filter((_, idx) => idx !== i);
+    renderTaps();
+    return;
+  }
+  const badge = e.target.closest('.layer-badge');
+  if (badge) {
+    const i = parseInt(badge.dataset.i, 10);
+    taps = taps.map((t, idx) => idx === i ? { ...t, layer: (t.layer % 3) + 1 } : t);
+    renderTaps();
+  }
 });
 
 // ---------------------------------------------------------------------------
@@ -704,7 +789,7 @@ btnClear.addEventListener('click', () => {
 // CSV helpers
 // ---------------------------------------------------------------------------
 function toCsv() {
-  const rows = ['tSec,band,strength', ...taps.map(t => `${t.tSec},${t.band},${t.strength}`)];
+  const rows = ['tSec,band,strength,layer', ...taps.map(t => `${t.tSec},${t.band},${t.strength},${t.layer ?? 1}`)];
   return rows.join('\n');
 }
 
@@ -712,13 +797,14 @@ function fromCsv(text) {
   const lines = text.trim().split(/\r?\n/).filter(Boolean);
   const result = [];
   for (const line of lines) {
-    if (/^tSec/i.test(line)) continue; // skip header
-    const [tSec, band, strength] = line.split(',').map(s => s.trim());
+    if (/^tSec/i.test(line)) continue;
+    const [tSec, band, strength, layer] = line.split(',').map(s => s.trim());
     const t = parseFloat(tSec);
-    const b = parseInt(band ?? '0', 10);
-    const s = parseFloat(strength ?? '1.0');
     if (isNaN(t)) continue;
-    result.push({ tSec: t, band: isNaN(b) ? 0 : b, strength: isNaN(s) ? 1.0 : s });
+    const b = parseInt(band   ?? '0',   10);
+    const s = parseFloat(strength ?? '1.0');
+    const l = parseInt(layer  ?? '1',   10);
+    result.push({ tSec: t, band: isNaN(b) ? 0 : b, strength: isNaN(s) ? 1.0 : s, layer: (l >= 1 && l <= 3) ? l : 1 });
   }
   return result.sort((a, b) => a.tSec - b.tSec);
 }
@@ -827,17 +913,19 @@ function drawViz() {
       size  = VIZ_HIT_SIZE  + (VIZ_EXIT_SIZE  - VIZ_HIT_SIZE)   * k;
       alpha = 1 - k * 0.8;
     }
-    const r = size / 2;
+    const r   = size / 2;
+    const col = layerColor(tap.layer);
+    const rgb = hexToRgb(col);
 
     // Glow
     const grd = ctx.createRadialGradient(cx, y, 0, cx, y, r * 1.6);
-    grd.addColorStop(0, `rgba(179,136,255,${(alpha * 0.5).toFixed(2)})`);
-    grd.addColorStop(1, 'rgba(179,136,255,0)');
+    grd.addColorStop(0, `rgba(${rgb},${(alpha * 0.5).toFixed(2)})`);
+    grd.addColorStop(1, `rgba(${rgb},0)`);
     ctx.fillStyle = grd;
     ctx.beginPath(); ctx.arc(cx, y, r * 1.6, 0, Math.PI * 2); ctx.fill();
 
     // Core
-    ctx.fillStyle = `rgba(179,136,255,${alpha.toFixed(2)})`;
+    ctx.fillStyle = `rgba(${rgb},${alpha.toFixed(2)})`;
     ctx.beginPath(); ctx.arc(cx, y, r, 0, Math.PI * 2); ctx.fill();
   }
 
@@ -879,6 +967,9 @@ const STRINGS = {
     importPH:      'paste CSV here (tSec,band,strength — one row per beat, header optional)',
     btnImport:     'IMPORT',
     vizLabel:      'preview',
+    lblLayer:      'LAYER',
+    layerHint:     'keys 1 · 2 · 3 to switch',
+    thLayer:       'layer',
     confirmClear:  'Clear all taps?',
     noRows:        'no valid rows found',
     imported:      n => `✓ imported ${n} taps`,
@@ -905,6 +996,9 @@ const STRINGS = {
     importPH:      '粘贴 CSV（tSec,band,strength — 每行一个节拍，表头可选）',
     btnImport:     '导入',
     vizLabel:      '预览',
+    lblLayer:      '层级',
+    layerHint:     '按键 1 · 2 · 3 切换',
+    thLayer:       '层',
     confirmClear:  '清除所有节拍？',
     noRows:        '未找到有效行',
     imported:      n => `✓ 已导入 ${n} 个节拍`,
@@ -935,6 +1029,10 @@ function applyLang(l) {
   importTA.placeholder  = s.importPH;
   document.getElementById('btn-import').textContent = s.btnImport;
   document.getElementById('viz-label').textContent  = s.vizLabel;
+  document.getElementById('lbl-layer').textContent  = s.lblLayer;
+  document.getElementById('layer-hint').textContent = s.layerHint;
+  const thLayer = document.getElementById('th-layer');
+  if (thLayer) thLayer.textContent = s.thLayer;
 }
 
 document.getElementById('btn-lang').addEventListener('click', () => {
