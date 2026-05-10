@@ -1,296 +1,531 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light" data-lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Collaborate with Play Instigator</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title data-en="Collaborate with Play Instigator" data-zh="与 Play Instigator 合作">Collaborate with Play Instigator</title>
   <meta name="description" content="Play Instigator is forming a creative collective to build IP that's transmedia by design. Game, music, visual art, and more — co-creating a world together. Read the one-pager." />
-  <meta name="theme-color" content="#1C1917" />
+  <meta name="theme-color" content="#F9F5F1" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#1C1917" media="(prefers-color-scheme: dark)" />
   <meta property="og:title" content="Collaborate with Play Instigator" />
   <meta property="og:description" content="A creative collective building IP that's transmedia by design. Every medium shapes the world. Currently building Ritual &amp; Ruin." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://playinstigator.com/collaborator.html" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Figtree:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <style>
-    /* ── Page-specific reading layout ── */
-    body {
-      background: var(--bg);
-      color: var(--text);
+    /* ── Brand tokens ── */
+    :root {
+      --cream:        #F9F5F1;
+      --charcoal:     #1C1917;
+      --coral:        #FF3344;
+      --play-blue:    #57E0FF;
+      --ultraviolet:  #974DFF;
+      --lemon:        #FFF066;
+      --mint:         #81FDC1;
+
+      --f-play:  "Fredoka", system-ui, sans-serif;
+      --f-sharp: "Plus Jakarta Sans", "Noto Sans SC", system-ui, sans-serif;
+      --f-body:  "Figtree", "Noto Sans SC", system-ui, sans-serif;
+
+      /* light theme defaults */
+      --bg:        var(--cream);
+      --bg-2:      #F1ECE5;
+      --ink:       var(--charcoal);
+      --ink-soft:  #3D3834;
+      --quiet:     #6B615B;
+      --rule:      #D8CEC4;
+      --accent:    var(--ultraviolet);
+      --accent-2:  var(--coral);
+      --card:      #FFFFFF;
+      --shadow:    0 6px 24px rgba(28, 25, 23, 0.07);
     }
 
-    /* Top bar (transparent variant of site nav) */
-    .pg-top {
+    [data-theme="dark"] {
+      --bg:        var(--charcoal);
+      --bg-2:      #2A2622;
+      --ink:       var(--cream);
+      --ink-soft:  #D8CEC4;
+      --quiet:     #9A8F87;
+      --rule:      #3D3834;
+      --accent:    #B47CFF;
+      --accent-2:  #FF5566;
+      --card:      #24201C;
+      --shadow:    0 8px 28px rgba(0, 0, 0, 0.45);
+    }
+
+    /* ── Reset ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--f-body);
+      font-size: 19px;
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      transition: background-color 0.25s ease, color 0.25s ease;
+      min-height: 100vh;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* ── Language switching ── */
+    [data-lang="en"] .lang-zh { display: none !important; }
+    [data-lang="zh"] .lang-en { display: none !important; }
+    [data-lang="zh"] body {
+      font-family: "Noto Sans SC", "Figtree", system-ui, sans-serif;
+    }
+    [data-lang="zh"] h1,
+    [data-lang="zh"] h2,
+    [data-lang="zh"] h3 {
+      font-family: "Noto Sans SC", "Plus Jakarta Sans", system-ui, sans-serif;
+      letter-spacing: 0;
+    }
+    [data-lang="zh"] em { font-style: normal; color: var(--ink-soft); }
+
+    /* ── Decorative shapes ── */
+    .shape { position: absolute; pointer-events: none; opacity: 0.45; z-index: 0; border-radius: 50%; }
+    .shape-1 { top: -60px; right: -50px; width: 200px; height: 200px; background: var(--coral); transform: rotate(13deg); }
+    .shape-2 { top: 320px; left: -90px; width: 160px; height: 160px; background: var(--ultraviolet); clip-path: polygon(50% 0, 100% 100%, 0 100%); border-radius: 0; transform: rotate(-7deg); opacity: 0.32; }
+    .shape-3 { bottom: 180px; right: -70px; width: 240px; height: 70px; background: var(--play-blue); border-radius: 100px; transform: rotate(7deg); opacity: 0.28; }
+    [data-theme="dark"] .shape   { opacity: 0.22; }
+    [data-theme="dark"] .shape-1 { opacity: 0.28; }
+
+    /* ── Top bar ── */
+    .topbar {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 28px 28px 0;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 1.5rem var(--gutter);
-      max-width: var(--max-w);
-      margin: 0 auto;
+      gap: 12px;
+      flex-wrap: wrap;
+      position: relative;
+      z-index: 5;
     }
 
-    .pg-mark {
-      font-size: 1rem;
-      letter-spacing: -0.01em;
+    .studio-mark {
+      display: inline-flex;
+      align-items: baseline;
+      gap: 7px;
       text-decoration: none;
-    }
-
-    .pg-mark .play {
-      font-family: 'Fredoka', sans-serif;
-      font-weight: 600;
-      color: #FF3344;
-    }
-
-    .pg-mark .instigator {
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      font-weight: 800;
-      color: #F9F5F1;
-    }
-
-    .pg-back {
-      font-family: 'Figtree', sans-serif;
-      font-size: 0.75rem;
+      font-family: var(--f-sharp);
+      font-weight: 700;
+      font-size: 12px;
+      letter-spacing: 0.24em;
       text-transform: uppercase;
-      letter-spacing: 0.12em;
-      color: rgba(249,245,241,0.4);
-      text-decoration: none;
-      transition: color 0.2s ease;
+      color: var(--quiet);
+    }
+    .studio-mark .play {
+      font-family: var(--f-play);
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      color: var(--accent);
+      font-size: 13px;
+    }
+    .studio-mark .dot {
+      width: 4px; height: 4px;
+      background: var(--accent-2);
+      border-radius: 50%;
+      display: inline-block;
+      transform: translateY(-2px);
+    }
+    .studio-mark .inst {
+      font-family: var(--f-sharp);
+      font-weight: 800;
+      letter-spacing: 0.02em;
+      color: var(--ink);
+      font-size: 13px;
     }
 
-    .pg-back:hover {
-      color: rgba(249,245,241,0.85);
+    .toggles { display: inline-flex; gap: 8px; align-items: center; }
+
+    .pill-btn {
+      background: var(--card);
+      border: 1.5px solid var(--rule);
+      border-radius: 999px;
+      padding: 7px 14px 7px 10px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--f-sharp);
+      font-weight: 600;
+      font-size: 12.5px;
+      letter-spacing: 0.04em;
+      color: var(--ink-soft);
+      transition: border-color 0.2s ease, color 0.2s ease, background-color 0.25s ease;
+    }
+    .pill-btn:hover { border-color: var(--ink-soft); color: var(--ink); }
+
+    .lang-toggle .globe {
+      width: 16px; height: 16px;
+      display: inline-block;
+      position: relative;
+      border: 1.8px solid currentColor;
+      border-radius: 50%;
+    }
+    .lang-toggle .globe::before,
+    .lang-toggle .globe::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      border: 1px solid currentColor;
+      border-radius: 50%;
+    }
+    .lang-toggle .globe::before { width: 100%; height: 50%; }
+    .lang-toggle .globe::after  { width: 40%;  height: 100%; }
+
+    .theme-toggle .icon {
+      width: 14px; height: 14px;
+      display: inline-block;
+      border-radius: 50%;
+      background: currentColor;
+      box-shadow: inset -3px -3px 0 0 var(--card);
     }
 
-    /* Reading column */
+    /* ── AI translation disclaimer (zh only) ── */
+    .ai-disclaimer {
+      max-width: 760px;
+      margin: 22px auto 0;
+      padding: 12px 18px;
+      background: var(--bg-2);
+      border: 1px solid var(--rule);
+      border-left: 3px solid var(--accent-2);
+      border-radius: 8px;
+      font-family: var(--f-body);
+      font-size: 14.5px;
+      line-height: 1.55;
+      color: var(--ink-soft);
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      position: relative;
+      z-index: 5;
+    }
+    .ai-disclaimer .bang {
+      flex-shrink: 0;
+      width: 20px; height: 20px;
+      border-radius: 50%;
+      background: var(--accent-2);
+      color: #fff;
+      font-family: var(--f-sharp);
+      font-weight: 800;
+      font-size: 13px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+      margin-top: 1px;
+    }
+
+    /* ── Reading column ── */
     .reader {
-      max-width: 680px;
+      max-width: 720px;
       margin: 0 auto;
-      padding: 4rem var(--gutter) 6rem;
+      padding: 56px 28px 96px;
       position: relative;
       z-index: 3;
     }
 
     .eyebrow {
-      font-family: 'Figtree', sans-serif;
-      font-size: 0.72rem;
+      font-family: var(--f-sharp);
+      font-size: 0.78rem;
       text-transform: uppercase;
-      letter-spacing: 0.16em;
-      color: rgba(249,245,241,0.4);
+      letter-spacing: 0.18em;
+      color: var(--quiet);
       margin-bottom: 1.5rem;
+      font-weight: 600;
     }
+    [data-lang="zh"] .eyebrow { letter-spacing: 0.14em; }
 
     .title {
-      font-family: 'Fredoka', sans-serif;
+      font-family: var(--f-play);
       font-weight: 600;
-      font-size: clamp(2.25rem, 5.5vw, 3.5rem);
-      line-height: 1.1;
+      font-size: clamp(2.4rem, 6vw, 3.75rem);
+      line-height: 1.12;
       letter-spacing: -0.015em;
-      color: #F9F5F1;
-      margin-bottom: 0.75rem;
+      color: var(--ink);
+      margin-bottom: 0.85rem;
     }
-
-    .title .accent {
-      color: #FF3344;
-    }
+    .title .accent { color: var(--accent-2); }
 
     .subtitle {
-      font-family: 'Figtree', sans-serif;
-      font-size: 1rem;
-      color: rgba(249,245,241,0.5);
-      margin-bottom: 3rem;
+      font-family: var(--f-body);
+      font-size: 1.25rem;
+      line-height: 1.55;
+      color: var(--quiet);
+      margin-bottom: 3.5rem;
     }
 
     .reader p {
-      font-family: 'Figtree', sans-serif;
-      font-size: 1.0625rem;
-      line-height: 1.75;
-      color: rgba(249,245,241,0.85);
-      margin-bottom: 1.4rem;
+      font-family: var(--f-body);
+      font-size: 1.1875rem;
+      line-height: 1.78;
+      color: var(--ink-soft);
+      margin-bottom: 1.55rem;
     }
+    [data-lang="zh"] .reader p { line-height: 1.95; }
 
     .reader p strong {
-      color: #F9F5F1;
+      color: var(--ink);
       font-weight: 700;
     }
 
     .reader p .accent {
-      color: #FF3344;
+      color: var(--accent-2);
       font-weight: 700;
-      font-style: normal;
     }
 
     .reader .pivot {
-      font-family: 'Fredoka', sans-serif;
+      font-family: var(--f-play);
       font-weight: 500;
-      font-size: 1.5rem;
+      font-size: 1.875rem;
       line-height: 1.4;
-      color: #F9F5F1;
-      margin: 2.4rem 0 2.4rem;
-      padding-left: 1.25rem;
-      border-left: 2px solid #FF3344;
+      color: var(--ink);
+      margin: 2.6rem 0 2.6rem;
+      padding-left: 1.4rem;
+      border-left: 3px solid var(--accent-2);
+    }
+    [data-lang="zh"] .reader .pivot {
+      font-family: "Noto Sans SC", var(--f-play), sans-serif;
+      font-weight: 600;
     }
 
-    .reader hr {
-      border: none;
-      border-top: 1px solid rgba(249,245,241,0.08);
-      margin: 3.5rem 0;
-    }
-
-    /* Email CTA */
+    /* ── Email CTA block ── */
     .cta-block {
       margin-top: 3.5rem;
-      padding: 2.5rem;
-      background: var(--bg-surface);
-      border: 1px solid var(--border);
-      border-radius: 12px;
+      padding: 2.75rem 2.5rem;
+      background: var(--card);
+      border: 1px solid var(--rule);
+      border-radius: 14px;
+      box-shadow: var(--shadow);
       text-align: center;
     }
 
     .cta-label {
-      font-family: 'Figtree', sans-serif;
-      font-size: 0.72rem;
+      font-family: var(--f-sharp);
+      font-size: 0.78rem;
       text-transform: uppercase;
-      letter-spacing: 0.16em;
-      color: rgba(249,245,241,0.4);
+      letter-spacing: 0.18em;
+      color: var(--quiet);
       margin-bottom: 1.25rem;
+      font-weight: 600;
     }
+    [data-lang="zh"] .cta-label { letter-spacing: 0.14em; }
 
     .cta-line {
-      font-family: 'Fredoka', sans-serif;
+      font-family: var(--f-play);
       font-weight: 500;
-      font-size: 1.25rem;
-      color: rgba(249,245,241,0.85);
+      font-size: 1.4rem;
+      color: var(--ink);
       line-height: 1.5;
-      margin-bottom: 1.5rem;
+      margin-bottom: 1.75rem;
+    }
+    [data-lang="zh"] .cta-line {
+      font-family: "Noto Sans SC", var(--f-play), sans-serif;
+      font-weight: 600;
     }
 
     .cta-email {
       display: inline-block;
-      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-family: var(--f-sharp);
       font-weight: 700;
-      font-size: 1.0625rem;
+      font-size: 1.125rem;
       letter-spacing: 0.01em;
-      background: #FF3344;
+      background: var(--accent-2);
       color: #F9F5F1;
-      padding: 0.95rem 1.9rem;
+      padding: 1rem 2rem;
       border-radius: 50px;
       text-decoration: none;
-      transition: background 0.2s ease, transform 0.15s ease;
+      transition: transform 0.15s ease, filter 0.2s ease;
     }
-
     .cta-email:hover {
-      background: #ff1a2e;
       transform: translateY(-1px);
+      filter: brightness(1.08);
     }
 
     .cta-foot {
-      font-family: 'Figtree', sans-serif;
-      font-size: 0.875rem;
-      color: rgba(249,245,241,0.35);
-      margin-top: 1.25rem;
+      font-family: var(--f-body);
+      font-size: 1rem;
+      color: var(--quiet);
+      margin-top: 1.4rem;
     }
 
     .signoff {
       text-align: center;
-      font-family: 'Fredoka', sans-serif;
+      font-family: var(--f-play);
       font-style: italic;
-      font-size: 0.95rem;
-      color: rgba(249,245,241,0.4);
-      margin-top: 4rem;
+      font-size: 1.05rem;
+      color: var(--quiet);
+      margin-top: 4.5rem;
+    }
+    [data-lang="zh"] .signoff {
+      font-family: "Noto Sans SC", var(--f-play), sans-serif;
+      font-style: normal;
     }
 
-    /* Floaters (decorative, like rest of site) */
-    .floater {
-      position: absolute;
-      z-index: 1;
-      pointer-events: none;
+    /* ── Footer ── */
+    .pg-foot {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 28px;
+      border-top: 1px solid var(--rule);
+      display: flex;
+      gap: 1.25rem;
+      flex-wrap: wrap;
+      align-items: center;
+      font-family: var(--f-body);
+      font-size: 0.875rem;
+      color: var(--quiet);
     }
+    .pg-foot a { color: var(--quiet); text-decoration: none; transition: color 0.2s ease; }
+    .pg-foot a:hover { color: var(--ink); }
 
+    /* ── Mobile ── */
     @media (max-width: 600px) {
-      .reader {
-        padding: 2.5rem var(--gutter) 4rem;
-      }
-
-      .reader p {
-        font-size: 1rem;
-      }
-
-      .reader .pivot {
-        font-size: 1.25rem;
-      }
-
-      .cta-block {
-        padding: 2rem 1.5rem;
-      }
-
-      .cta-line {
-        font-size: 1.0625rem;
-      }
-
-      .cta-email {
-        font-size: 1rem;
-        padding: 0.85rem 1.5rem;
-      }
+      body { font-size: 18px; }
+      .topbar { padding: 20px 20px 0; }
+      .ai-disclaimer { margin-left: 20px; margin-right: 20px; }
+      .reader { padding: 36px 20px 72px; }
+      .reader p { font-size: 1.0625rem; line-height: 1.75; }
+      .subtitle { font-size: 1.125rem; margin-bottom: 2.5rem; }
+      .reader .pivot { font-size: 1.5rem; padding-left: 1.1rem; }
+      .cta-block { padding: 2rem 1.5rem; }
+      .cta-line { font-size: 1.15rem; }
+      .cta-email { font-size: 1rem; padding: 0.85rem 1.6rem; }
+      .pg-foot { padding: 20px; }
     }
   </style>
 </head>
 <body>
 
-  <header class="pg-top">
-    <a class="pg-mark" href="/">
-      <span class="play">Play</span> <span class="instigator">Instigator</span>
+  <div class="shape shape-1" aria-hidden="true"></div>
+  <div class="shape shape-2" aria-hidden="true"></div>
+  <div class="shape shape-3" aria-hidden="true"></div>
+
+  <header class="topbar">
+    <a class="studio-mark" href="/">
+      <span class="play">Play</span>
+      <span class="dot" aria-hidden="true"></span>
+      <span class="inst">Instigator</span>
     </a>
-    <a class="pg-back" href="/">← Back to site</a>
+    <div class="toggles">
+      <button class="pill-btn lang-toggle" id="langToggle" type="button" aria-label="Switch language">
+        <span class="globe" aria-hidden="true"></span>
+        <span class="label" id="langLabel">中文</span>
+      </button>
+      <button class="pill-btn theme-toggle" id="themeToggle" type="button" aria-label="Toggle dark mode">
+        <span class="icon" aria-hidden="true"></span>
+        <span class="label" id="themeLabel">Dark</span>
+      </button>
+    </div>
   </header>
 
-  <!-- Decorative floaters -->
-  <div class="floater fA" style="--rot:-7deg;--dur:7s;--delay:0.4s;width:14px;height:14px;border-radius:50%;background:#974DFF;top:18%;left:6%;opacity:0.3;"></div>
-  <div class="floater fB" style="--rot:11deg;--dur:8.5s;--delay:0s;width:18px;height:8px;border-radius:999px;background:#FFF066;top:32%;right:5%;opacity:0.28;"></div>
-  <div class="floater fC" style="--rot:5deg;--dur:6s;--delay:1.1s;width:11px;height:11px;border-radius:3px;background:#57E0FF;top:62%;left:4%;opacity:0.25;"></div>
-  <div class="floater fA" style="--rot:-12deg;--dur:9s;--delay:0.7s;width:16px;height:16px;border-radius:50%;background:#FF3344;bottom:18%;right:7%;opacity:0.3;"></div>
-  <div class="floater fB" style="--rot:8deg;--dur:5.5s;--delay:1.3s;width:20px;height:8px;border-radius:999px;background:#81FDC1;bottom:34%;left:8%;opacity:0.25;"></div>
+  <div class="ai-disclaimer lang-zh">
+    <span class="bang" aria-hidden="true">!</span>
+    <span>本页中文内容由 AI 翻译，可能存在不准确或不自然的表达。原文以英文版本为准。</span>
+  </div>
 
   <main class="reader">
 
-    <p class="eyebrow">One-Pager · Creative Collective</p>
-    <h1 class="title">A different way of making <span class="accent">transmedia IP.</span></h1>
-    <p class="subtitle">For people who'd rather build a world across mediums than build in isolation.</p>
+    <p class="eyebrow">
+      <span class="lang-en">One-Pager · Creative Collective</span>
+      <span class="lang-zh">一页式介绍 · 共创团体</span>
+    </p>
 
-    <p>Transmedia IP is almost always done wrong. The light novel became a hit, so it gets turned into manga, anime, toys and games. The film was a box office success, so the characters get printed on everything imaginable and turned into theme park areas. The adaptation and licensing machine kicks in and the soul of the original work gets lost in translation. Sometimes the original creator wasn't involved. Sometimes the IP was never designed for the new medium in the first place. Time and time again, we have seen outputs that disgrace the original work.</p>
+    <h1 class="title">
+      <span class="lang-en">A different way of making <span class="accent">transmedia IP.</span></span>
+      <span class="lang-zh">一种不一样的、做<span class="accent">跨媒介 IP</span> 的方式。</span>
+    </h1>
 
-    <p>What if there's a better way? What if we design for multiple mediums right from the start, with the creators of each medium in the room together. Not adapting. Not licensing. Building the world simultaneously, so that the world itself is molded by the game and the music and the comics and the merch. The game mechanics are built into the lore, the comic's paneling and pacing mirrors the psychological breakdown of the character, the books explore the depths of the literature of an alien language. Each of them a unique experience of the world that is only possible in their medium, each one changes your previous understanding of the world, each one feels like a natural extension of the world you loved.</p>
+    <p class="subtitle">
+      <span class="lang-en">For people who'd rather build a world across mediums than build in isolation.</span>
+      <span class="lang-zh">写给那些更想在多个媒介之间一起建造一个世界、而不是各自孤立创作的人。</span>
+    </p>
 
-    <p class="pivot">That's what we're trying to do.</p>
+    <div class="lang-en">
+      <p>Transmedia IP is almost always done wrong. The light novel became a hit, so it gets turned into manga, anime, toys and games. The film was a box office success, so the characters get printed on everything imaginable and turned into theme park areas. The adaptation and licensing machine kicks in and the soul of the original work gets lost in translation. Sometimes the original creator wasn't involved. Sometimes the IP was never designed for the new medium in the first place. Time and time again, we have seen outputs that disgrace the original work.</p>
 
-    <p><strong>Play Instigator</strong> is forming a creative collective to build IP that's transmedia by design. A small group of creators from each medium (game, music, visual art, etc.) co-creating a world together. Every medium shapes the world. Every medium IS the original, every one IS canon. The world emerges from the conversation between mediums, not from one medium's logic and then adapted into others.</p>
+      <p>What if there's a better way? What if we design for multiple mediums right from the start, with the creators of each medium in the room together. Not adapting. Not licensing. Building the world simultaneously, so that the world itself is molded by the game and the music and the comics and the merch. The game mechanics are built into the lore, the comic's paneling and pacing mirrors the psychological breakdown of the character, the books explore the depths of the literature of an alien language. Each of them a unique experience of the world that is only possible in their medium, each one changes your previous understanding of the world, each one feels like a natural extension of the world you loved.</p>
+    </div>
+    <div class="lang-zh">
+      <p>跨媒介 IP 几乎总是被以错误的方式做出来。轻小说火了，就被改成漫画、动画、周边玩具和游戏。电影票房大卖，角色就被印到所有能想到的东西上、被做成主题乐园里的区域。改编与授权的机器一启动，原作的灵魂就在转化中失落。有时原作者根本没有参与。有时这个 IP 一开始就不是为新媒介设计的。一次又一次，我们看到那些羞辱了原作的产出。</p>
 
-    <p>The first round is built around a game prototype called <span class="accent">Ritual &amp; Ruin</span> — a 2v2 local co-op party game about tiny creatures hauling blood through forbidden rituals, evolving into something wrong, and hunting each other in their final moments. The prototype is playable, and in active iteration. The IP around it — the sonic identity, the visual language, the lore, the artefacts that make this a world and not just a game — is what this round builds. That's the work.</p>
-
-    <p>The model runs on revenue share. No upfront fees. The commitment is evenings and most weekends through end of 2026. The game ships by end of year. This is the first round.</p>
-
-    <p><strong>We're not looking for the most experienced people in the room.</strong> We're looking for people who are hungry to get better at their craft — people who find the idea of building something across mediums more interesting than building in isolation, and who want to be part of figuring out what doing this right actually looks like.</p>
-
-    <div class="cta-block">
-      <p class="cta-label">If that's a question you want to work on</p>
-      <p class="cta-line">Email me. Tell me what medium you work in and what about this resonates.</p>
-      <a class="cta-email" href="mailto:collab@playinstigator.com?subject=Collaborator%20%E2%80%94%20%5Byour%20medium%5D">collab@playinstigator.com</a>
-      <p class="cta-foot">A real conversation, not an application form.</p>
+      <p>如果还有更好的方式呢？如果我们从一开始就为多个媒介一同设计，让每个媒介的创作者都坐在同一个房间里。不是改编。不是授权。是在同一时间一起建造这个世界，让世界本身被游戏、被音乐、被漫画、被周边一起塑形。游戏机制内嵌进世界观，漫画的分镜与节奏映照角色的心理崩塌，书本深入探索一种异种语言的文学。每一个都是这个世界在那个媒介里独有的体验，每一个都会改变你之前对世界的理解，每一个都像是你所爱的那个世界的自然延伸。</p>
     </div>
 
-    <p class="signoff">Play Instigator — Instigating real play.</p>
+    <p class="pivot">
+      <span class="lang-en">That's what we're trying to do.</span>
+      <span class="lang-zh">这就是我们想要做的事。</span>
+    </p>
+
+    <div class="lang-en">
+      <p><strong>Play Instigator</strong> is forming a creative collective to build IP that's transmedia by design. A small group of creators from each medium (game, music, visual art, etc.) co-creating a world together. Every medium shapes the world. Every medium IS the original, every one IS canon. The world emerges from the conversation between mediums, not from one medium's logic and then adapted into others.</p>
+
+      <p>The first round is built around a game prototype called <span class="accent">Ritual &amp; Ruin</span> — a 2v2 local co-op party game about tiny creatures hauling blood through forbidden rituals, evolving into something wrong, and hunting each other in their final moments. The prototype is playable, and in active iteration. The IP around it — the sonic identity, the visual language, the lore, the artefacts that make this a world and not just a game — is what this round builds. That's the work.</p>
+
+      <p>The model runs on revenue share. No upfront fees. The commitment is evenings and most weekends through end of 2026. The game ships by end of year. This is the first round.</p>
+
+      <p><strong>We're not looking for the most experienced people in the room.</strong> We're looking for people who are hungry to get better at their craft — people who find the idea of building something across mediums more interesting than building in isolation, and who want to be part of figuring out what doing this right actually looks like.</p>
+    </div>
+    <div class="lang-zh">
+      <p><strong>Play Instigator</strong> 正在组建一个创作共同体，去做那种"从设计之初就跨媒介"的 IP。一个由各个媒介的创作者（游戏、音乐、视觉艺术等）组成的小团体，一起共同创造一个世界。每个媒介都塑形这个世界。每个媒介都是"原作"，每一个都是正典。世界是从媒介之间的对话里浮现出来的，而不是从某一个媒介的逻辑出发、再被改编到其他媒介里去。</p>
+
+      <p>第一轮是围绕一个名为 <span class="accent">Ritual &amp; Ruin</span> 的游戏原型展开的——一款 2v2 本地合作派对游戏，关于一些细小的生物在禁忌仪式中搬运血液、进化成某种"错的东西"、然后在它们最后的时刻互相猎杀。原型已经可玩，并且在持续迭代中。围绕它的 IP——声音身份、视觉语言、世界观、那些让这成为"一个世界"而不只是"一款游戏"的物件——就是这一轮要建造的东西。这就是工作本身。</p>
+
+      <p>这个模式跑的是收益分享。没有预付费用。承诺的是 2026 年底之前的晚上和大多数周末。游戏在年底之前出货。这是第一轮。</p>
+
+      <p><strong>我们要找的不是房间里经验最丰富的人。</strong>我们要找的是那种对自己手艺真正想变得更好的人——那种觉得"在多个媒介之间共同建造"比"独自一人创作"更有意思的人，以及想要参与到"摸索把这件事做对究竟是什么样子"中来的人。</p>
+    </div>
+
+    <div class="cta-block">
+      <p class="cta-label">
+        <span class="lang-en">If that's a question you want to work on</span>
+        <span class="lang-zh">如果这是你想去工作的问题</span>
+      </p>
+      <p class="cta-line">
+        <span class="lang-en">Email me. Tell me what medium you work in and what about this resonates.</span>
+        <span class="lang-zh">给我写邮件。告诉我你在哪个媒介里工作，以及这其中哪些地方让你产生了共鸣。</span>
+      </p>
+      <a class="cta-email" href="mailto:collab@playinstigator.com?subject=Collaborator%20%E2%80%94%20%5Byour%20medium%5D">collab@playinstigator.com</a>
+      <p class="cta-foot">
+        <span class="lang-en">A real conversation, not an application form.</span>
+        <span class="lang-zh">这是一场真实的对话，不是一份申请表。</span>
+      </p>
+    </div>
+
+    <p class="signoff">
+      <span class="lang-en">Play Instigator — Instigating real play.</span>
+      <span class="lang-zh">Play Instigator —— 制造真实的玩。</span>
+    </p>
 
   </main>
 
-  <footer>
-    <div class="container footer-inner">
-      <span class="footer-logo">Play Instigator</span>
-      <span class="footer-location">Singapore</span>
-      <span class="footer-tagline">Your excuse to make friends.</span>
-      <a href="/privacy.html" class="footer-privacy">Privacy Policy</a>
-    </div>
+  <footer class="pg-foot">
+    <span>
+      <span class="lang-en">Play Instigator · Singapore</span>
+      <span class="lang-zh">Play Instigator · 新加坡</span>
+    </span>
+    <span>·</span>
+    <a href="/">
+      <span class="lang-en">Back to site</span>
+      <span class="lang-zh">返回主站</span>
+    </a>
+    <span>·</span>
+    <a href="/privacy.html">
+      <span class="lang-en">Privacy</span>
+      <span class="lang-zh">隐私政策</span>
+    </a>
   </footer>
 
+  <script src="/collaborator-pack/nav.js"></script>
 </body>
 </html>
