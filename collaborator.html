@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Collaborate with Play Instigator</title>
+  <meta name="description" content="Play Instigator is forming a creative collective to build IP that's transmedia by design. Game, music, visual art, and more — co-creating a world together. Read the one-pager." />
+  <meta name="theme-color" content="#1C1917" />
+  <meta property="og:title" content="Collaborate with Play Instigator" />
+  <meta property="og:description" content="A creative collective building IP that's transmedia by design. Every medium shapes the world. Currently building Ritual &amp; Ruin." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://playinstigator.com/collaborator.html" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* ── Page-specific reading layout ── */
+    body {
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    /* Top bar (transparent variant of site nav) */
+    .pg-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.5rem var(--gutter);
+      max-width: var(--max-w);
+      margin: 0 auto;
+    }
+
+    .pg-mark {
+      font-size: 1rem;
+      letter-spacing: -0.01em;
+      text-decoration: none;
+    }
+
+    .pg-mark .play {
+      font-family: 'Fredoka', sans-serif;
+      font-weight: 600;
+      color: #FF3344;
+    }
+
+    .pg-mark .instigator {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 800;
+      color: #F9F5F1;
+    }
+
+    .pg-back {
+      font-family: 'Figtree', sans-serif;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: rgba(249,245,241,0.4);
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    .pg-back:hover {
+      color: rgba(249,245,241,0.85);
+    }
+
+    /* Reading column */
+    .reader {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 4rem var(--gutter) 6rem;
+      position: relative;
+      z-index: 3;
+    }
+
+    .eyebrow {
+      font-family: 'Figtree', sans-serif;
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: rgba(249,245,241,0.4);
+      margin-bottom: 1.5rem;
+    }
+
+    .title {
+      font-family: 'Fredoka', sans-serif;
+      font-weight: 600;
+      font-size: clamp(2.25rem, 5.5vw, 3.5rem);
+      line-height: 1.1;
+      letter-spacing: -0.015em;
+      color: #F9F5F1;
+      margin-bottom: 0.75rem;
+    }
+
+    .title .accent {
+      color: #FF3344;
+    }
+
+    .subtitle {
+      font-family: 'Figtree', sans-serif;
+      font-size: 1rem;
+      color: rgba(249,245,241,0.5);
+      margin-bottom: 3rem;
+    }
+
+    .reader p {
+      font-family: 'Figtree', sans-serif;
+      font-size: 1.0625rem;
+      line-height: 1.75;
+      color: rgba(249,245,241,0.85);
+      margin-bottom: 1.4rem;
+    }
+
+    .reader p strong {
+      color: #F9F5F1;
+      font-weight: 700;
+    }
+
+    .reader p .accent {
+      color: #FF3344;
+      font-weight: 700;
+      font-style: normal;
+    }
+
+    .reader .pivot {
+      font-family: 'Fredoka', sans-serif;
+      font-weight: 500;
+      font-size: 1.5rem;
+      line-height: 1.4;
+      color: #F9F5F1;
+      margin: 2.4rem 0 2.4rem;
+      padding-left: 1.25rem;
+      border-left: 2px solid #FF3344;
+    }
+
+    .reader hr {
+      border: none;
+      border-top: 1px solid rgba(249,245,241,0.08);
+      margin: 3.5rem 0;
+    }
+
+    /* Email CTA */
+    .cta-block {
+      margin-top: 3.5rem;
+      padding: 2.5rem;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      text-align: center;
+    }
+
+    .cta-label {
+      font-family: 'Figtree', sans-serif;
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: rgba(249,245,241,0.4);
+      margin-bottom: 1.25rem;
+    }
+
+    .cta-line {
+      font-family: 'Fredoka', sans-serif;
+      font-weight: 500;
+      font-size: 1.25rem;
+      color: rgba(249,245,241,0.85);
+      line-height: 1.5;
+      margin-bottom: 1.5rem;
+    }
+
+    .cta-email {
+      display: inline-block;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 700;
+      font-size: 1.0625rem;
+      letter-spacing: 0.01em;
+      background: #FF3344;
+      color: #F9F5F1;
+      padding: 0.95rem 1.9rem;
+      border-radius: 50px;
+      text-decoration: none;
+      transition: background 0.2s ease, transform 0.15s ease;
+    }
+
+    .cta-email:hover {
+      background: #ff1a2e;
+      transform: translateY(-1px);
+    }
+
+    .cta-foot {
+      font-family: 'Figtree', sans-serif;
+      font-size: 0.875rem;
+      color: rgba(249,245,241,0.35);
+      margin-top: 1.25rem;
+    }
+
+    .signoff {
+      text-align: center;
+      font-family: 'Fredoka', sans-serif;
+      font-style: italic;
+      font-size: 0.95rem;
+      color: rgba(249,245,241,0.4);
+      margin-top: 4rem;
+    }
+
+    /* Floaters (decorative, like rest of site) */
+    .floater {
+      position: absolute;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    @media (max-width: 600px) {
+      .reader {
+        padding: 2.5rem var(--gutter) 4rem;
+      }
+
+      .reader p {
+        font-size: 1rem;
+      }
+
+      .reader .pivot {
+        font-size: 1.25rem;
+      }
+
+      .cta-block {
+        padding: 2rem 1.5rem;
+      }
+
+      .cta-line {
+        font-size: 1.0625rem;
+      }
+
+      .cta-email {
+        font-size: 1rem;
+        padding: 0.85rem 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="pg-top">
+    <a class="pg-mark" href="/">
+      <span class="play">Play</span> <span class="instigator">Instigator</span>
+    </a>
+    <a class="pg-back" href="/">← Back to site</a>
+  </header>
+
+  <!-- Decorative floaters -->
+  <div class="floater fA" style="--rot:-7deg;--dur:7s;--delay:0.4s;width:14px;height:14px;border-radius:50%;background:#974DFF;top:18%;left:6%;opacity:0.3;"></div>
+  <div class="floater fB" style="--rot:11deg;--dur:8.5s;--delay:0s;width:18px;height:8px;border-radius:999px;background:#FFF066;top:32%;right:5%;opacity:0.28;"></div>
+  <div class="floater fC" style="--rot:5deg;--dur:6s;--delay:1.1s;width:11px;height:11px;border-radius:3px;background:#57E0FF;top:62%;left:4%;opacity:0.25;"></div>
+  <div class="floater fA" style="--rot:-12deg;--dur:9s;--delay:0.7s;width:16px;height:16px;border-radius:50%;background:#FF3344;bottom:18%;right:7%;opacity:0.3;"></div>
+  <div class="floater fB" style="--rot:8deg;--dur:5.5s;--delay:1.3s;width:20px;height:8px;border-radius:999px;background:#81FDC1;bottom:34%;left:8%;opacity:0.25;"></div>
+
+  <main class="reader">
+
+    <p class="eyebrow">One-Pager · Creative Collective</p>
+    <h1 class="title">A different way of making <span class="accent">transmedia IP.</span></h1>
+    <p class="subtitle">For people who'd rather build a world across mediums than build in isolation.</p>
+
+    <p>Transmedia IP is almost always done wrong. The light novel became a hit, so it gets turned into manga, anime, toys and games. The film was a box office success, so the characters get printed on everything imaginable and turned into theme park areas. The adaptation and licensing machine kicks in and the soul of the original work gets lost in translation. Sometimes the original creator wasn't involved. Sometimes the IP was never designed for the new medium in the first place. Time and time again, we have seen outputs that disgrace the original work.</p>
+
+    <p>What if there's a better way? What if we design for multiple mediums right from the start, with the creators of each medium in the room together. Not adapting. Not licensing. Building the world simultaneously, so that the world itself is molded by the game and the music and the comics and the merch. The game mechanics are built into the lore, the comic's paneling and pacing mirrors the psychological breakdown of the character, the books explore the depths of the literature of an alien language. Each of them a unique experience of the world that is only possible in their medium, each one changes your previous understanding of the world, each one feels like a natural extension of the world you loved.</p>
+
+    <p class="pivot">That's what we're trying to do.</p>
+
+    <p><strong>Play Instigator</strong> is forming a creative collective to build IP that's transmedia by design. A small group of creators from each medium (game, music, visual art, etc.) co-creating a world together. Every medium shapes the world. Every medium IS the original, every one IS canon. The world emerges from the conversation between mediums, not from one medium's logic and then adapted into others.</p>
+
+    <p>The first round is built around a game prototype called <span class="accent">Ritual &amp; Ruin</span> — a 2v2 local co-op party game about tiny creatures hauling blood through forbidden rituals, evolving into something wrong, and hunting each other in their final moments. The prototype is playable, and in active iteration. The IP around it — the sonic identity, the visual language, the lore, the artefacts that make this a world and not just a game — is what this round builds. That's the work.</p>
+
+    <p>The model runs on revenue share. No upfront fees. The commitment is evenings and most weekends through end of 2026. The game ships by end of year. This is the first round.</p>
+
+    <p><strong>We're not looking for the most experienced people in the room.</strong> We're looking for people who are hungry to get better at their craft — people who find the idea of building something across mediums more interesting than building in isolation, and who want to be part of figuring out what doing this right actually looks like.</p>
+
+    <div class="cta-block">
+      <p class="cta-label">If that's a question you want to work on</p>
+      <p class="cta-line">Email me. Tell me what medium you work in and what about this resonates.</p>
+      <a class="cta-email" href="mailto:collab@playinstigator.com?subject=Collaborator%20%E2%80%94%20%5Byour%20medium%5D">collab@playinstigator.com</a>
+      <p class="cta-foot">A real conversation, not an application form.</p>
+    </div>
+
+    <p class="signoff">Play Instigator — Instigating real play.</p>
+
+  </main>
+
+  <footer>
+    <div class="container footer-inner">
+      <span class="footer-logo">Play Instigator</span>
+      <span class="footer-location">Singapore</span>
+      <span class="footer-tagline">Your excuse to make friends.</span>
+      <a href="/privacy.html" class="footer-privacy">Privacy Policy</a>
+    </div>
+  </footer>
+
+</body>
+</html>
