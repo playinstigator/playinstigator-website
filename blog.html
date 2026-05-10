@@ -331,6 +331,84 @@
           <!-- WEEKLY-GENERATED START -->
           <article class="entry-card">
               <div class="entry-meta">
+                <span class="entry-week-tag">Week of 7 May</span>
+                <span class="entry-date">7 &ndash; 7 May 2026</span>
+              </div>
+              <div class="entry-body">
+                <p>Hey there! This week in Ritual & Ruin dev land, we've been diving into some cool updates that should make your game experience even more vibrant and smooth.</p>
+                <p>First off, I tackled a pesky issue with the Hazard Cube material. It was showing up as magenta due to an old Unity shader mismatch, but now it's sporting a new dedicated material in Assets/ProtoV2/Materials. This means the cube looks just how you'd expect it to, without any strange colors popping up unexpectedly.</p>
+                <p>Next, we've made some exciting progress on our Color Palette Workflow. We wrapped up Phase 4 and wired everything into MatchScene. Now, changing color palettes is a breeze—a quick dropdown selection takes less than 30 seconds! This will make customizing the game's look faster and more intuitive for everyone. I've set up a new system where you can easily preview and apply different color schemes with minimal fuss.</p>
+                <p>On the to-do list, we're planning to generate some additional palettes so you'll have even more options to choose from. Plus, if future updates show that certain elements need more attention for readability, like wall or gap-edge colors, we’ll make sure they’re up to par too.</p>
+                <p>Keep an eye out for these changes, and thanks for sticking with us on this colorful journey!</p>
+              </div>
+              <details class="entry-raw">
+                <summary>Raw session notes</summary>
+                <div class="raw-content">
+                  <h3>2026-05-07 — Color Palette Phase 4 wiring + Hazard material fix</h3>
+                  <h3>Hazard pink material — fix</h3>
+                  <p><strong>Root cause</strong>: <code>Hazard/Cube</code> <code>MeshRenderer</code> was referencing <code>Assets/Obi/Samples/Common/SampleResources/Materials/FinishLine.mat</code>, an Obi sample asset serialized in Unity 2019.3 against the Built-in Standard shader. URP can't render Standard → magenta. Almost certainly re-imported by the Obi 7.1.1 upgrade on 2026-04-29 (the prior <code>MaterialShaderFixer</code> URP patch from 2026-03-28 didn't survive the package update). Project rule says don't modify <code>Assets/Obi/</code>, so the fix is a dedicated material under <code>Assets/ProtoV2/Materials/</code>.</p>
+                  <p><strong>Fix</strong>:</p>
+                  <ul>
+                    <li>New material: <code>Assets/ProtoV2/Materials/M_Hazard.mat</code> — URP/Unlit, full transparent recipe (<code>_Surface=1</code>, <code>_SrcBlend=5</code>, <code>_DstBlend=10</code>, <code>_ZWrite=0</code>, <code>_Cull=0</code>, <code>_SURFACE_TYPE_TRANSPARENT</code> keyword, <code>RenderType: Transparent</code>, <code>m_CustomRenderQueue=3000</code>), tint <code>_BaseColor (1, 0.18, 0.18, 0.35)</code>.</li>
+                    <li>Assigned to <code>Hazard/Cube</code> <code>MeshRenderer.sharedMaterial</code> via Unity MCP.</li>
+                    <li>Note: MCP <code>manage_material set_material_shader_property</code> reported success but didn't persist values to the <code>.mat</code> file — patched the YAML directly via <code>Write</code> to apply the transparent recipe in one shot.</li>
+                  </ul>
+                  <p><strong>Verification</strong>: Unity console clean (0 errors, 0 warnings); cube renderer's <code>sharedMaterial</code> confirmed = <code>Assets/ProtoV2/Materials/M_Hazard.mat</code>.</p>
+                  <h3>Color Palette Workflow Phase 4 — end-to-end</h3>
+                  <p>Phase 4 scripts shipped 2026-05-06; today wired them into MatchScene. Phase 4 is the bottleneck-killer for the [Color Composition Workflow](../../Games/Ritual%20&%20Ruin/Confirmed/design/Color%20Composition%20Workflow.md) — turns a 5-min-per-palette material wrangle into a ~30-second dropdown swap.</p>
+                  <h3>What changed</h3>
+                  <p><strong>Scripts</strong> (Assets/ProtoV2/Scripts/):</p>
+                  <ul>
+                    <li><code>ColorSystem/ColorPaletteSO.cs</code> — <code>[CreateAssetMenu]</code> SO with floor / wall / background + altarAccent / gapEdgeAccent + optional bloodTintAccent (toggle). <code>paletteName</code> + <code>description</code> for the dropdown.</li>
+                    <li><code>ColorSystem/PaletteApplier.cs</code> — <code>[ExecuteAlways] [DisallowMultipleComponent]</code> MonoBehaviour with material-array slots per palette role. Pushes <code>_BaseColor</code> (URP) and <code>_Color</code> (legacy) on each wired material. Optional camera clear-color binding. <code>OnValidate</code> auto-applies via <code>EditorApplication.delayCall</code>.</li>
+                    <li><code>Editor/ColorPalettePreviewWindow.cs</code> — <code>Window → Ritual & Ruin → Color Palette Preview</code> window: palette dropdown, swatch preview, Push-Live / Capture / Cycle-All. Captures land in <code>PaletteCaptures/</code> at the project root (outside <code>Assets/</code> so the AssetDatabase doesn't ingest them).</li>
+                  </ul>
+                  <p><strong>Data</strong>:</p>
+                  <ul>
+                    <li>New folders: <code>Assets/ProtoV2/Data/</code> and <code>Assets/ProtoV2/Data/ColorPalettes/</code>.</li>
+                    <li><code>Assets/ProtoV2/Data/ColorPalettes/Default.asset</code> — first <code>ColorPaletteSO</code>, baseline / clinical mood.</li>
+                  </ul>
+                  <p><strong>Scene</strong> (Assets/ProtoV2/Scenes/MatchScene.unity):</p>
+                  <ul>
+                    <li>New GameObject: <code>ColorPaletteRoot</code> (root, world origin) with <code>PaletteApplier</code> component.</li>
+                    <li>Wiring:</li>
+                    <li><code>_activePalette</code> → <code>Default.asset</code></li>
+                    <li><code>_floorMaterials</code> → [<code>ChunkFloorTile.mat</code>, <code>ChunkFloorTile_Boundary.mat</code>]</li>
+                    <li><code>_backgroundClearCamera</code> → <code>Main Camera</code></li>
+                    <li>Scene saved.</li>
+                  </ul>
+                  <h3>Why these scope choices</h3>
+                  <ul>
+                    <li><strong>Walls, gap edges, altar accent NOT wired</strong>: each one creates its material at runtime from <code>[SerializeField] Color</code> fields (<code>BoundaryWalls.cs</code>, <code>GapHighlighter.cs</code>, <code>AltarFillVisual.cs</code>) — no <code>.mat</code> asset exists to slot in. Making them palette-driven needs script changes (expose color setters on each, have <code>PaletteApplier</code> push palette colors into them). Deferred — Phase 5 readability validation will tell us which ones are worth the work.</li>
+                    <li><strong>Camera clear flags left as Skybox</strong>: switching to Solid Color is a visible scene change beyond pure wiring. The camera reference is wired so that flipping <code>Clear Flags → Solid Color</code> in the Inspector immediately makes <code>backgroundColor</code> palette-driven.</li>
+                    <li><strong>Materials chosen — <code>ChunkFloorTile.mat</code> and <code>ChunkFloorTile_Boundary.mat</code></strong>: these are the two real <code>.mat</code> assets used by the chunk prefab and floor boundary, dedicated to the floor surface, no shared use elsewhere. Safe to recolor.</li>
+                  </ul>
+                  <h3>Verification</h3>
+                  <ul>
+                    <li>Unity console clean (0 errors, 0 warnings) after script add, scene save.</li>
+                    <li><code>PaletteApplier</code> component state verified via MCP resource: <code>_activePalette</code>, <code>_floorMaterials</code> array, <code>_backgroundClearCamera</code> all serialized correctly.</li>
+                  </ul>
+                  <h3>Files modified</h3>
+                  <ul>
+                    <li>New: <code>Assets/ProtoV2/Scripts/ColorSystem/ColorPaletteSO.cs</code></li>
+                    <li>New: <code>Assets/ProtoV2/Scripts/ColorSystem/PaletteApplier.cs</code></li>
+                    <li>New: <code>Assets/ProtoV2/Scripts/Editor/ColorPalettePreviewWindow.cs</code></li>
+                    <li>New: <code>Assets/ProtoV2/Materials/M_Hazard.mat</code></li>
+                    <li>New: <code>Assets/ProtoV2/Data/ColorPalettes/Default.asset</code></li>
+                    <li>Modified: <code>Assets/ProtoV2/Scenes/MatchScene.unity</code> — added <code>ColorPaletteRoot</code> GameObject + reassigned <code>Hazard/Cube</code> material</li>
+                  </ul>
+                  <h3>Follow-ups</h3>
+                  <ul>
+                    <li>(User) Open <code>Window → Ritual & Ruin → Color Palette Preview</code> and confirm Default appears in the dropdown; click "Push palette live" and watch <code>ChunkFloorTile.mat</code> <code>_BaseColor</code> update in the Scene view.</li>
+                    <li>(User) Optional: flip <code>Main Camera</code> Clear Flags to Solid Color when ready to test palette-driven backgrounds.</li>
+                    <li>Phase 3 candidate generation — produce 6–10 named palettes as additional <code>ColorPaletteSO</code> assets under the same folder. Each becomes a dropdown entry automatically.</li>
+                    <li>If Phase 5 validation shows wall / gap-edge color is load-bearing for readability, build the deferred runtime-color setter pattern on <code>BoundaryWalls</code> / <code>GapHighlighter</code> / <code>AltarFillVisual</code>.</li>
+                  </ul>
+                </div>
+              </details>
+            </article>
+          <article class="entry-card">
+              <div class="entry-meta">
                 <span class="entry-week-tag">Week of 27 Apr</span>
                 <span class="entry-date">27 &ndash; 29 April 2026</span>
               </div>
