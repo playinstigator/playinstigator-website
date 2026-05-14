@@ -4,6 +4,9 @@ scripts/devlog_update.log
 # OMC tooling state
 .omc/
 
+# Claude Code local settings (per-machine permissions)
+.claude/settings.local.json
+
 # Python
 __pycache__/
 *.pyc
