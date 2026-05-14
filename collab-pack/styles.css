@@ -1087,3 +1087,100 @@ tbody tr:first-child td { border-top: none; }
 }
 
 ::selection { background: var(--accent); color: var(--cream); }
+
+/* ---------- Seat-page paneling (improves scan-ability) ---------- */
+/* Scoped to seat pages only via body[data-page^="seat-"] */
+
+/* h3 sub-sections become visible section markers */
+body[data-page^="seat-"] main h3 {
+  position: relative;
+  background: var(--bg-2);
+  padding: 12px 14px 12px 16px;
+  border-left: 4px solid var(--accent);
+  border-radius: 0 10px 10px 0;
+  margin: 40px 0 14px 0;
+  font-size: clamp(17px, 2.3vw, 19px);
+  line-height: 1.3;
+}
+
+/* Bold-led "key point" paragraphs become feature panels.
+   Matches direct children of <main> that start with <strong> followed by text.
+   This auto-detects the existing pattern across all three seat pages without
+   touching the HTML. Excludes paragraphs inside callouts/blockquotes via the
+   direct-descendant combinator. */
+body[data-page^="seat-"] main > p:has(> strong:first-child:not(:only-child)) {
+  background: var(--card);
+  border: 1px solid var(--rule);
+  border-left: 3px solid var(--accent-2);
+  border-radius: 10px;
+  padding: 14px 18px;
+  margin: 10px 0;
+  box-shadow: var(--shadow);
+}
+body[data-page^="seat-"] main > p:has(> strong:first-child:not(:only-child)) strong:first-child {
+  display: inline;
+  color: var(--ink);
+}
+
+/* Bullet lists of bold-led items (composer "What the song is not", "Narrative
+   specificity requirements") become panel-like rows. */
+body[data-page^="seat-"] main > ul:has(> li > strong:first-child) {
+  list-style: none;
+  padding: 0;
+  margin: 12px 0 22px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+body[data-page^="seat-"] main > ul:has(> li > strong:first-child) > li {
+  background: var(--card);
+  border: 1px solid var(--rule);
+  border-left: 3px solid var(--accent);
+  border-radius: 10px;
+  padding: 12px 16px;
+  margin: 0;
+  box-shadow: var(--shadow);
+}
+body[data-page^="seat-"] main > ul:has(> li > strong:first-child) > li strong:first-child {
+  color: var(--ink);
+}
+
+/* "Precedent" paragraphs (merch seat) get a quieter, distinct panel style */
+body[data-page^="seat-"] main > p.precedent {
+  background: var(--bg-2);
+  border: 1px dashed var(--rule);
+  border-left: 3px solid var(--quiet);
+  border-radius: 8px;
+  padding: 10px 14px;
+  margin: -4px 0 18px 0;
+  font-size: 14px;
+  color: var(--ink-soft);
+  box-shadow: none;
+}
+body[data-page^="seat-"] main > p.precedent em {
+  font-style: italic;
+}
+
+/* "From → To" mental model shift paragraphs become a stacked pair */
+body[data-page^="seat-"] main > p:has(> em:only-child) {
+  margin: 6px 0;
+}
+
+/* Tighten spacing between heading and its first panel */
+body[data-page^="seat-"] main h3 + p:has(> strong:first-child),
+body[data-page^="seat-"] main h3 + ul:has(> li > strong:first-child) {
+  margin-top: 14px;
+}
+
+@media (max-width: 560px) {
+  body[data-page^="seat-"] main h3 {
+    margin: 32px 0 12px 0;
+    padding: 10px 12px 10px 14px;
+  }
+  body[data-page^="seat-"] main > p:has(> strong:first-child:not(:only-child)) {
+    padding: 12px 14px;
+  }
+  body[data-page^="seat-"] main > ul:has(> li > strong:first-child) > li {
+    padding: 10px 14px;
+  }
+}
