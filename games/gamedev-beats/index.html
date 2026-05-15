@@ -587,7 +587,7 @@
 // -----------------------------------------------------------------------------
 // CONFIG
 // -----------------------------------------------------------------------------
-const TRACK_AUDIO_URL = 'https://gamedev-beats-audio.reconunpro.workers.dev/26.5.9.mp3';  // null disables track / synth fallback
+const TRACK_AUDIO_URL = 'https://gamedev-beats-audio.reconunpro.workers.dev/26.5.10.mp3';  // null disables track / synth fallback
 const TRACK_BEATS_URL = './gamedev-beats.csv'; // authored beats CSV; null to fall back to runtime onset detection
 
 const PLAYERS = [
@@ -1336,7 +1336,7 @@ function beginPlay() {
   // Synth fallback (no track loaded): play a steady metronome at the level's
   // intended tempo so the level still "ends" rather than crashing.
   const level = LEVELS[state.currentRound];
-  const bpm = 140 * (level.speed || 1.0);     // 26.5.9.mp3 native tempo ≈ 140
+  const bpm = 140 * (level.speed || 1.0);     // 26.5.10.mp3 native tempo ≈ 140
   const beatMs = 60000 / bpm;
   const startTime = performance.now();
   const audioStart = audioCtx.currentTime;

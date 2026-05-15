@@ -3,5 +3,5 @@ main = "src/index.js"
 compatibility_date = "2024-11-06"
 
 # Audio is embedded as base64 in src/audio.b64.js (gitignored, regenerated
-# locally before each deploy from games/gamedev-beats/26.5.9.mp3). No R2
+# locally before each deploy from the source mp3, currently 26.5.10.mp3). No R2
 # binding required.

@@ -3,6 +3,6 @@ node_modules/
 .dev.vars
 
 # Embedded audio: bundled into the deployed Worker, NOT committed to the public repo.
-# Regenerate locally before each deploy from games/gamedev-beats/26.5.9.mp3.
+# Regenerate locally before each deploy from the source mp3 (currently 26.5.10.mp3).
 src/audio.b64.js
 src/audio.mp3
