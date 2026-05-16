@@ -471,12 +471,13 @@ const PLAYERS = [
 
 // Level = { layers, speed, question }
 // Each level uses the authored CSV beats filtered to specific layer(s) and plays the
-// audio at a fixed speed multiplier. Layers: 1 = main pulse (31), 2 = accents (13).
+// audio at a fixed speed multiplier. Layers: 1 = downbeats (8, ~1.7s apart),
+// 2 = mid pulse (23), 3 = ornament accents (13).
 const LEVELS = [
-  { layers: [1],    speed: 0.9, question: "What are you working on this session — and what's the very next thing you need to do on it?" },
-  { layers: [1, 2], speed: 0.9, question: "What's a small thing in your project you're secretly proud of?" },
-  { layers: [1],    speed: 1.0, question: "What's a game by someone in your scene (or someone you've met) more people should know about?" },
-  { layers: [1, 2], speed: 1.0, question: "A year from now, what do you want to be working on?" },
+  { layers: [1],       speed: 0.9, question: "What are you working on this session — and what's the very next thing you need to do on it?" },
+  { layers: [1, 2],    speed: 0.9, question: "What's a small thing in your project you're secretly proud of?" },
+  { layers: [1, 2, 3], speed: 0.9, question: "What's a game you think is underrated and more people should know about?" },
+  { layers: [1, 2, 3], speed: 1.0, question: "A year from now, what do you want to be working on?" },
 ];
 
 const HIT_WINDOW_MS = 180;     // ± window for a successful hit
