@@ -460,7 +460,7 @@
 // CONFIG
 // -----------------------------------------------------------------------------
 const TRACK_AUDIO_URL = 'https://gamedev-beats-audio.reconunpro.workers.dev/26.5.10.mp3';  // null disables track / synth fallback
-const TRACK_BEATS_URL = './gamedev-beats.csv?v=2'; // authored beats CSV; null to fall back to runtime onset detection. Bump ?v= when CSV changes to bust browser cache.
+const TRACK_BEATS_URL = './gamedev-beats.csv?v=5'; // authored beats CSV; null to fall back to runtime onset detection. Bump ?v= when CSV changes to bust browser cache.
 
 const PLAYERS = [
   { id: 0, name: 'PLAYER 1', color: 'p1', defaultKey: 'a' },
@@ -471,12 +471,15 @@ const PLAYERS = [
 
 // Level = { layers, speed, question }
 // Each level uses the authored CSV beats filtered to specific layer(s) and plays the
-// audio at a fixed speed multiplier. Layers: 1 = downbeats (8, ~1.7s apart),
-// 2 = mid pulse (23), 3 = ornament accents (13).
+// audio at a fixed speed multiplier. Layers in the CSV:
+//   1 = downbeats (8, ~1.7s apart)
+//   2 = mid pulse (23)
+//   3 = ornament accents (4)
+//   4 = combined preview (recorder-only reference, not played in any level)
 const LEVELS = [
-  { layers: [1],       speed: 0.9, question: "What are you working on this session — and what's the very next thing you need to do on it?" },
-  { layers: [1, 2],    speed: 0.9, question: "What's a small thing in your project you're secretly proud of?" },
-  { layers: [1, 2, 3], speed: 0.9, question: "What's a game you think is underrated and more people should know about?" },
+  { layers: [1],       speed: 0.8, question: "What are you working on this session — and what's the very next thing you need to do on it?" },
+  { layers: [1, 2],    speed: 0.8, question: "What's a small thing in your project you're secretly proud of?" },
+  { layers: [1, 2, 3], speed: 0.8, question: "What's a game you think is underrated and more people should know about?" },
   { layers: [1, 2, 3], speed: 1.0, question: "A year from now, what do you want to be working on?" },
 ];
 
@@ -914,13 +917,8 @@ function beginPlayWithTrack() {
   const effectiveLeadInMs = Math.max(NOTE_LEAD_IN_MS, PRE_ROLL_MS);
 
   // HUD label
-  const avgMult = (bm.startMult + bm.endMult) / 2;
-  const avgBpm = track.detectedBpm ? track.detectedBpm * avgMult : null;
-  const speedTxt = avgBpm
-    ? `~${Math.round(avgBpm)} BPM (${bm.startMult.toFixed(2)}×→${bm.endMult.toFixed(2)}×)`
-    : `${bm.startMult.toFixed(2)}×→${bm.endMult.toFixed(2)}×`;
   document.getElementById('round-indicator').textContent =
-    `LEVEL ${state.currentRound + 1} / ${LEVELS.length} · ${speedTxt}`;
+    `LEVEL ${state.currentRound + 1} / ${LEVELS.length}`;
 
   if (currentSource) { try { currentSource.stop(); } catch(e){} currentSource = null; }
 
@@ -1591,7 +1589,7 @@ async function loadAuthoredBeats(url) {
       tSec,
       band:     Number.isFinite(band)     ? band     : 0,
       strength: Number.isFinite(strength) ? strength : 1.0,
-      layer:    (layer >= 1 && layer <= 3) ? layer    : 1,
+      layer:    (layer >= 1 && layer <= 5) ? layer    : 1,
     });
   }
   onsets.sort((a, b) => a.tSec - b.tSec);
