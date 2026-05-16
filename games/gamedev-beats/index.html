@@ -185,6 +185,34 @@
     z-index: 20;
     text-shadow: 0 0 32px var(--accent);
   }
+  #speedup-warning {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 64px;
+    font-weight: bold;
+    letter-spacing: 6px;
+    color: var(--p3);
+    z-index: 20;
+    text-shadow: 0 0 32px var(--p3);
+    text-align: center;
+    animation: speedupPulse 0.4s ease-out;
+  }
+  #speedup-warning .sub {
+    display: block;
+    font-size: 20px;
+    letter-spacing: 4px;
+    color: var(--text);
+    margin-top: 12px;
+    text-shadow: none;
+    opacity: 0.85;
+  }
+  @keyframes speedupPulse {
+    0%   { transform: translate(-50%, -50%) scale(0.6); opacity: 0; }
+    50%  { transform: translate(-50%, -50%) scale(1.15); opacity: 1; }
+    100% { transform: translate(-50%, -50%) scale(1);    opacity: 1; }
+  }
 
   .feedback {
     position: absolute;
@@ -419,6 +447,7 @@
       <div class="lane"><span class="lbl">HIGH</span><div class="dot high" id="beat-dot-high"></div></div>
     </div>
     <div id="countdown" style="display:none"></div>
+    <div id="speedup-warning" style="display:none"></div>
     <div id="pause-overlay">
       <h1>PAUSED</h1>
       <p class="dim">press ESC to resume</p>
@@ -1180,8 +1209,31 @@ function startRound() {
   // screen is visible. requestAnimationFrame ensures the layout has resolved.
   requestAnimationFrame(() => {
     buildTargets();
-    runCountdown(() => beginPlay());
+    // If this level is faster than the previous one, flash a speed-up warning
+    // before the standard 3-2-1-GO countdown.
+    const i    = state.currentRound;
+    const prev = i > 0 ? (LEVELS[i - 1].speed || 1.0) : null;
+    const curr = LEVELS[i].speed || 1.0;
+    const speedup = prev !== null && curr > prev + 0.001;
+    if (speedup) {
+      const pct = Math.round(((curr - prev) / prev) * 100);
+      runSpeedupWarning(pct, () => runCountdown(() => beginPlay()));
+    } else {
+      runCountdown(() => beginPlay());
+    }
   });
+}
+
+function runSpeedupWarning(percent, done) {
+  const el = document.getElementById('speedup-warning');
+  el.style.animation = 'none';
+  el.innerHTML = `SPEED UP +${percent}%<span class="sub">brace yourself</span>`;
+  // Force reflow so the animation replays on each show.
+  // eslint-disable-next-line no-unused-expressions
+  el.offsetWidth;
+  el.style.animation = '';
+  el.style.display = '';
+  setTimeout(() => { el.style.display = 'none'; done(); }, 1400);
 }
 
 function runCountdown(done) {
