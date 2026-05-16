@@ -460,7 +460,7 @@
 // CONFIG
 // -----------------------------------------------------------------------------
 const TRACK_AUDIO_URL = 'https://gamedev-beats-audio.reconunpro.workers.dev/26.5.10.mp3';  // null disables track / synth fallback
-const TRACK_BEATS_URL = './gamedev-beats.csv'; // authored beats CSV; null to fall back to runtime onset detection
+const TRACK_BEATS_URL = './gamedev-beats.csv?v=2'; // authored beats CSV; null to fall back to runtime onset detection. Bump ?v= when CSV changes to bust browser cache.
 
 const PLAYERS = [
   { id: 0, name: 'PLAYER 1', color: 'p1', defaultKey: 'a' },
