@@ -334,7 +334,7 @@
     gap: 10px;
   }
   .credits .by { opacity: 0.7; }
-  .credits .handle { opacity: 0.55; font-size: 11px; margin-left: 4px; }
+  .credits .handle { color: var(--text); font-size: 11px; margin-left: 6px; font-weight: 600; }
   .credits-tagline {
     color: var(--accent);
     opacity: 0.85;
@@ -445,6 +445,54 @@
     text-shadow: 0 0 32px var(--accent);
   }
   #pause-overlay p { margin-top: 16px; font-size: 14px; }
+
+  /* TITLE SCREEN POLISH */
+  #screen-title {
+    background:
+      radial-gradient(circle at 50% 30%, rgba(179,136,255,0.10) 0%, transparent 55%),
+      radial-gradient(circle at 20% 80%, rgba(0,229,255,0.05) 0%, transparent 50%),
+      radial-gradient(circle at 80% 80%, rgba(255,64,129,0.05) 0%, transparent 50%);
+  }
+  #screen-title h1 {
+    font-size: 64px;
+    letter-spacing: 10px;
+    margin-bottom: 12px;
+    background: linear-gradient(90deg,
+      var(--p1) 0%,
+      var(--accent) 25%,
+      var(--p2) 50%,
+      var(--p3) 75%,
+      var(--p4) 100%);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+            background-clip: text;
+    color: transparent;
+    animation: titleShine 8s linear infinite;
+    filter: drop-shadow(0 0 24px rgba(179,136,255,0.25));
+  }
+  @keyframes titleShine {
+    0%   { background-position:   0% center; }
+    100% { background-position: 200% center; }
+  }
+  #screen-title h2 {
+    color: var(--accent);
+    opacity: 0.75;
+    font-size: 14px;
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    margin-bottom: 32px;
+  }
+  #screen-title p {
+    color: var(--text);
+    opacity: 0.75;
+  }
+  #screen-title #btn-start:not(:disabled) {
+    animation: startPulse 2.4s ease-in-out infinite;
+  }
+  @keyframes startPulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(179,136,255,0.45); }
+    50%      { box-shadow: 0 0 0 14px rgba(179,136,255,0); }
+  }
 </style>
 </head>
 <body>
@@ -528,7 +576,7 @@
   <div id="screen-question" class="screen">
     <div class="round-indicator" id="question-round">LEVEL 1 / 4</div>
     <div class="question-card">
-      <div class="who-now" id="who-now"><span class="label">NEXT UP:</span> <span class="name"></span></div>
+      <div class="who-now" id="who-now"><span class="name"></span><span class="label">, please answer:</span></div>
       <div class="q-text" id="q-text"></div>
       <div class="order-dots" id="order-dots"></div>
     </div>
