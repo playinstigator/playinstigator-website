@@ -317,6 +317,39 @@
 
   .hint { font-size: 13px; color: var(--dim); margin-top: 32px; letter-spacing: 1px; }
 
+  /* CREDITS */
+  .credits {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    margin-top: 24px;
+    font-size: 12px;
+    color: var(--dim);
+    letter-spacing: 1px;
+  }
+  .credits-row {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .credits .by { opacity: 0.7; }
+  .credits-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border: 1px solid var(--dim);
+    border-radius: 999px;
+    color: var(--text);
+    text-decoration: none;
+    font-size: 12px;
+    letter-spacing: 1px;
+    transition: border-color 0.15s, color 0.15s, background 0.15s;
+  }
+  .credits-link:hover { border-color: var(--accent); color: var(--accent); background: rgba(179,136,255,0.08); }
+  .credits-link svg { width: 14px; height: 14px; fill: currentColor; }
+
   /* TRACK CONFIG (title screen) */
   .track-config {
     width: 100%;
@@ -425,6 +458,26 @@
     </div>
     <button id="btn-start" disabled>LOADING…</button>
     <p class="hint" id="title-hint">loading…</p>
+    <div class="credits">
+      <span class="credits-row">
+        <span class="by">by Play Instigator</span>
+        <a class="credits-link" href="https://discord.com/users/1119292455016202260" target="_blank" rel="noopener" title="Message Play Instigator on Discord">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.317 4.369A19.79 19.79 0 0 0 16.558 3.2a.074.074 0 0 0-.079.037c-.34.605-.719 1.396-.984 2.013a18.27 18.27 0 0 0-5.486 0 12.64 12.64 0 0 0-1-2.013.077.077 0 0 0-.079-.037 19.736 19.736 0 0 0-3.76 1.169.07.07 0 0 0-.032.027C2.533 8.045 1.91 11.61 2.216 15.132a.082.082 0 0 0 .031.056 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.873-1.295 1.226-1.995a.076.076 0 0 0-.042-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128c.126-.094.252-.192.372-.291a.074.074 0 0 1 .077-.01c3.927 1.793 8.18 1.793 12.061 0a.074.074 0 0 1 .078.009c.12.099.246.198.373.292a.077.077 0 0 1-.006.128 12.299 12.299 0 0 1-1.873.891.077.077 0 0 0-.041.107c.36.7.772 1.364 1.225 1.994a.076.076 0 0 0 .084.028 19.84 19.84 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-4.073-.838-7.61-3.548-10.736a.061.061 0 0 0-.031-.028zM8.02 13.331c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.095 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.974 0c-1.182 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.095 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>
+          DISCORD
+        </a>
+        <a class="credits-link" href="mailto:collab@playinstigator.com" title="Email Play Instigator">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2.5 5.5h19c.55 0 1 .45 1 1v11c0 .55-.45 1-1 1h-19c-.55 0-1-.45-1-1v-11c0-.55.45-1 1-1zm.96 1.7v.4l8.54 5.4 8.54-5.4v-.4H3.46zm17.08 2.46-7.55 4.77a1 1 0 0 1-1.06 0L4.38 9.66v7.64h16.16V9.66z"/></svg>
+          EMAIL
+        </a>
+      </span>
+      <span class="credits-row">
+        <span class="by">music by qwq404</span>
+        <a class="credits-link" href="https://discord.com/users/1412387055622688778" target="_blank" rel="noopener" title="Message qwq404 on Discord">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.317 4.369A19.79 19.79 0 0 0 16.558 3.2a.074.074 0 0 0-.079.037c-.34.605-.719 1.396-.984 2.013a18.27 18.27 0 0 0-5.486 0 12.64 12.64 0 0 0-1-2.013.077.077 0 0 0-.079-.037 19.736 19.736 0 0 0-3.76 1.169.07.07 0 0 0-.032.027C2.533 8.045 1.91 11.61 2.216 15.132a.082.082 0 0 0 .031.056 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.873-1.295 1.226-1.995a.076.076 0 0 0-.042-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128c.126-.094.252-.192.372-.291a.074.074 0 0 1 .077-.01c3.927 1.793 8.18 1.793 12.061 0a.074.074 0 0 1 .078.009c.12.099.246.198.373.292a.077.077 0 0 1-.006.128 12.299 12.299 0 0 1-1.873.891.077.077 0 0 0-.041.107c.36.7.772 1.364 1.225 1.994a.076.076 0 0 0 .084.028 19.84 19.84 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-4.073-.838-7.61-3.548-10.736a.061.061 0 0 0-.031-.028zM8.02 13.331c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.095 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.974 0c-1.182 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.095 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>
+          DISCORD
+        </a>
+      </span>
+    </div>
   </div>
 
   <!-- SETUP -->
@@ -480,6 +533,26 @@
     <h2>nice to meet you</h2>
     <p>Now go make games.</p>
     <button id="btn-restart">PLAY AGAIN</button>
+    <div class="credits">
+      <span class="credits-row">
+        <span class="by">by Play Instigator</span>
+        <a class="credits-link" href="https://discord.com/users/1119292455016202260" target="_blank" rel="noopener" title="Message Play Instigator on Discord">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.317 4.369A19.79 19.79 0 0 0 16.558 3.2a.074.074 0 0 0-.079.037c-.34.605-.719 1.396-.984 2.013a18.27 18.27 0 0 0-5.486 0 12.64 12.64 0 0 0-1-2.013.077.077 0 0 0-.079-.037 19.736 19.736 0 0 0-3.76 1.169.07.07 0 0 0-.032.027C2.533 8.045 1.91 11.61 2.216 15.132a.082.082 0 0 0 .031.056 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.873-1.295 1.226-1.995a.076.076 0 0 0-.042-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128c.126-.094.252-.192.372-.291a.074.074 0 0 1 .077-.01c3.927 1.793 8.18 1.793 12.061 0a.074.074 0 0 1 .078.009c.12.099.246.198.373.292a.077.077 0 0 1-.006.128 12.299 12.299 0 0 1-1.873.891.077.077 0 0 0-.041.107c.36.7.772 1.364 1.225 1.994a.076.076 0 0 0 .084.028 19.84 19.84 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-4.073-.838-7.61-3.548-10.736a.061.061 0 0 0-.031-.028zM8.02 13.331c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.095 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.974 0c-1.182 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.095 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>
+          DISCORD
+        </a>
+        <a class="credits-link" href="mailto:collab@playinstigator.com" title="Email Play Instigator">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2.5 5.5h19c.55 0 1 .45 1 1v11c0 .55-.45 1-1 1h-19c-.55 0-1-.45-1-1v-11c0-.55.45-1 1-1zm.96 1.7v.4l8.54 5.4 8.54-5.4v-.4H3.46zm17.08 2.46-7.55 4.77a1 1 0 0 1-1.06 0L4.38 9.66v7.64h16.16V9.66z"/></svg>
+          EMAIL
+        </a>
+      </span>
+      <span class="credits-row">
+        <span class="by">music by qwq404</span>
+        <a class="credits-link" href="https://discord.com/users/1412387055622688778" target="_blank" rel="noopener" title="Message qwq404 on Discord">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.317 4.369A19.79 19.79 0 0 0 16.558 3.2a.074.074 0 0 0-.079.037c-.34.605-.719 1.396-.984 2.013a18.27 18.27 0 0 0-5.486 0 12.64 12.64 0 0 0-1-2.013.077.077 0 0 0-.079-.037 19.736 19.736 0 0 0-3.76 1.169.07.07 0 0 0-.032.027C2.533 8.045 1.91 11.61 2.216 15.132a.082.082 0 0 0 .031.056 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.873-1.295 1.226-1.995a.076.076 0 0 0-.042-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128c.126-.094.252-.192.372-.291a.074.074 0 0 1 .077-.01c3.927 1.793 8.18 1.793 12.061 0a.074.074 0 0 1 .078.009c.12.099.246.198.373.292a.077.077 0 0 1-.006.128 12.299 12.299 0 0 1-1.873.891.077.077 0 0 0-.041.107c.36.7.772 1.364 1.225 1.994a.076.076 0 0 0 .084.028 19.84 19.84 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-4.073-.838-7.61-3.548-10.736a.061.061 0 0 0-.031-.028zM8.02 13.331c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.095 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.974 0c-1.182 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.095 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>
+          DISCORD
+        </a>
+      </span>
+    </div>
   </div>
 
 </div>
@@ -506,7 +579,7 @@ const PLAYERS = [
 //   3 = ornament accents (4)
 //   4 = combined preview (recorder-only reference, not played in any level)
 const LEVELS = [
-  { layers: [1],       speed: 0.8, question: "What are you working on this session — and what's the very next thing you need to do on it?" },
+  { layers: [1],       speed: 0.8, question: "What's your name and what are you currently working on?" },
   { layers: [1, 2],    speed: 0.8, question: "What's a small thing in your project you're secretly proud of?" },
   { layers: [1, 2, 3], speed: 0.8, question: "What's a game you think is underrated and more people should know about?" },
   { layers: [1, 2, 3], speed: 1.0, question: "A year from now, what do you want to be working on?" },
