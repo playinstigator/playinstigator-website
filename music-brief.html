@@ -216,14 +216,14 @@
   <nav class="toc" aria-label="Contents">
     <span class="toc-label">Contents</span>
     <a href="#disclaimers"><span class="toc-num">·</span>Disclaimers</a>
-    <a href="#scope"><span class="toc-num">I</span>Scope at a Glance</a>
-    <a href="#deliverables"><span class="toc-num">II</span>Music Deliverables</a>
-    <a href="#integration"><span class="toc-num">III</span>Integration</a>
-    <a href="#out-of-scope"><span class="toc-num">IV</span>Not in Scope</a>
-    <a href="#specs"><span class="toc-num">V</span>Technical Specs</a>
-    <a href="#process"><span class="toc-num">VI</span>Process</a>
-    <a href="#remember"><span class="toc-num">VII</span>The One Thing</a>
-    <a href="#world"><span class="toc-num">VIII</span>World Brief</a>
+    <a href="#world"><span class="toc-num">I</span>The World</a>
+    <a href="#scope"><span class="toc-num">II</span>Scope at a Glance</a>
+    <a href="#deliverables"><span class="toc-num">III</span>Music Deliverables</a>
+    <a href="#integration"><span class="toc-num">IV</span>Integration</a>
+    <a href="#out-of-scope"><span class="toc-num">V</span>Not in Scope</a>
+    <a href="#specs"><span class="toc-num">VI</span>Technical Specs</a>
+    <a href="#process"><span class="toc-num">VII</span>Process</a>
+    <a href="#remember"><span class="toc-num">VIII</span>The One Thing</a>
   </nav>
 
   <h2 id="disclaimers"><span class="num">·</span>Two disclaimers before you start</h2>
@@ -240,283 +240,9 @@
     <p>If I've described something incorrectly, used a term wrong, or made assumptions that don't hold up against how composing actually works, please tell me. You know this craft and I don't.</p>
   </div>
 
-  <h2 id="scope"><span class="num">I</span>Scope at a Glance</h2>
+  <h2 id="world"><span class="num">I</span>The World</h2>
 
-  <p>You're one person working on this in part-time hours. The game cannot ask you for a full adaptive score on a deadline. So this brief is tiered — and the lowest tier is honestly just <strong>one good loop</strong>. Each tier above expands what the score can do, but each one is fully optional.</p>
-
-  <p>This is my first game and it functions partly as a learning project for me. I'm not chasing a masterpiece — if the game has even one track that sounds like it belongs in this world, I'll be satisfied.</p>
-
-  <table class="scope-table">
-    <thead>
-      <tr><th>Tier</th><th>What it covers</th><th>Pieces</th><th>Why it matters</th></tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td class="tier-cell t1">Tier 1<br>One Track</td>
-        <td>A single loop that captures the aesthetic, used everywhere</td>
-        <td>1 piece</td>
-        <td>The game has music. That music feels like it belongs. Done.</td>
-      </tr>
-      <tr>
-        <td class="tier-cell t2">Tier 2<br>Coverage</td>
-        <td>Menu, Match, Terminal, End screens, <strong>the Larger Ending</strong></td>
-        <td>6 pieces</td>
-        <td>The score plays the right cue at the right moment from boot to the game's final beat</td>
-      </tr>
-      <tr>
-        <td class="tier-cell t3">Tier 3<br>Adaptive &amp; Full</td>
-        <td>Adaptive Match layers, Lobby, Start bed, split Terminal</td>
-        <td>+3–4 pieces</td>
-        <td>Adds breath, dynamics, and runtime adaptability</td>
-      </tr>
-      <tr>
-        <td class="tier-cell t4">Tier 4<br>Wishlist</td>
-        <td>Cross-round erosion, SFX, motifs, the ending, more</td>
-        <td>open-ended</td>
-        <td>The truly ambitious version of the score</td>
-      </tr>
-    </tbody>
-  </table>
-
-  <p><strong>The tiers are a soft guideline, not a prescription.</strong> They exist to communicate <em>scope and effort</em> — not to dictate sequence. You're free to mix and match: write the Larger Ending without writing the Aesthetic Loop first, jump straight to a Tier 3 adaptive layer if that's what excites you, deliver a Tier 4 SFX pass before any music. Whatever fits your creative energy and our combined sense of priority.</p>
-
-  <p><strong>One soft suggestion:</strong> if nothing else pulls at you first, the Tier 1 Aesthetic Loop is a useful starting point because it confirms world-alignment cheaply. But that's a suggestion, not a gate.</p>
-
-  <p><strong>Stopping is fine at any point.</strong> If life gets full, we ship with whatever exists at that moment and call it a complete score. No guilt about anything left undone.</p>
-
-  <h2 id="deliverables"><span class="num">II</span>The Music Deliverables</h2>
-
-  <p>Each entry: where it plays, what it has to do, approximate length, and what tone to land. Lengths are guidance, not contract.</p>
-
-  <p>All music routes through Unity's <code>Music</code> mixer group. Format: <code>.ogg</code> (Vorbis), 44.1 kHz, stereo. Looping tracks need clean loop points (no fades). Stings/jingles can have natural tails.</p>
-
-  <h3 class="tier tier1"><span class="label">Tier 1</span> One Track</h3>
-
-  <h4><span class="num-pill t1">1</span>The Aesthetic Loop</h4>
-
-  <div class="deliverable">
-    <div class="meta-line"><strong>Where</strong> Literally everywhere. One track, every scene, the whole time. Main menu, lobby, every match start to finish, end screens. The loop never stops, never changes track. The game has exactly one piece of music and it's this one.</div>
-    <div class="meta-line"><strong>Length</strong> 2:30–4:00, seamless loop. Long enough that a 10-minute match doesn't feel like it's hearing the same 30 seconds again and again.</div>
-    <div class="meta-line"><strong>Job</strong> Capture the world. Adorable and sinister in the same frame. Cute, but the lab is on, and the lab is indifferent. Driving enough that it works under match chaos, restrained enough that it doesn't fight a player's voice in the lobby or a quiet menu screen. Has to hold across every context the game has — because in this tier, it is every context.</div>
-    <div class="meta-line"><strong>Tone reference</strong> The full reference media set in the world brief — but if you had to pick three: <em>Cult of the Lamb</em> (the adorable / sinister duality), <em>Nier: Automata</em> (choral indifference), <em>Death Stranding / Low Roar</em> (music as elegy over brutal terrain).</div>
-    <p><strong>If you stop here:</strong> This is the entire score. The lab only has one channel and it's always playing. End screens land on it. Terminal phase shifts via SFX and visual filter only. It will feel intentional.</p>
-  </div>
-
-  <h3 class="tier tier2"><span class="label">Tier 2</span> Coverage</h3>
-
-  <p>Six pieces that let the score play the right cue at the right moment. Replaces Tier 1's single-loop approach with context-specific music from boot to the game's final beat. The first piece in this tier — the Larger Ending — carries the entire emotional payoff of the game and is the single most important deliverable in the whole brief.</p>
-
-  <h4><span class="num-pill t2">2</span>The Larger Ending — <em>the most important piece in the score</em></h4>
-  <div class="deliverable">
-    <div class="meta-line"><strong>Where</strong> Plays once, at the end of the game. Not the end of a match — the end of the <em>whole thing</em>. The lab finally shuts down for good. A few creatures got out. The rest are left unborn — no more will ever be born. The machine simply stops.</div>
-    <div class="meta-line"><strong>Length</strong> 2:00–4:00. A piece, not a loop. Has a beginning, development, and a definitive ending. When it's over, it's over.</div>
-    <div class="meta-line"><strong>Job</strong> This is the emotional payoff of the entire game arc. Everything the five-step feel arc has been building toward lands here. The player who pushed through the degradation, who kept going when there was no external reason to, arrives at this moment — and what they get isn't a triumph. It isn't a defeat either. It's the specific flatness of an ending that doesn't pay off the way you thought it would. The machine just stops. Life goes on. You did it. That's it.</div>
-    <p>The music's hardest job in the whole game: <strong>hold both the weight of having gone this far AND the flatness of arriving at nothing</strong>. Not triumphant. Not mournful. Not bittersweet in the easy sense — bittersweet in the specific sense of a system you spent hours inside finally falling silent without ceremony.</p>
-    <p><strong>Tone:</strong> <em>Death Stranding</em> / Low Roar territory — music as elegy over brutal terrain. <em>Made in Abyss</em> cosmic tenderness at the end of a descent. <em>Nier: Automata</em>'s final pieces. A wordless choir is welcome here if it serves the moment. The piece should arrive somewhere — and that somewhere should not be a resolution chord that says "you won." It should be the sound of the lab going quiet for the last time.</p>
-    <p><strong>Honest caveat:</strong> The ending sequence itself is not yet designed visually. We're asking you to compose to a feeling, not to specific visuals. That feeling is described above and in the world brief. When the visual sequence exists, we will design it <em>toward</em> the music you write — not the other way around. That makes this piece authorial.</p>
-    <div class="callout important"><p><strong>If you can only deliver one Tier 2 piece, deliver this one.</strong> This is the moment that justifies the entire game existing.</p></div>
-  </div>
-
-  <h4><span class="num-pill t2">3</span>Main Menu loop</h4>
-  <div class="deliverable">
-    <div class="meta-line"><strong>Where</strong> Title screen / boot of the game.</div>
-    <div class="meta-line"><strong>Length</strong> 1:30–2:30, seamless loop.</div>
-    <div class="meta-line"><strong>Job</strong> First impression. Plant the world before anyone has pressed a button. Adorable and sinister in the same frame — the player should not be sure whether this is going to be a cute party game or something else. (It is both.) The lab is on but quiet. Nothing is happening yet.</div>
-    <div class="meta-line"><strong>Tone</strong> <em>Cult of the Lamb</em> menu energy crossed with <em>Serial Experiments Lain</em> hum.</div>
-  </div>
-
-  <h4><span class="num-pill t2">4</span>Match loop — single version</h4>
-  <div class="deliverable">
-    <div class="meta-line"><strong>Where</strong> Plays throughout the relay phase of every match. The track players will hear most often.</div>
-    <div class="meta-line"><strong>Length</strong> 3:00–5:00, seamless loop. Single piece, no adaptive layers required at this tier.</div>
-    <div class="meta-line"><strong>Job</strong> Driving, ritualistic, builds and releases internally, but never resolves — the match cannot be musically "won." Write it so it can hold for a 10-minute match without exhausting the listener.</div>
-    <div class="meta-line"><strong>Tone</strong> <em>Nier: Automata</em>'s choral indifference, <em>Death Stranding</em> / Low Roar weight, with the underlying pulse of a small system that doesn't know it's been abandoned.</div>
-  </div>
-
-  <h4><span class="num-pill t2">5</span>Terminal Phase cue</h4>
-  <div class="deliverable">
-    <div class="meta-line"><strong>Where</strong> Triggers the moment a creature reaches terminal form. A color filter changes on screen, a full-width countdown bar appears, ~30 seconds remain.</div>
-    <div class="meta-line"><strong>Length</strong> A single combined piece — short opening sting + sustaining layer through the ~30 sec countdown, dying as the bar empties. Roughly 30–40 sec total of authored material.</div>
-    <div class="meta-line"><strong>Job</strong> The match has changed. Cosmic horror is on the field. Closest the score gets to "horror" — but it should feel like an inevitable arrival, not a jump scare. The cute thing is still cute; it's just carrying too much.</div>
-    <div class="meta-line"><strong>Both-terminal note</strong> Two creatures may reach terminal at once. The cue should still work — don't write it so it depends on being unique.</div>
-    <div class="meta-line"><strong>Tone</strong> <em>Made in Abyss</em> cosmic tenderness over <em>Evangelion</em> NERV pulse.</div>
-  </div>
-
-  <h4><span class="num-pill t2">6</span>End screen jingles (three short cues)</h4>
-  <div class="deliverable">
-    <div class="meta-line"><strong>Where</strong> After the match countdown resolves and the end screen displays. The end screen has two visual styles the player can switch between (clinical in-world log vs. party-game celebration). The jingles should work under both — neither overcommit. There is no version where these are triumphant fanfares.</div>
-    <ul>
-      <li><strong>6a · Match Victory</strong> — your team outlasted. ~4–8 sec. A small lift, then it sits. Not a fanfare. The lab does not celebrate.</li>
-      <li><strong>6b · Match Defeat</strong> — your team was wiped. ~4–8 sec. Not punitive. The system recorded a result.</li>
-      <li><strong>6c · Match Draw</strong> — both teams down, or terminal expired. ~4–8 sec. Specifically flat. The experiment produced no clean data.</li>
-    </ul>
-  </div>
-
-  <h3 class="tier tier3"><span class="label">Tier 3</span> Adaptive &amp; Full</h3>
-
-  <p>Adds breath, dynamics, and runtime adaptability. Higher effort than Tier 2 because most of it requires either authored stems or paired runtime tooling on our end. Pick from this tier whenever it pulls at you — no ordering requirement.</p>
-
-  <h4><span class="num-pill t3">7</span>Lobby loop</h4>
-  <div class="deliverable">
-    <div class="meta-line"><strong>Where</strong> Input-config / setup screen between matches, character + entity + environment selection.</div>
-    <div class="meta-line"><strong>Length</strong> 1:30–2:30, seamless loop.</div>
-    <div class="meta-line"><strong>Job</strong> Lower-stakes waiting-room track. Players are pressing buttons, picking creatures, chatting in the room. Music holds the world but stays out of the way. Slightly lighter than the main menu — closer to "ritual preparation" than "ritual itself."</div>
-    <div class="meta-line"><strong>Tone</strong> A breath. Lab is idle. Soft enough that human voices fill the foreground.</div>
-  </div>
-
-  <h4><span class="num-pill t3">8</span>Match loop — adaptive intensity layers</h4>
-  <div class="deliverable">
-    <p>Upgrade to the Tier 2 Match loop. Three intensity bands, delivered either as three distinct loops or as a stem-layered single loop with three states. The runtime crossfades between bands at bar boundaries.</p>
-    <ul>
-      <li><strong>Band 1 — Pre-evolution (relay only):</strong> Light percussion, pulse, suggestion of melody. The party game is on.</li>
-      <li><strong>Band 2 — First evolution achieved (by either team):</strong> A layer enters. The lab is paying more attention. Pulse tightens.</li>
-      <li><strong>Band 3 — Approaching terminal (any team near 2nd evolution):</strong> Choral or low harmonic layer enters. The thing this is becoming is now audible.</li>
-    </ul>
-    <p>If delivered as stems: all layers phase-aligned to the same bar/tempo, plus a reference full mix <code>.ogg</code>.</p>
-  </div>
-
-  <h4><span class="num-pill t3">9</span>Match Start countdown bed</h4>
-  <div class="deliverable">
-    <div class="meta-line"><strong>Where</strong> Under the typewriter terminal countdown at match start (<code>EXPERIMENT INITIATING IN... 3, 2, 1</code>).</div>
-    <div class="meta-line"><strong>Length</strong> ~6–10 sec, ending on a definitive moment for the GO frame.</div>
-    <div class="meta-line"><strong>Job</strong> Charge the moment before the relay begins. A low pulse with three audible beats aligned to "3," "2," "1," resolving into the first downbeat of the Match loop.</div>
-    <div class="meta-line"><strong>Open question</strong> This may not need music at all — the SFX countdown beeps + GO sound can carry it. Pitch whichever version feels right.</div>
-  </div>
-
-  <h4><span class="num-pill t3">10</span>Terminal sting / layer split</h4>
-  <div class="deliverable">
-    <p>Upgrade to the Tier 2 Terminal cue: split into a distinct entry sting + a separate sustaining layer that can be retriggered or extended cleanly for the both-terminal scenario. Same tone, more flexibility for the audio system to compose at runtime.</p>
-  </div>
-
-  <h3 class="tier tier4"><span class="label">Tier 4</span> Wishlist <span style="opacity:0.7;font-size:13px;letter-spacing:0;text-transform:none;font-weight:600;margin-left:6px;">— no pressure, no deadline</span></h3>
-
-  <p>Genuinely open territory. None of this is required. None of it has a deadline. These are here so you have somewhere to put creative energy if the world keeps pulling at you — and so you know in advance what we'd be excited to receive if it ever lands.</p>
-
-  <h4><span class="num-pill t4">★</span>Cross-round erosion — the ambitious dream</h4>
-  <div class="deliverable">
-    <p>This is the conceptual ceiling of what the score could do, and it's worth naming even though it's wildly out of scope for a part-time commission.</p>
-    <p>The game's central theme is erosion. As a single session continues — round 1, round 10, round 50, round 100 — the lab itself is supposed to degrade. The visual layer is built to support this (shaders that progressively crack, glitch frequency rising, environmental anomalies accumulating). The music could carry this too.</p>
-    <p><strong>The dream:</strong> The music a player hears in round 1 is recognisably the same track they hear in round 50, but it has <em>drifted</em>. Subtle detune. A rhythmic element has dropped. The noise floor has crept up. A choral layer that was beautiful is now slightly out of tune. By round 100, the music is barely holding together — the same theme, audibly haunted by the hours of play that have passed.</p>
-    <p><strong>The shape it might take:</strong> Authored "late-state" stems faded in across long timescales, runtime processing parameters (drift, detune, low-pass cutoff, noise injection) that ramp with session round count, or a hybrid — authored stems crossfaded with the base plus runtime processing on top.</p>
-    <p><strong>Why it's a wishlist item:</strong> It's a high-concept feature requiring careful authoring + runtime tooling on our end. The minimum version (one static loop) intentionally does not do this. But it is one of the most distinctive things the game could have, and naming it here so you know it exists as a direction.</p>
-    <p><strong>Lower-tier seeds:</strong> If you happen to write the base loop in a way that <em>could</em> be processed this way later — clean stems, modal harmony that survives detune, percussion that survives dropout — we'd love that, even if the runtime processing never ships. No commitment, just an awareness.</p>
-  </div>
-
-  <h4><span class="num-pill t4">★</span>Sound effects (full, partial, or none)</h4>
-  <div class="deliverable">
-    <p>Sonic coherence between score and SFX is one of the highest-value things a single composer can give a game, so we'd love to offer SFX to you as well. But it's genuinely optional — if SFX isn't your thing, we'll keep grinding through CC0 libraries ourselves and the game will be fine.</p>
-    <p><strong>Honest state of the current SFX:</strong> Placeholder. The game is wired with a working CC0 layer (Kenney, Freesound CC0, OpenGameArt) so the audio system has <em>something</em> playing for every event — but a lot of the actual sounds in there are bad, some slots are obviously wrong, and some are missing entirely. Regardless of whether you take this on, the full SFX layer is going to get worked over.</p>
-    <p><strong>Possible shapes this could take, in order of effort:</strong></p>
-    <ul>
-      <li><strong>Curation only:</strong> Help us pick the right options from the existing CC0 pools we've gathered. No original composition, just an ear we trust on what to grab.</li>
-      <li><strong>Treatments:</strong> Process / re-pitch / reverb-tail selected SFX so they sit inside the score's world.</li>
-      <li><strong>Signature events only:</strong> Compose original SFX for the handful of most narratively important moments — altar ritual completion, terminal evolution, match end, evolution tier-ups. Leave the rest as curated CC0.</li>
-      <li><strong>Full SFX pass:</strong> Compose all key gameplay SFX in your sonic vocabulary. The most coherent option, the largest lift.</li>
-    </ul>
-    <p><strong>If you don't want this at all:</strong> Absolutely fine, no awkwardness. We'll keep going with CC0 ourselves. Just tell us "music only" and we'll never bring it up again.</p>
-  </div>
-
-  <h4><span class="num-pill t4">★</span>Rare degradation cues</h4>
-  <div class="deliverable">
-    <p>Short stings (2–6 sec, 3–5 cues total) that fire on rare moments when the system glitches harder than usual — a major subsystem drift event, an unexpected failure mode, a rare environmental anomaly. Wrongness, briefly. Should never feel like a stinger library.</p>
-  </div>
-
-  <h4><span class="num-pill t4">★</span>Per-creature motifs</h4>
-  <div class="deliverable">
-    <p>The game launches with one creature archetype and grows to four. Each creature has its own voice in the world. Short melodic / textural identifiers (4–12 sec) that surface in the Match loop when that creature is in play, or in the Lobby when it's selected.</p>
-  </div>
-
-  <h4><span class="num-pill t4">★</span>Per-environment color</h4>
-  <div class="deliverable">
-    <p>Four environments at launch. Each has its own visual identity. A subtle environment-specific tonal shift to the Match loop — different reverb tail, different choral color, different low-end weight. Could be authored as alternate stems on top of the Match loop base.</p>
-  </div>
-
-  <h4><span class="num-pill t4">★</span>Per-entity choral signature</h4>
-  <div class="deliverable">
-    <p>The "otherworldly entities" being tapped for power each have their own character. When an entity is active in a match, a faint signature could surface in the Terminal cue — a different vowel sound, a different interval. The thing being tapped has a voice.</p>
-  </div>
-
-  <h2 id="integration"><span class="num">III</span>Integration — Where We'd Love Your Take</h2>
-
-  <p>This commission isn't a separate scoring gig handed to you after the game is built. It's the <strong>integration layer</strong>. Your ear shapes what the game sounds like, and the game's mechanical reality feeds back into what the music becomes. The boundary between "music" and "sound design" should be porous — ideally invisible to the player.</p>
-
-  <p>Below are integration possibilities, ordered from biggest-concept to smallest-touchpoint. None of it is committed scope. Pitch any of it at whatever tier you're working in, ignore the rest, or suggest things we haven't named.</p>
-
-  <h3>Big-concept integration ideas</h3>
-
-  <div class="deliverable">
-    <p><strong>Dynamic music tied to game state.</strong> Music that responds to the player's creature evolution stage, the match's emotional register, the session's accumulated weight. The Tier 3 adaptive intensity layers are one expression of this. The Tier 4 cross-round erosion is another. The Tier 4 per-creature / per-environment / per-entity wishlist items are too. All of them are <em>music responding to game state</em>.</p>
-    <p><strong>Music structure driving game state — the inverted version.</strong> The most interesting design space here is the <em>opposite</em> relationship: phrase structure, verse/chorus/bridge, modulating creature spawn density, evolution pressure, or ritual event timing. The music's bar count becomes the heartbeat that the game's procedural systems align to. The player may or may not notice consciously; the music's structure shapes their experience regardless. Whether that invisibility is a feature or a limitation is a design question worth investigating together.</p>
-    <p><strong>SFX and ambient as a unified sonic world.</strong> If you take on any of the Tier 4 SFX work, the goal is a soundscape where the boundary between music and sound design isn't audible to the player. <strong>Mick Gordon's work on <em>Doom</em> (2016)</strong> is the reference: a score so deeply tied to the game's sonic identity that the boundary between music and sound design nearly dissolves — SFX from the game world become musical material. This applies even at lower SFX involvement (treatments, signature events) — the question is just how much of the existing CC0 layer survives that treatment.</p>
-    <p><strong>Sonic solutions shaping the score's emotional register.</strong> Whatever you find for <em>how the degradation sounds</em> — specific textures, frequencies, the feel of a system glitching — will shape the rest of the score. The audio world is what makes the game feel like the game.</p>
-  </div>
-
-  <h3>Smaller integration touchpoints</h3>
-
-  <p>We don't have strong opinions on these yet — invitations to think out loud:</p>
-
-  <ul>
-    <li><strong>Pause behavior</strong> — Any player can pause at any time. When they do, should the music duck, freeze, or continue uninterrupted?</li>
-    <li><strong>Music ducking under SFX</strong> — Should the music duck under specific high-impact SFX (altar discharge, terminal sting, evolution moment) so the gameplay event lands? Or do you write the music to leave space, and we don't touch the mix?</li>
-    <li><strong>Context transitions</strong> — Match loop → End screen jingle: crossfade, hard cut, or tail-out? Same question for Menu → Lobby and Lobby → Match.</li>
-    <li><strong>Solo creature state</strong> — When one teammate dies and a single creature is left from a team, does the music shift to acknowledge that, or hold steady?</li>
-    <li><strong>First-evolution one-shot</strong> — Should the very first evolution of a session get a one-shot musical event distinct from the ongoing intensity bands, marking "the system has woken up"? Or does the adaptive band-shift already cover it?</li>
-    <li><strong>Anything else?</strong> — If you spot integration opportunities we haven't named, surface them. The audio system can be built around what you want — not the other way around.</li>
-  </ul>
-
-  <h2 id="out-of-scope"><span class="num">IV</span>What's Not in Scope</h2>
-
-  <p>So you know what you are <em>not</em> on the hook for:</p>
-
-  <ul>
-    <li><strong>A standalone song / pop track / vocal piece</strong> — out of scope. Earlier planning explored this as a transmedia artefact; we have scoped down to ship the game first.</li>
-    <li><strong>Music video / trailer-specific score</strong> — not in scope for the initial commission.</li>
-    <li><strong>Live instrument recording requirements</strong> — not required. Sample libraries are fine if they serve the world.</li>
-    <li><strong>Sung lyrics in any language</strong> — wordless vocals (choral, syllabic, glossolalic) are welcome. Lyrics are not in scope here.</li>
-  </ul>
-
-  <p>On SFX: see Tier 4. SFX from you is <em>optional</em> — offered if you want it, no expectation if you don't. (The current SFX layer is rough CC0 placeholder and is going to be reworked either way.)</p>
-
-  <h2 id="specs"><span class="num">V</span>Technical Specs</h2>
-
-  <ul>
-    <li><strong>Format:</strong> <code>.ogg</code> Vorbis, 44.1 kHz, 16-bit minimum, stereo. Source <code>.wav</code> masters appreciated for archival.</li>
-    <li><strong>Loudness target:</strong> Approx. −16 to −14 LUFS integrated for music loops. Stings can hit slightly hotter (−12 to −10 LUFS short-term peak) but with peaks below −1 dBTP.</li>
-    <li><strong>Loop points:</strong> Seamless. No fade at start/end of loop file. If the loop relies on a tail+head crossfade, mark it.</li>
-    <li><strong>Stems:</strong> If delivering adaptive Match loop as stems, please provide:
-      <ul>
-        <li>One stems folder with each layer as its own loopable <code>.ogg</code>, all phase-aligned to the same bar/tempo</li>
-        <li>A reference full mix <code>.ogg</code> as the "what it should sound like" anchor</li>
-      </ul>
-    </li>
-    <li><strong>Naming:</strong> <code>mus_&lt;context&gt;_&lt;variant&gt;.ogg</code>. Examples: <code>mus_menu_main.ogg</code>, <code>mus_match_loop_band1.ogg</code>, <code>mus_terminal_sting.ogg</code>, <code>mus_endscreen_victory.ogg</code>.</li>
-    <li><strong>Mixer routing:</strong> All music files are loaded by a <code>GameAudioData</code> ScriptableObject and routed to the <code>Music</code> mixer group. You don't need to touch Unity — just deliver named files.</li>
-  </ul>
-
-  <h2 id="process"><span class="num">VI</span>Process</h2>
-
-  <p>You are one person doing this in part-time hours. This brief is written assuming that. No artificial deadlines, no "we need everything by Q3." The game has its own pace; the score has yours.</p>
-
-  <p><strong>First pass:</strong> A short demo (1–2 minutes) of whichever piece pulls at you first. The <strong>Tier 1 Aesthetic Loop</strong> is a useful default because it confirms world-alignment cheaply, but if you'd rather start with the <strong>Larger Ending</strong> or any other piece, that works too. We'll respond with notes on whatever you send.</p>
-
-  <p><strong>Iteration:</strong> Two rounds of revisions per piece is the working assumption. We give specific feedback ("the second half drifts too pretty," "the pulse is too fast under the choir"). We don't ask for full rewrites without flagging that explicitly.</p>
-
-  <p><strong>Cadence:</strong> Pick pieces as your energy leads. The tiers are about scope and effort, not sequence — feel free to skip across them. If you'd like a suggested running order in case nothing else pulls at you: <strong>Aesthetic Loop → Larger Ending → Match loop → Menu → Terminal cue → End screen jingles → (anything else)</strong>. The Larger Ending sits early in that suggestion because it's the piece the whole game leans on emotionally, and having it early shapes how the rest of the score frames itself. But again — soft suggestion only.</p>
-
-  <p><strong>Stopping is okay at any point.</strong> Whatever exists when you stop is a complete score. No guilt about anything undone.</p>
-
-  <p><strong>Final delivery (per piece):</strong> <code>.ogg</code> + source <code>.wav</code> + a one-line note (tempo, key, notes on intended use). Stems folder for any adaptive track.</p>
-
-  <h2 id="remember"><span class="num">VII</span>The One Thing to Remember</h2>
-
-  <div class="callout important">
-    <p>The game does not pay off the way a party game pays off. The music shouldn't either. Write something that holds the weight of having gone this far. The lab is indifferent. The creatures are cute. The system stops.</p>
-    <p>That's the whole brief.</p>
-  </div>
-
-  <h2 id="world"><span class="num">VIII</span>World Brief Refresher</h2>
-
-  <p>You've read the <a href="collab-pack/audio-composer-briefing.html">full world brief</a> — this section is a quick refresher so everything's in one place. Skim or skip.</p>
+  <p>The world of <em>Ritual &amp; Ruin</em>. Read it for texture — then trust your own ear. (A longer version with deeper context lives in the <a href="collab-pack/audio-composer-briefing.html">Audio Composer Briefing</a>.)</p>
 
   <h3>Premise</h3>
   <p>Ritual &amp; Ruin is set inside an AI-automated experimental lab. The civilization that built the lab and started the experiment has gone extinct. The lab kept running.</p>
@@ -706,6 +432,280 @@
     <li><strong>Match start</strong> — typewriter-style terminal text on a phosphor-green overlay: <code>EXPERIMENT INITIATING IN... 3 ... 2 ... 1 ... EXPERIMENT INITIATED AT CYCLE IV · T### · HH:MM:SS</code>. The lab is booting a session.</li>
     <li><strong>The larger ending</strong> — beyond any single match, the lab eventually shuts down for good. A few creatures got out. The rest are left unborn — no more will ever be born. No fanfare. The machine simply stops.</li>
   </ul>
+
+  <h2 id="scope"><span class="num">II</span>Scope at a Glance</h2>
+
+  <p>You're one person working on this in part-time hours. The game cannot ask you for a full adaptive score on a deadline. So this brief is tiered — and the lowest tier is honestly just <strong>one good loop</strong>. Each tier above expands what the score can do, but each one is fully optional.</p>
+
+  <p>This is my first game and it functions partly as a learning project for me. I'm not chasing a masterpiece — if the game has even one track that sounds like it belongs in this world, I'll be satisfied.</p>
+
+  <table class="scope-table">
+    <thead>
+      <tr><th>Tier</th><th>What it covers</th><th>Pieces</th><th>Why it matters</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="tier-cell t1">Tier 1<br>One Track</td>
+        <td>A single loop that captures the aesthetic, used everywhere</td>
+        <td>1 piece</td>
+        <td>The game has music. That music feels like it belongs. Done.</td>
+      </tr>
+      <tr>
+        <td class="tier-cell t2">Tier 2<br>Coverage</td>
+        <td>Menu, Match, Terminal, End screens, <strong>the Larger Ending</strong></td>
+        <td>6 pieces</td>
+        <td>The score plays the right cue at the right moment from boot to the game's final beat</td>
+      </tr>
+      <tr>
+        <td class="tier-cell t3">Tier 3<br>Adaptive &amp; Full</td>
+        <td>Adaptive Match layers, Lobby, Start bed, split Terminal</td>
+        <td>+3–4 pieces</td>
+        <td>Adds breath, dynamics, and runtime adaptability</td>
+      </tr>
+      <tr>
+        <td class="tier-cell t4">Tier 4<br>Wishlist</td>
+        <td>Cross-round erosion, SFX, motifs, the ending, more</td>
+        <td>open-ended</td>
+        <td>The truly ambitious version of the score</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p><strong>The tiers are a soft guideline, not a prescription.</strong> They exist to communicate <em>scope and effort</em> — not to dictate sequence. You're free to mix and match: write the Larger Ending without writing the Aesthetic Loop first, jump straight to a Tier 3 adaptive layer if that's what excites you, deliver a Tier 4 SFX pass before any music. Whatever fits your creative energy and our combined sense of priority.</p>
+
+  <p><strong>One soft suggestion:</strong> if nothing else pulls at you first, the Tier 1 Aesthetic Loop is a useful starting point because it confirms world-alignment cheaply. But that's a suggestion, not a gate.</p>
+
+  <p><strong>Stopping is fine at any point.</strong> If life gets full, we ship with whatever exists at that moment and call it a complete score. No guilt about anything left undone.</p>
+
+  <h2 id="deliverables"><span class="num">III</span>The Music Deliverables</h2>
+
+  <p>Each entry: where it plays, what it has to do, approximate length, and what tone to land. Lengths are guidance, not contract.</p>
+
+  <p>All music routes through Unity's <code>Music</code> mixer group. Format: <code>.ogg</code> (Vorbis), 44.1 kHz, stereo. Looping tracks need clean loop points (no fades). Stings/jingles can have natural tails.</p>
+
+  <h3 class="tier tier1"><span class="label">Tier 1</span> One Track</h3>
+
+  <h4><span class="num-pill t1">1</span>The Aesthetic Loop</h4>
+
+  <div class="deliverable">
+    <div class="meta-line"><strong>Where</strong> Literally everywhere. One track, every scene, the whole time. Main menu, lobby, every match start to finish, end screens. The loop never stops, never changes track. The game has exactly one piece of music and it's this one.</div>
+    <div class="meta-line"><strong>Length</strong> 2:30–4:00, seamless loop. Long enough that a 10-minute match doesn't feel like it's hearing the same 30 seconds again and again.</div>
+    <div class="meta-line"><strong>Job</strong> Capture the world. Adorable and sinister in the same frame. Cute, but the lab is on, and the lab is indifferent. Driving enough that it works under match chaos, restrained enough that it doesn't fight a player's voice in the lobby or a quiet menu screen. Has to hold across every context the game has — because in this tier, it is every context.</div>
+    <div class="meta-line"><strong>Tone reference</strong> The full reference media set in the world brief — but if you had to pick three: <em>Cult of the Lamb</em> (the adorable / sinister duality), <em>Nier: Automata</em> (choral indifference), <em>Death Stranding / Low Roar</em> (music as elegy over brutal terrain).</div>
+    <p><strong>If you stop here:</strong> This is the entire score. The lab only has one channel and it's always playing. End screens land on it. Terminal phase shifts via SFX and visual filter only. It will feel intentional.</p>
+  </div>
+
+  <h3 class="tier tier2"><span class="label">Tier 2</span> Coverage</h3>
+
+  <p>Six pieces that let the score play the right cue at the right moment. Replaces Tier 1's single-loop approach with context-specific music from boot to the game's final beat. The first piece in this tier — the Larger Ending — carries the entire emotional payoff of the game and is the single most important deliverable in the whole brief.</p>
+
+  <h4><span class="num-pill t2">2</span>The Larger Ending — <em>the most important piece in the score</em></h4>
+  <div class="deliverable">
+    <div class="meta-line"><strong>Where</strong> Plays once, at the end of the game. Not the end of a match — the end of the <em>whole thing</em>. The lab finally shuts down for good. A few creatures got out. The rest are left unborn — no more will ever be born. The machine simply stops.</div>
+    <div class="meta-line"><strong>Length</strong> 2:00–4:00. A piece, not a loop. Has a beginning, development, and a definitive ending. When it's over, it's over.</div>
+    <div class="meta-line"><strong>Job</strong> This is the emotional payoff of the entire game arc. Everything the five-step feel arc has been building toward lands here. The player who pushed through the degradation, who kept going when there was no external reason to, arrives at this moment — and what they get isn't a triumph. It isn't a defeat either. It's the specific flatness of an ending that doesn't pay off the way you thought it would. The machine just stops. Life goes on. You did it. That's it.</div>
+    <p>The music's hardest job in the whole game: <strong>hold both the weight of having gone this far AND the flatness of arriving at nothing</strong>. Not triumphant. Not mournful. Not bittersweet in the easy sense — bittersweet in the specific sense of a system you spent hours inside finally falling silent without ceremony.</p>
+    <p><strong>Tone:</strong> <em>Death Stranding</em> / Low Roar territory — music as elegy over brutal terrain. <em>Made in Abyss</em> cosmic tenderness at the end of a descent. <em>Nier: Automata</em>'s final pieces. A wordless choir is welcome here if it serves the moment. The piece should arrive somewhere — and that somewhere should not be a resolution chord that says "you won." It should be the sound of the lab going quiet for the last time.</p>
+    <p><strong>Honest caveat:</strong> The ending sequence itself is not yet designed visually. We're asking you to compose to a feeling, not to specific visuals. That feeling is described above and in the world brief. When the visual sequence exists, we will design it <em>toward</em> the music you write — not the other way around. That makes this piece authorial.</p>
+    <div class="callout important"><p><strong>If you can only deliver one Tier 2 piece, deliver this one.</strong> This is the moment that justifies the entire game existing.</p></div>
+  </div>
+
+  <h4><span class="num-pill t2">3</span>Main Menu loop</h4>
+  <div class="deliverable">
+    <div class="meta-line"><strong>Where</strong> Title screen / boot of the game.</div>
+    <div class="meta-line"><strong>Length</strong> 1:30–2:30, seamless loop.</div>
+    <div class="meta-line"><strong>Job</strong> First impression. Plant the world before anyone has pressed a button. Adorable and sinister in the same frame — the player should not be sure whether this is going to be a cute party game or something else. (It is both.) The lab is on but quiet. Nothing is happening yet.</div>
+    <div class="meta-line"><strong>Tone</strong> <em>Cult of the Lamb</em> menu energy crossed with <em>Serial Experiments Lain</em> hum.</div>
+  </div>
+
+  <h4><span class="num-pill t2">4</span>Match loop — single version</h4>
+  <div class="deliverable">
+    <div class="meta-line"><strong>Where</strong> Plays throughout the relay phase of every match. The track players will hear most often.</div>
+    <div class="meta-line"><strong>Length</strong> 3:00–5:00, seamless loop. Single piece, no adaptive layers required at this tier.</div>
+    <div class="meta-line"><strong>Job</strong> Driving, ritualistic, builds and releases internally, but never resolves — the match cannot be musically "won." Write it so it can hold for a 10-minute match without exhausting the listener.</div>
+    <div class="meta-line"><strong>Tone</strong> <em>Nier: Automata</em>'s choral indifference, <em>Death Stranding</em> / Low Roar weight, with the underlying pulse of a small system that doesn't know it's been abandoned.</div>
+  </div>
+
+  <h4><span class="num-pill t2">5</span>Terminal Phase cue</h4>
+  <div class="deliverable">
+    <div class="meta-line"><strong>Where</strong> Triggers the moment a creature reaches terminal form. A color filter changes on screen, a full-width countdown bar appears, ~30 seconds remain.</div>
+    <div class="meta-line"><strong>Length</strong> A single combined piece — short opening sting + sustaining layer through the ~30 sec countdown, dying as the bar empties. Roughly 30–40 sec total of authored material.</div>
+    <div class="meta-line"><strong>Job</strong> The match has changed. Cosmic horror is on the field. Closest the score gets to "horror" — but it should feel like an inevitable arrival, not a jump scare. The cute thing is still cute; it's just carrying too much.</div>
+    <div class="meta-line"><strong>Both-terminal note</strong> Two creatures may reach terminal at once. The cue should still work — don't write it so it depends on being unique.</div>
+    <div class="meta-line"><strong>Tone</strong> <em>Made in Abyss</em> cosmic tenderness over <em>Evangelion</em> NERV pulse.</div>
+  </div>
+
+  <h4><span class="num-pill t2">6</span>End screen jingles (three short cues)</h4>
+  <div class="deliverable">
+    <div class="meta-line"><strong>Where</strong> After the match countdown resolves and the end screen displays. The end screen has two visual styles the player can switch between (clinical in-world log vs. party-game celebration). The jingles should work under both — neither overcommit. There is no version where these are triumphant fanfares.</div>
+    <ul>
+      <li><strong>6a · Match Victory</strong> — your team outlasted. ~4–8 sec. A small lift, then it sits. Not a fanfare. The lab does not celebrate.</li>
+      <li><strong>6b · Match Defeat</strong> — your team was wiped. ~4–8 sec. Not punitive. The system recorded a result.</li>
+      <li><strong>6c · Match Draw</strong> — both teams down, or terminal expired. ~4–8 sec. Specifically flat. The experiment produced no clean data.</li>
+    </ul>
+  </div>
+
+  <h3 class="tier tier3"><span class="label">Tier 3</span> Adaptive &amp; Full</h3>
+
+  <p>Adds breath, dynamics, and runtime adaptability. Higher effort than Tier 2 because most of it requires either authored stems or paired runtime tooling on our end. Pick from this tier whenever it pulls at you — no ordering requirement.</p>
+
+  <h4><span class="num-pill t3">7</span>Lobby loop</h4>
+  <div class="deliverable">
+    <div class="meta-line"><strong>Where</strong> Input-config / setup screen between matches, character + entity + environment selection.</div>
+    <div class="meta-line"><strong>Length</strong> 1:30–2:30, seamless loop.</div>
+    <div class="meta-line"><strong>Job</strong> Lower-stakes waiting-room track. Players are pressing buttons, picking creatures, chatting in the room. Music holds the world but stays out of the way. Slightly lighter than the main menu — closer to "ritual preparation" than "ritual itself."</div>
+    <div class="meta-line"><strong>Tone</strong> A breath. Lab is idle. Soft enough that human voices fill the foreground.</div>
+  </div>
+
+  <h4><span class="num-pill t3">8</span>Match loop — adaptive intensity layers</h4>
+  <div class="deliverable">
+    <p>Upgrade to the Tier 2 Match loop. Three intensity bands, delivered either as three distinct loops or as a stem-layered single loop with three states. The runtime crossfades between bands at bar boundaries.</p>
+    <ul>
+      <li><strong>Band 1 — Pre-evolution (relay only):</strong> Light percussion, pulse, suggestion of melody. The party game is on.</li>
+      <li><strong>Band 2 — First evolution achieved (by either team):</strong> A layer enters. The lab is paying more attention. Pulse tightens.</li>
+      <li><strong>Band 3 — Approaching terminal (any team near 2nd evolution):</strong> Choral or low harmonic layer enters. The thing this is becoming is now audible.</li>
+    </ul>
+    <p>If delivered as stems: all layers phase-aligned to the same bar/tempo, plus a reference full mix <code>.ogg</code>.</p>
+  </div>
+
+  <h4><span class="num-pill t3">9</span>Match Start countdown bed</h4>
+  <div class="deliverable">
+    <div class="meta-line"><strong>Where</strong> Under the typewriter terminal countdown at match start (<code>EXPERIMENT INITIATING IN... 3, 2, 1</code>).</div>
+    <div class="meta-line"><strong>Length</strong> ~6–10 sec, ending on a definitive moment for the GO frame.</div>
+    <div class="meta-line"><strong>Job</strong> Charge the moment before the relay begins. A low pulse with three audible beats aligned to "3," "2," "1," resolving into the first downbeat of the Match loop.</div>
+    <div class="meta-line"><strong>Open question</strong> This may not need music at all — the SFX countdown beeps + GO sound can carry it. Pitch whichever version feels right.</div>
+  </div>
+
+  <h4><span class="num-pill t3">10</span>Terminal sting / layer split</h4>
+  <div class="deliverable">
+    <p>Upgrade to the Tier 2 Terminal cue: split into a distinct entry sting + a separate sustaining layer that can be retriggered or extended cleanly for the both-terminal scenario. Same tone, more flexibility for the audio system to compose at runtime.</p>
+  </div>
+
+  <h3 class="tier tier4"><span class="label">Tier 4</span> Wishlist <span style="opacity:0.7;font-size:13px;letter-spacing:0;text-transform:none;font-weight:600;margin-left:6px;">— no pressure, no deadline</span></h3>
+
+  <p>Genuinely open territory. None of this is required. None of it has a deadline. These are here so you have somewhere to put creative energy if the world keeps pulling at you — and so you know in advance what we'd be excited to receive if it ever lands.</p>
+
+  <h4><span class="num-pill t4">★</span>Cross-round erosion — the ambitious dream</h4>
+  <div class="deliverable">
+    <p>This is the conceptual ceiling of what the score could do, and it's worth naming even though it's wildly out of scope for a part-time commission.</p>
+    <p>The game's central theme is erosion. As a single session continues — round 1, round 10, round 50, round 100 — the lab itself is supposed to degrade. The visual layer is built to support this (shaders that progressively crack, glitch frequency rising, environmental anomalies accumulating). The music could carry this too.</p>
+    <p><strong>The dream:</strong> The music a player hears in round 1 is recognisably the same track they hear in round 50, but it has <em>drifted</em>. Subtle detune. A rhythmic element has dropped. The noise floor has crept up. A choral layer that was beautiful is now slightly out of tune. By round 100, the music is barely holding together — the same theme, audibly haunted by the hours of play that have passed.</p>
+    <p><strong>The shape it might take:</strong> Authored "late-state" stems faded in across long timescales, runtime processing parameters (drift, detune, low-pass cutoff, noise injection) that ramp with session round count, or a hybrid — authored stems crossfaded with the base plus runtime processing on top.</p>
+    <p><strong>Why it's a wishlist item:</strong> It's a high-concept feature requiring careful authoring + runtime tooling on our end. The minimum version (one static loop) intentionally does not do this. But it is one of the most distinctive things the game could have, and naming it here so you know it exists as a direction.</p>
+    <p><strong>Lower-tier seeds:</strong> If you happen to write the base loop in a way that <em>could</em> be processed this way later — clean stems, modal harmony that survives detune, percussion that survives dropout — we'd love that, even if the runtime processing never ships. No commitment, just an awareness.</p>
+  </div>
+
+  <h4><span class="num-pill t4">★</span>Sound effects (full, partial, or none)</h4>
+  <div class="deliverable">
+    <p>Sonic coherence between score and SFX is one of the highest-value things a single composer can give a game, so we'd love to offer SFX to you as well. But it's genuinely optional — if SFX isn't your thing, we'll keep grinding through CC0 libraries ourselves and the game will be fine.</p>
+    <p><strong>Honest state of the current SFX:</strong> Placeholder. The game is wired with a working CC0 layer (Kenney, Freesound CC0, OpenGameArt) so the audio system has <em>something</em> playing for every event — but a lot of the actual sounds in there are bad, some slots are obviously wrong, and some are missing entirely. Regardless of whether you take this on, the full SFX layer is going to get worked over.</p>
+    <p><strong>Possible shapes this could take, in order of effort:</strong></p>
+    <ul>
+      <li><strong>Curation only:</strong> Help us pick the right options from the existing CC0 pools we've gathered. No original composition, just an ear we trust on what to grab.</li>
+      <li><strong>Treatments:</strong> Process / re-pitch / reverb-tail selected SFX so they sit inside the score's world.</li>
+      <li><strong>Signature events only:</strong> Compose original SFX for the handful of most narratively important moments — altar ritual completion, terminal evolution, match end, evolution tier-ups. Leave the rest as curated CC0.</li>
+      <li><strong>Full SFX pass:</strong> Compose all key gameplay SFX in your sonic vocabulary. The most coherent option, the largest lift.</li>
+    </ul>
+    <p><strong>If you don't want this at all:</strong> Absolutely fine, no awkwardness. We'll keep going with CC0 ourselves. Just tell us "music only" and we'll never bring it up again.</p>
+  </div>
+
+  <h4><span class="num-pill t4">★</span>Rare degradation cues</h4>
+  <div class="deliverable">
+    <p>Short stings (2–6 sec, 3–5 cues total) that fire on rare moments when the system glitches harder than usual — a major subsystem drift event, an unexpected failure mode, a rare environmental anomaly. Wrongness, briefly. Should never feel like a stinger library.</p>
+  </div>
+
+  <h4><span class="num-pill t4">★</span>Per-creature motifs</h4>
+  <div class="deliverable">
+    <p>The game launches with one creature archetype and grows to four. Each creature has its own voice in the world. Short melodic / textural identifiers (4–12 sec) that surface in the Match loop when that creature is in play, or in the Lobby when it's selected.</p>
+  </div>
+
+  <h4><span class="num-pill t4">★</span>Per-environment color</h4>
+  <div class="deliverable">
+    <p>Four environments at launch. Each has its own visual identity. A subtle environment-specific tonal shift to the Match loop — different reverb tail, different choral color, different low-end weight. Could be authored as alternate stems on top of the Match loop base.</p>
+  </div>
+
+  <h4><span class="num-pill t4">★</span>Per-entity choral signature</h4>
+  <div class="deliverable">
+    <p>The "otherworldly entities" being tapped for power each have their own character. When an entity is active in a match, a faint signature could surface in the Terminal cue — a different vowel sound, a different interval. The thing being tapped has a voice.</p>
+  </div>
+
+  <h2 id="integration"><span class="num">IV</span>Integration — Where We'd Love Your Take</h2>
+
+  <p>This commission isn't a separate scoring gig handed to you after the game is built. It's the <strong>integration layer</strong>. Your ear shapes what the game sounds like, and the game's mechanical reality feeds back into what the music becomes. The boundary between "music" and "sound design" should be porous — ideally invisible to the player.</p>
+
+  <p>Below are integration possibilities, ordered from biggest-concept to smallest-touchpoint. None of it is committed scope. Pitch any of it at whatever tier you're working in, ignore the rest, or suggest things we haven't named.</p>
+
+  <h3>Big-concept integration ideas</h3>
+
+  <div class="deliverable">
+    <p><strong>Dynamic music tied to game state.</strong> Music that responds to the player's creature evolution stage, the match's emotional register, the session's accumulated weight. The Tier 3 adaptive intensity layers are one expression of this. The Tier 4 cross-round erosion is another. The Tier 4 per-creature / per-environment / per-entity wishlist items are too. All of them are <em>music responding to game state</em>.</p>
+    <p><strong>Music structure driving game state — the inverted version.</strong> The most interesting design space here is the <em>opposite</em> relationship: phrase structure, verse/chorus/bridge, modulating creature spawn density, evolution pressure, or ritual event timing. The music's bar count becomes the heartbeat that the game's procedural systems align to. The player may or may not notice consciously; the music's structure shapes their experience regardless. Whether that invisibility is a feature or a limitation is a design question worth investigating together.</p>
+    <p><strong>SFX and ambient as a unified sonic world.</strong> If you take on any of the Tier 4 SFX work, the goal is a soundscape where the boundary between music and sound design isn't audible to the player. <strong>Mick Gordon's work on <em>Doom</em> (2016)</strong> is the reference: a score so deeply tied to the game's sonic identity that the boundary between music and sound design nearly dissolves — SFX from the game world become musical material. This applies even at lower SFX involvement (treatments, signature events) — the question is just how much of the existing CC0 layer survives that treatment.</p>
+    <p><strong>Sonic solutions shaping the score's emotional register.</strong> Whatever you find for <em>how the degradation sounds</em> — specific textures, frequencies, the feel of a system glitching — will shape the rest of the score. The audio world is what makes the game feel like the game.</p>
+  </div>
+
+  <h3>Smaller integration touchpoints</h3>
+
+  <p>We don't have strong opinions on these yet — invitations to think out loud:</p>
+
+  <ul>
+    <li><strong>Pause behavior</strong> — Any player can pause at any time. When they do, should the music duck, freeze, or continue uninterrupted?</li>
+    <li><strong>Music ducking under SFX</strong> — Should the music duck under specific high-impact SFX (altar discharge, terminal sting, evolution moment) so the gameplay event lands? Or do you write the music to leave space, and we don't touch the mix?</li>
+    <li><strong>Context transitions</strong> — Match loop → End screen jingle: crossfade, hard cut, or tail-out? Same question for Menu → Lobby and Lobby → Match.</li>
+    <li><strong>Solo creature state</strong> — When one teammate dies and a single creature is left from a team, does the music shift to acknowledge that, or hold steady?</li>
+    <li><strong>First-evolution one-shot</strong> — Should the very first evolution of a session get a one-shot musical event distinct from the ongoing intensity bands, marking "the system has woken up"? Or does the adaptive band-shift already cover it?</li>
+    <li><strong>Anything else?</strong> — If you spot integration opportunities we haven't named, surface them. The audio system can be built around what you want — not the other way around.</li>
+  </ul>
+
+  <h2 id="out-of-scope"><span class="num">V</span>What's Not in Scope</h2>
+
+  <p>So you know what you are <em>not</em> on the hook for:</p>
+
+  <ul>
+    <li><strong>A standalone song / pop track / vocal piece</strong> — out of scope. Earlier planning explored this as a transmedia artefact; we have scoped down to ship the game first.</li>
+    <li><strong>Music video / trailer-specific score</strong> — not in scope for the initial commission.</li>
+    <li><strong>Live instrument recording requirements</strong> — not required. Sample libraries are fine if they serve the world.</li>
+    <li><strong>Sung lyrics in any language</strong> — wordless vocals (choral, syllabic, glossolalic) are welcome. Lyrics are not in scope here.</li>
+  </ul>
+
+  <p>On SFX: see Tier 4. SFX from you is <em>optional</em> — offered if you want it, no expectation if you don't. (The current SFX layer is rough CC0 placeholder and is going to be reworked either way.)</p>
+
+  <h2 id="specs"><span class="num">VI</span>Technical Specs</h2>
+
+  <ul>
+    <li><strong>Format:</strong> <code>.ogg</code> Vorbis, 44.1 kHz, 16-bit minimum, stereo. Source <code>.wav</code> masters appreciated for archival.</li>
+    <li><strong>Loudness target:</strong> Approx. −16 to −14 LUFS integrated for music loops. Stings can hit slightly hotter (−12 to −10 LUFS short-term peak) but with peaks below −1 dBTP.</li>
+    <li><strong>Loop points:</strong> Seamless. No fade at start/end of loop file. If the loop relies on a tail+head crossfade, mark it.</li>
+    <li><strong>Stems:</strong> If delivering adaptive Match loop as stems, please provide:
+      <ul>
+        <li>One stems folder with each layer as its own loopable <code>.ogg</code>, all phase-aligned to the same bar/tempo</li>
+        <li>A reference full mix <code>.ogg</code> as the "what it should sound like" anchor</li>
+      </ul>
+    </li>
+    <li><strong>Naming:</strong> <code>mus_&lt;context&gt;_&lt;variant&gt;.ogg</code>. Examples: <code>mus_menu_main.ogg</code>, <code>mus_match_loop_band1.ogg</code>, <code>mus_terminal_sting.ogg</code>, <code>mus_endscreen_victory.ogg</code>.</li>
+    <li><strong>Mixer routing:</strong> All music files are loaded by a <code>GameAudioData</code> ScriptableObject and routed to the <code>Music</code> mixer group. You don't need to touch Unity — just deliver named files.</li>
+  </ul>
+
+  <h2 id="process"><span class="num">VII</span>Process</h2>
+
+  <p>Part-time hours, no fixed deadlines. The game has its own pace; the score has yours.</p>
+
+  <p><strong>First pass:</strong> A short demo (1–2 minutes) of whichever piece pulls at you first. The <strong>Tier 1 Aesthetic Loop</strong> is a useful default because it confirms world-alignment cheaply, but if you'd rather start with the <strong>Larger Ending</strong> or any other piece, that works too. We'll respond with notes on whatever you send.</p>
+
+  <p><strong>Iteration:</strong> Two rounds of revisions per piece is the working assumption. We give specific feedback ("the second half drifts too pretty," "the pulse is too fast under the choir"). We don't ask for full rewrites without flagging that explicitly.</p>
+
+  <p><strong>Cadence:</strong> Pick pieces as your energy leads. The tiers are about scope and effort, not sequence — feel free to skip across them. If you'd like a suggested running order in case nothing else pulls at you: <strong>Aesthetic Loop → Larger Ending → Match loop → Menu → Terminal cue → End screen jingles → (anything else)</strong>. The Larger Ending sits early in that suggestion because it's the piece the whole game leans on emotionally, and having it early shapes how the rest of the score frames itself. But again — soft suggestion only.</p>
+
+  <p><strong>Stopping is okay at any point.</strong> Whatever exists when you stop is a complete score. No guilt about anything undone.</p>
+
+  <p><strong>Final delivery (per piece):</strong> <code>.ogg</code> + source <code>.wav</code> + a one-line note (tempo, key, notes on intended use). Stems folder for any adaptive track.</p>
+
+  <h2 id="remember"><span class="num">VIII</span>The One Thing to Remember</h2>
+
+  <div class="callout important">
+    <p>The game does not pay off the way a party game pays off. The music shouldn't either. Write something that holds the weight of having gone this far. The lab is indifferent. The creatures are cute. The system stops.</p>
+    <p>That's the whole brief.</p>
+  </div>
 
   <footer class="foot">
     <span>Play Instigator · Ritual &amp; Ruin</span>
