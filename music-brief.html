@@ -66,6 +66,13 @@
 
   .lede { font-style:italic; font-size:clamp(16px,2.2vw,19px); line-height:1.55; color:var(--ink-soft); margin:0 0 36px 0; padding:20px 22px; border-left:3px solid var(--accent); background:var(--bg-2); border-radius:0 12px 12px 0; }
 
+  .toc { display:flex; flex-wrap:wrap; gap:6px; margin:0 0 36px 0; padding:14px; background:var(--bg-2); border:1px solid var(--rule); border-radius:14px; align-items:center; }
+  .toc-label { font-family:var(--f-sharp); font-weight:700; font-size:10.5px; letter-spacing:0.2em; text-transform:uppercase; color:var(--quiet); padding:0 10px; }
+  .toc a { display:inline-flex; align-items:center; gap:8px; font-family:var(--f-sharp); font-weight:600; font-size:12.5px; letter-spacing:0.02em; text-decoration:none; color:var(--ink-soft); padding:7px 12px; border-radius:999px; transition:all 0.18s ease; white-space:nowrap; }
+  .toc a:hover { background:var(--card); color:var(--accent); }
+  .toc-num { font-family:var(--f-sharp); font-weight:800; font-size:10px; color:var(--accent-2); background:var(--card); padding:2px 6px; border-radius:4px; min-width:18px; text-align:center; }
+  html { scroll-padding-top:24px; }
+
   .disclaimer { background:var(--card); border:1px solid var(--rule); border-left:3px solid var(--accent-2); border-radius:10px; padding:16px 20px; margin:0 0 18px 0; box-shadow:var(--shadow); }
   .disclaimer strong { display:block; font-family:var(--f-sharp); font-size:13px; letter-spacing:0.08em; text-transform:uppercase; color:var(--accent-2); margin-bottom:6px; }
   .disclaimer p { margin:0; font-size:15px; line-height:1.55; }
@@ -128,6 +135,37 @@
 
   code { font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace; font-size:0.92em; background:var(--bg-2); padding:1px 6px; border-radius:4px; color:var(--ink); }
 
+  .refs ul { list-style:none; padding:0; margin:14px 0 8px 0; display:grid; grid-template-columns:repeat(auto-fill, minmax(150px, 1fr)); gap:14px; }
+  .refs li { margin:0; padding:0; }
+  .ref-card { display:flex; flex-direction:column; background:var(--card); border:1px solid var(--rule); border-radius:10px; overflow:hidden; text-decoration:none; color:inherit; transition:transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease; box-shadow:var(--shadow); height:100%; }
+  .ref-card:hover { transform:translateY(-3px) rotate(0.4deg); border-color:var(--accent); box-shadow:0 12px 30px rgba(28,25,23,0.12); }
+  [data-theme="dark"] .ref-card:hover { box-shadow:0 12px 30px rgba(0,0,0,0.6); }
+  .ref-card .thumb { aspect-ratio:4/5; position:relative; display:flex; align-items:center; justify-content:center; overflow:hidden; color:#F9F5F1; font-family:var(--f-sharp); font-weight:800; font-size:42px; letter-spacing:-0.02em; line-height:1; text-align:center; padding:10px; }
+  .ref-card .thumb::before { content:""; position:absolute; width:80px; height:80px; background:rgba(255,255,255,0.14); border-radius:50%; top:-20px; right:-20px; transform:rotate(13deg); transition:opacity 0.3s ease; }
+  .ref-card .thumb::after { content:""; position:absolute; width:60px; height:18px; background:rgba(0,0,0,0.22); border-radius:40px; bottom:14px; left:-14px; transform:rotate(-7deg); transition:opacity 0.3s ease; }
+  .ref-card .thumb.has-image::before, .ref-card .thumb.has-image::after { opacity:0; }
+  .ref-card .thumb span { position:relative; z-index:1; transition:opacity 0.2s ease; }
+  .ref-card .thumb.has-image span { opacity:0; }
+  .ref-card .thumb img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:0; transition:opacity 0.3s ease; z-index:2; }
+  .ref-card .thumb img.loaded { opacity:1; }
+  .t-g1 { background:linear-gradient(135deg, #974DFF 0%, #FF3344 100%); }
+  .t-g2 { background:linear-gradient(135deg, #57E0FF 0%, #974DFF 100%); }
+  .t-g3 { background:linear-gradient(135deg, #FF3344 0%, #FFF066 100%); color:#1C1917; }
+  .t-g4 { background:linear-gradient(135deg, #81FDC1 0%, #57E0FF 100%); color:#1C1917; }
+  .t-g5 { background:linear-gradient(135deg, #1C1917 0%, #974DFF 100%); }
+  .t-g6 { background:linear-gradient(135deg, #FFF066 0%, #FF3344 100%); color:#1C1917; }
+  .t-g7 { background:linear-gradient(135deg, #974DFF 0%, #1C1917 100%); }
+  .t-g8 { background:linear-gradient(135deg, #FF3344 0%, #974DFF 65%, #57E0FF 100%); }
+  .t-g9 { background:linear-gradient(135deg, #57E0FF 0%, #81FDC1 100%); color:#1C1917; }
+  .t-g10 { background:linear-gradient(135deg, #1C1917 0%, #FF3344 100%); }
+  .t-g11 { background:linear-gradient(135deg, #F9F5F1 0%, #974DFF 100%); color:#1C1917; }
+  .ref-card .meta { padding:10px 12px 12px; display:flex; flex-direction:column; gap:4px; flex:1; }
+  .ref-card .ref-title { font-family:var(--f-sharp); font-weight:700; font-size:13.5px; line-height:1.25; color:var(--ink); }
+  .ref-card .ref-q { font-style:italic; font-size:12.5px; color:var(--quiet); line-height:1.4; }
+  .ref-card .go { margin-top:auto; padding-top:6px; font-family:var(--f-sharp); font-weight:600; font-size:10px; letter-spacing:0.18em; text-transform:uppercase; color:var(--accent); display:inline-flex; align-items:center; gap:4px; }
+  .ref-card .go::after { content:"→"; font-style:normal; transition:transform 0.18s ease; }
+  .ref-card:hover .go::after { transform:translateX(3px); }
+
   .back-to-top { position:fixed; bottom:24px; right:24px; width:44px; height:44px; border-radius:50%; background:var(--ink); color:var(--bg); border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 16px rgba(28,25,23,0.2); opacity:0; pointer-events:none; transform:translateY(8px); transition:opacity 0.25s ease, transform 0.25s ease, background 0.18s ease, color 0.18s ease; z-index:50; font-family:var(--f-sharp); font-size:18px; font-weight:700; line-height:1; padding:0; }
   .back-to-top.visible { opacity:1; pointer-events:auto; transform:translateY(0); }
   .back-to-top:hover { background:var(--accent); color:#fff; }
@@ -175,11 +213,20 @@
     </h1>
   </header>
 
-  <p class="lede">
-    You've already read the <a href="collab-pack/audio-composer-briefing.html">Audio Composer Briefing</a> — the world, premise, feel, references. This document is about <strong>scope</strong>: what the music commission could actually look like, from a one-track minimum up through an ambitious wishlist. It's tiered so you can pick the level of investment that fits part-time work.
-  </p>
+  <nav class="toc" aria-label="Contents">
+    <span class="toc-label">Contents</span>
+    <a href="#disclaimers"><span class="toc-num">·</span>Disclaimers</a>
+    <a href="#scope"><span class="toc-num">I</span>Scope at a Glance</a>
+    <a href="#deliverables"><span class="toc-num">II</span>Music Deliverables</a>
+    <a href="#integration"><span class="toc-num">III</span>Integration</a>
+    <a href="#out-of-scope"><span class="toc-num">IV</span>Not in Scope</a>
+    <a href="#specs"><span class="toc-num">V</span>Technical Specs</a>
+    <a href="#process"><span class="toc-num">VI</span>Process</a>
+    <a href="#remember"><span class="toc-num">VII</span>The One Thing</a>
+    <a href="#world"><span class="toc-num">VIII</span>World Brief</a>
+  </nav>
 
-  <h2><span class="num">·</span>Two disclaimers before you start</h2>
+  <h2 id="disclaimers"><span class="num">·</span>Two disclaimers before you start</h2>
 
   <div class="disclaimer">
     <strong>1 · AI-synthesised from unorganised thoughts</strong>
@@ -193,7 +240,7 @@
     <p>If I've described something incorrectly, used a term wrong, or made assumptions that don't hold up against how composing actually works, please tell me. You know this craft and I don't.</p>
   </div>
 
-  <h2><span class="num">I</span>Scope at a Glance</h2>
+  <h2 id="scope"><span class="num">I</span>Scope at a Glance</h2>
 
   <p>You're one person working on this in part-time hours. The game cannot ask you for a full adaptive score on a deadline. So this brief is tiered — and the lowest tier is honestly just <strong>one good loop</strong>. Each tier above expands what the score can do, but each one is fully optional.</p>
 
@@ -237,7 +284,7 @@
 
   <p><strong>Stopping is fine at any point.</strong> If life gets full, we ship with whatever exists at that moment and call it a complete score. No guilt about anything left undone.</p>
 
-  <h2><span class="num">II</span>The Music Deliverables</h2>
+  <h2 id="deliverables"><span class="num">II</span>The Music Deliverables</h2>
 
   <p>Each entry: where it plays, what it has to do, approximate length, and what tone to land. Lengths are guidance, not contract.</p>
 
@@ -389,7 +436,7 @@
     <p>The "otherworldly entities" being tapped for power each have their own character. When an entity is active in a match, a faint signature could surface in the Terminal cue — a different vowel sound, a different interval. The thing being tapped has a voice.</p>
   </div>
 
-  <h2><span class="num">III</span>Integration — Where We'd Love Your Take</h2>
+  <h2 id="integration"><span class="num">III</span>Integration — Where We'd Love Your Take</h2>
 
   <p>This commission isn't a separate scoring gig handed to you after the game is built. It's the <strong>integration layer</strong>. Your ear shapes what the game sounds like, and the game's mechanical reality feeds back into what the music becomes. The boundary between "music" and "sound design" should be porous — ideally invisible to the player.</p>
 
@@ -417,7 +464,7 @@
     <li><strong>Anything else?</strong> — If you spot integration opportunities we haven't named, surface them. The audio system can be built around what you want — not the other way around.</li>
   </ul>
 
-  <h2><span class="num">IV</span>What's Not in Scope</h2>
+  <h2 id="out-of-scope"><span class="num">IV</span>What's Not in Scope</h2>
 
   <p>So you know what you are <em>not</em> on the hook for:</p>
 
@@ -430,7 +477,7 @@
 
   <p>On SFX: see Tier 4. SFX from you is <em>optional</em> — offered if you want it, no expectation if you don't. (The current SFX layer is rough CC0 placeholder and is going to be reworked either way.)</p>
 
-  <h2><span class="num">V</span>Technical Specs</h2>
+  <h2 id="specs"><span class="num">V</span>Technical Specs</h2>
 
   <ul>
     <li><strong>Format:</strong> <code>.ogg</code> Vorbis, 44.1 kHz, 16-bit minimum, stereo. Source <code>.wav</code> masters appreciated for archival.</li>
@@ -446,7 +493,7 @@
     <li><strong>Mixer routing:</strong> All music files are loaded by a <code>GameAudioData</code> ScriptableObject and routed to the <code>Music</code> mixer group. You don't need to touch Unity — just deliver named files.</li>
   </ul>
 
-  <h2><span class="num">VI</span>Process</h2>
+  <h2 id="process"><span class="num">VI</span>Process</h2>
 
   <p>You are one person doing this in part-time hours. This brief is written assuming that. No artificial deadlines, no "we need everything by Q3." The game has its own pace; the score has yours.</p>
 
@@ -460,14 +507,14 @@
 
   <p><strong>Final delivery (per piece):</strong> <code>.ogg</code> + source <code>.wav</code> + a one-line note (tempo, key, notes on intended use). Stems folder for any adaptive track.</p>
 
-  <h2><span class="num">VII</span>The One Thing to Remember</h2>
+  <h2 id="remember"><span class="num">VII</span>The One Thing to Remember</h2>
 
   <div class="callout important">
     <p>The game does not pay off the way a party game pays off. The music shouldn't either. Write something that holds the weight of having gone this far. The lab is indifferent. The creatures are cute. The system stops.</p>
     <p>That's the whole brief.</p>
   </div>
 
-  <h2><span class="num">VIII</span>World Brief Refresher</h2>
+  <h2 id="world"><span class="num">VIII</span>World Brief Refresher</h2>
 
   <p>You've read the <a href="collab-pack/audio-composer-briefing.html">full world brief</a> — this section is a quick refresher so everything's in one place. Skim or skip.</p>
 
@@ -501,19 +548,153 @@
 
   <h3>Reference media</h3>
   <p>World-grounding touchstones. Each pairs with one quality, not a sonic direction.</p>
-  <ul>
-    <li><strong>Neon Genesis Evangelion</strong> — interface duality; the NERV atmosphere</li>
-    <li><strong>Ghost in the Shell</strong> — interface density</li>
-    <li><strong>Serial Experiments Lain</strong> — signal-noise reality</li>
-    <li><strong>Cult of the Lamb</strong> — adorable and sinister in the same frame</li>
-    <li><strong>The Matrix</strong> — terminal aesthetic</li>
-    <li><strong>Dark Souls</strong> — ruined kingdoms, authored difficulty</li>
-    <li><strong>Made in Abyss</strong> — lower layers, cosmic tenderness</li>
-    <li><strong>Death Stranding / Low Roar</strong> — music as elegy over brutal terrain</li>
-    <li><strong>Nier: Automata</strong> — choral indifference</li>
-    <li><strong>Outer Wilds</strong> — drip-fed revelation</li>
-    <li><strong>INSIDE</strong> — first-screen coherent nightmare</li>
-  </ul>
+
+  <div class="refs">
+    <ul>
+      <li><a class="ref-card" target="_blank" rel="noopener" href="https://www.google.com/search?q=Neon+Genesis+Evangelion&tbm=isch">
+        <div class="thumb t-g1"><span>EVA</span>
+          <img alt="Neon Genesis Evangelion" loading="lazy" decoding="async" referrerpolicy="no-referrer"
+               src="https://upload.wikimedia.org/wikipedia/en/7/72/Evangelion_retouched.png"
+               onload="this.parentNode.classList.add('has-image');this.classList.add('loaded')"
+               onerror="this.remove()"></div>
+        <div class="meta">
+          <span class="ref-title">Neon Genesis Evangelion</span>
+          <span class="ref-q">interface duality; the NERV atmosphere</span>
+          <span class="go">Search</span>
+        </div>
+      </a></li>
+
+      <li><a class="ref-card" target="_blank" rel="noopener" href="https://www.google.com/search?q=Ghost+in+the+Shell+1995&tbm=isch">
+        <div class="thumb t-g2"><span>GITS</span>
+          <img alt="Ghost in the Shell" loading="lazy" decoding="async" referrerpolicy="no-referrer"
+               src="https://upload.wikimedia.org/wikipedia/en/c/ca/Ghostintheshellposter.jpg"
+               onload="this.parentNode.classList.add('has-image');this.classList.add('loaded')"
+               onerror="this.remove()"></div>
+        <div class="meta">
+          <span class="ref-title">Ghost in the Shell</span>
+          <span class="ref-q">interface density</span>
+          <span class="go">Search</span>
+        </div>
+      </a></li>
+
+      <li><a class="ref-card" target="_blank" rel="noopener" href="https://www.google.com/search?q=Serial+Experiments+Lain&tbm=isch">
+        <div class="thumb t-g5"><span>LAIN</span>
+          <img alt="Serial Experiments Lain" loading="lazy" decoding="async" referrerpolicy="no-referrer"
+               src="https://upload.wikimedia.org/wikipedia/en/3/32/Serial_Experiments_Lain_DVD_vol_1.jpg"
+               onload="this.parentNode.classList.add('has-image');this.classList.add('loaded')"
+               onerror="this.remove()"></div>
+        <div class="meta">
+          <span class="ref-title">Serial Experiments Lain</span>
+          <span class="ref-q">signal-noise reality</span>
+          <span class="go">Search</span>
+        </div>
+      </a></li>
+
+      <li><a class="ref-card" target="_blank" rel="noopener" href="https://www.google.com/search?q=Cult+of+the+Lamb+game&tbm=isch">
+        <div class="thumb t-g3"><span>COTL</span>
+          <img alt="Cult of the Lamb" loading="lazy" decoding="async" referrerpolicy="no-referrer"
+               src="https://upload.wikimedia.org/wikipedia/en/d/d4/Cult_of_the_Lamb_Key_Art.png"
+               onload="this.parentNode.classList.add('has-image');this.classList.add('loaded')"
+               onerror="this.remove()"></div>
+        <div class="meta">
+          <span class="ref-title">Cult of the Lamb</span>
+          <span class="ref-q">adorable and sinister in the same frame</span>
+          <span class="go">Search</span>
+        </div>
+      </a></li>
+
+      <li><a class="ref-card" target="_blank" rel="noopener" href="https://www.google.com/search?q=The+Matrix+1999+film&tbm=isch">
+        <div class="thumb t-g7"><span>MTRX</span>
+          <img alt="The Matrix" loading="lazy" decoding="async" referrerpolicy="no-referrer"
+               src="https://upload.wikimedia.org/wikipedia/en/d/db/The_Matrix.png"
+               onload="this.parentNode.classList.add('has-image');this.classList.add('loaded')"
+               onerror="this.remove()"></div>
+        <div class="meta">
+          <span class="ref-title">The Matrix</span>
+          <span class="ref-q">terminal aesthetic</span>
+          <span class="go">Search</span>
+        </div>
+      </a></li>
+
+      <li><a class="ref-card" target="_blank" rel="noopener" href="https://www.google.com/search?q=Dark+Souls+game&tbm=isch">
+        <div class="thumb t-g10"><span>DS</span>
+          <img alt="Dark Souls" loading="lazy" decoding="async" referrerpolicy="no-referrer"
+               src="https://upload.wikimedia.org/wikipedia/en/8/8d/Dark_Souls_Cover_Art.jpg"
+               onload="this.parentNode.classList.add('has-image');this.classList.add('loaded')"
+               onerror="this.remove()"></div>
+        <div class="meta">
+          <span class="ref-title">Dark Souls</span>
+          <span class="ref-q">ruined kingdoms, authored difficulty</span>
+          <span class="go">Search</span>
+        </div>
+      </a></li>
+
+      <li><a class="ref-card" target="_blank" rel="noopener" href="https://www.google.com/search?q=Made+in+Abyss+anime&tbm=isch">
+        <div class="thumb t-g4"><span>MIA</span>
+          <img alt="Made in Abyss" loading="lazy" decoding="async" referrerpolicy="no-referrer"
+               src="https://upload.wikimedia.org/wikipedia/en/9/9a/Made_in_Abyss_volume_1_cover.jpg"
+               onload="this.parentNode.classList.add('has-image');this.classList.add('loaded')"
+               onerror="this.remove()"></div>
+        <div class="meta">
+          <span class="ref-title">Made in Abyss</span>
+          <span class="ref-q">lower layers, cosmic tenderness</span>
+          <span class="go">Search</span>
+        </div>
+      </a></li>
+
+      <li><a class="ref-card" target="_blank" rel="noopener" href="https://www.google.com/search?q=Death+Stranding+Low+Roar+soundtrack&tbm=isch">
+        <div class="thumb t-g11"><span>DS·LR</span>
+          <img alt="Death Stranding" loading="lazy" decoding="async" referrerpolicy="no-referrer"
+               src="https://upload.wikimedia.org/wikipedia/en/2/22/Death_Stranding.jpg"
+               onload="this.parentNode.classList.add('has-image');this.classList.add('loaded')"
+               onerror="this.remove()"></div>
+        <div class="meta">
+          <span class="ref-title">Death Stranding / Low Roar</span>
+          <span class="ref-q">music as elegy over brutal terrain</span>
+          <span class="go">Search</span>
+        </div>
+      </a></li>
+
+      <li><a class="ref-card" target="_blank" rel="noopener" href="https://www.google.com/search?q=Nier+Automata+game&tbm=isch">
+        <div class="thumb t-g8"><span>2B</span>
+          <img alt="Nier: Automata" loading="lazy" decoding="async" referrerpolicy="no-referrer"
+               src="https://upload.wikimedia.org/wikipedia/en/2/21/Nier_Automata_cover_art.jpg"
+               onload="this.parentNode.classList.add('has-image');this.classList.add('loaded')"
+               onerror="this.remove()"></div>
+        <div class="meta">
+          <span class="ref-title">Nier: Automata</span>
+          <span class="ref-q">choral indifference</span>
+          <span class="go">Search</span>
+        </div>
+      </a></li>
+
+      <li><a class="ref-card" target="_blank" rel="noopener" href="https://www.google.com/search?q=Outer+Wilds+game&tbm=isch">
+        <div class="thumb t-g9"><span>OW</span>
+          <img alt="Outer Wilds" loading="lazy" decoding="async" referrerpolicy="no-referrer"
+               src="https://upload.wikimedia.org/wikipedia/en/f/f6/Outer_Wilds_Steam_artwork.jpg"
+               onload="this.parentNode.classList.add('has-image');this.classList.add('loaded')"
+               onerror="this.remove()"></div>
+        <div class="meta">
+          <span class="ref-title">Outer Wilds</span>
+          <span class="ref-q">drip-fed revelation</span>
+          <span class="go">Search</span>
+        </div>
+      </a></li>
+
+      <li><a class="ref-card" target="_blank" rel="noopener" href="https://www.google.com/search?q=INSIDE+Playdead+game&tbm=isch">
+        <div class="thumb t-g6"><span>INSIDE</span>
+          <img alt="INSIDE" loading="lazy" decoding="async" referrerpolicy="no-referrer"
+               src="https://upload.wikimedia.org/wikipedia/en/5/50/INSIDE_Xbox_One_cover_art.png"
+               onload="this.parentNode.classList.add('has-image');this.classList.add('loaded')"
+               onerror="this.remove()"></div>
+        <div class="meta">
+          <span class="ref-title">INSIDE</span>
+          <span class="ref-q">first-screen coherent nightmare</span>
+          <span class="go">Search</span>
+        </div>
+      </a></li>
+    </ul>
+  </div>
 
   <h3>Interesting things in the world</h3>
   <p>Mood and texture, not gameplay specs. Surfaces some of what the music sits underneath.</p>
