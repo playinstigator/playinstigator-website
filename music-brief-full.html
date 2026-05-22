@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#F9F5F1" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1C1917" media="(prefers-color-scheme: dark)">
+<title>Game Music Composer Brief — Ritual &amp; Ruin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream:#F9F5F1; --charcoal:#1C1917; --coral:#FF3344;
+    --play-blue:#57E0FF; --ultraviolet:#974DFF; --lemon:#FFF066; --mint:#81FDC1;
+    --f-play:"Fredoka",system-ui,sans-serif;
+    --f-sharp:"Plus Jakarta Sans",system-ui,sans-serif;
+    --f-body:"Figtree",system-ui,sans-serif;
+    --bg:var(--cream); --bg-2:#F1ECE5; --ink:var(--charcoal); --ink-soft:#3D3834;
+    --quiet:#6B615B; --rule:#D8CEC4; --accent:var(--ultraviolet); --accent-2:var(--coral);
+    --card:#FFFFFF; --shadow:0 6px 24px rgba(28,25,23,0.07);
+    --tier1:#C99A0D; --tier2:#1F8A4C; --tier3:#1F6FB8; --tier4:#7A3FC7;
+  }
+  [data-theme="dark"] {
+    --bg:var(--charcoal); --bg-2:#2A2622; --ink:var(--cream); --ink-soft:#D8CEC4;
+    --quiet:#9A8F87; --rule:#3D3834; --accent:#B47CFF; --accent-2:#FF5566;
+    --card:#24201C; --shadow:0 8px 28px rgba(0,0,0,0.45);
+    --tier1:#F1C40F; --tier2:#2ECC71; --tier3:#3498DB; --tier4:#B47CFF;
+  }
+  *,*::before,*::after { box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body {
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:var(--f-body); font-size:17px; line-height:1.65;
+    -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+    transition:background-color 0.25s ease, color 0.25s ease;
+    min-height:100vh; position:relative; overflow-x:hidden;
+  }
+  .shape { position:absolute; pointer-events:none; opacity:0.55; z-index:0; }
+  .shape-1 { top:-40px; right:-40px; width:180px; height:180px; background:var(--coral); border-radius:50%; transform:rotate(13deg); }
+  .shape-2 { top:280px; left:-80px; width:140px; height:140px; background:var(--ultraviolet); clip-path:polygon(50% 0,100% 100%,0 100%); transform:rotate(-7deg); opacity:0.35; }
+  .shape-3 { bottom:120px; right:-60px; width:220px; height:60px; background:var(--play-blue); border-radius:100px; transform:rotate(7deg); opacity:0.3; }
+  [data-theme="dark"] .shape { opacity:0.22; }
+  [data-theme="dark"] .shape-1 { opacity:0.3; }
+
+  .page { max-width:820px; margin:0 auto; padding:48px 24px 96px; position:relative; z-index:1; }
+
+  .topbar { display:flex; align-items:center; justify-content:space-between; margin-bottom:28px; gap:12px; flex-wrap:wrap; }
+  .studio-mark { font-family:var(--f-sharp); font-weight:700; font-size:11px; letter-spacing:0.24em; text-transform:uppercase; color:var(--quiet); display:inline-flex; align-items:baseline; gap:6px; }
+  .studio-mark .play { font-family:var(--f-play); font-weight:600; letter-spacing:0.08em; color:var(--accent); font-size:12px; }
+  .studio-mark .dot { width:4px; height:4px; background:var(--accent-2); border-radius:50%; display:inline-block; transform:translateY(-2px); }
+  .studio-mark .inst { font-family:var(--f-sharp); font-weight:800; color:var(--ink); font-size:12px; }
+
+  .pill-btn { background:var(--card); border:1.5px solid var(--rule); border-radius:999px; padding:7px 14px 7px 10px; cursor:pointer; display:inline-flex; align-items:center; gap:8px; font-family:var(--f-sharp); font-size:12px; font-weight:600; color:var(--ink-soft); letter-spacing:0.04em; transition:all 0.2s ease; box-shadow:var(--shadow); }
+  .pill-btn:hover { transform:translateY(-1px); border-color:var(--accent); color:var(--accent); }
+  .theme-toggle .icon { width:16px; height:16px; display:inline-block; position:relative; }
+  .theme-toggle .icon::before { content:""; position:absolute; inset:0; border-radius:50%; background:var(--accent); transition:all 0.3s ease; }
+  [data-theme="dark"] .theme-toggle .icon::before { background:var(--lemon); box-shadow:inset -5px -3px 0 0 var(--charcoal); }
+
+  .mast { border-bottom:2.5px solid var(--ink); padding-bottom:28px; margin-bottom:36px; }
+  .eyebrow { font-family:var(--f-sharp); font-weight:600; font-size:11.5px; letter-spacing:0.22em; text-transform:uppercase; color:var(--quiet); margin:0 0 10px 0; }
+  .eyebrow::after { content:""; display:inline-block; width:28px; height:2px; background:var(--accent-2); margin-left:10px; transform:translateY(-3px); }
+  h1.title { font-family:var(--f-sharp); font-weight:800; font-size:clamp(34px,7vw,54px); line-height:1.05; margin:0; letter-spacing:-0.02em; color:var(--ink); }
+  h1.title .amp { color:var(--accent); font-weight:500; font-style:italic; margin:0 0.15em; }
+  h1.title .sub { display:block; font-size:clamp(18px,3vw,24px); font-weight:600; color:var(--ink-soft); margin-top:8px; letter-spacing:-0.01em; }
+
+  .lede { font-style:italic; font-size:clamp(16px,2.2vw,19px); line-height:1.55; color:var(--ink-soft); margin:0 0 36px 0; padding:20px 22px; border-left:3px solid var(--accent); background:var(--bg-2); border-radius:0 12px 12px 0; }
+
+  .toc { display:flex; flex-wrap:wrap; gap:6px; margin:0 0 36px 0; padding:14px; background:var(--bg-2); border:1px solid var(--rule); border-radius:14px; align-items:center; }
+  .toc-label { font-family:var(--f-sharp); font-weight:700; font-size:10.5px; letter-spacing:0.2em; text-transform:uppercase; color:var(--quiet); padding:0 10px; }
+  .toc a { display:inline-flex; align-items:center; gap:8px; font-family:var(--f-sharp); font-weight:600; font-size:12.5px; letter-spacing:0.02em; text-decoration:none; color:var(--ink-soft); padding:7px 12px; border-radius:999px; transition:all 0.18s ease; white-space:nowrap; }
+  .toc a:hover { background:var(--card); color:var(--accent); }
+  .toc-num { font-family:var(--f-sharp); font-weight:800; font-size:10px; color:var(--accent-2); background:var(--card); padding:2px 6px; border-radius:4px; min-width:18px; text-align:center; }
+  html { scroll-padding-top:24px; }
+
+  .disclaimer { background:var(--card); border:1px solid var(--rule); border-left:3px solid var(--accent-2); border-radius:10px; padding:16px 20px; margin:0 0 18px 0; box-shadow:var(--shadow); }
+  .disclaimer > strong { display:block; font-family:var(--f-sharp); font-size:13px; letter-spacing:0.08em; text-transform:uppercase; color:var(--accent-2); margin-bottom:6px; }
+  .disclaimer p { margin:0; font-size:15px; line-height:1.55; }
+
+  h2 { font-family:var(--f-sharp); font-weight:800; font-size:clamp(22px,3.5vw,28px); letter-spacing:-0.01em; color:var(--ink); margin:56px 0 18px 0; padding-bottom:10px; border-bottom:1.5px solid var(--rule); display:flex; align-items:baseline; gap:14px; }
+  h2 .num { font-family:var(--f-sharp); font-size:14px; letter-spacing:0; font-weight:700; color:var(--accent-2); background:var(--bg-2); padding:4px 10px; border-radius:6px; min-width:36px; text-align:center; flex-shrink:0; }
+
+  h3 { font-family:var(--f-sharp); font-weight:700; font-size:clamp(18px,2.5vw,22px); color:var(--ink); margin:36px 0 12px 0; }
+  h3.tier { display:flex; align-items:center; gap:10px; padding:10px 16px; border-radius:10px; color:#fff; font-weight:800; }
+  h3.tier .label { font-family:var(--f-sharp); font-size:11px; letter-spacing:0.18em; text-transform:uppercase; opacity:0.85; }
+  h3.tier1 { background:var(--tier1); }
+  h3.tier2 { background:var(--tier2); }
+  h3.tier3 { background:var(--tier3); }
+  h3.tier4 { background:var(--tier4); }
+  [data-theme="dark"] h3.tier { color:#1C1917; }
+  [data-theme="dark"] h3.tier3 { color:#fff; }
+  [data-theme="dark"] h3.tier4 { color:#fff; }
+
+  h4 { font-family:var(--f-sharp); font-weight:700; font-size:clamp(17px,2.3vw,19px); color:var(--ink); margin:28px 0 8px 0; }
+  h4 .num-pill { display:inline-block; font-family:var(--f-sharp); font-weight:800; color:#fff; font-size:11px; padding:3px 9px; border-radius:5px; margin-right:8px; letter-spacing:0.04em; vertical-align:2px; }
+  h4 .num-pill.t1 { background:var(--tier1); }
+  h4 .num-pill.t2 { background:var(--tier2); }
+  h4 .num-pill.t3 { background:var(--tier3); }
+  h4 .num-pill.t4 { background:var(--tier4); }
+  [data-theme="dark"] h4 .num-pill { color:#1C1917; }
+  [data-theme="dark"] h4 .num-pill.t3, [data-theme="dark"] h4 .num-pill.t4 { color:#fff; }
+
+  p { margin:0 0 16px 0; }
+  strong { color:var(--ink); font-weight:700; }
+  em { color:var(--ink-soft); }
+
+  ul, ol { margin:8px 0 20px 0; padding-left:22px; }
+  li { margin:0 0 8px 0; }
+
+  .scope-table { width:100%; border-collapse:separate; border-spacing:0; margin:18px 0 8px 0; background:var(--card); border:1px solid var(--rule); border-radius:12px; overflow:hidden; box-shadow:var(--shadow); font-size:14.5px; }
+  .scope-table th, .scope-table td { padding:12px 14px; text-align:left; border-bottom:1px solid var(--rule); vertical-align:top; }
+  .scope-table thead th { background:var(--bg-2); font-family:var(--f-sharp); font-size:11px; letter-spacing:0.14em; text-transform:uppercase; color:var(--quiet); font-weight:700; }
+  .scope-table tbody tr:last-child td { border-bottom:none; }
+  .scope-table .tier-cell { font-family:var(--f-sharp); font-weight:800; font-size:13px; white-space:nowrap; }
+  .scope-table .t1 { color:var(--tier1); }
+  .scope-table .t2 { color:var(--tier2); }
+  .scope-table .t3 { color:var(--tier3); }
+  .scope-table .t4 { color:var(--tier4); }
+
+  .deliverable { background:var(--card); border:1px solid var(--rule); border-radius:10px; padding:18px 20px; margin:0 0 16px 0; box-shadow:var(--shadow); }
+  .deliverable p:last-child { margin-bottom:0; }
+  .deliverable .meta-line { font-family:var(--f-sharp); font-size:13px; color:var(--ink-soft); margin-bottom:10px; line-height:1.55; }
+  .deliverable .meta-line strong { font-family:var(--f-sharp); font-weight:700; color:var(--accent); text-transform:uppercase; letter-spacing:0.08em; font-size:11.5px; margin-right:6px; }
+
+  .callout { background:var(--bg-2); border-radius:10px; padding:14px 18px; margin:14px 0 18px 0; font-size:15.5px; }
+  .callout.important { border-left:3px solid var(--accent-2); background:var(--card); border:1px solid var(--rule); border-left:3px solid var(--accent-2); }
+  .callout p:last-child { margin-bottom:0; }
+
+  .foot { margin-top:72px; padding-top:20px; border-top:2.5px solid var(--ink); font-family:var(--f-sharp); font-weight:600; font-size:11.5px; letter-spacing:0.2em; text-transform:uppercase; color:var(--quiet); display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; }
+  .foot .dot-row { display:inline-flex; gap:6px; align-items:center; }
+  .foot .dot-row i { width:8px; height:8px; border-radius:50%; display:inline-block; }
+  .foot .dot-row .d1 { background:var(--coral); transform:rotate(7deg); }
+  .foot .dot-row .d2 { background:var(--ultraviolet); }
+  .foot .dot-row .d3 { background:var(--play-blue); transform:rotate(-13deg); }
+
+  code { font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace; font-size:0.92em; background:var(--bg-2); padding:1px 6px; border-radius:4px; color:var(--ink); }
+
+  .refs ul { list-style:none; padding:0; margin:14px 0 8px 0; display:grid; grid-template-columns:repeat(auto-fill, minmax(150px, 1fr)); gap:14px; }
+  .refs li { margin:0; padding:0; }
+  .ref-card { display:flex; flex-direction:column; background:var(--card); border:1px solid var(--rule); border-radius:10px; overflow:hidden; text-decoration:none; color:inherit; transition:transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease; box-shadow:var(--shadow); height:100%; }
+  .ref-card:hover { transform:translateY(-3px) rotate(0.4deg); border-color:var(--accent); box-shadow:0 12px 30px rgba(28,25,23,0.12); }
+  [data-theme="dark"] .ref-card:hover { box-shadow:0 12px 30px rgba(0,0,0,0.6); }
+  .ref-card .thumb { aspect-ratio:4/5; position:relative; display:flex; align-items:center; justify-content:center; overflow:hidden; color:#F9F5F1; font-family:var(--f-sharp); font-weight:800; font-size:42px; letter-spacing:-0.02em; line-height:1; text-align:center; padding:10px; }
+  .ref-card .thumb::before { content:""; position:absolute; width:80px; height:80px; background:rgba(255,255,255,0.14); border-radius:50%; top:-20px; right:-20px; transform:rotate(13deg); transition:opacity 0.3s ease; }
+  .ref-card .thumb::after { content:""; position:absolute; width:60px; height:18px; background:rgba(0,0,0,0.22); border-radius:40px; bottom:14px; left:-14px; transform:rotate(-7deg); transition:opacity 0.3s ease; }
+  .ref-card .thumb.has-image::before, .ref-card .thumb.has-image::after { opacity:0; }
+  .ref-card .thumb span { position:relative; z-index:1; transition:opacity 0.2s ease; }
+  .ref-card .thumb.has-image span { opacity:0; }
+  .ref-card .thumb img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:0; transition:opacity 0.3s ease; z-index:2; }
+  .ref-card .thumb img.loaded { opacity:1; }
+  .t-g1 { background:linear-gradient(135deg, #974DFF 0%, #FF3344 100%); }
+  .t-g2 { background:linear-gradient(135deg, #57E0FF 0%, #974DFF 100%); }
+  .t-g3 { background:linear-gradient(135deg, #FF3344 0%, #FFF066 100%); color:#1C1917; }
+  .t-g4 { background:linear-gradient(135deg, #81FDC1 0%, #57E0FF 100%); color:#1C1917; }
+  .t-g5 { background:linear-gradient(135deg, #1C1917 0%, #974DFF 100%); }
+  .t-g6 { background:linear-gradient(135deg, #FFF066 0%, #FF3344 100%); color:#1C1917; }
+  .t-g7 { background:linear-gradient(135deg, #974DFF 0%, #1C1917 100%); }
+  .t-g8 { background:linear-gradient(135deg, #FF3344 0%, #974DFF 65%, #57E0FF 100%); }
+  .t-g9 { background:linear-gradient(135deg, #57E0FF 0%, #81FDC1 100%); color:#1C1917; }
+  .t-g10 { background:linear-gradient(135deg, #1C1917 0%, #FF3344 100%); }
+  .t-g11 { background:linear-gradient(135deg, #F9F5F1 0%, #974DFF 100%); color:#1C1917; }
+  .ref-card .meta { padding:10px 12px 12px; display:flex; flex-direction:column; gap:4px; flex:1; }
+  .ref-card .ref-title { font-family:var(--f-sharp); font-weight:700; font-size:13.5px; line-height:1.25; color:var(--ink); }
+  .ref-card .ref-q { font-style:italic; font-size:12.5px; color:var(--quiet); line-height:1.4; }
+  .ref-card .go { margin-top:auto; padding-top:6px; font-family:var(--f-sharp); font-weight:600; font-size:10px; letter-spacing:0.18em; text-transform:uppercase; color:var(--accent); display:inline-flex; align-items:center; gap:4px; }
+  .ref-card .go::after { content:"→"; font-style:normal; transition:transform 0.18s ease; }
+  .ref-card:hover .go::after { transform:translateX(3px); }
+
+  .back-to-top { position:fixed; bottom:24px; right:24px; width:44px; height:44px; border-radius:50%; background:var(--ink); color:var(--bg); border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 16px rgba(28,25,23,0.2); opacity:0; pointer-events:none; transform:translateY(8px); transition:opacity 0.25s ease, transform 0.25s ease, background 0.18s ease, color 0.18s ease; z-index:50; font-family:var(--f-sharp); font-size:18px; font-weight:700; line-height:1; padding:0; }
+  .back-to-top.visible { opacity:1; pointer-events:auto; transform:translateY(0); }
+  .back-to-top:hover { background:var(--accent); color:#fff; }
+
+  @media (max-width:560px) {
+    .page { padding:32px 18px 64px; }
+    .deliverable { padding:14px 16px; }
+    .scope-table { font-size:13.5px; }
+    .scope-table th, .scope-table td { padding:10px 10px; }
+  }
+  @media (prefers-reduced-motion: reduce) { * { transition:none !important; } html { scroll-behavior:auto; } }
+  @media print {
+    .pill-btn, .shape, .topbar .pill-btn, .back-to-top { display:none !important; }
+    body { background:#fff; color:#000; }
+    .page { padding:0; max-width:100%; }
+    .deliverable, .scope-table { box-shadow:none; }
+  }
+  ::selection { background:var(--accent); color:var(--cream); }
+</style>
+</head>
+<body>
+
+<div class="shape shape-1" aria-hidden="true"></div>
+<div class="shape shape-2" aria-hidden="true"></div>
+<div class="shape shape-3" aria-hidden="true"></div>
+
+<div class="page">
+
+  <div class="topbar">
+    <span class="studio-mark">
+      <span class="play">Play</span>
+      <span class="dot"></span>
+      <span class="inst">Instigator</span>
+    </span>
+    <button class="pill-btn theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+      <span class="icon" aria-hidden="true"></span>
+      <span class="label" id="themeLabel">Dark</span>
+    </button>
+  </div>
+
+  <header class="mast">
+    <p class="eyebrow">Creative Brief · Music · Scope</p>
+    <h1 class="title">Game Music Composer Brief
+      <span class="sub">Ritual <span class="amp">&amp;</span> Ruin</span>
+    </h1>
+  </header>
+
+  <nav class="toc" aria-label="Contents">
+    <span class="toc-label">Contents</span>
+    <a href="#disclaimers"><span class="toc-num">·</span>Disclaimers</a>
+    <a href="#deal"><span class="toc-num">·</span>The Deal</a>
+    <a href="#world"><span class="toc-num">I</span>The World</a>
+    <a href="#scope"><span class="toc-num">II</span>Scope at a Glance</a>
+    <a href="#deliverables"><span class="toc-num">III</span>Music Deliverables</a>
+    <a href="#integration"><span class="toc-num">IV</span>Integration</a>
+    <a href="#out-of-scope"><span class="toc-num">V</span>Not in Scope</a>
+    <a href="#specs"><span class="toc-num">VI</span>Technical Specs</a>
+    <a href="#process"><span class="toc-num">VII</span>Process</a>
+    <a href="#remember"><span class="toc-num">VIII</span>Let's Talk</a>
+  </nav>
+
+  <h2 id="disclaimers"><span class="num">·</span>Two disclaimers before you start</h2>
+
+  <div class="disclaimer">
+    <strong>1 · AI-synthesised from unorganised thoughts</strong>
+    <p>This document was written with the help of AI from a pile of my ideas, plans, and conversations. It will sound more structured and confident than the underlying thinking actually is. Please push back, disagree, or ask for clarification on anything that seems off, vague, or contradictory. Treat nothing here as final.</p>
+  </div>
+
+  <div class="disclaimer">
+    <strong>2 · I have almost zero music experience</strong>
+    <p>Every music suggestion in this document — track lengths, intensity bands, adaptive layering, technical specs, references, stems, naming conventions — was generated by AI based on my game documents and what little I understand about how music supports games. Take it with a <strong>mountain</strong> of salt. If I've described something incorrectly, used a term wrong, or made assumptions that don't hold up against how composing actually works, please tell me. You know this craft and I don't.</p>
+  </div>
+
+  <h2 id="deal"><span class="num">·</span>The Deal</h2>
+
+  <h3>What I'm looking for</h3>
+  <p>A game <strong>music composer and/or SFX designer</strong> — ideally one person open to both, since sonic coherence between score and sound effects is one of the highest-value things a single audio person can give a game. But "music only" is completely fine, and so is "SFX only" — just say the word and we'll scope to it.</p>
+
+  <h3>Compensation &amp; honest expectations</h3>
+  <p>I want to be upfront, because the worst thing I could do is waste your time on a false premise.</p>
+  <ul>
+    <li><strong>This is a learning project</strong>, first and foremost — my first game, made partly to learn. I'm not promising a hit. The bar is "it's good and it ships," not "commercial juggernaut."</li>
+    <li><strong>Compensation, if you require it, is revenue-share</strong> — and I genuinely don't expect it to make a meaningful amount. Some people may be happy to do this purely for the experience and the credit; if you need compensation, it's a fair share of whatever the game earns, but plan as if the money is roughly zero, because realistically it might be. Treat any revenue as a bonus, not the reason to do this.</li>
+    <li><strong>So why do it? The real opportunity is total authorship of the audio.</strong> This isn't a hand-off scoring gig where you get a locked game and fill it with music. You'd shape the <strong>entire soundscape</strong> — music <em>and</em> SFX as one sonic world — and <strong>influence the story from a sonic perspective</strong>: how the arc lands, where the game withholds emotion vs releases it, how the degradation <em>sounds</em>. You'd be in control of everything audio, and the game's systems can bend toward what you want rather than the other way around. Plus a shipped credit and a portfolio piece in a world worth scoring. For an audio person, that level of control is rare — most gigs hand you a finished thing. If the exchange still isn't worth it given the money reality, that's a completely fair "no" — no hard feelings.</li>
+    <li><strong>No deadlines, no lock-in.</strong> Part-time, your pace, stop whenever.</li>
+  </ul>
+
+  <h2 id="world"><span class="num">I</span>The World</h2>
+
+  <p>The world of <em>Ritual &amp; Ruin</em>. Read it for texture — then trust your own ear. (A longer version with deeper context lives in the <a href="collab-pack/audio-composer-briefing.html">Audio Composer Briefing</a>.)</p>
+
+  <h3>What the game actually is</h3>
+  <p>A <strong>2v2 co-op-competitive party game</strong> for PC (Steam) — top-down / isometric, 5–10 minute rounds, couch or online. Each player controls a small creature whose whole drive is to <strong>find blood, carry it to a ritual altar, and pour it in</strong>. Fill the altar and it completes a ritual, flooding the nearest creature with power — evolving it through three stages: cute base form → powered-up → cosmic-horror "terminal" form that breaks down from the inside. Teams race and interfere across a vertical stack of floors the world scrolls through. On the surface it's chaotic, cute, and quick to pick up; underneath, it curdles.</p>
+
+  <h3>Premise</h3>
+  <p>Ritual &amp; Ruin is set inside an AI-automated experimental lab. The civilization that built the lab and started the experiment has gone extinct. The lab kept running.</p>
+  <p>The experiment harvests power by bioengineering small creatures whose only drive is to seek blood, carry it to an altar, and repeat. The altar floods them with power. Their bodies cannot hold it for long, and break down from the inside. Over the course of the game, with no one left to maintain it, the system degrades.</p>
+
+  <h3>How it feels — the five-step arc</h3>
+  <p>The feel arcs across the whole experience, not just one match:</p>
+  <ol>
+    <li><strong>Fun.</strong> A silly little party game with friends. Chaos, laughs, "again, again."</li>
+    <li><strong>Something's off.</strong> Glitches appear. Behaviors drift. At first it looks like jank; then it doesn't.</li>
+    <li><strong>Not fun anymore.</strong> The system has degraded enough that the game is no longer smooth. The party-game feel is slipping away.</li>
+    <li><strong>Push through anyway.</strong> The game is broken, but the players keep going — less because they're enjoying it and more because they want to see where this ends.</li>
+    <li><strong>It just ends.</strong> The system completely breaks. The players reach an ending, but there is no epic payoff. No fanfare. The machine simply stops.</li>
+  </ol>
+
+  <p>This is the game's core theme made felt: <strong>persistence in the face of uncertainty</strong>. The music's job is to carry that arc — not to push the player to keep going, and not to mourn the ending. To hold both at once: the weight of having gone this far, and the specific flatness of an ending that doesn't pay off the way you thought it would.</p>
+
+  <div class="callout"><p>Hold these tensions underneath: <strong>cute versus wrong, relief versus triumph, cooperation versus exploitation, organic versus clinical</strong>. Cute does not disappear from this game. It is consumed.</p></div>
+
+  <p>The overarching constraint is <strong>erosion</strong>. Not a mode switch. A gradient. The demoralization is authored — the frame is allowed to mourn the player. Trust that.</p>
+
+  <h3>Three load-bearing concepts</h3>
+
+  <p><strong>1 · Cute, corrupted into cosmic horror.</strong> Each creature passes through three visual states: base, enhanced, terminal. A descent into madness, not a replacement. The terminal form is the base form underneath, just carrying too much. For the music: the cosmic-horror layer should feel like the cute layer wearing a body it was never built for. Same melodic DNA, distorted.</p>
+
+  <p><strong>2 · The whole game is seen through an AI experiment system.</strong> The game is observed by the lab itself — automated monitoring, tracking frames, event log, vital readouts. The system is not cruel. It is indifferent because no one has looked at its logs in a very long time. For the music: clinical observation is part of the texture. Where a traditional party-game score would land an emotion, this one can withhold it. The lab does not score the moment. It logs the moment.</p>
+
+  <p><strong>3 · The system degrades over time.</strong> The degradation is the point — it's why the game is called <em>Ritual &amp; Ruin</em>. The ritual is what the system does. The ruin is what it leaves behind. The degradation sits in deliberately uncertain territory. The player should feel it before they can name it. For the music: anything that loops should be capable of degrading. Cleaner early states, drift / glitch / detune / dropout later. A slow corruption of the same source material.</p>
+
+  <h3>Reference media</h3>
+  <p>World-grounding touchstones. Each pairs with one quality, not a sonic direction.</p>
+
+  <div class="refs">
+    <ul>
+      <li><a class="ref-card" target="_blank" rel="noopener" href="https://www.google.com/search?q=Neon+Genesis+Evangelion&tbm=isch">
+        <div class="thumb t-g1"><span>EVA</span>
+          <img alt="Neon Genesis Evangelion" loading="lazy" decoding="async" referrerpolicy="no-referrer"
+               src="https://upload.wikimedia.org/wikipedia/en/7/72/Evangelion_retouched.png"
+               onload="this.parentNode.classList.add('has-image');this.classList.add('loaded')"
+               onerror="this.remove()"></div>
+        <div class="meta">
+          <span class="ref-title">Neon Genesis Evangelion</span>
+          <span class="ref-q">interface duality; the NERV atmosphere</span>
+          <span class="go">Search</span>
+        </div>
+      </a></li>
+
+      <li><a class="ref-card" target="_blank" rel="noopener" href="https://www.google.com/search?q=Ghost+in+the+Shell+1995&tbm=isch">
+        <div class="thumb t-g2"><span>GITS</span>
+          <img alt="Ghost in the Shell" loading="lazy" decoding="async" referrerpolicy="no-referrer"
+               src="https://upload.wikimedia.org/wikipedia/en/c/ca/Ghostintheshellposter.jpg"
+               onload="this.parentNode.classList.add('has-image');this.classList.add('loaded')"
+               onerror="this.remove()"></div>
+        <div class="meta">
+          <span class="ref-title">Ghost in the Shell</span>
+          <span class="ref-q">interface density</span>
+          <span class="go">Search</span>
+        </div>
+      </a></li>
+
+      <li><a class="ref-card" target="_blank" rel="noopener" href="https://www.google.com/search?q=Serial+Experiments+Lain&tbm=isch">
+        <div class="thumb t-g5"><span>LAIN</span>
+          <img alt="Serial Experiments Lain" loading="lazy" decoding="async" referrerpolicy="no-referrer"
+               src="https://upload.wikimedia.org/wikipedia/en/3/32/Serial_Experiments_Lain_DVD_vol_1.jpg"
+               onload="this.parentNode.classList.add('has-image');this.classList.add('loaded')"
+               onerror="this.remove()"></div>
+        <div class="meta">
+          <span class="ref-title">Serial Experiments Lain</span>
+          <span class="ref-q">signal-noise reality</span>
+          <span class="go">Search</span>
+        </div>
+      </a></li>
+
+      <li><a class="ref-card" target="_blank" rel="noopener" href="https://www.google.com/search?q=Cult+of+the+Lamb+game&tbm=isch">
+        <div class="thumb t-g3"><span>COTL</span>
+          <img alt="Cult of the Lamb" loading="lazy" decoding="async" referrerpolicy="no-referrer"
+               src="https://upload.wikimedia.org/wikipedia/en/d/d4/Cult_of_the_Lamb_Key_Art.png"
+               onload="this.parentNode.classList.add('has-image');this.classList.add('loaded')"
+               onerror="this.remove()"></div>
+        <div class="meta">
+          <span class="ref-title">Cult of the Lamb</span>
+          <span class="ref-q">adorable and sinister in the same frame</span>
+          <span class="go">Search</span>
+        </div>
+      </a></li>
+
+      <li><a class="ref-card" target="_blank" rel="noopener" href="https://www.google.com/search?q=The+Matrix+1999+film&tbm=isch">
+        <div class="thumb t-g7"><span>MTRX</span>
+          <img alt="The Matrix" loading="lazy" decoding="async" referrerpolicy="no-referrer"
+               src="https://upload.wikimedia.org/wikipedia/en/d/db/The_Matrix.png"
+               onload="this.parentNode.classList.add('has-image');this.classList.add('loaded')"
+               onerror="this.remove()"></div>
+        <div class="meta">
+          <span class="ref-title">The Matrix</span>
+          <span class="ref-q">terminal aesthetic</span>
+          <span class="go">Search</span>
+        </div>
+      </a></li>
+
+      <li><a class="ref-card" target="_blank" rel="noopener" href="https://www.google.com/search?q=Dark+Souls+game&tbm=isch">
+        <div class="thumb t-g10"><span>DS</span>
+          <img alt="Dark Souls" loading="lazy" decoding="async" referrerpolicy="no-referrer"
+               src="https://upload.wikimedia.org/wikipedia/en/8/8d/Dark_Souls_Cover_Art.jpg"
+               onload="this.parentNode.classList.add('has-image');this.classList.add('loaded')"
+               onerror="this.remove()"></div>
+        <div class="meta">
+          <span class="ref-title">Dark Souls</span>
+          <span class="ref-q">ruined kingdoms, authored difficulty</span>
+          <span class="go">Search</span>
+        </div>
+      </a></li>
+
+      <li><a class="ref-card" target="_blank" rel="noopener" href="https://www.google.com/search?q=Made+in+Abyss+anime&tbm=isch">
+        <div class="thumb t-g4"><span>MIA</span>
+          <img alt="Made in Abyss" loading="lazy" decoding="async" referrerpolicy="no-referrer"
+               src="https://upload.wikimedia.org/wikipedia/en/9/9a/Made_in_Abyss_volume_1_cover.jpg"
+               onload="this.parentNode.classList.add('has-image');this.classList.add('loaded')"
+               onerror="this.remove()"></div>
+        <div class="meta">
+          <span class="ref-title">Made in Abyss</span>
+          <span class="ref-q">lower layers, cosmic tenderness</span>
+          <span class="go">Search</span>
+        </div>
+      </a></li>
+
+      <li><a class="ref-card" target="_blank" rel="noopener" href="https://www.google.com/search?q=Death+Stranding+Low+Roar+soundtrack&tbm=isch">
+        <div class="thumb t-g11"><span>DS·LR</span>
+          <img alt="Death Stranding" loading="lazy" decoding="async" referrerpolicy="no-referrer"
+               src="https://upload.wikimedia.org/wikipedia/en/2/22/Death_Stranding.jpg"
+               onload="this.parentNode.classList.add('has-image');this.classList.add('loaded')"
+               onerror="this.remove()"></div>
+        <div class="meta">
+          <span class="ref-title">Death Stranding / Low Roar</span>
+          <span class="ref-q">music as elegy over brutal terrain</span>
+          <span class="go">Search</span>
+        </div>
+      </a></li>
+
+      <li><a class="ref-card" target="_blank" rel="noopener" href="https://www.google.com/search?q=Nier+Automata+game&tbm=isch">
+        <div class="thumb t-g8"><span>2B</span>
+          <img alt="Nier: Automata" loading="lazy" decoding="async" referrerpolicy="no-referrer"
+               src="https://upload.wikimedia.org/wikipedia/en/2/21/Nier_Automata_cover_art.jpg"
+               onload="this.parentNode.classList.add('has-image');this.classList.add('loaded')"
+               onerror="this.remove()"></div>
+        <div class="meta">
+          <span class="ref-title">Nier: Automata</span>
+          <span class="ref-q">choral indifference</span>
+          <span class="go">Search</span>
+        </div>
+      </a></li>
+
+      <li><a class="ref-card" target="_blank" rel="noopener" href="https://www.google.com/search?q=Outer+Wilds+game&tbm=isch">
+        <div class="thumb t-g9"><span>OW</span>
+          <img alt="Outer Wilds" loading="lazy" decoding="async" referrerpolicy="no-referrer"
+               src="https://upload.wikimedia.org/wikipedia/en/f/f6/Outer_Wilds_Steam_artwork.jpg"
+               onload="this.parentNode.classList.add('has-image');this.classList.add('loaded')"
+               onerror="this.remove()"></div>
+        <div class="meta">
+          <span class="ref-title">Outer Wilds</span>
+          <span class="ref-q">drip-fed revelation</span>
+          <span class="go">Search</span>
+        </div>
+      </a></li>
+
+      <li><a class="ref-card" target="_blank" rel="noopener" href="https://www.google.com/search?q=INSIDE+Playdead+game&tbm=isch">
+        <div class="thumb t-g6"><span>INSIDE</span>
+          <img alt="INSIDE" loading="lazy" decoding="async" referrerpolicy="no-referrer"
+               src="https://upload.wikimedia.org/wikipedia/en/5/50/INSIDE_Xbox_One_cover_art.png"
+               onload="this.parentNode.classList.add('has-image');this.classList.add('loaded')"
+               onerror="this.remove()"></div>
+        <div class="meta">
+          <span class="ref-title">INSIDE</span>
+          <span class="ref-q">first-screen coherent nightmare</span>
+          <span class="go">Search</span>
+        </div>
+      </a></li>
+    </ul>
+  </div>
+
+  <h3>Interesting things in the world</h3>
+  <p>Mood and texture, not gameplay specs. Surfaces some of what the music sits underneath.</p>
+  <ul>
+    <li><strong>The altar</strong> — centerpiece of every match. Blood pours in until it's full. Three ritual flames light in sequence — a ceremonial "3, 2, 1." The altar pulses faster, then releases a single beam of light to whichever creature is standing closest. Happens about eight times per match. The closest the game has to a musical beat structure baked into the mechanic.</li>
+    <li><strong>Creature evolution</strong> — base → enhanced → terminal cosmic horror. The base shape is always still visible underneath, just carrying too much.</li>
+    <li><strong>Terminal Phase</strong> — the second evolution. A large bar appears across the top of the screen. ~30 seconds. Cosmic-horror form hunts. The match has changed register. If both teams hit terminal at once, two countdowns stack.</li>
+    <li><strong>The monitoring layer</strong> — the lab observes everything. Tracking brackets lock onto creatures. An event log scrolls. Vital readouts tick. Occasional screen glitches mark big moments. The system names what it sees in its own cold vocabulary.</li>
+    <li><strong>Match start</strong> — typewriter-style terminal text on a phosphor-green overlay: <code>EXPERIMENT INITIATING IN... 3 ... 2 ... 1 ... EXPERIMENT INITIATED AT CYCLE IV · T### · HH:MM:SS</code>. The lab is booting a session.</li>
+    <li><strong>The larger ending</strong> — beyond any single match, the lab eventually shuts down for good. A few creatures got out. The rest are left unborn — no more will ever be born. No fanfare. The machine simply stops.</li>
+  </ul>
+
+  <h2 id="scope"><span class="num">II</span>Scope at a Glance</h2>
+
+  <p>The tiers below are just a recommendation — a way to talk about scope and effort. Do as much or as little as you want. One good loop is enough for the game to feel scored; anything beyond that is bonus. We'd rather you commit to less and feel good about it than over-promise and grind.</p>
+
+  <p>This is my first game and partly a learning project for me. I'm not chasing a masterpiece — if the game has even one track that sounds like it belongs in this world, I'll be satisfied.</p>
+
+  <table class="scope-table">
+    <thead>
+      <tr><th>Tier</th><th>What it covers</th><th>Pieces</th><th>Why it matters</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="tier-cell t1">Tier 1<br>One Track</td>
+        <td>A single loop that captures the aesthetic, used everywhere</td>
+        <td>1 piece</td>
+        <td>The game has music. That music feels like it belongs. Done.</td>
+      </tr>
+      <tr>
+        <td class="tier-cell t2">Tier 2<br>Coverage</td>
+        <td>Menu, Match, Terminal, End screens, <strong>the Larger Ending</strong></td>
+        <td>6 pieces</td>
+        <td>The score plays the right cue at the right moment from boot to the game's final beat</td>
+      </tr>
+      <tr>
+        <td class="tier-cell t3">Tier 3<br>Adaptive &amp; Full</td>
+        <td>Adaptive Match layers, Lobby, Start bed, split Terminal</td>
+        <td>+3–4 pieces</td>
+        <td>Adds breath, dynamics, and runtime adaptability</td>
+      </tr>
+      <tr>
+        <td class="tier-cell t4">Tier 4<br>Wishlist</td>
+        <td>Cross-round erosion, SFX, motifs, the ending, more</td>
+        <td>open-ended</td>
+        <td>The truly ambitious version of the score</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>Mix and match freely. Skip across tiers, write the Larger Ending without writing the Aesthetic Loop first, deliver a Tier 4 SFX pass before any music — whatever pulls at you. If nothing in particular calls, the Tier 1 Aesthetic Loop is a cheap way to confirm world-alignment, but that's a suggestion, not a gate.</p>
+
+  <p><strong>Stopping is fine at any point.</strong> If life gets full, we ship with whatever exists at that moment and call it a complete score. No guilt about anything left undone.</p>
+
+  <h2 id="deliverables"><span class="num">III</span>The Music Deliverables</h2>
+
+  <p>Each entry: where it plays, what it might need to do, approximate length, and a tone we're imagining. None of the lengths or tones are fixed — they're our best guesses about what each cue could be, and we'd much rather hear your read on it than have you stick to ours.</p>
+
+  <p>Looping tracks need clean loop points (no fades). Stings/jingles can have natural tails. Full technical specs are in Section VI — and those are flexible too.</p>
+
+  <h3 class="tier tier1"><span class="label">Tier 1</span> One Track</h3>
+
+  <h4><span class="num-pill t1">1</span>The Aesthetic Loop</h4>
+
+  <div class="deliverable">
+    <div class="meta-line"><strong>Where</strong> Literally everywhere. One track, every scene, the whole time. Main menu, lobby, every match start to finish, end screens. The loop never stops, never changes track. The game has exactly one piece of music and it's this one.</div>
+    <div class="meta-line"><strong>Length</strong> 2:30–4:00, seamless loop. Long enough that a 10-minute match doesn't feel like it's hearing the same 30 seconds again and again.</div>
+    <div class="meta-line"><strong>Job</strong> Capture the world. Adorable and sinister in the same frame. Cute, but the lab is on, and the lab is indifferent. Driving enough that it works under match chaos, restrained enough that it doesn't fight a player's voice in the lobby or a quiet menu screen. Has to hold across every context the game has — because in this tier, it is every context.</div>
+    <div class="meta-line"><strong>Tone reference</strong> The full reference media set in Section I — but if you had to pick three: <em>Cult of the Lamb</em> (the adorable / sinister duality), <em>Nier: Automata</em> (choral indifference), <em>Death Stranding / Low Roar</em> (music as elegy over brutal terrain).</div>
+    <p><strong>If you stop here:</strong> This is the entire score. The lab only has one channel and it's always playing. End screens land on it. Terminal phase shifts via SFX and visual filter only. It will feel intentional.</p>
+  </div>
+
+  <h3 class="tier tier2"><span class="label">Tier 2</span> Coverage</h3>
+
+  <p>Six pieces that let the score play the right cue at the right moment. Replaces Tier 1's single-loop approach with context-specific music from boot to the game's final beat. The first piece in this tier — the Larger Ending — carries the entire emotional payoff of the game and is the single most important deliverable in the whole brief.</p>
+
+  <h4><span class="num-pill t2">2</span>The Larger Ending — <em>the most important piece in the score</em></h4>
+  <div class="deliverable">
+    <div class="meta-line"><strong>Where</strong> Plays once, at the end of the game. Not the end of a match — the end of the <em>whole thing</em>. The lab finally shuts down for good. A few creatures got out. The rest are left unborn — no more will ever be born. The machine simply stops.</div>
+    <div class="meta-line"><strong>Length</strong> 2:00–4:00. A piece, not a loop. Has a beginning, development, and a definitive ending. When it's over, it's over.</div>
+    <div class="meta-line"><strong>Job</strong> This is the emotional payoff of the entire game arc. Everything the five-step feel arc has been building toward lands here. The player who pushed through the degradation, who kept going when there was no external reason to, arrives at this moment — and what they get isn't a triumph. It isn't a defeat either. It's the specific flatness of an ending that doesn't pay off the way you thought it would. The machine just stops. Life goes on. You did it. That's it.</div>
+    <p>The music's hardest job in the whole game: <strong>hold both the weight of having gone this far AND the flatness of arriving at nothing</strong>. Not triumphant. Not mournful. Not bittersweet in the easy sense — bittersweet in the specific sense of a system you spent hours inside finally falling silent without ceremony.</p>
+    <p><strong>Tone:</strong> <em>Death Stranding</em> / Low Roar territory — music as elegy over brutal terrain. <em>Made in Abyss</em> cosmic tenderness at the end of a descent. <em>Nier: Automata</em>'s final pieces. A wordless choir is welcome here if it serves the moment. The piece should arrive somewhere — and that somewhere should not be a resolution chord that says "you won." It should be the sound of the lab going quiet for the last time.</p>
+    <p><strong>Honest caveat:</strong> The ending sequence itself is not yet designed visually. We're asking you to compose to a feeling, not to specific visuals. That feeling is described above and in the world brief. When the visual sequence exists, we will design it <em>toward</em> the music you write — not the other way around. That makes this piece authorial.</p>
+    <div class="callout important"><p><strong>If you can only deliver one Tier 2 piece, deliver this one.</strong> This is the moment that justifies the entire game existing.</p></div>
+  </div>
+
+  <h4><span class="num-pill t2">3</span>Main Menu loop</h4>
+  <div class="deliverable">
+    <div class="meta-line"><strong>Where</strong> Title screen / boot of the game.</div>
+    <div class="meta-line"><strong>Length</strong> 1:30–2:30, seamless loop.</div>
+    <div class="meta-line"><strong>Job</strong> First impression. Plant the world before anyone has pressed a button. Adorable and sinister in the same frame — the player should not be sure whether this is going to be a cute party game or something else. (It is both.) The lab is on but quiet. Nothing is happening yet.</div>
+    <div class="meta-line"><strong>Tone</strong> <em>Cult of the Lamb</em> menu energy crossed with <em>Serial Experiments Lain</em> hum.</div>
+  </div>
+
+  <h4><span class="num-pill t2">4</span>Match loop — single version</h4>
+  <div class="deliverable">
+    <div class="meta-line"><strong>Where</strong> Plays throughout the relay phase of every match. The track players will hear most often.</div>
+    <div class="meta-line"><strong>Length</strong> 3:00–5:00, seamless loop. Single piece, no adaptive layers required at this tier.</div>
+    <div class="meta-line"><strong>Job</strong> Driving, ritualistic, builds and releases internally, but never resolves — the match cannot be musically "won." Write it so it can hold for a 10-minute match without exhausting the listener.</div>
+    <div class="meta-line"><strong>Tone</strong> <em>Nier: Automata</em>'s choral indifference, <em>Death Stranding</em> / Low Roar weight, with the underlying pulse of a small system that doesn't know it's been abandoned.</div>
+  </div>
+
+  <h4><span class="num-pill t2">5</span>Terminal Phase cue</h4>
+  <div class="deliverable">
+    <div class="meta-line"><strong>Where</strong> Triggers the moment a creature reaches terminal form. A color filter changes on screen, a full-width countdown bar appears, ~30 seconds remain.</div>
+    <div class="meta-line"><strong>Length</strong> A single combined piece — short opening sting + sustaining layer through the ~30 sec countdown, dying as the bar empties. Roughly 30–40 sec total of authored material.</div>
+    <div class="meta-line"><strong>Job</strong> The match has changed. Cosmic horror is on the field. Closest the score gets to "horror" — but it should feel like an inevitable arrival, not a jump scare. The cute thing is still cute; it's just carrying too much.</div>
+    <div class="meta-line"><strong>Both-terminal note</strong> Two creatures may reach terminal at once. The cue should still work — don't write it so it depends on being unique.</div>
+    <div class="meta-line"><strong>Tone</strong> <em>Made in Abyss</em> cosmic tenderness over <em>Evangelion</em> NERV pulse.</div>
+  </div>
+
+  <h4><span class="num-pill t2">6</span>End screen jingles (three short cues)</h4>
+  <div class="deliverable">
+    <div class="meta-line"><strong>Where</strong> After the match countdown resolves and the end screen displays. The end screen has two visual styles the player can switch between (clinical in-world log vs. party-game celebration). The jingles should work under both — neither overcommit. There is no version where these are triumphant fanfares.</div>
+    <ul>
+      <li><strong>6a · Match Victory</strong> — your team outlasted. ~4–8 sec. A small lift, then it sits. Not a fanfare. The lab does not celebrate.</li>
+      <li><strong>6b · Match Defeat</strong> — your team was wiped. ~4–8 sec. Not punitive. The system recorded a result.</li>
+      <li><strong>6c · Match Draw</strong> — both teams down, or terminal expired. ~4–8 sec. Specifically flat. The experiment produced no clean data.</li>
+    </ul>
+  </div>
+
+  <h3 class="tier tier3"><span class="label">Tier 3</span> Adaptive &amp; Full</h3>
+
+  <p>Adds breath, dynamics, and runtime adaptability. Higher effort than Tier 2 because most of it requires either authored stems or paired runtime tooling on our end. Pick from this tier whenever it pulls at you — no ordering requirement.</p>
+
+  <h4><span class="num-pill t3">7</span>Lobby loop</h4>
+  <div class="deliverable">
+    <div class="meta-line"><strong>Where</strong> Input-config / setup screen between matches, character + entity + environment selection.</div>
+    <div class="meta-line"><strong>Length</strong> 1:30–2:30, seamless loop.</div>
+    <div class="meta-line"><strong>Job</strong> Lower-stakes waiting-room track. Players are pressing buttons, picking creatures, chatting in the room. Music holds the world but stays out of the way. Slightly lighter than the main menu — closer to "ritual preparation" than "ritual itself."</div>
+    <div class="meta-line"><strong>Tone</strong> A breath. Lab is idle. Soft enough that human voices fill the foreground.</div>
+  </div>
+
+  <h4><span class="num-pill t3">8</span>Match loop — adaptive intensity layers</h4>
+  <div class="deliverable">
+    <p>Upgrade to the Tier 2 Match loop. Three intensity bands, delivered either as three distinct loops or as a stem-layered single loop with three states. The runtime crossfades between bands at bar boundaries.</p>
+    <ul>
+      <li><strong>Band 1 — Pre-evolution (relay only):</strong> Light percussion, pulse, suggestion of melody. The party game is on.</li>
+      <li><strong>Band 2 — First evolution achieved (by either team):</strong> A layer enters. The lab is paying more attention. Pulse tightens.</li>
+      <li><strong>Band 3 — Approaching terminal (any team near 2nd evolution):</strong> Choral or low harmonic layer enters. The thing this is becoming is now audible.</li>
+    </ul>
+    <p>If delivered as stems: all layers phase-aligned to the same bar/tempo, plus a reference full mix <code>.ogg</code>.</p>
+  </div>
+
+  <h4><span class="num-pill t3">9</span>Match Start countdown bed</h4>
+  <div class="deliverable">
+    <div class="meta-line"><strong>Where</strong> Under the typewriter terminal countdown at match start (<code>EXPERIMENT INITIATING IN... 3, 2, 1</code>).</div>
+    <div class="meta-line"><strong>Length</strong> ~6–10 sec, ending on a definitive moment for the GO frame.</div>
+    <div class="meta-line"><strong>Job</strong> Charge the moment before the relay begins. A low pulse with three audible beats aligned to "3," "2," "1," resolving into the first downbeat of the Match loop.</div>
+    <div class="meta-line"><strong>Open question</strong> This may not need music at all — the SFX countdown beeps + GO sound can carry it. Pitch whichever version feels right.</div>
+  </div>
+
+  <h4><span class="num-pill t3">10</span>Terminal sting / layer split</h4>
+  <div class="deliverable">
+    <p>Upgrade to the Tier 2 Terminal cue: split into a distinct entry sting + a separate sustaining layer that can be retriggered or extended cleanly for the both-terminal scenario. Same tone, more flexibility for the audio system to compose at runtime.</p>
+  </div>
+
+  <h3 class="tier tier4"><span class="label">Tier 4</span> Wishlist <span style="opacity:0.7;font-size:13px;letter-spacing:0;text-transform:none;font-weight:600;margin-left:6px;">— no pressure, no deadline</span></h3>
+
+  <p>Genuinely open territory. None of this is required. None of it has a deadline. These are here so you have somewhere to put creative energy if the world keeps pulling at you — and so you know in advance what we'd be excited to receive if it ever lands.</p>
+
+  <h4><span class="num-pill t4">★</span>Cross-round erosion — the ambitious dream</h4>
+  <div class="deliverable">
+    <p>This is the conceptual ceiling of what the score could do, and it's worth naming even though it's wildly out of scope for any realistic part-time effort.</p>
+    <p>The game's central theme is erosion. As a single session continues — round 1, round 10, round 50, round 100 — the lab itself is supposed to degrade. The visual layer is built to support this (shaders that progressively crack, glitch frequency rising, environmental anomalies accumulating). The music could carry this too.</p>
+    <p><strong>The dream:</strong> The music a player hears in round 1 is recognisably the same track they hear in round 50, but it has <em>drifted</em>. Subtle detune. A rhythmic element has dropped. The noise floor has crept up. A choral layer that was beautiful is now slightly out of tune. By round 100, the music is barely holding together — the same theme, audibly haunted by the hours of play that have passed.</p>
+    <p><strong>The shape it might take:</strong> Authored "late-state" stems faded in across long timescales, runtime processing parameters (drift, detune, low-pass cutoff, noise injection) that ramp with session round count, or a hybrid — authored stems crossfaded with the base plus runtime processing on top.</p>
+    <p><strong>Why it's a wishlist item:</strong> It's a high-concept feature requiring careful authoring + runtime tooling on our end. The minimum version (one static loop) intentionally does not do this. But it is one of the most distinctive things the game could have, and naming it here so you know it exists as a direction.</p>
+    <p><strong>Lower-tier seeds:</strong> If you happen to write the base loop in a way that <em>could</em> be processed this way later — clean stems, modal harmony that survives detune, percussion that survives dropout — we'd love that, even if the runtime processing never ships. No commitment, just an awareness.</p>
+  </div>
+
+  <h4><span class="num-pill t4">★</span>Sound effects (full, partial, or none)</h4>
+  <div class="deliverable">
+    <p>Sonic coherence between score and SFX is one of the highest-value things a single composer can give a game, so we'd love to offer SFX to you as well. But it's genuinely optional — if SFX isn't your thing, we'll keep grinding through CC0 libraries ourselves and the game will be fine.</p>
+    <p><strong>Honest state of the current SFX:</strong> Placeholder. The game is wired with a working CC0 layer (Kenney, Freesound CC0, OpenGameArt) so the audio system has <em>something</em> playing for every event — but a lot of the actual sounds in there are bad, some slots are obviously wrong, and some are missing entirely. Regardless of whether you take this on, the full SFX layer is going to get worked over.</p>
+    <p><strong>Possible shapes this could take, in order of effort:</strong></p>
+    <ul>
+      <li><strong>Curation only:</strong> Help us pick the right options from the existing CC0 pools we've gathered. No original composition, just an ear we trust on what to grab.</li>
+      <li><strong>Treatments:</strong> Process / re-pitch / reverb-tail selected SFX so they sit inside the score's world.</li>
+      <li><strong>Signature events only:</strong> Compose original SFX for the handful of most narratively important moments — altar ritual completion, terminal evolution, match end, evolution tier-ups. Leave the rest as curated CC0.</li>
+      <li><strong>Full SFX pass:</strong> Compose all key gameplay SFX in your sonic vocabulary. The most coherent option, the largest lift.</li>
+    </ul>
+    <p><strong>If you don't want this at all:</strong> Absolutely fine, no awkwardness. We'll keep going with CC0 ourselves. Just tell us "music only" and we'll never bring it up again.</p>
+  </div>
+
+  <h4><span class="num-pill t4">★</span>Rare degradation cues</h4>
+  <div class="deliverable">
+    <p>Short stings (2–6 sec, 3–5 cues total) that fire on rare moments when the system glitches harder than usual — a major subsystem drift event, an unexpected failure mode, a rare environmental anomaly. Wrongness, briefly. Should never feel like a stinger library.</p>
+  </div>
+
+  <h4><span class="num-pill t4">★</span>Per-creature motifs</h4>
+  <div class="deliverable">
+    <p>The game launches with one creature archetype and grows to four. Each creature has its own voice in the world. Short melodic / textural identifiers (4–12 sec) that surface in the Match loop when that creature is in play, or in the Lobby when it's selected.</p>
+  </div>
+
+  <h4><span class="num-pill t4">★</span>Per-environment color</h4>
+  <div class="deliverable">
+    <p>Four environments at launch. Each has its own visual identity. A subtle environment-specific tonal shift to the Match loop — different reverb tail, different choral color, different low-end weight. Could be authored as alternate stems on top of the Match loop base.</p>
+  </div>
+
+  <h4><span class="num-pill t4">★</span>Per-entity choral signature</h4>
+  <div class="deliverable">
+    <p>The "otherworldly entities" being tapped for power each have their own character. When an entity is active in a match, a faint signature could surface in the Terminal cue — a different vowel sound, a different interval. The thing being tapped has a voice.</p>
+  </div>
+
+  <h2 id="integration"><span class="num">IV</span>Integration — Where We'd Love Your Take</h2>
+
+  <p>This isn't a separate scoring job handed over after the game is built. It's the <strong>integration layer</strong>. Your ear shapes what the game sounds like, and the game's mechanical reality feeds back into what the music becomes. The boundary between "music" and "sound design" should be porous — ideally invisible to the player.</p>
+
+  <p>Below are integration possibilities, ordered from biggest-concept to smallest-touchpoint. None of it is committed scope. Pitch any of it at whatever tier you're working in, ignore the rest, or suggest things we haven't named.</p>
+
+  <h3>Big-concept integration ideas</h3>
+
+  <div class="deliverable">
+    <p><strong>Dynamic music tied to game state.</strong> Music that responds to the player's creature evolution stage, the match's emotional register, the session's accumulated weight. The Tier 3 adaptive intensity layers are one expression of this. The Tier 4 cross-round erosion is another. The Tier 4 per-creature / per-environment / per-entity wishlist items are too. All of them are <em>music responding to game state</em>.</p>
+    <p><strong>Music structure driving game state — the inverted version.</strong> The most interesting design space here is the <em>opposite</em> relationship: phrase structure, verse/chorus/bridge, modulating creature spawn density, evolution pressure, or ritual event timing. The music's bar count becomes the heartbeat that the game's procedural systems align to. The player may or may not notice consciously; the music's structure shapes their experience regardless. Whether that invisibility is a feature or a limitation is a design question worth investigating together.</p>
+    <p><strong>SFX and ambient as a unified sonic world.</strong> If you take on any of the Tier 4 SFX work, the goal is a soundscape where the boundary between music and sound design isn't audible to the player. <strong>Mick Gordon's work on <em>Doom</em> (2016)</strong> is the reference: a score so deeply tied to the game's sonic identity that the boundary between music and sound design nearly dissolves — SFX from the game world become musical material. This applies even at lower SFX involvement (treatments, signature events) — the question is just how much of the existing CC0 layer survives that treatment.</p>
+    <p><strong>Sonic solutions shaping the score's emotional register.</strong> Whatever you find for <em>how the degradation sounds</em> — specific textures, frequencies, the feel of a system glitching — will shape the rest of the score. The audio world is what makes the game feel like the game.</p>
+  </div>
+
+  <h3>Smaller integration touchpoints</h3>
+
+  <p>We don't have strong opinions on these yet — invitations to think out loud:</p>
+
+  <ul>
+    <li><strong>Pause behavior</strong> — Any player can pause at any time. When they do, should the music duck, freeze, or continue uninterrupted?</li>
+    <li><strong>Music ducking under SFX</strong> — Should the music duck under specific high-impact SFX (altar discharge, terminal sting, evolution moment) so the gameplay event lands? Or do you write the music to leave space, and we don't touch the mix?</li>
+    <li><strong>Context transitions</strong> — Match loop → End screen jingle: crossfade, hard cut, or tail-out? Same question for Menu → Lobby and Lobby → Match.</li>
+    <li><strong>Solo creature state</strong> — When one teammate dies and a single creature is left from a team, does the music shift to acknowledge that, or hold steady?</li>
+    <li><strong>First-evolution one-shot</strong> — Should the very first evolution of a session get a one-shot musical event distinct from the ongoing intensity bands, marking "the system has woken up"? Or does the adaptive band-shift already cover it?</li>
+    <li><strong>Anything else?</strong> — If you spot integration opportunities we haven't named, surface them. The audio system can be built around what you want — not the other way around.</li>
+  </ul>
+
+  <h2 id="out-of-scope"><span class="num">V</span>What's Not in Scope</h2>
+
+  <p>So you know what you are <em>not</em> on the hook for:</p>
+
+  <ul>
+    <li><strong>A standalone song / pop track / vocal piece</strong> — out of scope. Earlier planning explored this as a transmedia artefact; we have scoped down to ship the game first.</li>
+    <li><strong>Music video / trailer-specific score</strong> — not in scope for now.</li>
+    <li><strong>Live instrument recording requirements</strong> — not required. Sample libraries are fine if they serve the world.</li>
+    <li><strong>Sung lyrics in any language</strong> — wordless vocals (choral, syllabic, glossolalic) are welcome. Lyrics are not in scope here.</li>
+  </ul>
+
+  <p>On SFX: see Tier 4. SFX from you is <em>optional</em> — offered if you want it, no expectation if you don't. (The current SFX layer is rough CC0 placeholder and is going to be reworked either way.)</p>
+
+  <h2 id="specs"><span class="num">VI</span>Technical Specs</h2>
+
+  <p>These are starting points, not requirements. If your delivery workflow points to different formats, loudness, naming, or stem structure, tell us — we'll adapt the engine side around what you actually do.</p>
+
+  <ul>
+    <li><strong>Format:</strong> <code>.ogg</code> Vorbis, 44.1 kHz, 16-bit minimum, stereo. Source <code>.wav</code> masters appreciated for archival.</li>
+    <li><strong>Loudness target:</strong> Approx. −16 to −14 LUFS integrated for music loops. Stings can hit slightly hotter (−12 to −10 LUFS short-term peak) but with peaks below −1 dBTP.</li>
+    <li><strong>Loop points:</strong> Seamless. No fade at start/end of loop file. If the loop relies on a tail+head crossfade, mark it.</li>
+    <li><strong>Stems:</strong> If delivering adaptive Match loop as stems, please provide:
+      <ul>
+        <li>One stems folder with each layer as its own loopable <code>.ogg</code>, all phase-aligned to the same bar/tempo</li>
+        <li>A reference full mix <code>.ogg</code> as the "what it should sound like" anchor</li>
+      </ul>
+    </li>
+    <li><strong>Naming:</strong> <code>mus_&lt;context&gt;_&lt;variant&gt;.ogg</code>. Examples: <code>mus_menu_main.ogg</code>, <code>mus_match_loop_band1.ogg</code>, <code>mus_terminal_sting.ogg</code>, <code>mus_endscreen_victory.ogg</code>.</li>
+    <li><strong>Mixer routing:</strong> All music files are loaded by a <code>GameAudioData</code> ScriptableObject and routed to the <code>Music</code> mixer group. You don't need to touch Unity — just deliver named files.</li>
+  </ul>
+
+  <h2 id="process"><span class="num">VII</span>Process</h2>
+
+  <p>Part-time hours, no fixed deadlines. The game has its own pace; the score has yours. Roughly how we'd work together:</p>
+
+  <p><strong>First pass:</strong> Whichever piece pulls at you first, in whatever length feels right to share. If nothing else is calling, the Tier 1 Aesthetic Loop is a cheap way to confirm world-alignment, but the Larger Ending or anything else is equally welcome. We'll respond with notes on whatever you send.</p>
+
+  <p><strong>Iteration:</strong> However you usually run revisions, we'll follow your lead. We can give specific feedback ("the second half drifts too pretty," "pulse too fast under the choir") when it helps — tell us what kind of notes are useful and we'll shape the back-and-forth around that.</p>
+
+  <p><strong>Cadence:</strong> Pick pieces as your energy leads. The tiers are about scope and effort, not sequence — skip across them freely. We can offer a suggested order if you want one, but we'd rather hear yours.</p>
+
+  <p><strong>Stopping is okay at any point.</strong> Whatever exists when you stop is a complete score. No guilt about anything undone.</p>
+
+  <p><strong>Final delivery (per piece):</strong> <code>.ogg</code> + source <code>.wav</code> + a one-line note (tempo, key, intended use). Stems folder for any adaptive track. (Specs in Section VI — and those are flexible, see the lead-in there.)</p>
+
+  <h2 id="remember"><span class="num">VIII</span>Let's Talk</h2>
+
+  <p>This brief is a starting point, not a fixed plan. The interesting part is what comes after you've read it — when we actually talk about what you'd want to make, and we figure out together what this score is going to be.</p>
+
+  <p>A few directions a conversation could open from here:</p>
+
+  <ul>
+    <li><strong>What pulls at you?</strong> Which pieces in the brief actually excite you, which feel off, which would you write differently. We'd rather follow what you're drawn to than push you toward what we drafted.</li>
+    <li><strong>How much do you want to take on?</strong> One loop, the full Tier 2, an ambitious wishlist piece — your call. Tell us what scope feels good and we'll shape things around it.</li>
+    <li><strong>What do you want to know more about?</strong> Any thread in the world — the lab, the degradation, the creatures, the ending, the themes underneath — we'd love to go deeper on, in writing or on a call. Ask anything.</li>
+    <li><strong>Want to see the prototype?</strong> The game is playable in a rough state. Happy to send a build, screen-share a session, or walk you through where it is. The current sound is placeholder, but the feel of the thing is starting to be there.</li>
+    <li><strong>Anything we missed.</strong> If something obvious is absent from this brief — a question, a concern, a constraint we should know about — surface it.</li>
+  </ul>
+
+  <p>Reply however suits you. There's no expected format and no wrong way in.</p>
+
+  <footer class="foot">
+    <span>Play Instigator · Ritual &amp; Ruin</span>
+    <span class="dot-row" aria-hidden="true">
+      <i class="d1"></i><i class="d2"></i><i class="d3"></i>
+    </span>
+    <span>Music Composer Brief</span>
+  </footer>
+
+</div>
+
+<button class="back-to-top" id="backToTop" aria-label="Back to top" type="button">↑</button>
+
+<script>
+  (function () {
+    var btn = document.getElementById("backToTop");
+    if (!btn) return;
+    function update() {
+      if (window.scrollY > 400) btn.classList.add("visible");
+      else btn.classList.remove("visible");
+    }
+    window.addEventListener("scroll", update, { passive: true });
+    update();
+    btn.addEventListener("click", function () {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+  })();
+
+  (function () {
+    var root = document.documentElement;
+    var btn = document.getElementById("themeToggle");
+    var label = document.getElementById("themeLabel");
+    var KEY = "pi-theme";
+    function getInitial() {
+      try {
+        var saved = localStorage.getItem(KEY);
+        if (saved === "light" || saved === "dark") return saved;
+      } catch (e) {}
+      if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) return "dark";
+      return "light";
+    }
+    function apply(theme) {
+      root.setAttribute("data-theme", theme);
+      if (label) label.textContent = theme === "dark" ? "Light" : "Dark";
+      if (btn) btn.setAttribute("aria-label", theme === "dark" ? "Switch to light mode" : "Switch to dark mode");
+      var meta = document.querySelector('meta[name="theme-color"]');
+      if (meta) meta.setAttribute("content", theme === "dark" ? "#1C1917" : "#F9F5F1");
+    }
+    apply(getInitial());
+    if (btn) btn.addEventListener("click", function () {
+      var cur = root.getAttribute("data-theme");
+      var next = cur === "dark" ? "light" : "dark";
+      apply(next);
+      try { localStorage.setItem(KEY, next); } catch (e) {}
+    });
+  })();
+</script>
+
+</body>
+</html>
