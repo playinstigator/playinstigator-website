@@ -67,11 +67,13 @@
   .lede { font-style:italic; font-size:clamp(16px,2.2vw,19px); line-height:1.55; color:var(--ink-soft); margin:0 0 28px 0; padding:20px 22px; border-left:3px solid var(--accent); background:var(--bg-2); border-radius:0 12px 12px 0; }
 
   .hero-art { display:block; width:100%; max-width:560px; height:auto; margin:4px auto 44px; border-radius:16px; box-shadow:var(--shadow); }
-  .cta-wrap { margin:26px 0 6px; }
+  .cta-wrap { margin:26px 0 6px; display:flex; flex-wrap:wrap; gap:12px; }
   .cta-btn { display:inline-flex; align-items:center; gap:9px; background:var(--accent); color:#fff; font-family:var(--f-sharp); font-weight:700; font-size:15.5px; letter-spacing:0.01em; text-decoration:none; padding:14px 26px; border-radius:999px; box-shadow:var(--shadow); transition:transform 0.18s ease, filter 0.18s ease; }
   .cta-btn:hover { transform:translateY(-2px); filter:brightness(1.06); }
   .cta-btn .arrow { font-weight:800; font-size:17px; }
   [data-theme="dark"] .cta-btn { color:#1C1917; }
+  .cta-btn.discord { background:#5865F2; color:#fff; }
+  [data-theme="dark"] .cta-btn.discord { color:#fff; }
   .contact-sub { font-size:14px; color:var(--quiet); margin-top:14px; }
   .contact-sub a { color:var(--accent); text-decoration:none; }
   .contact-sub a:hover { text-decoration:underline; }
@@ -246,9 +248,10 @@
   <h2 id="talk">Interested?</h2>
   <p>Get in touch for more — I'll share the full brief (what the work could actually look like, from one loop up to an ambitious score-plus-SFX), a video walking through the game and where it's at, and how we'd work together.</p>
   <div class="cta-wrap">
-    <a class="cta-btn" href="mailto:collab@playinstigator.com?subject=Audio%20%E2%80%94%20Ritual%20%26%20Ruin">Get in touch <span class="arrow" aria-hidden="true">→</span></a>
+    <a class="cta-btn" href="mailto:collab@playinstigator.com?subject=Audio%20%E2%80%94%20Ritual%20%26%20Ruin">Email me <span class="arrow" aria-hidden="true">→</span></a>
+    <a class="cta-btn discord" href="https://discord.com/users/1119292455016202260" target="_blank" rel="noopener">Message me on Discord</a>
   </div>
-  <p class="contact-sub"><a href="mailto:collab@playinstigator.com?subject=Audio%20%E2%80%94%20Ritual%20%26%20Ruin">collab@playinstigator.com</a> — tell me a little about what you make.</p>
+  <p class="contact-sub">Email <a href="mailto:collab@playinstigator.com?subject=Audio%20%E2%80%94%20Ritual%20%26%20Ruin">collab@playinstigator.com</a> or DM <strong>Play Instigator</strong> on Discord — tell me a little about what you make.</p>
   <footer class="foot">
     <span>Play Instigator · Ritual &amp; Ruin</span>
     <span class="dot-row" aria-hidden="true">
