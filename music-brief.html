@@ -64,7 +64,17 @@
   h1.title .amp { color:var(--accent); font-weight:500; font-style:italic; margin:0 0.15em; }
   h1.title .sub { display:block; font-size:clamp(18px,3vw,24px); font-weight:600; color:var(--ink-soft); margin-top:8px; letter-spacing:-0.01em; }
 
-  .lede { font-style:italic; font-size:clamp(16px,2.2vw,19px); line-height:1.55; color:var(--ink-soft); margin:0 0 36px 0; padding:20px 22px; border-left:3px solid var(--accent); background:var(--bg-2); border-radius:0 12px 12px 0; }
+  .lede { font-style:italic; font-size:clamp(16px,2.2vw,19px); line-height:1.55; color:var(--ink-soft); margin:0 0 28px 0; padding:20px 22px; border-left:3px solid var(--accent); background:var(--bg-2); border-radius:0 12px 12px 0; }
+
+  .hero-art { display:block; width:100%; max-width:560px; height:auto; margin:4px auto 44px; }
+  .cta-wrap { margin:26px 0 6px; }
+  .cta-btn { display:inline-flex; align-items:center; gap:9px; background:var(--accent); color:#fff; font-family:var(--f-sharp); font-weight:700; font-size:15.5px; letter-spacing:0.01em; text-decoration:none; padding:14px 26px; border-radius:999px; box-shadow:var(--shadow); transition:transform 0.18s ease, filter 0.18s ease; }
+  .cta-btn:hover { transform:translateY(-2px); filter:brightness(1.06); }
+  .cta-btn .arrow { font-weight:800; font-size:17px; }
+  [data-theme="dark"] .cta-btn { color:#1C1917; }
+  .contact-sub { font-size:14px; color:var(--quiet); margin-top:14px; }
+  .contact-sub a { color:var(--accent); text-decoration:none; }
+  .contact-sub a:hover { text-decoration:underline; }
 
   .toc { display:flex; flex-wrap:wrap; gap:6px; margin:0 0 36px 0; padding:14px; background:var(--bg-2); border:1px solid var(--rule); border-radius:14px; align-items:center; }
   .toc-label { font-family:var(--f-sharp); font-weight:700; font-size:10.5px; letter-spacing:0.2em; text-transform:uppercase; color:var(--quiet); padding:0 10px; }
@@ -215,14 +225,16 @@
 
   <p class="lede">Looking for a <strong>music composer and/or SFX designer</strong> to own the sound of <em>Ritual &amp; Ruin</em>.</p>
 
-  <h2 id="game"><span class="num">·</span>The game</h2>
+  <img src="images/Characters.png" alt="Ritual &amp; Ruin — character art" class="hero-art">
+
+  <h2 id="game">The game</h2>
   <p>A <strong>2v2 co-op-competitive party game</strong> for PC (Steam) — top-down, 5–10 minute rounds, couch or online. You control a small creature that hunts blood, carries it to a ritual altar, and pours it in; feeding the altar evolves your creature from a cute little thing into something far stranger. It plays as chaotic, cute, and quick to pick up — but it doesn't stay that way. Underneath the party game is something stranger and darker, and audio is a huge part of selling that turn.</p>
 
-  <h2 id="role"><span class="num">·</span>The opportunity</h2>
+  <h2 id="role">The opportunity</h2>
   <p><strong>Total authorship of the audio.</strong> This isn't a hand-off scoring gig where you get a finished game and fill it with music. You'd shape the <strong>entire soundscape</strong> — music <em>and</em> SFX as one sonic world — and <strong>influence the story from a sonic perspective</strong>: how the emotional arc lands, where the game holds back versus releases, how the world's slow decay actually <em>sounds</em>. You'd be in control of everything audio, and the game's systems can bend toward what you want rather than the other way around. For an audio person, that level of control is rare — most gigs hand you a locked thing.</p>
   <p>Music only, or SFX only, is completely fine too — just say which.</p>
 
-  <h2 id="deal"><span class="num">·</span>The honest deal</h2>
+  <h2 id="deal">The honest deal</h2>
   <ul>
     <li><strong>It's a learning project</strong> — my first game, made partly to learn. The bar is just to ship something, not to make a hit.</li>
     <li><strong>Compensation, if you require it, is revenue-share</strong> — and I genuinely don't expect it to make a meaningful amount. Some people may be happy to do this for the experience and the credit; if you need compensation it's a fair share of whatever the game earns, but plan as if the money is roughly zero. Treat any revenue as a bonus.</li>
@@ -231,9 +243,12 @@
 
   <div class="callout"><p>If that exchange is worth it to you, I'd love to talk. If it isn't, given the money reality, that's a completely fair "no" — no hard feelings.</p></div>
 
-  <h2 id="talk"><span class="num">·</span>Interested?</h2>
+  <h2 id="talk">Interested?</h2>
   <p>Get in touch for more — I'll share the full brief (what the work could actually look like, from one loop up to an ambitious score-plus-SFX), a video walking through the game and where it's at, and how we'd work together.</p>
-  <p><a href="mailto:collab@playinstigator.com?subject=Audio%20%E2%80%94%20Ritual%20%26%20Ruin">collab@playinstigator.com</a> — tell me a little about what you make.</p>
+  <div class="cta-wrap">
+    <a class="cta-btn" href="mailto:collab@playinstigator.com?subject=Audio%20%E2%80%94%20Ritual%20%26%20Ruin">Get in touch <span class="arrow" aria-hidden="true">→</span></a>
+  </div>
+  <p class="contact-sub"><a href="mailto:collab@playinstigator.com?subject=Audio%20%E2%80%94%20Ritual%20%26%20Ruin">collab@playinstigator.com</a> — tell me a little about what you make.</p>
   <footer class="foot">
     <span>Play Instigator · Ritual &amp; Ruin</span>
     <span class="dot-row" aria-hidden="true">
