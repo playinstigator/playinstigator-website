@@ -320,14 +320,17 @@
   /* CREDITS */
   .credits {
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 8px;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: stretch;
+    justify-content: center;
+    gap: 12px;
     margin-top: 64px;
     font-size: 12px;
     color: var(--dim);
     letter-spacing: 1px;
   }
+  .credits-tagline, .credits-footer { flex-basis: 100%; text-align: center; }
   .credits-row {
     display: inline-flex;
     align-items: center;
@@ -560,6 +563,21 @@
     opacity: 0.75;
   }
   #screen-end .credits { margin-top: 96px; }
+
+  /* Collab note — small lines inside the credit card */
+  .collab-note {
+    margin: 12px auto 0;
+    padding-top: 12px;
+    border-top: 1px solid rgba(232,232,240,0.12);
+    max-width: 240px;
+    font-size: 11px;
+    line-height: 1.6;
+    color: var(--dim);
+    letter-spacing: 0.5px;
+    text-align: center;
+  }
+  .collab-note a { color: var(--accent); text-decoration: none; }
+  .collab-note a:hover { text-decoration: underline; }
 </style>
 </head>
 <body>
@@ -670,6 +688,10 @@
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2.5 5.5h19c.55 0 1 .45 1 1v11c0 .55-.45 1-1 1h-19c-.55 0-1-.45-1-1v-11c0-.55.45-1 1-1zm.96 1.7v.4l8.54 5.4 8.54-5.4v-.4H3.46zm17.08 2.46-7.55 4.77a1 1 0 0 1-1.06 0L4.38 9.66v7.64h16.16V9.66z"/></svg>
           collab@playinstigator.com
         </a>
+        <div class="collab-note">
+          I'm looking for a music collaborator. <a href="../../music-brief.html">Here's what I have in mind.</a><br>
+          I'd also love to bring creators across mediums together to co-create a world. Say hi.
+        </div>
       </div>
       <div class="credit-card">
         <div class="credit-name">music by qwq404</div>
@@ -678,7 +700,6 @@
           DISCORD
         </a><span class="handle">@qqq520190</span></span>
       </div>
-      <div class="credits-footer">collabs are welcome</div>
     </div>
   </div>
 
