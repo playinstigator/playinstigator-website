@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>How do you build a world? — A co-world-building sharing session (Draft 1)</title>
-  <meta name="description" content="Draft 1 of two. A small, casual session for creators across different mediums to share how each of us thinks about world-building in our craft — and explore whether co-world-building together is something we'd want to do." />
+  <title>How do you build a world? — A co-world-building sharing session</title>
+  <meta name="description" content="A small, casual session for creators across different mediums to explore co-creating worlds together from the start — instead of one craft owning the world and everything else adapting." />
   <meta name="theme-color" content="#F9F5F1" media="(prefers-color-scheme: light)" />
   <meta name="theme-color" content="#1C1917" media="(prefers-color-scheme: dark)" />
-  <meta property="og:title" content="How do you build a world? — Co-world-building session (Draft 1)" />
-  <meta property="og:description" content="A small, casual session. Each creator shares how they think about world-building in their craft, then we explore: could we build a world together? No pitch, no commitment." />
+  <meta property="og:title" content="How do you build a world? — A co-world-building sharing session" />
+  <meta property="og:description" content="What if creators from games, music, animation, comics, toys built a world together from the start instead of one medium owning it and the rest adapting? Low-stakes evening to find out." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://playinstigator.com/sharing/" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -75,46 +75,8 @@
       background:currentColor; box-shadow:inset -3px -3px 0 0 var(--card);
     }
 
-    .draft-switcher {
-      max-width:760px; margin:24px auto 0; padding:0 28px;
-      display:flex; gap:8px; flex-wrap:wrap; align-items:center;
-      position:relative; z-index:5;
-    }
-    .draft-switcher .switch-label {
-      font-family:var(--f-sharp); font-weight:700; font-size:10.5px;
-      letter-spacing:0.22em; text-transform:uppercase; color:var(--quiet);
-      margin-right:4px;
-    }
-    .draft-tab {
-      display:inline-flex; align-items:center; gap:8px;
-      padding:8px 14px; background:var(--card);
-      border:1.5px solid var(--rule); border-radius:999px;
-      text-decoration:none; font-family:var(--f-sharp);
-      font-weight:600; font-size:12.5px; letter-spacing:0.02em;
-      color:var(--ink-soft); transition:border-color 0.2s ease, color 0.2s ease, background-color 0.2s ease;
-    }
-    .draft-tab:hover { border-color:var(--ink-soft); color:var(--ink); }
-    .draft-tab .draft-num {
-      font-family:var(--f-sharp); font-weight:800; font-size:9.5px;
-      letter-spacing:0.18em; text-transform:uppercase;
-      color:var(--quiet); padding:2px 7px;
-      background:var(--bg-2); border-radius:4px;
-    }
-    .draft-tab.active {
-      background:var(--accent); border-color:var(--accent); color:#fff;
-    }
-    .draft-tab.active .draft-num {
-      background:rgba(255,255,255,0.22); color:#fff;
-    }
-    .draft-intro {
-      max-width:760px; margin:10px auto 0; padding:0 28px;
-      font-family:var(--f-body); font-size:13px;
-      color:var(--quiet); font-style:italic;
-      position:relative; z-index:5;
-    }
-
     .reader {
-      max-width:720px; margin:0 auto; padding:42px 28px 96px;
+      max-width:720px; margin:0 auto; padding:56px 28px 96px;
       position:relative; z-index:3;
     }
 
@@ -288,10 +250,7 @@
     @media (max-width:600px) {
       body { font-size:18px; }
       .topbar { padding:20px 20px 0; }
-      .draft-switcher { padding:0 20px; margin-top:18px; }
-      .draft-intro { padding:0 20px; }
-      .draft-tab { font-size:11.5px; padding:7px 11px; }
-      .reader { padding:30px 20px 72px; }
+      .reader { padding:36px 20px 72px; }
       .reader p { font-size:1.0625rem; line-height:1.75; }
       .subtitle { font-size:1.125rem; margin-bottom:2.5rem; }
       .reader .pivot { font-size:1.5rem; padding-left:1.1rem; }
@@ -321,38 +280,25 @@
     </button>
   </header>
 
-  <nav class="draft-switcher" aria-label="Draft variants">
-    <span class="switch-label">Drafts</span>
-    <a class="draft-tab active" href="./" aria-current="page">
-      <span class="draft-num">D1</span>
-      <span>Co-world-building</span>
-    </a>
-    <a class="draft-tab" href="process.html">
-      <span class="draft-num">D2</span>
-      <span>Process sharing</span>
-    </a>
-  </nav>
-  <p class="draft-intro">Two drafts being compared. Click to switch.</p>
-
   <main class="reader">
 
     <p class="eyebrow">Sharing Session · Invite</p>
 
     <h1 class="title">How do you <span class="accent">build a world?</span></h1>
 
-    <p class="subtitle">A small, casual session for creators across different mediums to share how each of us thinks about world-building — and whether co-world-building together is something we'd want to try.</p>
+    <p class="subtitle">An evening for creators across different mediums — about co-creating worlds across crafts, from the start.</p>
 
-    <p>Worlds are almost always built by one craft and adapted into others. The writer makes the world, the game and music and comics arrive later — pre-shaped, adapting decisions already made. By the time a creator from another medium gets there, the world is closed.</p>
+    <p>A Disney movie becomes a huge success. So now you need a live-action remake, storybooks, a Broadway show, a new theme park area. Was the original work created with those in mind? Probably not — the world was made for one medium, and everything else had to fit itself to it.</p>
 
-    <p>Across mediums <em>at the same time,</em> with creators of each craft in the room from the start — almost nobody builds worlds that way. Even the people who'd want to try it have nowhere to find each other, and no low-stakes way to find out if they'd actually click.</p>
+    <p>That's how almost all transmedia worlds get built. One craft owns the world. Everything else adapts. The soul gets lost in translation, and the creators in other mediums only show up after the decisions are already made.</p>
 
-    <p>What would happen if we did try? If a handful of us from different mediums got in a room and showed each other how we actually think about world-building. Not pitching anything — just seeing how each of us works. And then asking the question the usual model never lets us ask: could a group like this actually try <span class="accent">co-building a world together?</span></p>
+    <p>But what if we flipped it? What if we brought together creators of animation, games, music, comics, toys — and had them <span class="accent">co-create a world that's shaped by exactly that combination of mediums from the start?</span> Not adapting one world into others. Building one <em>together,</em> from the inside, each craft shaping it from where it sits.</p>
 
     <p class="pivot">That's what this is.</p>
 
-    <p>I'm putting together a small evening — four to six creators from different mediums, casual, no pitch. We share how we each think about world-building, then sit with the bigger question.</p>
+    <p>I'm putting together a small evening — four to six creators from different mediums, casual, no pitch. We share how we each think about world-building, then sit with the bigger question: could a group like this actually try doing it together?</p>
 
-    <p>I'm an indie game dev. I think the worlds I love most could only have been built with people from other crafts in the room from the start — but I've never actually seen it happen. I want to find out what it looks like when we try. <span class="accent">Low stakes, good company, mutual curiosity.</span></p>
+    <p>I'm an indie game dev. I think the worlds I love most could only have been built with people from other crafts in the room from the start — but I've never actually seen it happen at an indie scale. I want to find out what it looks like when we try. <span class="accent">Low stakes, good company, mutual curiosity.</span></p>
 
     <p>If that sounds like your kind of evening, come.</p>
 
@@ -390,7 +336,7 @@
       <p class="cta-label">If that sounds like your kind of evening</p>
       <p class="cta-line">Tell me a bit about you. I'll reach out personally.</p>
       <form class="interest-form" id="interest-form" action="https://formspree.io/f/xjgaaeyn" method="POST" novalidate>
-        <input type="hidden" name="_subject" value="Sharing session interest — Draft 1 (co-world-building)" />
+        <input type="hidden" name="_subject" value="Sharing session interest (co-world-building)" />
         <div class="ff-row">
           <label class="ff-field"><span class="ff-label">Your name</span><input type="text" name="name" required autocomplete="name" /></label>
           <label class="ff-field"><span class="ff-label">Your medium</span><input type="text" name="medium" required placeholder="writing, music, illustration, games…" /></label>
@@ -405,7 +351,6 @@
         <p class="ff-thanks-msg">I'll be in touch when there's a session locked in.</p>
       </div>
       <p class="cta-foot ff-fallback">Or reach out directly: <a href="mailto:collab@playinstigator.com?subject=World-building%20session%20%E2%80%94%20%5Byour%20medium%5D">email</a> · <a href="https://discord.com/users/1119292455016202260" target="_blank" rel="noopener">Discord</a></p>
-      <p class="cta-foot cta-cross">Comparing drafts? <a href="process.html">See Draft 2 (process sharing) →</a></p>
     </div>
 
     <p class="signoff">Play Instigator. Instigating real play.</p>
