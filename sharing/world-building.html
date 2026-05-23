@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>How do you build a world? — A co-world-building sharing session</title>
+  <meta name="description" content="A small, casual session for creators across different mediums to share how each of us thinks about world-building in our craft — and explore whether co-world-building together is something we'd want to do." />
+  <meta name="theme-color" content="#F9F5F1" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#1C1917" media="(prefers-color-scheme: dark)" />
+  <meta property="og:title" content="How do you build a world? — Co-world-building session" />
+  <meta property="og:description" content="A small, casual session. Each creator shares how they think about world-building in their craft, then we explore: could we build a world together? No pitch, no commitment." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://playinstigator.com/sharing/world-building.html" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --cream:#F9F5F1; --charcoal:#1C1917; --coral:#FF3344;
+      --play-blue:#57E0FF; --ultraviolet:#974DFF; --lemon:#FFF066; --mint:#81FDC1;
+      --f-play:"Fredoka",system-ui,sans-serif;
+      --f-sharp:"Plus Jakarta Sans",system-ui,sans-serif;
+      --f-body:"Figtree",system-ui,sans-serif;
+      --bg:var(--cream); --bg-2:#F1ECE5; --ink:var(--charcoal); --ink-soft:#3D3834;
+      --quiet:#6B615B; --rule:#D8CEC4; --accent:var(--ultraviolet); --accent-2:var(--coral);
+      --card:#FFFFFF; --shadow:0 6px 24px rgba(28,25,23,0.07);
+    }
+    [data-theme="dark"] {
+      --bg:var(--charcoal); --bg-2:#2A2622; --ink:var(--cream); --ink-soft:#D8CEC4;
+      --quiet:#9A8F87; --rule:#3D3834; --accent:#B47CFF; --accent-2:#FF5566;
+      --card:#24201C; --shadow:0 8px 28px rgba(0,0,0,0.45);
+    }
+
+    *,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+    html { scroll-behavior:smooth; }
+    body {
+      background:var(--bg); color:var(--ink);
+      font-family:var(--f-body); font-size:19px; line-height:1.7;
+      -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+      transition:background-color 0.25s ease, color 0.25s ease;
+      min-height:100vh; position:relative; overflow-x:hidden;
+    }
+
+    .shape { position:absolute; pointer-events:none; opacity:0.45; z-index:0; border-radius:50%; }
+    .shape-1 { top:-60px; right:-50px; width:200px; height:200px; background:var(--ultraviolet); transform:rotate(13deg); opacity:0.4; }
+    .shape-2 { top:320px; left:-90px; width:160px; height:160px; background:var(--coral); clip-path:polygon(50% 0,100% 100%,0 100%); border-radius:0; transform:rotate(-7deg); opacity:0.35; }
+    .shape-3 { bottom:180px; right:-70px; width:240px; height:70px; background:var(--play-blue); border-radius:100px; transform:rotate(7deg); opacity:0.28; }
+    [data-theme="dark"] .shape { opacity:0.22; }
+    [data-theme="dark"] .shape-1 { opacity:0.28; }
+
+    .topbar {
+      max-width:760px; margin:0 auto; padding:28px 28px 0;
+      display:flex; align-items:center; justify-content:space-between;
+      gap:12px; flex-wrap:wrap; position:relative; z-index:5;
+    }
+    .studio-mark {
+      display:inline-flex; align-items:baseline; gap:7px; text-decoration:none;
+      font-family:var(--f-sharp); font-weight:700; font-size:12px;
+      letter-spacing:0.24em; text-transform:uppercase; color:var(--quiet);
+    }
+    .studio-mark .play { font-family:var(--f-play); font-weight:600; letter-spacing:0.08em; color:var(--accent); font-size:13px; }
+    .studio-mark .dot { width:4px; height:4px; background:var(--accent-2); border-radius:50%; display:inline-block; transform:translateY(-2px); }
+    .studio-mark .inst { font-family:var(--f-sharp); font-weight:800; letter-spacing:0.02em; color:var(--ink); font-size:13px; }
+
+    .pill-btn {
+      background:var(--card); border:1.5px solid var(--rule); border-radius:999px;
+      padding:7px 14px 7px 10px; cursor:pointer; display:inline-flex; align-items:center; gap:8px;
+      font-family:var(--f-sharp); font-weight:600; font-size:12.5px;
+      letter-spacing:0.04em; color:var(--ink-soft);
+      transition:border-color 0.2s ease, color 0.2s ease;
+    }
+    .pill-btn:hover { border-color:var(--ink-soft); color:var(--ink); }
+    .theme-toggle .icon {
+      width:14px; height:14px; display:inline-block; border-radius:50%;
+      background:currentColor; box-shadow:inset -3px -3px 0 0 var(--card);
+    }
+
+    .reader {
+      max-width:720px; margin:0 auto; padding:56px 28px 96px;
+      position:relative; z-index:3;
+    }
+
+    .eyebrow {
+      font-family:var(--f-sharp); font-size:0.78rem; text-transform:uppercase;
+      letter-spacing:0.18em; color:var(--quiet); margin-bottom:1.5rem; font-weight:600;
+    }
+
+    .title {
+      font-family:var(--f-play); font-weight:600;
+      font-size:clamp(2.4rem,6vw,3.75rem); line-height:1.12;
+      letter-spacing:-0.015em; color:var(--ink); margin-bottom:0.85rem;
+    }
+    .title .accent { color:var(--accent-2); }
+
+    .subtitle {
+      font-family:var(--f-body); font-size:1.25rem; line-height:1.55;
+      color:var(--quiet); margin-bottom:3.5rem;
+    }
+
+    .reader p {
+      font-family:var(--f-body); font-size:1.1875rem; line-height:1.78;
+      color:var(--ink-soft); margin-bottom:1.55rem;
+    }
+    .reader p strong { color:var(--ink); font-weight:700; }
+    .reader p .accent { color:var(--accent-2); font-weight:700; }
+
+    .reader .pivot {
+      font-family:var(--f-play); font-weight:500;
+      font-size:1.875rem; line-height:1.4; color:var(--ink);
+      margin:2.6rem 0; padding-left:1.4rem;
+      border-left:3px solid var(--accent-2);
+    }
+
+    .shape-block {
+      margin:2.6rem 0; padding:1.8rem 2rem;
+      background:var(--bg-2); border:1px solid var(--rule); border-radius:14px;
+    }
+    .shape-block h3 {
+      font-family:var(--f-sharp); font-weight:800; font-size:0.85rem;
+      text-transform:uppercase; letter-spacing:0.18em;
+      color:var(--accent); margin-bottom:1rem;
+    }
+    .shape-block ol {
+      list-style:none; counter-reset:step; padding:0; margin:0;
+    }
+    .shape-block li {
+      counter-increment:step;
+      font-family:var(--f-body); font-size:1.0625rem; line-height:1.65;
+      color:var(--ink-soft); padding:0.65rem 0 0.65rem 2.4rem;
+      position:relative; border-bottom:1px dashed var(--rule);
+    }
+    .shape-block li:last-child { border-bottom:none; }
+    .shape-block li::before {
+      content:counter(step);
+      position:absolute; left:0; top:0.7rem;
+      width:1.7rem; height:1.7rem;
+      background:var(--accent); color:#fff;
+      font-family:var(--f-sharp); font-weight:800; font-size:0.78rem;
+      border-radius:50%; display:inline-flex;
+      align-items:center; justify-content:center;
+    }
+    .shape-block li strong { color:var(--ink); font-weight:700; }
+
+    .compare {
+      display:grid; grid-template-columns:1fr 1fr; gap:14px;
+      margin:2.6rem 0 2.4rem;
+    }
+    .compare > div {
+      background:var(--card); border:1px solid var(--rule); border-radius:12px;
+      padding:1.4rem 1.5rem; box-shadow:var(--shadow);
+    }
+    .compare h3 {
+      font-family:var(--f-sharp); font-weight:700; font-size:0.78rem;
+      text-transform:uppercase; letter-spacing:0.18em;
+      margin-bottom:1rem; padding-bottom:0.7rem; border-bottom:1px solid var(--rule);
+    }
+    .compare .is h3 { color:var(--accent); }
+    .compare .isnt h3 { color:var(--accent-2); }
+    .compare ul { list-style:none; padding:0; margin:0; }
+    .compare li {
+      font-family:var(--f-body); font-size:1rem; line-height:1.55;
+      color:var(--ink-soft); padding:0.5rem 0; border-bottom:1px dashed var(--rule);
+    }
+    .compare li:last-child { border-bottom:none; }
+    @media (max-width:600px) {
+      .compare { grid-template-columns:1fr; gap:10px; }
+    }
+
+    .cta-block {
+      margin-top:3.5rem; padding:2.75rem 2.5rem;
+      background:var(--card); border:1px solid var(--rule); border-radius:14px;
+      box-shadow:var(--shadow); text-align:center;
+    }
+    .cta-label {
+      font-family:var(--f-sharp); font-size:0.78rem; text-transform:uppercase;
+      letter-spacing:0.18em; color:var(--quiet); margin-bottom:1.25rem; font-weight:600;
+    }
+    .cta-line {
+      font-family:var(--f-play); font-weight:500; font-size:1.4rem;
+      color:var(--ink); line-height:1.5; margin-bottom:1.75rem;
+    }
+    .cta-email {
+      display:inline-block; font-family:var(--f-sharp); font-weight:700;
+      font-size:1.125rem; letter-spacing:0.01em;
+      background:var(--accent-2); color:#F9F5F1;
+      padding:1rem 2rem; border-radius:50px; text-decoration:none;
+      transition:transform 0.15s ease, filter 0.2s ease;
+    }
+    .cta-email:hover { transform:translateY(-1px); filter:brightness(1.08); }
+    .cta-foot {
+      font-family:var(--f-body); font-size:1rem; color:var(--quiet); margin-top:1.4rem;
+    }
+    .cta-cross {
+      margin-top:1.2rem; padding-top:1.2rem; border-top:1px solid var(--rule);
+      font-size:0.95rem;
+    }
+    .cta-cross a { color:var(--accent); font-weight:600; text-decoration:none; }
+    .cta-cross a:hover { text-decoration:underline; }
+
+    .signoff {
+      text-align:center; font-family:var(--f-play); font-style:italic;
+      font-size:1.05rem; color:var(--quiet); margin-top:4.5rem;
+    }
+
+    .pg-foot {
+      max-width:720px; margin:0 auto; padding:28px;
+      border-top:1px solid var(--rule);
+      display:flex; gap:1.25rem; flex-wrap:wrap; align-items:center;
+      font-family:var(--f-body); font-size:0.875rem; color:var(--quiet);
+    }
+    .pg-foot a { color:var(--quiet); text-decoration:none; transition:color 0.2s ease; }
+    .pg-foot a:hover { color:var(--ink); }
+
+    @media (max-width:600px) {
+      body { font-size:18px; }
+      .topbar { padding:20px 20px 0; }
+      .reader { padding:36px 20px 72px; }
+      .reader p { font-size:1.0625rem; line-height:1.75; }
+      .subtitle { font-size:1.125rem; margin-bottom:2.5rem; }
+      .reader .pivot { font-size:1.5rem; padding-left:1.1rem; }
+      .shape-block { padding:1.4rem 1.4rem; }
+      .cta-block { padding:2rem 1.5rem; }
+      .cta-line { font-size:1.15rem; }
+      .cta-email { font-size:1rem; padding:0.85rem 1.6rem; }
+      .pg-foot { padding:20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="shape shape-1" aria-hidden="true"></div>
+  <div class="shape shape-2" aria-hidden="true"></div>
+  <div class="shape shape-3" aria-hidden="true"></div>
+
+  <header class="topbar">
+    <a class="studio-mark" href="/">
+      <span class="play">Play</span>
+      <span class="dot" aria-hidden="true"></span>
+      <span class="inst">Instigator</span>
+    </a>
+    <button class="pill-btn theme-toggle" id="themeToggle" type="button" aria-label="Toggle dark mode">
+      <span class="icon" aria-hidden="true"></span>
+      <span class="label" id="themeLabel">Dark</span>
+    </button>
+  </header>
+
+  <main class="reader">
+
+    <p class="eyebrow">Sharing Session · Co-World-Building</p>
+
+    <h1 class="title">How do you <span class="accent">build a world?</span></h1>
+
+    <p class="subtitle">A small, casual session for creators across different mediums to share how each of us thinks about world-building — and whether co-world-building together is something we'd want to try.</p>
+
+    <p>Hey — I'm putting together a small, casual session for people who make things across different mediums, and I'd love to have you.</p>
+
+    <p>Here's the angle: each of us comes in and shares <strong>how we think about world-building in our craft.</strong> Not finished worlds. The way you actually approach it: where does a world begin for you? How does it cohere? How do you know when it has weight? How does your medium shape the kinds of worlds you can build, and the kinds you can't?</p>
+
+    <p>A writer and a musician and an illustrator and a game designer don't world-build the same way. They probably <em>shouldn't.</em> But seeing each other's approaches up close, even briefly — that's interesting in itself.</p>
+
+    <p>And then the bigger question: if a handful of us were to actually try <span class="accent">building a world together,</span> across our mediums — what would that even look like? What would it ask of us? What would we want from it? Not a pitch. Not a commitment. Just an honest conversation about whether co-world-building is something any of us is curious about.</p>
+
+    <p>I'm an indie game dev building a world I care about, and I want to see what happens when people from different crafts compare notes on this specific thing. <span class="accent">Low stakes, good company, mutual curiosity.</span></p>
+
+    <p class="pivot">If that sounds like your kind of evening, come.</p>
+
+    <div class="shape-block">
+      <h3>Rough shape of the evening</h3>
+      <ol>
+        <li><strong>Each creator, 5–10 min</strong> — informally walk us through how you approach world-building in your medium. Slides optional. Show one or two real examples from your process if useful.</li>
+        <li><strong>Cross-medium discussion</strong> — what's surprising, what overlaps, what's totally medium-specific.</li>
+        <li><strong>The open question</strong> — would any of us want to try co-world-building together? What would make it worth doing? What would kill it?</li>
+      </ol>
+    </div>
+
+    <div class="compare">
+      <div class="is">
+        <h3>What it is</h3>
+        <ul>
+          <li>Each creator shares how they world-build, briefly</li>
+          <li>An honest discussion about co-world-building</li>
+          <li>Cross-medium curiosity, low stakes</li>
+          <li>A way to feel out creative chemistry</li>
+        </ul>
+      </div>
+      <div class="isnt">
+        <h3>What it isn't</h3>
+        <ul>
+          <li>A pitch or recruitment</li>
+          <li>A commitment to any project</li>
+          <li>Paid, or about money at all</li>
+          <li>A pre-made world you're being asked to join</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="cta-block">
+      <p class="cta-label">If that sounds like your kind of evening</p>
+      <p class="cta-line">Email me. Tell me what medium you work in and roughly how you think about world-building.</p>
+      <a class="cta-email" href="mailto:collab@playinstigator.com?subject=World-building%20session%20%E2%80%94%20%5Byour%20medium%5D">collab@playinstigator.com</a>
+      <p class="cta-foot">A real conversation, not an application form.</p>
+      <p class="cta-foot cta-cross">Prefer a wider conversation about creative process? <a href="./">Try the general process variant →</a></p>
+    </div>
+
+    <p class="signoff">Play Instigator. Instigating real play.</p>
+
+  </main>
+
+  <footer class="pg-foot">
+    <span>Play Instigator · Singapore</span>
+    <span>·</span>
+    <a href="/">Back to site</a>
+    <span>·</span>
+    <a href="/privacy.html">Privacy</a>
+  </footer>
+
+  <script>
+    (function(){
+      var root = document.documentElement;
+      var btn = document.getElementById('themeToggle');
+      var label = document.getElementById('themeLabel');
+      var stored = null;
+      try { stored = localStorage.getItem('pi-theme'); } catch (e) {}
+      if (stored === 'dark' || stored === 'light') {
+        root.setAttribute('data-theme', stored);
+      } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        root.setAttribute('data-theme', 'dark');
+      }
+      function sync(){
+        var t = root.getAttribute('data-theme');
+        if (label) label.textContent = t === 'dark' ? 'Light' : 'Dark';
+      }
+      sync();
+      if (btn) btn.addEventListener('click', function(){
+        var t = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+        root.setAttribute('data-theme', t);
+        try { localStorage.setItem('pi-theme', t); } catch (e) {}
+        sync();
+      });
+    })();
+  </script>
+</body>
+</html>
