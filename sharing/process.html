@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>How do you build a world? — A co-world-building sharing session</title>
-  <meta name="description" content="A small, casual session for creators across different mediums to share how each of us thinks about world-building in our craft — and explore whether co-world-building together is something we'd want to do." />
+  <title>How do you build a world? — A creator sharing session (Draft 2)</title>
+  <meta name="description" content="Draft 2 of two. A small, casual session for creators across different mediums — writers, musicians, illustrators, game folks — to share how we actually work. No pitch, no project. Just process." />
   <meta name="theme-color" content="#F9F5F1" media="(prefers-color-scheme: light)" />
   <meta name="theme-color" content="#1C1917" media="(prefers-color-scheme: dark)" />
-  <meta property="og:title" content="How do you build a world? — Co-world-building session" />
-  <meta property="og:description" content="A small, casual session. Each creator shares how they think about world-building in their craft, then we explore: could we build a world together? No pitch, no commitment." />
+  <meta property="og:title" content="How do you build a world? (Draft 2)" />
+  <meta property="og:description" content="A small, casual creator sharing session. Cross-medium notes on how we actually work — the messy middle. No pitch, no project." />
   <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://playinstigator.com/sharing/world-building.html" />
+  <meta property="og:url" content="https://playinstigator.com/sharing/process.html" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -42,8 +42,8 @@
     }
 
     .shape { position:absolute; pointer-events:none; opacity:0.45; z-index:0; border-radius:50%; }
-    .shape-1 { top:-60px; right:-50px; width:200px; height:200px; background:var(--ultraviolet); transform:rotate(13deg); opacity:0.4; }
-    .shape-2 { top:320px; left:-90px; width:160px; height:160px; background:var(--coral); clip-path:polygon(50% 0,100% 100%,0 100%); border-radius:0; transform:rotate(-7deg); opacity:0.35; }
+    .shape-1 { top:-60px; right:-50px; width:200px; height:200px; background:var(--coral); transform:rotate(13deg); }
+    .shape-2 { top:320px; left:-90px; width:160px; height:160px; background:var(--ultraviolet); clip-path:polygon(50% 0,100% 100%,0 100%); border-radius:0; transform:rotate(-7deg); opacity:0.32; }
     .shape-3 { bottom:180px; right:-70px; width:240px; height:70px; background:var(--play-blue); border-radius:100px; transform:rotate(7deg); opacity:0.28; }
     [data-theme="dark"] .shape { opacity:0.22; }
     [data-theme="dark"] .shape-1 { opacity:0.28; }
@@ -75,8 +75,46 @@
       background:currentColor; box-shadow:inset -3px -3px 0 0 var(--card);
     }
 
+    .draft-switcher {
+      max-width:760px; margin:24px auto 0; padding:0 28px;
+      display:flex; gap:8px; flex-wrap:wrap; align-items:center;
+      position:relative; z-index:5;
+    }
+    .draft-switcher .switch-label {
+      font-family:var(--f-sharp); font-weight:700; font-size:10.5px;
+      letter-spacing:0.22em; text-transform:uppercase; color:var(--quiet);
+      margin-right:4px;
+    }
+    .draft-tab {
+      display:inline-flex; align-items:center; gap:8px;
+      padding:8px 14px; background:var(--card);
+      border:1.5px solid var(--rule); border-radius:999px;
+      text-decoration:none; font-family:var(--f-sharp);
+      font-weight:600; font-size:12.5px; letter-spacing:0.02em;
+      color:var(--ink-soft); transition:border-color 0.2s ease, color 0.2s ease, background-color 0.2s ease;
+    }
+    .draft-tab:hover { border-color:var(--ink-soft); color:var(--ink); }
+    .draft-tab .draft-num {
+      font-family:var(--f-sharp); font-weight:800; font-size:9.5px;
+      letter-spacing:0.18em; text-transform:uppercase;
+      color:var(--quiet); padding:2px 7px;
+      background:var(--bg-2); border-radius:4px;
+    }
+    .draft-tab.active {
+      background:var(--accent); border-color:var(--accent); color:#fff;
+    }
+    .draft-tab.active .draft-num {
+      background:rgba(255,255,255,0.22); color:#fff;
+    }
+    .draft-intro {
+      max-width:760px; margin:10px auto 0; padding:0 28px;
+      font-family:var(--f-body); font-size:13px;
+      color:var(--quiet); font-style:italic;
+      position:relative; z-index:5;
+    }
+
     .reader {
-      max-width:720px; margin:0 auto; padding:56px 28px 96px;
+      max-width:720px; margin:0 auto; padding:42px 28px 96px;
       position:relative; z-index:3;
     }
 
@@ -110,36 +148,6 @@
       margin:2.6rem 0; padding-left:1.4rem;
       border-left:3px solid var(--accent-2);
     }
-
-    .shape-block {
-      margin:2.6rem 0; padding:1.8rem 2rem;
-      background:var(--bg-2); border:1px solid var(--rule); border-radius:14px;
-    }
-    .shape-block h3 {
-      font-family:var(--f-sharp); font-weight:800; font-size:0.85rem;
-      text-transform:uppercase; letter-spacing:0.18em;
-      color:var(--accent); margin-bottom:1rem;
-    }
-    .shape-block ol {
-      list-style:none; counter-reset:step; padding:0; margin:0;
-    }
-    .shape-block li {
-      counter-increment:step;
-      font-family:var(--f-body); font-size:1.0625rem; line-height:1.65;
-      color:var(--ink-soft); padding:0.65rem 0 0.65rem 2.4rem;
-      position:relative; border-bottom:1px dashed var(--rule);
-    }
-    .shape-block li:last-child { border-bottom:none; }
-    .shape-block li::before {
-      content:counter(step);
-      position:absolute; left:0; top:0.7rem;
-      width:1.7rem; height:1.7rem;
-      background:var(--accent); color:#fff;
-      font-family:var(--f-sharp); font-weight:800; font-size:0.78rem;
-      border-radius:50%; display:inline-flex;
-      align-items:center; justify-content:center;
-    }
-    .shape-block li strong { color:var(--ink); font-weight:700; }
 
     .compare {
       display:grid; grid-template-columns:1fr 1fr; gap:14px;
@@ -214,11 +222,13 @@
     @media (max-width:600px) {
       body { font-size:18px; }
       .topbar { padding:20px 20px 0; }
-      .reader { padding:36px 20px 72px; }
+      .draft-switcher { padding:0 20px; margin-top:18px; }
+      .draft-intro { padding:0 20px; }
+      .draft-tab { font-size:11.5px; padding:7px 11px; }
+      .reader { padding:30px 20px 72px; }
       .reader p { font-size:1.0625rem; line-height:1.75; }
       .subtitle { font-size:1.125rem; margin-bottom:2.5rem; }
       .reader .pivot { font-size:1.5rem; padding-left:1.1rem; }
-      .shape-block { padding:1.4rem 1.4rem; }
       .cta-block { padding:2rem 1.5rem; }
       .cta-line { font-size:1.15rem; }
       .cta-email { font-size:1rem; padding:0.85rem 1.6rem; }
@@ -244,43 +254,45 @@
     </button>
   </header>
 
+  <nav class="draft-switcher" aria-label="Draft variants">
+    <span class="switch-label">Drafts</span>
+    <a class="draft-tab" href="./">
+      <span class="draft-num">D1</span>
+      <span>Co-world-building</span>
+    </a>
+    <a class="draft-tab active" href="process.html" aria-current="page">
+      <span class="draft-num">D2</span>
+      <span>Process sharing</span>
+    </a>
+  </nav>
+  <p class="draft-intro">Two drafts being compared. Click to switch.</p>
+
   <main class="reader">
 
-    <p class="eyebrow">Sharing Session · Co-World-Building</p>
+    <p class="eyebrow">Sharing Session · Invite</p>
 
     <h1 class="title">How do you <span class="accent">build a world?</span></h1>
 
-    <p class="subtitle">A small, casual session for creators across different mediums to share how each of us thinks about world-building — and whether co-world-building together is something we'd want to try.</p>
+    <p class="subtitle">A small, casual session for people who make things across different mediums. No pitch. No project. Just process.</p>
 
     <p>Hey — I'm putting together a small, casual session for people who make things across different mediums, and I'd love to have you.</p>
 
-    <p>Here's the angle: each of us comes in and shares <strong>how we think about world-building in our craft.</strong> Not finished worlds. The way you actually approach it: where does a world begin for you? How does it cohere? How do you know when it has weight? How does your medium shape the kinds of worlds you can build, and the kinds you can't?</p>
+    <p>The idea is simple: a handful of creators — writers, musicians, illustrators, game folks, whoever — in one room (or call), each sharing <strong>how we actually work.</strong> Not finished portfolios. The messy middle: how you world-build, how you get from a blank page to an idea, how you prototype, how you know when something's done, where you get stuck.</p>
 
-    <p>A writer and a musician and an illustrator and a game designer don't world-build the same way. They probably <em>shouldn't.</em> But seeing each other's approaches up close, even briefly — that's interesting in itself.</p>
+    <p>No pitch. No project. Nothing to sign up for. I'm not recruiting you for anything — I just think there's something genuinely useful and fun in watching how someone from a totally different medium (or even your own) thinks through the same creative problems you do. We rarely get to see each other's process.</p>
 
-    <p>And then the bigger question: if a handful of us were to actually try <span class="accent">building a world together,</span> across our mediums — what would that even look like? What would it ask of us? What would we want from it? Not a pitch. Not a commitment. Just an honest conversation about whether co-world-building is something any of us is curious about.</p>
-
-    <p>I'm an indie game dev building a world I care about, and I want to see what happens when people from different crafts compare notes on this specific thing. <span class="accent">Low stakes, good company, mutual curiosity.</span></p>
+    <p>I'm an indie game dev building a world I care about, and I'm curious whether a group of people from different crafts can spark off each other. This first session is me testing exactly that — <span class="accent">low stakes, good company, mutual curiosity.</span></p>
 
     <p class="pivot">If that sounds like your kind of evening, come.</p>
-
-    <div class="shape-block">
-      <h3>Rough shape of the evening</h3>
-      <ol>
-        <li><strong>Each creator, 5–10 min</strong> — informally walk us through how you approach world-building in your medium. Slides optional. Show one or two real examples from your process if useful.</li>
-        <li><strong>Cross-medium discussion</strong> — what's surprising, what overlaps, what's totally medium-specific.</li>
-        <li><strong>The open question</strong> — would any of us want to try co-world-building together? What would make it worth doing? What would kill it?</li>
-      </ol>
-    </div>
 
     <div class="compare">
       <div class="is">
         <h3>What it is</h3>
         <ul>
-          <li>Each creator shares how they world-build, briefly</li>
-          <li>An honest discussion about co-world-building</li>
-          <li>Cross-medium curiosity, low stakes</li>
-          <li>A way to feel out creative chemistry</li>
+          <li>A casual share-your-process hangout</li>
+          <li>Cross-medium creators comparing how we work</li>
+          <li>Curiosity-driven, low-stakes, fun</li>
+          <li>A way to get a feel for each other</li>
         </ul>
       </div>
       <div class="isnt">
@@ -289,17 +301,17 @@
           <li>A pitch or recruitment</li>
           <li>A commitment to any project</li>
           <li>Paid, or about money at all</li>
-          <li>A pre-made world you're being asked to join</li>
+          <li>A deliverable or homework</li>
         </ul>
       </div>
     </div>
 
     <div class="cta-block">
       <p class="cta-label">If that sounds like your kind of evening</p>
-      <p class="cta-line">Email me. Tell me what medium you work in and roughly how you think about world-building.</p>
-      <a class="cta-email" href="mailto:collab@playinstigator.com?subject=World-building%20session%20%E2%80%94%20%5Byour%20medium%5D">collab@playinstigator.com</a>
+      <p class="cta-line">Email me. Tell me what medium you work in and roughly when you're free.</p>
+      <a class="cta-email" href="mailto:collab@playinstigator.com?subject=Sharing%20session%20%E2%80%94%20%5Byour%20medium%5D">collab@playinstigator.com</a>
       <p class="cta-foot">A real conversation, not an application form.</p>
-      <p class="cta-foot cta-cross">Prefer a wider conversation about creative process? <a href="./">Try the general process variant →</a></p>
+      <p class="cta-foot cta-cross">Comparing drafts? <a href="./">See Draft 1 (co-world-building) →</a></p>
     </div>
 
     <p class="signoff">Play Instigator. Instigating real play.</p>
