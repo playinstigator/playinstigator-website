@@ -437,6 +437,58 @@
     })();
 
     (function(){
+      try {
+        if (new URLSearchParams(location.search).get('edit') !== '1') return;
+      } catch (e) { return; }
+
+      var main = document.querySelector('main.reader');
+      if (main) {
+        main.setAttribute('contenteditable', 'true');
+        main.style.outline = 'none';
+      }
+
+      var badge = document.createElement('div');
+      badge.dataset.editOnly = '1';
+      badge.textContent = 'EDIT MODE';
+      badge.style.cssText = 'position:fixed;top:14px;left:14px;z-index:9999;background:#974DFF;color:#fff;font-family:system-ui,sans-serif;font-size:11px;font-weight:800;letter-spacing:0.14em;padding:7px 13px;border-radius:999px;box-shadow:0 4px 14px rgba(0,0,0,0.25);pointer-events:none;';
+      document.body.appendChild(badge);
+
+      var hint = document.createElement('div');
+      hint.dataset.editOnly = '1';
+      hint.textContent = 'Click anywhere in the main copy to edit. Click "Download edits" when done, then overwrite sharing/index.html.';
+      hint.style.cssText = 'position:fixed;bottom:84px;right:20px;z-index:9999;max-width:280px;background:#1C1917;color:#F9F5F1;font-family:system-ui,sans-serif;font-size:12px;line-height:1.45;padding:12px 14px;border-radius:10px;box-shadow:0 6px 20px rgba(0,0,0,0.3);';
+      document.body.appendChild(hint);
+
+      var saveBtn = document.createElement('button');
+      saveBtn.dataset.editOnly = '1';
+      saveBtn.type = 'button';
+      saveBtn.textContent = 'Download edits';
+      saveBtn.style.cssText = 'position:fixed;bottom:20px;right:20px;z-index:9999;background:#FF3344;color:#fff;font-family:system-ui,sans-serif;font-size:14px;font-weight:700;letter-spacing:0.02em;border:none;border-radius:999px;padding:14px 22px;cursor:pointer;box-shadow:0 8px 24px rgba(0,0,0,0.3);transition:transform 0.15s ease;';
+      saveBtn.addEventListener('mouseenter', function(){ saveBtn.style.transform = 'translateY(-2px)'; });
+      saveBtn.addEventListener('mouseleave', function(){ saveBtn.style.transform = 'translateY(0)'; });
+      saveBtn.addEventListener('click', function(){
+        var clone = document.documentElement.cloneNode(true);
+        clone.querySelectorAll('[data-edit-only]').forEach(function(el){ el.remove(); });
+        clone.querySelectorAll('[contenteditable]').forEach(function(el){
+          el.removeAttribute('contenteditable');
+          el.style.outline = '';
+          if (el.getAttribute('style') === '') el.removeAttribute('style');
+        });
+        var html = '<!DOCTYPE html>\n' + clone.outerHTML + '\n';
+        var blob = new Blob([html], { type: 'text/html;charset=utf-8' });
+        var url = URL.createObjectURL(blob);
+        var a = document.createElement('a');
+        a.href = url;
+        a.download = 'index.html';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        setTimeout(function(){ URL.revokeObjectURL(url); }, 1000);
+      });
+      document.body.appendChild(saveBtn);
+    })();
+
+    (function(){
       var form = document.getElementById('interest-form');
       if (!form) return;
       var submitBtn = form.querySelector('.ff-submit');
