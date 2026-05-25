@@ -297,41 +297,7 @@
     .ff-fallback a:hover { text-decoration:underline; }
     @media (max-width:600px) { .ff-row { grid-template-columns:1fr; } }
 
-    .at-glance-wrap {
-      max-width:720px; margin:0 auto 32px;
-      padding:0 28px; position:relative; z-index:3;
-    }
-    .at-glance {
-      background:var(--card); border:1px solid var(--rule);
-      border-radius:14px; padding:1.3rem 1.5rem;
-      box-shadow:var(--shadow);
-    }
-    .at-glance-label {
-      font-family:var(--f-sharp); font-size:0.72rem; font-weight:700;
-      letter-spacing:0.22em; text-transform:uppercase;
-      color:var(--accent); margin-bottom:0.85rem;
-    }
-    .at-glance ul { list-style:none; padding:0; margin:0; }
-    .at-glance li {
-      font-family:var(--f-body); font-size:0.95rem; line-height:1.4;
-      color:var(--ink-soft); padding:0.5rem 0;
-      border-bottom:1px dashed var(--rule);
-    }
-    .at-glance li:last-child { border-bottom:none; }
-
-    @media (min-width:1280px) {
-      .at-glance-wrap {
-        position:fixed; top:96px;
-        left:calc(50% + 384px);
-        width:240px; max-width:none;
-        margin:0; padding:0;
-      }
-    }
-    @media (max-width:600px) {
-      .at-glance-wrap { padding:0 20px; margin-bottom:24px; }
-    }
-
-    .signoff {
+.signoff {
       text-align:center; font-family:var(--f-play); font-style:italic;
       font-size:1.05rem; color:var(--quiet); margin-top:4.5rem;
     }
@@ -491,22 +457,7 @@
 
   </main>
 
-  <div class="at-glance-wrap">
-    <aside class="at-glance" aria-label="Session at a glance">
-      <p class="at-glance-label">At a glance</p>
-      <ul>
-        <li><strong>In person</strong> · *SCAPE Level 5, Singapore</li>
-        <li>Free</li>
-        <li>A few-minute sharing from each creator</li>
-        <li>Bring a couple of slides — or whatever best shows your process</li>
-        <li>Part of IdeasFest · 5 July 2026</li>
-        <li>*SCAPE Level 5, Singapore</li>
-        <li>Structure &amp; exact timing — TBC</li>
-      </ul>
-    </aside>
-  </div>
-
-  <footer class="pg-foot">
+<footer class="pg-foot">
     <span>Play Instigator · Singapore</span>
     <span>·</span>
     <a href="/">Back to site</a>
