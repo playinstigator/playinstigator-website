@@ -1,0 +1,1046 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light" data-lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#F9F5F1" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1C1917" media="(prefers-color-scheme: dark)">
+<title>Audio Composer Briefing — Ritual &amp; Ruin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Figtree:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700;800&family=Noto+Serif+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  /* ---------- Brand tokens ---------- */
+  :root {
+    --cream:        #F9F5F1;
+    --charcoal:     #1C1917;
+    --coral:        #FF3344;
+    --play-blue:    #57E0FF;
+    --ultraviolet:  #974DFF;
+    --lemon:        #FFF066;
+    --mint:         #81FDC1;
+
+    --f-play:       "Fredoka", system-ui, sans-serif;
+    --f-sharp:      "Plus Jakarta Sans", "Noto Sans SC", system-ui, sans-serif;
+    --f-body:       "Figtree", "Noto Sans SC", system-ui, sans-serif;
+
+    --bg:           var(--cream);
+    --bg-2:         #F1ECE5;
+    --ink:          var(--charcoal);
+    --ink-soft:     #3D3834;
+    --quiet:        #6B615B;
+    --rule:         #D8CEC4;
+    --accent:       var(--ultraviolet);
+    --accent-2:     var(--coral);
+    --card:         #FFFFFF;
+    --shadow:       0 6px 24px rgba(28, 25, 23, 0.07);
+    --shape-a:      var(--coral);
+    --shape-b:      var(--ultraviolet);
+    --shape-c:      var(--play-blue);
+  }
+
+  [data-theme="dark"] {
+    --bg:           var(--charcoal);
+    --bg-2:         #2A2622;
+    --ink:          var(--cream);
+    --ink-soft:     #D8CEC4;
+    --quiet:        #9A8F87;
+    --rule:         #3D3834;
+    --accent:       #B47CFF;
+    --accent-2:     #FF5566;
+    --card:         #24201C;
+    --shadow:       0 8px 28px rgba(0, 0, 0, 0.45);
+  }
+
+  /* ---------- Language switching ---------- */
+  [data-lang="en"] .lang-zh { display: none !important; }
+  [data-lang="zh"] .lang-en { display: none !important; }
+  [data-lang="zh"] body {
+    font-family: "Noto Sans SC", "Figtree", system-ui, sans-serif;
+  }
+  [data-lang="zh"] h1,
+  [data-lang="zh"] h2,
+  [data-lang="zh"] h3,
+  [data-lang="zh"] h4 {
+    font-family: "Noto Sans SC", "Plus Jakarta Sans", system-ui, sans-serif;
+    letter-spacing: 0;
+  }
+
+  /* ---------- Reset + base ---------- */
+  *, *::before, *::after { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--f-body);
+    font-size: 17px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    transition: background-color 0.25s ease, color 0.25s ease;
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  /* Decorative shapes */
+  .shape { position: absolute; pointer-events: none; opacity: 0.55; z-index: 0; }
+  .shape-1 { top: -40px; right: -40px; width: 180px; height: 180px; background: var(--shape-a); border-radius: 50%; transform: rotate(13deg); }
+  .shape-2 { top: 280px; left: -80px; width: 140px; height: 140px; background: var(--shape-b); clip-path: polygon(50% 0, 100% 100%, 0 100%); transform: rotate(-7deg); opacity: 0.35; }
+  .shape-3 { bottom: 120px; right: -60px; width: 220px; height: 60px; background: var(--shape-c); border-radius: 100px; transform: rotate(7deg); opacity: 0.3; }
+  [data-theme="dark"] .shape { opacity: 0.22; }
+  [data-theme="dark"] .shape-1 { opacity: 0.3; }
+
+  .page { max-width: 780px; margin: 0 auto; padding: 48px 24px 96px; position: relative; z-index: 1; }
+
+  /* AI disclaimer banner */
+  .ai-disclaimer {
+    background: var(--bg-2);
+    border: 1px solid var(--rule);
+    border-left: 3px solid var(--accent-2);
+    border-radius: 8px;
+    padding: 10px 14px;
+    margin: 0 0 22px 0;
+    font-family: var(--f-body);
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--ink-soft);
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .ai-disclaimer .bang {
+    flex-shrink: 0;
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    background: var(--accent-2);
+    color: #fff;
+    font-family: var(--f-sharp);
+    font-weight: 800;
+    font-size: 12px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    margin-top: 1px;
+  }
+
+  /* ---------- Top bar ---------- */
+  .topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 28px;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .studio-mark {
+    font-family: var(--f-sharp);
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--quiet);
+    display: inline-flex;
+    align-items: baseline;
+    gap: 6px;
+  }
+  .studio-mark .play {
+    font-family: var(--f-play);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-size: 12px;
+  }
+  .studio-mark .dot {
+    width: 4px; height: 4px;
+    background: var(--accent-2);
+    border-radius: 50%;
+    display: inline-block;
+    transform: translateY(-2px);
+  }
+  .studio-mark .inst {
+    font-family: var(--f-sharp);
+    font-weight: 800;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    color: var(--ink);
+    font-size: 12px;
+  }
+
+  .toggles { display: inline-flex; gap: 8px; align-items: center; }
+
+  .pill-btn {
+    background: var(--card);
+    border: 1.5px solid var(--rule);
+    border-radius: 999px;
+    padding: 7px 14px 7px 10px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--f-sharp);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--ink-soft);
+    letter-spacing: 0.04em;
+    transition: all 0.2s ease;
+    box-shadow: var(--shadow);
+  }
+  .pill-btn:hover {
+    transform: translateY(-1px);
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  .pill-btn:active { transform: translateY(0); }
+
+  .theme-toggle .icon {
+    width: 16px; height: 16px;
+    display: inline-block;
+    position: relative;
+  }
+  .theme-toggle .icon::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: var(--accent);
+    transition: all 0.3s ease;
+  }
+  [data-theme="dark"] .theme-toggle .icon::before {
+    background: var(--lemon);
+    box-shadow: inset -5px -3px 0 0 var(--charcoal);
+  }
+  .pill-btn .label { min-width: 32px; text-align: left; }
+
+  .lang-toggle .globe {
+    width: 16px; height: 16px;
+    display: inline-block;
+    position: relative;
+    border: 1.8px solid currentColor;
+    border-radius: 50%;
+  }
+  .lang-toggle .globe::before,
+  .lang-toggle .globe::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    border: 1px solid currentColor;
+    border-radius: 50%;
+  }
+  .lang-toggle .globe::before { width: 100%; height: 50%; }
+  .lang-toggle .globe::after { width: 40%; height: 100%; }
+
+  /* ---------- Masthead ---------- */
+  .mast {
+    border-bottom: 2.5px solid var(--ink);
+    padding-bottom: 28px;
+    margin-bottom: 36px;
+  }
+  .eyebrow {
+    font-family: var(--f-sharp);
+    font-weight: 600;
+    font-size: 11.5px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--quiet);
+    margin: 0 0 10px 0;
+  }
+  [data-lang="zh"] .eyebrow { letter-spacing: 0.18em; }
+  .eyebrow::after {
+    content: "";
+    display: inline-block;
+    width: 28px;
+    height: 2px;
+    background: var(--accent-2);
+    margin-left: 10px;
+    transform: translateY(-3px);
+  }
+  h1.title {
+    font-family: var(--f-sharp);
+    font-weight: 800;
+    font-size: clamp(38px, 8vw, 64px);
+    line-height: 1.02;
+    margin: 0;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+  }
+  h1.title .amp {
+    color: var(--accent);
+    font-weight: 500;
+    font-style: italic;
+    margin: 0 0.15em;
+  }
+
+  .lede {
+    font-style: italic;
+    font-size: clamp(16px, 2.2vw, 19px);
+    line-height: 1.55;
+    color: var(--ink-soft);
+    margin: 0 0 48px 0;
+    padding: 20px 22px;
+    border-left: 3px solid var(--accent);
+    background: var(--bg-2);
+    border-radius: 0 12px 12px 0;
+  }
+  [data-lang="zh"] .lede { font-style: normal; }
+
+  h2 {
+    font-family: var(--f-sharp);
+    font-weight: 800;
+    font-size: clamp(22px, 3.5vw, 28px);
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    margin: 56px 0 18px 0;
+    padding-bottom: 10px;
+    border-bottom: 1.5px solid var(--rule);
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+  }
+  h2 .num {
+    font-family: var(--f-sharp);
+    font-size: 14px;
+    letter-spacing: 0;
+    font-weight: 700;
+    color: var(--accent-2);
+    background: var(--bg-2);
+    padding: 4px 10px;
+    border-radius: 6px;
+    min-width: 36px;
+    text-align: center;
+    flex-shrink: 0;
+  }
+
+  h3 {
+    font-family: var(--f-sharp);
+    font-weight: 700;
+    font-size: clamp(18px, 2.5vw, 20px);
+    color: var(--ink);
+    margin: 36px 0 10px 0;
+  }
+
+  h4 {
+    font-family: var(--f-sharp);
+    font-weight: 700;
+    font-size: clamp(16px, 2.2vw, 18px);
+    color: var(--ink);
+    margin: 28px 0 8px 0;
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+  }
+  h4 .idx {
+    font-family: var(--f-sharp);
+    font-weight: 800;
+    color: var(--accent);
+    font-size: 14px;
+    background: var(--bg-2);
+    padding: 3px 9px;
+    border-radius: 6px;
+  }
+
+  p { margin: 0 0 16px 0; }
+  strong { color: var(--ink); font-weight: 700; }
+  em { color: var(--ink-soft); }
+  [data-lang="zh"] em { font-style: normal; color: var(--ink-soft); }
+
+  ol, ul { margin: 8px 0 20px 0; padding-left: 0; }
+  li { margin: 0 0 10px 0; }
+
+  .stages ol {
+    list-style: none;
+    counter-reset: stage;
+    padding: 0;
+  }
+  .stages li {
+    counter-increment: stage;
+    position: relative;
+    padding: 16px 0 16px 56px;
+    border-top: 1px solid var(--rule);
+  }
+  .stages li:first-child { border-top: none; }
+  .stages li::before {
+    content: counter(stage, decimal-leading-zero);
+    position: absolute;
+    left: 0; top: 16px;
+    font-family: var(--f-sharp);
+    font-weight: 800;
+    font-size: 14px;
+    color: var(--accent-2);
+    background: var(--bg-2);
+    padding: 4px 10px;
+    border-radius: 6px;
+    line-height: 1;
+  }
+
+  /* References */
+  .refs ul {
+    list-style: none;
+    padding: 0;
+    margin: 12px 0 8px 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 14px;
+  }
+  .refs li { margin: 0; padding: 0; }
+  .ref-card {
+    display: flex;
+    flex-direction: column;
+    background: var(--card);
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+    box-shadow: var(--shadow);
+    height: 100%;
+  }
+  .ref-card:hover {
+    transform: translateY(-3px) rotate(0.4deg);
+    border-color: var(--accent);
+    box-shadow: 0 12px 30px rgba(28, 25, 23, 0.12);
+  }
+  [data-theme="dark"] .ref-card:hover {
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
+  }
+  .ref-card .thumb {
+    aspect-ratio: 4 / 5;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    color: #F9F5F1;
+    font-family: var(--f-sharp);
+    font-weight: 800;
+    font-size: 42px;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    text-align: center;
+    padding: 10px;
+  }
+  .ref-card .thumb::before {
+    content: "";
+    position: absolute;
+    width: 80px; height: 80px;
+    background: rgba(255, 255, 255, 0.14);
+    border-radius: 50%;
+    top: -20px; right: -20px;
+    transform: rotate(13deg);
+    transition: opacity 0.3s ease;
+  }
+  .ref-card .thumb::after {
+    content: "";
+    position: absolute;
+    width: 60px; height: 18px;
+    background: rgba(0, 0, 0, 0.22);
+    border-radius: 40px;
+    bottom: 14px; left: -14px;
+    transform: rotate(-7deg);
+    transition: opacity 0.3s ease;
+  }
+  .ref-card .thumb.has-image::before,
+  .ref-card .thumb.has-image::after { opacity: 0; }
+  .ref-card .thumb span {
+    position: relative;
+    z-index: 1;
+    transition: opacity 0.2s ease;
+  }
+  .ref-card .thumb.has-image span { opacity: 0; }
+  .ref-card .thumb img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 2;
+  }
+  .ref-card .thumb img.loaded { opacity: 1; }
+
+  .t-g1  { background: linear-gradient(135deg, #974DFF 0%, #FF3344 100%); }
+  .t-g2  { background: linear-gradient(135deg, #57E0FF 0%, #974DFF 100%); }
+  .t-g3  { background: linear-gradient(135deg, #FF3344 0%, #FFF066 100%); color: #1C1917; }
+  .t-g4  { background: linear-gradient(135deg, #81FDC1 0%, #57E0FF 100%); color: #1C1917; }
+  .t-g5  { background: linear-gradient(135deg, #1C1917 0%, #974DFF 100%); }
+  .t-g6  { background: linear-gradient(135deg, #FFF066 0%, #FF3344 100%); color: #1C1917; }
+  .t-g7  { background: linear-gradient(135deg, #974DFF 0%, #1C1917 100%); }
+  .t-g8  { background: linear-gradient(135deg, #FF3344 0%, #974DFF 65%, #57E0FF 100%); }
+  .t-g9  { background: linear-gradient(135deg, #57E0FF 0%, #81FDC1 100%); color: #1C1917; }
+  .t-g10 { background: linear-gradient(135deg, #1C1917 0%, #FF3344 100%); }
+  .t-g11 { background: linear-gradient(135deg, #F9F5F1 0%, #974DFF 100%); color: #1C1917; }
+
+  .ref-card .meta {
+    padding: 10px 12px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex: 1;
+  }
+  .ref-card .ref-title {
+    font-family: var(--f-sharp);
+    font-weight: 700;
+    font-size: 13.5px;
+    line-height: 1.25;
+    color: var(--ink);
+  }
+  .ref-card .ref-q {
+    font-style: italic;
+    font-size: 12.5px;
+    color: var(--quiet);
+    line-height: 1.4;
+  }
+  [data-lang="zh"] .ref-card .ref-q { font-style: normal; }
+  .ref-card .go {
+    margin-top: auto;
+    padding-top: 6px;
+    font-family: var(--f-sharp);
+    font-weight: 600;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .ref-card .go::after {
+    content: "→";
+    font-style: normal;
+    transition: transform 0.18s ease;
+  }
+  .ref-card:hover .go::after { transform: translateX(3px); }
+
+  /* Mechanism callouts */
+  .mechs p {
+    background: var(--card);
+    border: 1px solid var(--rule);
+    border-left: 3px solid var(--accent);
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin-bottom: 14px;
+    box-shadow: var(--shadow);
+  }
+  .mechs p strong:first-child {
+    display: inline-block;
+    font-family: var(--f-sharp);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--accent);
+    margin-right: 6px;
+  }
+  [data-lang="zh"] .mechs p strong:first-child {
+    letter-spacing: 0.05em;
+    text-transform: none;
+    font-size: 13px;
+  }
+
+  .tensions {
+    background: var(--bg-2);
+    border-radius: 12px;
+    padding: 18px 22px;
+    margin: 16px 0 20px 0;
+  }
+  .tensions p { margin: 0; }
+
+  .foot {
+    margin-top: 72px;
+    padding-top: 20px;
+    border-top: 2.5px solid var(--ink);
+    font-family: var(--f-sharp);
+    font-weight: 600;
+    font-size: 11.5px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--quiet);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  [data-lang="zh"] .foot { letter-spacing: 0.1em; text-transform: none; }
+  .foot .dot-row { display: inline-flex; gap: 6px; align-items: center; }
+  .foot .dot-row i { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+  .foot .dot-row .d1 { background: var(--coral); transform: rotate(7deg); }
+  .foot .dot-row .d2 { background: var(--ultraviolet); }
+  .foot .dot-row .d3 { background: var(--play-blue); transform: rotate(-13deg); }
+
+  @media (max-width: 560px) {
+    .page { padding: 32px 18px 64px; }
+    .mast { padding-bottom: 20px; margin-bottom: 28px; }
+    .lede { padding: 16px 18px; margin-bottom: 36px; }
+    .mechs p { padding: 14px 16px; }
+    .stages li { padding: 14px 0 14px 48px; }
+    .shape-1 { width: 120px; height: 120px; top: -30px; right: -30px; }
+    .shape-2 { width: 100px; height: 100px; top: 220px; left: -60px; }
+    .shape-3 { width: 160px; bottom: 80px; }
+    h2 { margin: 40px 0 14px 0; }
+  }
+  @media (max-width: 420px) {
+    .pill-btn .label { display: none; }
+    .pill-btn { padding: 7px 9px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; }
+    html { scroll-behavior: auto; }
+  }
+
+  @media print {
+    .pill-btn, .shape, .toggles { display: none !important; }
+    body { background: #fff; color: #000; }
+    .page { padding: 0; max-width: 100%; }
+    .mechs p { box-shadow: none; }
+  }
+
+  ::selection { background: var(--accent); color: var(--cream); }
+</style>
+</head>
+<body>
+
+<div class="shape shape-1" aria-hidden="true"></div>
+<div class="shape shape-2" aria-hidden="true"></div>
+<div class="shape shape-3" aria-hidden="true"></div>
+
+<div class="page">
+
+  <div class="topbar">
+    <span class="studio-mark">
+      <span class="play">Play</span>
+      <span class="dot"></span>
+      <span class="inst">Instigator</span>
+    </span>
+    <div class="toggles">
+      <button class="pill-btn lang-toggle" id="langToggle" aria-label="Switch language">
+        <span class="globe" aria-hidden="true"></span>
+        <span class="label" id="langLabel">中文</span>
+      </button>
+      <button class="pill-btn theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+        <span class="icon" aria-hidden="true"></span>
+        <span class="label" id="themeLabel">Dark</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- AI translation disclaimer (Chinese only) -->
+  <div class="ai-disclaimer lang-zh">
+    <span class="bang" aria-hidden="true">!</span>
+    <span>本页中文内容由 AI 翻译，可能存在不准确或不自然的表达。原文以英文版本为准。</span>
+  </div>
+
+  <header class="mast">
+    <p class="eyebrow lang-en">Creative Brief · Audio</p>
+    <p class="eyebrow lang-zh">创意简报 · 音频</p>
+    <h1 class="title">Ritual <span class="amp">&amp;</span> Ruin</h1>
+  </header>
+
+  <p class="lede lang-en">
+    This is a creative brief about the world of the game. It is not a spec sheet or a delivery list. Read it for texture, then trust your own ear.
+  </p>
+  <p class="lede lang-zh">
+    这是一份关于游戏世界的创意简报，不是规格表，也不是交付清单。读它是为了感受质地，然后相信你自己的耳朵。
+  </p>
+
+  <main>
+
+    <h2><span class="num">I</span><span class="lang-en">Premise</span><span class="lang-zh">前提</span></h2>
+
+    <div class="lang-en">
+      <p><em>Ritual &amp; Ruin</em> is set inside an <strong>AI-automated experimental lab</strong>. The civilization that built the lab and started the experiment has gone extinct. The lab kept running.</p>
+      <p>The experiment's purpose was to harvest power. To do that, the civilization <strong>bioengineered small creatures</strong> whose only drive is to seek blood, carry it to an altar, and repeat. When a creature brings blood to the altar, the altar floods it with power. The creature's body cannot hold that much power for long, and eventually breaks down from the inside. The system exploits these creatures to keep producing power — power that was meant to sustain a civilization that no longer exists.</p>
+      <p>Over the course of the game, we watch the system degrade. With no one left to maintain it, things start to go wrong. Subsystems glitch. Behaviors drift. Pieces stop working. Pieces break. By the end, the lab is no longer functioning — just the memory of something that used to.</p>
+    </div>
+
+    <div class="lang-zh">
+      <p><em>Ritual &amp; Ruin</em> 的故事发生在一座 <strong>由 AI 自动运行的实验室</strong> 之中。建造这座实验室、启动这项实验的文明早已灭绝。但实验室还在继续运作。</p>
+      <p>实验的目的是收集能量。为此，这个文明对小型生物进行了 <strong>生物工程改造</strong>，让它们唯一的本能就是寻找血液、带回祭坛、循环往复。当生物把血液送到祭坛时，祭坛会向它灌注能量。这具身体承受不了那么多能量太久，最终会从内部崩溃。系统就这样利用这些生物不断产出能量——这些能量，本来是用来维持那个如今已不存在的文明的。</p>
+      <p>随着游戏推进，我们会看到这套系统逐渐退化。因为再没有人去维护它，事情开始出错。子系统出现故障。行为偏离了原本的设计。有些部件停止运作。有些部件彻底损坏。到最后，这座实验室已经不再运作了——它只是某种曾经存在之物的记忆。</p>
+    </div>
+
+    <h2><span class="num">II</span><span class="lang-en">Genre, Play, Feel, References</span><span class="lang-zh">类型、玩法、感觉、参考</span></h2>
+
+    <h3><span class="lang-en">How it plays</span><span class="lang-zh">如何游玩</span></h3>
+    <p class="lang-en">Ritual &amp; Ruin is a <strong>2v2 local co-op competitive party game</strong> for PC, controller-first, viewed from a top-down / isometric angle. A match lasts 5–10 minutes. The loop: harvest blood from emitters, relay it across floors, pour it into altars, contest for proximity when the altar discharges, receive power, evolve, reach the terminal form, and outlast the other team. A match is not a fight. It is a survival competition, while the space the four players share degrades slowly match after match.</p>
+    <p class="lang-zh">Ritual &amp; Ruin 是一款 PC 平台的 <strong>2v2 本地合作竞技派对游戏</strong>，优先使用手柄，采用俯视 / 等距视角。每局比赛持续 5–10 分钟。核心循环：从喷出口采集血液、跨楼层传送、倒入祭坛、在祭坛激活时争夺靠近位置、获得能量、进化、抵达终末形态、比对方队伍活得更久。一场比赛不是战斗，而是生存竞赛；而四位玩家共享的这片空间，会在一局又一局中慢慢退化。</p>
+
+    <h3><span class="lang-en">How it should feel</span><span class="lang-zh">应当呈现的感觉</span></h3>
+    <p class="lang-en">The feel of the game follows an arc across the whole experience — not just a single match, but the full journey from first boot to ending.</p>
+    <p class="lang-zh">游戏的感觉贯穿整个体验——不只是单局比赛，而是从首次启动到最终结局的完整旅程。</p>
+
+    <div class="stages">
+      <ol class="lang-en">
+        <li><strong>Fun.</strong> At first, it's a silly little party game. You're playing with friends, competing in a goofy blood-relay scramble. Chaos, laughs, "again, again."</li>
+        <li><strong>Something's off.</strong> Glitches start to appear. Small things go wrong. Behaviors drift. At first it looks like jank; then it doesn't.</li>
+        <li><strong>Not fun anymore.</strong> The system has degraded enough that the game is no longer smooth. Things break. Playing becomes harder. The party-game feel is slipping away.</li>
+        <li><strong>Push through anyway.</strong> The game is broken, but the players keep going — less because they're enjoying it and more because they want to see where this ends.</li>
+        <li><strong>It just ends.</strong> The system completely breaks. A few creatures got out. The rest are left unborn — no more will ever be born. The players reach an ending, but there is no epic payoff. No victory fanfare. No final boss. The machine simply stops.</li>
+      </ol>
+      <ol class="lang-zh">
+        <li><strong>有趣。</strong> 最开始，它就是一款傻乎乎的小型派对游戏。你和朋友一起玩，进行一场滑稽的血液接力混战。混乱、笑声、"再来一局，再来一局"。</li>
+        <li><strong>有点不对劲。</strong> 故障开始出现。小事情开始出错。行为开始偏离预期。一开始看起来像是粗糙的 bug；然后渐渐地，又不像了。</li>
+        <li><strong>不再好玩了。</strong> 系统已经退化到游戏不再流畅的程度。东西在坏。玩起来变得更难。派对游戏的感觉正在流失。</li>
+        <li><strong>还是继续玩下去。</strong> 游戏已经坏了，但玩家还在继续——与其说是因为享受，不如说是想看看这一切会怎么收场。</li>
+        <li><strong>它就这样结束了。</strong> 系统彻底崩溃。只有少数生物逃了出去。其余的再也无法被孕育——再也不会有新的生物诞生。玩家抵达了一个结局，但没有宏大的回报。没有胜利的号角。没有最终 boss。这台机器就这样停了。</li>
+      </ol>
+    </div>
+
+    <div class="tensions">
+      <p class="lang-en">Hold these tensions underneath all of it: <strong>cute versus wrong, relief versus triumph, cooperation versus exploitation, organic versus clinical</strong>. Cute does not disappear from this game. It is consumed.</p>
+      <p class="lang-zh">在这一切之下，请始终把握住这些张力：<strong>可爱 vs 不对劲、松一口气 vs 凯旋、合作 vs 剥削、有机 vs 冷酷</strong>。可爱不会从这款游戏中消失——它是被消耗掉的。</p>
+    </div>
+
+    <p class="lang-en">The overarching constraint is <strong>erosion</strong>. There is no single moment where fun becomes not-fun, or where the system flips from running to broken. Not a mode switch. A gradient. The demoralization is authored — the frame is allowed to mourn the player. Trust that.</p>
+    <p class="lang-zh">贯穿一切的约束是 <strong>侵蚀</strong>。不存在某一个明确的瞬间让有趣变成无趣，或者让系统从"运转中"切到"崩坏"。不是模式切换，是渐变。这种挫败感是被写出来的——这个叙事框架是允许为玩家哀悼的。请信任这一点。</p>
+
+    <h3><span class="lang-en">Reference media</span><span class="lang-zh">参考作品</span></h3>
+    <p class="lang-en">World-grounding touchstones. Each pairs with one quality, not a sonic direction.</p>
+    <p class="lang-zh">用于锚定世界氛围的作品。每一部对应一种特质，不对应某种具体的声音方向。</p>
+
+    <div class="refs">
+      <ul>
+        <li><a class="ref-card" target="_blank" rel="noopener" href="https://www.google.com/search?q=Neon+Genesis+Evangelion&tbm=isch">
+          <div class="thumb t-g1">
+            <span>EVA</span>
+            <img alt="Neon Genesis Evangelion" loading="lazy" decoding="async" referrerpolicy="no-referrer"
+                 src="https://upload.wikimedia.org/wikipedia/en/7/72/Evangelion_retouched.png"
+                 onload="this.parentNode.classList.add('has-image');this.classList.add('loaded')"
+                 onerror="this.remove()">
+          </div>
+          <div class="meta">
+            <span class="ref-title">Neon Genesis Evangelion</span>
+            <span class="ref-q lang-en">interface duality; the NERV atmosphere</span>
+            <span class="ref-q lang-zh">界面的双重性；NERV 的氛围感</span>
+            <span class="go"><span class="lang-en">Search</span><span class="lang-zh">搜索</span></span>
+          </div>
+        </a></li>
+
+        <li><a class="ref-card" target="_blank" rel="noopener" href="https://www.google.com/search?q=Ghost+in+the+Shell+1995&tbm=isch">
+          <div class="thumb t-g2">
+            <span>GITS</span>
+            <img alt="Ghost in the Shell" loading="lazy" decoding="async" referrerpolicy="no-referrer"
+                 src="https://upload.wikimedia.org/wikipedia/en/c/ca/Ghostintheshellposter.jpg"
+                 onload="this.parentNode.classList.add('has-image');this.classList.add('loaded')"
+                 onerror="this.remove()">
+          </div>
+          <div class="meta">
+            <span class="ref-title">Ghost in the Shell</span>
+            <span class="ref-q lang-en">interface density</span>
+            <span class="ref-q lang-zh">界面的密度</span>
+            <span class="go"><span class="lang-en">Search</span><span class="lang-zh">搜索</span></span>
+          </div>
+        </a></li>
+
+        <li><a class="ref-card" target="_blank" rel="noopener" href="https://www.google.com/search?q=Serial+Experiments+Lain&tbm=isch">
+          <div class="thumb t-g5">
+            <span>LAIN</span>
+            <img alt="Serial Experiments Lain" loading="lazy" decoding="async" referrerpolicy="no-referrer"
+                 src="https://upload.wikimedia.org/wikipedia/en/3/32/Serial_Experiments_Lain_DVD_vol_1.jpg"
+                 onload="this.parentNode.classList.add('has-image');this.classList.add('loaded')"
+                 onerror="this.remove()">
+          </div>
+          <div class="meta">
+            <span class="ref-title">Serial Experiments Lain</span>
+            <span class="ref-q lang-en">signal-noise reality</span>
+            <span class="ref-q lang-zh">信号与噪声交织的现实</span>
+            <span class="go"><span class="lang-en">Search</span><span class="lang-zh">搜索</span></span>
+          </div>
+        </a></li>
+
+        <li><a class="ref-card" target="_blank" rel="noopener" href="https://www.google.com/search?q=Cult+of+the+Lamb+game&tbm=isch">
+          <div class="thumb t-g3">
+            <span>COTL</span>
+            <img alt="Cult of the Lamb" loading="lazy" decoding="async" referrerpolicy="no-referrer"
+                 src="https://upload.wikimedia.org/wikipedia/en/d/d4/Cult_of_the_Lamb_Key_Art.png"
+                 onload="this.parentNode.classList.add('has-image');this.classList.add('loaded')"
+                 onerror="this.remove()">
+          </div>
+          <div class="meta">
+            <span class="ref-title">Cult of the Lamb</span>
+            <span class="ref-q lang-en">adorable and sinister in the same frame</span>
+            <span class="ref-q lang-zh">可爱与阴森同框</span>
+            <span class="go"><span class="lang-en">Search</span><span class="lang-zh">搜索</span></span>
+          </div>
+        </a></li>
+
+        <li><a class="ref-card" target="_blank" rel="noopener" href="https://www.google.com/search?q=The+Matrix+1999+film&tbm=isch">
+          <div class="thumb t-g7">
+            <span>MTRX</span>
+            <img alt="The Matrix" loading="lazy" decoding="async" referrerpolicy="no-referrer"
+                 src="https://upload.wikimedia.org/wikipedia/en/d/db/The_Matrix.png"
+                 onload="this.parentNode.classList.add('has-image');this.classList.add('loaded')"
+                 onerror="this.remove()">
+          </div>
+          <div class="meta">
+            <span class="ref-title">The Matrix</span>
+            <span class="ref-q lang-en">terminal aesthetic</span>
+            <span class="ref-q lang-zh">终端美学</span>
+            <span class="go"><span class="lang-en">Search</span><span class="lang-zh">搜索</span></span>
+          </div>
+        </a></li>
+
+        <li><a class="ref-card" target="_blank" rel="noopener" href="https://www.google.com/search?q=Dark+Souls+game&tbm=isch">
+          <div class="thumb t-g10">
+            <span>DS</span>
+            <img alt="Dark Souls" loading="lazy" decoding="async" referrerpolicy="no-referrer"
+                 src="https://upload.wikimedia.org/wikipedia/en/8/8d/Dark_Souls_Cover_Art.jpg"
+                 onload="this.parentNode.classList.add('has-image');this.classList.add('loaded')"
+                 onerror="this.remove()">
+          </div>
+          <div class="meta">
+            <span class="ref-title">Dark Souls</span>
+            <span class="ref-q lang-en">ruined kingdoms, authored difficulty</span>
+            <span class="ref-q lang-zh">衰败的王国，有设计意图的难度</span>
+            <span class="go"><span class="lang-en">Search</span><span class="lang-zh">搜索</span></span>
+          </div>
+        </a></li>
+
+        <li><a class="ref-card" target="_blank" rel="noopener" href="https://www.google.com/search?q=Made+in+Abyss+anime&tbm=isch">
+          <div class="thumb t-g4">
+            <span>MIA</span>
+            <img alt="Made in Abyss" loading="lazy" decoding="async" referrerpolicy="no-referrer"
+                 src="https://upload.wikimedia.org/wikipedia/en/9/9a/Made_in_Abyss_volume_1_cover.jpg"
+                 onload="this.parentNode.classList.add('has-image');this.classList.add('loaded')"
+                 onerror="this.remove()">
+          </div>
+          <div class="meta">
+            <span class="ref-title">Made in Abyss</span>
+            <span class="ref-q lang-en">lower layers, cosmic tenderness</span>
+            <span class="ref-q lang-zh">深层，宇宙般的温柔</span>
+            <span class="go"><span class="lang-en">Search</span><span class="lang-zh">搜索</span></span>
+          </div>
+        </a></li>
+
+        <li><a class="ref-card" target="_blank" rel="noopener" href="https://www.google.com/search?q=Death+Stranding+Low+Roar+soundtrack&tbm=isch">
+          <div class="thumb t-g11">
+            <span>DS·LR</span>
+            <img alt="Death Stranding" loading="lazy" decoding="async" referrerpolicy="no-referrer"
+                 src="https://upload.wikimedia.org/wikipedia/en/2/22/Death_Stranding.jpg"
+                 onload="this.parentNode.classList.add('has-image');this.classList.add('loaded')"
+                 onerror="this.remove()">
+          </div>
+          <div class="meta">
+            <span class="ref-title">Death Stranding / Low Roar</span>
+            <span class="ref-q lang-en">music as elegy over brutal terrain</span>
+            <span class="ref-q lang-zh">音乐作为挽歌，覆于残酷地形之上</span>
+            <span class="go"><span class="lang-en">Search</span><span class="lang-zh">搜索</span></span>
+          </div>
+        </a></li>
+
+        <li><a class="ref-card" target="_blank" rel="noopener" href="https://www.google.com/search?q=Nier+Automata+game&tbm=isch">
+          <div class="thumb t-g8">
+            <span>2B</span>
+            <img alt="Nier: Automata" loading="lazy" decoding="async" referrerpolicy="no-referrer"
+                 src="https://upload.wikimedia.org/wikipedia/en/2/21/Nier_Automata_cover_art.jpg"
+                 onload="this.parentNode.classList.add('has-image');this.classList.add('loaded')"
+                 onerror="this.remove()">
+          </div>
+          <div class="meta">
+            <span class="ref-title">Nier: Automata</span>
+            <span class="ref-q lang-en">choral indifference</span>
+            <span class="ref-q lang-zh">合唱式的冷漠</span>
+            <span class="go"><span class="lang-en">Search</span><span class="lang-zh">搜索</span></span>
+          </div>
+        </a></li>
+
+        <li><a class="ref-card" target="_blank" rel="noopener" href="https://www.google.com/search?q=Outer+Wilds+game&tbm=isch">
+          <div class="thumb t-g9">
+            <span>OW</span>
+            <img alt="Outer Wilds" loading="lazy" decoding="async" referrerpolicy="no-referrer"
+                 src="https://upload.wikimedia.org/wikipedia/en/f/f6/Outer_Wilds_Steam_artwork.jpg"
+                 onload="this.parentNode.classList.add('has-image');this.classList.add('loaded')"
+                 onerror="this.remove()">
+          </div>
+          <div class="meta">
+            <span class="ref-title">Outer Wilds</span>
+            <span class="ref-q lang-en">drip-fed revelation</span>
+            <span class="ref-q lang-zh">一点一滴揭开的真相</span>
+            <span class="go"><span class="lang-en">Search</span><span class="lang-zh">搜索</span></span>
+          </div>
+        </a></li>
+
+        <li><a class="ref-card" target="_blank" rel="noopener" href="https://www.google.com/search?q=INSIDE+Playdead+game&tbm=isch">
+          <div class="thumb t-g6">
+            <span>INSIDE</span>
+            <img alt="INSIDE" loading="lazy" decoding="async" referrerpolicy="no-referrer"
+                 src="https://upload.wikimedia.org/wikipedia/en/5/50/INSIDE_Xbox_One_cover_art.png"
+                 onload="this.parentNode.classList.add('has-image');this.classList.add('loaded')"
+                 onerror="this.remove()">
+          </div>
+          <div class="meta">
+            <span class="ref-title">INSIDE</span>
+            <span class="ref-q lang-en">first-screen coherent nightmare</span>
+            <span class="ref-q lang-zh">从第一屏就成立的梦魇</span>
+            <span class="go"><span class="lang-en">Search</span><span class="lang-zh">搜索</span></span>
+          </div>
+        </a></li>
+      </ul>
+    </div>
+
+    <h2><span class="num">III</span><span class="lang-en">Important Concepts</span><span class="lang-zh">重要概念</span></h2>
+
+    <p class="lang-en">Three load-bearing truths of the game. These are worldview, not tasks.</p>
+    <p class="lang-zh">游戏的三条支撑性真相。它们是世界观，不是任务清单。</p>
+
+    <h4><span class="idx">1</span><span class="lang-en">Cute, corrupted into cosmic horror</span><span class="lang-zh">可爱，被腐化成宇宙级恐怖</span></h4>
+    <p class="lang-en">Each creature passes through three visual states across a match: base, enhanced, terminal. This is a <strong>descent into madness</strong>, not a replacement. The terminal form is still the base form underneath — just with too many eyes, too many tentacles, too many spikes. It was always going to end up here. The cute thing never stopped being cute; it was just carrying too much power for a body that small to hold.</p>
+    <p class="lang-zh">每个生物在一局比赛中会经历三种视觉状态：基础、增强、终末。这是一场 <strong>向疯狂的坠落</strong>，不是替换。终末形态底下，仍然是那个基础形态——只是多了太多的眼睛、太多的触手、太多的尖刺。它从一开始就注定要走到这一步。那个可爱的东西从未停止可爱；只是那么小的一具身体，承担了太多的能量。</p>
+
+    <h4><span class="idx">2</span><span class="lang-en">The whole game is seen through an AI experiment system</span><span class="lang-zh">整个游戏是透过一个 AI 实验系统被观察的</span></h4>
+    <p class="lang-en">The game is not watched by the player alone. It is also <strong>observed by the lab itself</strong> — the automated monitoring system built by the civilization that's gone. Tracking frames lock onto the creatures. An event log records what happens. Vital readouts update in real time. The lab has a category and a log line for everything.</p>
+    <p class="lang-zh">这个游戏不只是玩家在看。它也同时被 <strong>实验室本身</strong> 观察着——那个早已消失的文明所建造的自动监控系统。追踪框锁定在生物身上。事件日志记录发生的一切。生命读数实时刷新。对于它所看见的一切，实验室都有一个分类，也有一条日志。</p>
+    <p class="lang-en">This AI lens <strong>overlays</strong> the first concept. The player is not just watching a cute creature become a cosmic horror. They are watching the lab record that transformation, unbothered, as a routine output of the experiment. The system is not cruel. It is indifferent because no one has looked at its logs in a very long time.</p>
+    <p class="lang-zh">这层 AI 视角 <strong>叠加在</strong> 第一个概念之上。玩家不只是在看一个可爱生物变成宇宙级恐怖。他们是在看实验室以无动于衷的姿态，把这场转变当成实验的常规产出记录下来。这个系统并不残忍。它之所以冷漠，是因为已经很久没有人去查看它的日志了。</p>
+
+    <h4><span class="idx">3</span><span class="lang-en">The system degrades over time</span><span class="lang-zh">系统随时间退化</span></h4>
+    <p class="lang-en">With the civilization gone, nothing maintains the lab. Over the course of the game, the system <strong>goes haywire</strong>. Some parts drift out of spec. Some parts stop functioning. Some parts break completely. By the end, the lab is barely a lab. The degradation is the point — it's why the game is called <em>Ritual &amp; Ruin</em>. The ritual is what the system does. The ruin is what it leaves behind, and what it is becoming.</p>
+    <p class="lang-zh">文明消失以后，没有人再去维护这座实验室。随着游戏推进，整个系统 <strong>开始失控</strong>。有些部分偏离了规格。有些部分停止运作。有些部分彻底崩坏。到最后，这座实验室已经几乎称不上一座实验室了。这种退化本身，就是重点——这正是游戏叫《Ritual &amp; Ruin》的原因。"仪式（Ritual）"是系统在做的事情。"废墟（Ruin）"是它留下的，也是它正在变成的。</p>
+    <p class="lang-en">The degradation sits in deliberately uncertain territory. The player should feel it before they can name it.</p>
+    <p class="lang-zh">这种退化处在一个刻意模糊的地带。玩家应当先感受到它，然后才能说出它是什么。</p>
+
+    <h2><span class="num">IV</span><span class="lang-en">Mechanisms and Moments</span><span class="lang-zh">机制与时刻</span></h2>
+
+    <p class="lang-en">Below are some bits and pieces of specific mechanisms — not a complete list, and not a delivery spec. They're here to show how the pieces come together, so that someone new to the project can get a feel for the whole thing from the inside.</p>
+    <p class="lang-zh">以下是一些具体机制的片段——不是完整清单，也不是交付规格。它们的作用，是展示这些拼图是如何拼到一起的，帮助一个对项目完全陌生的人，从内部感受一下整体的样子。</p>
+
+    <div class="mechs">
+      <div class="lang-en">
+        <p><strong>The altar.</strong> The centerpiece of every match. Blood is poured into the altar until it's full. Three ritual flames then light up in sequence — a ceremonial "3, 2, 1." The altar pulses faster and faster, then releases a single beam of light to whichever creature is standing closest. That creature gets power. This happens about eight times per match.</p>
+        <p><strong>The creatures.</strong> Small and cute in their base form. When they absorb power from the altar, they evolve — first into a sharper, stranger version, then into a full cosmic-horror. The base shape is always still visible, just carrying too much. Death leaves a body on the field; no respawns mid-match. New match starts with a new creature.</p>
+        <p><strong>Blood.</strong> The resource. It's a real physics fluid — it sloshes, spills, splashes, gets contested. Creatures carry it in their bodies by transforming their shape into a container. There's no "pick up" or "pour" button; everything happens through positioning and movement.</p>
+        <p><strong>The arena.</strong> Seen isometrically from the side, like a 2D platformer with depth. As altars are used up, the floor scrolls downward and the arena descends through layers. The space the players share keeps moving.</p>
+        <p><strong>The monitoring layer.</strong> The lab's automated system observes everything. Tracking brackets lock onto creatures. An event log scrolls at the edge of the screen. Vital readouts update. Occasional screen glitches and scanline sweeps mark big moments. The system names everything it sees in its own cold vocabulary.</p>
+        <p><strong>Endings.</strong> A match ends in one of three ways — victory, defeat, or draw. None of them are celebrations, just records of the experiment output. The game's larger ending (far beyond a single match) is the lab shutting down for good. No fanfare. The system just stops.</p>
+        <p><strong>Degradation throughout.</strong> Across the whole experience, parts of the lab start to glitch, drift, or fail outright. This is the spine of the game's arc and touches every mechanism above — the altar, the creatures, the monitoring layer, the interface. All of it erodes together.</p>
+      </div>
+
+      <div class="lang-zh">
+        <p><strong>祭坛。</strong> 每局比赛的核心。血液被倒入祭坛，直至填满。然后三道仪式之火会依次点亮——这是仪式化的"3、2、1"。祭坛的脉动越来越快，最终向站在最近位置的那只生物释放一束光。那只生物获得能量。每局比赛大约会发生八次。</p>
+        <p><strong>生物。</strong> 基础形态下，体型小、很可爱。当它们从祭坛吸收到能量后，便开始进化——先变成一个更锋利、更古怪的版本，然后彻底变成宇宙级恐怖。基础的形状始终还能看见，只是承担得太多了。死亡会在场上留下尸体；单局内不复活。新一局由一只新的生物开始。</p>
+        <p><strong>血液。</strong> 资源。它是一种真实的物理流体——会晃、会洒、会溅、会被抢。生物通过把自己的身体变形成容器来运送它。没有"拾取"或"倾倒"按钮；一切都通过站位与移动来完成。</p>
+        <p><strong>竞技场。</strong> 采用等距视角、从侧面看去，像一款带有纵深的 2D 平台游戏。随着祭坛被一个个耗尽，地板向下滚动，竞技场一层一层地下沉。玩家共享的这片空间，一直在移动。</p>
+        <p><strong>监控层。</strong> 实验室的自动系统观察着一切。追踪框锁定在生物身上。事件日志在屏幕边缘滚动。生命读数不断刷新。偶尔的屏幕故障与扫描线扫过，标记出重要时刻。系统以它自己那套冷冰冰的词汇，为它看见的一切命名。</p>
+        <p><strong>结局。</strong> 一局比赛有三种结束方式——胜利、失败、平局。没有任何一种是庆祝，它们只是实验产出的记录。游戏更大层面的结局（远远超出单局范围）是实验室永久停机。没有号角。系统就这样停了。</p>
+        <p><strong>贯穿始终的退化。</strong> 贯穿整个体验，实验室的各个部分开始出现故障、开始偏离、或者直接失效。这是游戏弧线的脊柱，触及上述每一项机制——祭坛、生物、监控层、界面。它们一起被侵蚀。</p>
+      </div>
+    </div>
+
+  </main>
+
+  <footer class="foot">
+    <span>Play Instigator · Ritual &amp; Ruin</span>
+    <span class="dot-row" aria-hidden="true">
+      <i class="d1"></i><i class="d2"></i><i class="d3"></i>
+    </span>
+    <span class="lang-en">Audio Creative Brief</span>
+    <span class="lang-zh">音频创意简报</span>
+  </footer>
+
+</div>
+
+<script>
+  /* ---------- Theme toggle ---------- */
+  (function () {
+    var root   = document.documentElement;
+    var btn    = document.getElementById("themeToggle");
+    var label  = document.getElementById("themeLabel");
+    var KEY    = "pi-theme";
+
+    function getInitialTheme() {
+      try {
+        var saved = localStorage.getItem(KEY);
+        if (saved === "light" || saved === "dark") return saved;
+      } catch (e) {}
+      if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
+        return "dark";
+      }
+      return "light";
+    }
+
+    function applyTheme(theme) {
+      root.setAttribute("data-theme", theme);
+      var currentLang = root.getAttribute("data-lang") || "en";
+      if (label) label.textContent = labelFor(theme, currentLang);
+      if (btn) btn.setAttribute("aria-label", theme === "dark" ? "Switch to light mode" : "Switch to dark mode");
+      var meta = document.querySelector('meta[name="theme-color"]');
+      if (meta) meta.setAttribute("content", theme === "dark" ? "#1C1917" : "#F9F5F1");
+    }
+
+    function labelFor(theme, lang) {
+      if (lang === "zh") return theme === "dark" ? "浅色" : "深色";
+      return theme === "dark" ? "Light" : "Dark";
+    }
+    window.__piThemeLabelFor = labelFor;
+
+    applyTheme(getInitialTheme());
+
+    if (btn) {
+      btn.addEventListener("click", function () {
+        var current = root.getAttribute("data-theme");
+        var next = current === "dark" ? "light" : "dark";
+        applyTheme(next);
+        try { localStorage.setItem(KEY, next); } catch (e) {}
+      });
+    }
+  })();
+
+  /* ---------- Language toggle ---------- */
+  (function () {
+    var root   = document.documentElement;
+    var btn    = document.getElementById("langToggle");
+    var label  = document.getElementById("langLabel");
+    var themeLabel = document.getElementById("themeLabel");
+    var KEY    = "pi-lang";
+
+    function getInitialLang() {
+      try {
+        var saved = localStorage.getItem(KEY);
+        if (saved === "en" || saved === "zh") return saved;
+      } catch (e) {}
+      var nav = (navigator.language || "en").toLowerCase();
+      if (nav.indexOf("zh") === 0) return "zh";
+      return "en";
+    }
+
+    function applyLang(lang) {
+      root.setAttribute("data-lang", lang);
+      root.setAttribute("lang", lang === "zh" ? "zh-Hans" : "en");
+      if (label) label.textContent = lang === "zh" ? "EN" : "中文";
+      if (btn)   btn.setAttribute("aria-label", lang === "zh" ? "Switch to English" : "切换到中文");
+      /* Keep theme label in sync with active language */
+      if (themeLabel && window.__piThemeLabelFor) {
+        var currentTheme = root.getAttribute("data-theme") || "light";
+        themeLabel.textContent = window.__piThemeLabelFor(currentTheme, lang);
+      }
+      var titleEl = document.querySelector("title");
+      if (titleEl) {
+        titleEl.textContent = lang === "zh"
+          ? "音频创意简报 — Ritual & Ruin"
+          : "Audio Composer Briefing — Ritual & Ruin";
+      }
+    }
+
+    applyLang(getInitialLang());
+
+    if (btn) {
+      btn.addEventListener("click", function () {
+        var current = root.getAttribute("data-lang") || "en";
+        var next = current === "zh" ? "en" : "zh";
+        applyLang(next);
+        try { localStorage.setItem(KEY, next); } catch (e) {}
+      });
+    }
+  })();
+</script>
+
+</body>
+</html>
