@@ -181,302 +181,189 @@
   </div>
 
   <header class="mast">
-    <p class="eyebrow">Addon · Composer · Idea Bank</p>
-    <h1 class="title">Music<span class="amp">–</span>Game Integration Ideas
-      <span class="sub">Ritual <span class="amp">&amp;</span> Ruin</span>
+    <p class="eyebrow">Provocations · Audio · Ritual &amp; Ruin</p>
+    <h1 class="title">Things in this world that<br>might be interesting to score
+      <span class="sub">Ritual <span class="amp">&amp;</span> Ruin · audio provocations</span>
     </h1>
   </header>
 
-  <p class="lede">An idea bank for what music and game <em>can do to each other</em> in Ritual &amp; Ruin. A possibility space — not a delivery list.</p>
+  <p class="lede">Provocations, not specifications. A scrapbook of the things about <em>Ritual &amp; Ruin</em> that might be interesting to a sound person — written so you can react to them, not so you can build them. None of this is a brief. The point is to spark something.</p>
 
   <div class="addon-note">
-    <p>This is an <strong>addon</strong> to:</p>
-    <ul>
-      <li><a href="music-brief-full">Game Music Composer Brief</a> — scope, tiered deliverables, technical specs</li>
-      <li><a href="music-brief">Music Brief (short version)</a> — the one-page introduction</li>
-    </ul>
-    <p>Those tell you <em>what</em> the music needs to be. This page is about <em>how music and game can talk to each other once it exists</em>. Nothing here is committed. Pick whatever pulls at you, ignore the rest, propose things we haven't named.</p>
+    <p>The actual briefs are over here: <a href="music-brief-full">Music Composer Brief</a> (scope and tiers) and <a href="music-brief">the short version</a>. They're what this page is an addon to.</p>
+    <p>Read whatever pulls at you. Skip the rest. Push back on anything. The most valuable thing you could do with this page is tell us which parts excite you and which parts you'd write differently.</p>
   </div>
 
   <nav class="toc" aria-label="Contents">
     <span class="toc-label">Contents</span>
-    <a href="#how-to-read"><span class="toc-num">·</span>How to read this</a>
-    <a href="#family-a"><span class="toc-num a">A</span>Music ← Game</a>
-    <a href="#family-b"><span class="toc-num b">B</span>Game ← Music</a>
-    <a href="#family-c"><span class="toc-num c">C</span>Music ≡ SFX</a>
-    <a href="#family-d"><span class="toc-num d">D</span>Mechanical hooks</a>
-    <a href="#family-e"><span class="toc-num e">E</span>Your space</a>
-    <a href="#committed"><span class="toc-num">·</span>Committed vs. possible</a>
+    <a href="#family-a"><span class="toc-num a">A</span>Music that listens to the game</a>
+    <a href="#family-b"><span class="toc-num b">B</span>Music the game listens to</a>
+    <a href="#family-c"><span class="toc-num c">C</span>Score and SFX as one thing</a>
+    <a href="#family-d"><span class="toc-num d">D</span>The small decisions</a>
+    <a href="#family-e"><span class="toc-num e">E</span>What we missed</a>
   </nav>
 
-  <h2 id="framing"><span class="num">·</span>A note on framing</h2>
-  <p>I'm not a composer. The integration ideas below are written from the side of someone who knows the game's systems and what they can be made to do. You know what music can carry that I don't. The point of this document is to give you enough hooks into the game's mechanics that you can spot integration possibilities I'd never think of. If you read something here and think <em>"the more interesting version of that is…"</em>, that's the document working.</p>
+  <h2 id="family-a"><span class="num a">A</span>Music that listens to the game</h2>
+  <p class="fam-blurb">The game's state — who's evolving, how long the session has run, what's on screen — feeds into what the music is doing.</p>
 
-  <h2 id="how-to-read"><span class="num">·</span>How to read this</h2>
-
-  <p>The ideas are grouped into four families. The families are not a sequence and not a hierarchy. They're four different <em>directions</em> the integration can run.</p>
-
-  <table class="families-table">
-    <thead>
-      <tr><th>Family</th><th>The relationship</th><th>Example</th></tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td class="fam-cell a">A · Music ← Game</td>
-        <td>Game state changes the music</td>
-        <td>Intensity layers crossfade as the match heats up</td>
-      </tr>
-      <tr>
-        <td class="fam-cell b">B · Game ← Music</td>
-        <td>Music structure changes game state</td>
-        <td>Spawn density modulates with the chorus arrival</td>
-      </tr>
-      <tr>
-        <td class="fam-cell c">C · Music ≡ SFX</td>
-        <td>The boundary between score and SFX dissolves</td>
-        <td>Altar discharge <em>is</em> the downbeat</td>
-      </tr>
-      <tr>
-        <td class="fam-cell d">D · Mechanical hooks</td>
-        <td>Existing game events the audio system already exposes</td>
-        <td>Pause, ducking, transitions, the altar's 3-2-1</td>
-      </tr>
-    </tbody>
-  </table>
-
-  <p>Each idea below has: <strong>what it is</strong> (the idea in one paragraph), <strong>what the game would need to expose</strong> (so you know what's free vs. what requires code), and <strong>why it might be interesting</strong> (the <em>feel</em> it would create, not the feature itself).</p>
-
-  <h2 id="family-a"><span class="num a">A</span>Music responds to game state</h2>
-  <p class="fam-blurb">The game has a runtime state. The music can react to it. This is the most common direction in game scoring, and the lowest lift — the audio system can already broadcast most of what's listed here.</p>
-
-  <h3><span class="tag a">A1</span>Intensity bands across a match</h3>
+  <h3><span class="tag a">A1</span>The match has an arc</h3>
   <div class="idea">
-    <p>Three crossfading layers tied to match progression: pre-evolution → first evolution → approaching terminal. Already in the music brief as Tier 3. The interesting bit is <em>what</em> differentiates the bands beyond "more instruments."</p>
-    <p>Possibilities worth considering:</p>
-    <ul>
-      <li><strong>Harmonic temperature shift</strong> — the bands stay tonally adjacent but move from modal-bright to modal-cold</li>
-      <li><strong>Pulse fidelity</strong> — band 1's pulse is clean and quantised; by band 3 the pulse has micro-drift, like the lab clock is losing time</li>
-      <li><strong>Choir presence</strong> — the choir doesn't enter until band 2 and is fully degraded by band 3</li>
-    </ul>
-    <p class="meta-line"><strong>What the game exposes:</strong>evolution state per team, time-in-terminal, round number. All cheap.</p>
+    <p>A match starts as a goofy party game. Cute creatures slapping each other around an altar. Twenty seconds before it ends, someone is a cosmic horror barely held together by their own body. The music is somewhere on that journey too, but where, and what does it sound like to <em>go</em> there?</p>
+    <p>That arc could happen invisibly (the music gets denser without the player noticing) or as a transformation they can name. Both are interesting in different ways. Which is yours?</p>
   </div>
 
-  <h3><span class="tag a">A2</span>Cross-round erosion (the long arc)</h3>
+  <h3><span class="tag a">A2</span>The lab degrades over time</h3>
   <div class="idea">
-    <p>The dream version: round 1 sounds clean, round 50 sounds drifted, round 100 is barely holding together. Same source material, audibly haunted by hours of play.</p>
-    <p>Implementation surfaces:</p>
-    <ul>
-      <li><strong>Authored late-state stems</strong> — you write the round-1 version <em>and</em> the round-100 version, we crossfade across a long timescale</li>
-      <li><strong>Runtime processing</strong> — we expose detune, low-pass cutoff, noise injection, dropout probability as parameters that ramp with round count</li>
-      <li><strong>Hybrid</strong> — late stems on top of base + light runtime processing on everything</li>
-    </ul>
-    <p>The interesting design question: <strong>does erosion reset per session or persist across sessions?</strong> Persistent erosion (the lab degrades forever in this player's save) is more thematically pure but means the player who joins late hears a world that's already mostly gone. Per-session erosion is less ambitious but always lets the arc happen for whoever's playing.</p>
-    <p class="meta-line"><strong>What the game exposes:</strong>persistent session round counter. We can also expose "lab health" as a 0–1 float if a single scalar is more useful than discrete bands.</p>
+    <p>The single defining theme of the game is decay. The visuals are built to track it across hours of play — cracks spread, glitches accumulate, the world goes wrong by degrees. The music is invited to do the same.</p>
+    <p>What does music sound like after fifty hours in this lab? Not "the same track but worse" — something more interesting than that. What's the last thing to fall apart? What's the part that refuses to break?</p>
   </div>
 
-  <h3><span class="tag a">A3</span>Per-creature motifs</h3>
+  <h3><span class="tag a">A3</span>Creatures with character</h3>
   <div class="idea">
-    <p>Four creature archetypes at full launch. Each could carry a 4–12 second motif that surfaces when that creature is in play — in the lobby when selected, threaded into the match loop when active, transformed into the terminal cue when that creature reaches terminal form.</p>
-    <p>The motif doesn't have to be melodic. It can be <strong>a single instrument's character</strong>, a vowel sound, a rhythmic figure, a frequency band. Whatever reads as "this creature's voice."</p>
-    <p>The integration question: when two players bring different creatures into the same match, do their motifs <em>combine</em> (counterpoint), <em>fight</em> (dissonant overlap), or <em>take turns</em>? Each answer is a different feel.</p>
-    <p class="meta-line"><strong>What the game exposes:</strong>active creature ID per player, lobby selection state.</p>
+    <p>There'll be a small handful of creature types. They're not designed yet. Each one is a little personality — what it wants, how it moves, how it deals with the power being poured into it.</p>
+    <p>Imagine you got to sit in the room when these creatures were being designed, and the question on the table was "what does this thing <em>sound</em> like." What's the move? A signature instrument, a vocal colour, a rhythm? Something stranger?</p>
   </div>
 
-  <h3><span class="tag a">A4</span>Per-environment color</h3>
+  <h3><span class="tag a">A4</span>Rooms with psyches</h3>
   <div class="idea">
-    <p>Four launch environments. Each is visually distinct. The match loop could pick up an environment-specific tonal shift — different reverb tail, different choral color, different low-end weight. Authored as alternate stems layered onto the match loop base.</p>
-    <p class="meta-line"><strong>What the game exposes:</strong>current environment ID at match start. Single signal, never changes mid-match.</p>
+    <p>The lab has different rooms — different environments at launch. Cold storage. The growing chamber. Wherever the ritual machinery actually lives. They look different. Should they sound like different rooms inside the same song, or like different songs entirely?</p>
   </div>
 
-  <h3><span class="tag a">A5</span>Per-entity (the otherworldly power source) signature</h3>
+  <h3><span class="tag a">A5</span>The thing being drained has a voice</h3>
   <div class="idea">
-    <p>The "things being tapped for power" by the ritual each have their own character. The Terminal cue could carry a faint entity-specific signature — a different vowel in the choir, a different interval in the dissonance.</p>
-    <p>The thing being tapped has a voice. The player doesn't need to consciously hear it, but the same entity always <em>sounds</em> the same when its power lands.</p>
-    <p class="meta-line"><strong>What the game exposes:</strong>which entity is being tapped this match (currently a single global value; could be per-altar if useful).</p>
+    <p>The ritual is pulling power out of <em>something</em>. Some kind of otherworldly entity the original civilization figured out how to siphon from. There can be different entities behind different matches.</p>
+    <p>What if you could hear which one was bleeding into the music tonight? Not on the nose — a different vowel in the choir, a different dissonance, a colour that wasn't there yesterday. The player wouldn't know what it was. But they'd know <em>something</em> was different.</p>
   </div>
 
-  <h3><span class="tag a">A6</span>The match's emotional register, not its mechanical state</h3>
+  <h3><span class="tag a">A6</span>The signal you'd want, if you could ask</h3>
   <div class="idea">
-    <p>Most game scoring reads the mechanical state (HP, distance to objective, enemies on screen). The more interesting version here might read the <em>emotional</em> state — which can be modelled as composite signals:</p>
-    <ul>
-      <li><strong>Hopelessness</strong> = (rounds since last win) × (terminal failures) × (system degradation)</li>
-      <li><strong>Tension</strong> = (time remaining in terminal) × (proximity to opposing creature)</li>
-      <li><strong>Triumph-deferred</strong> = (altars completed) × (no evolution achieved)</li>
-    </ul>
-    <p>We can compute these and expose them. They're not real player feelings, but they're closer to "what the music should reflect" than raw mechanics are.</p>
-    <p>This is a place where I'd love your instinct — <em>what signal would you want the game to compute if you could ask for anything?</em></p>
+    <p>The game knows a lot of things it could tell you about. How long this team has been losing. Whether they've ever evolved. How close the creatures are to each other right now. How tired the lab is.</p>
+    <p>Most game music gets handed health bars and timers. If we could compute any signal for you to score against — emotional, mechanical, or completely strange — what would you ask for?</p>
   </div>
 
-  <h2 id="family-b"><span class="num b">B</span>Music drives game state</h2>
-  <p class="fam-blurb">The inverted relationship. The music is upstream; the game responds. This is rarer in games, more authorial, and exactly the kind of thing Ritual &amp; Ruin's "lab as indifferent observer" frame can absorb without breaking.</p>
+  <h2 id="family-b"><span class="num b">B</span>Music the game listens to</h2>
+  <p class="fam-blurb">Flip it. The music is upstream of the game. Beats, choruses, bridges in the song are felt in what the world does.</p>
 
-  <h3><span class="tag b">B1</span>Phrase structure as system pulse</h3>
+  <h3><span class="tag b">B1</span>The song as the lab's heartbeat</h3>
   <div class="idea">
-    <p>The music's bar count becomes the game's heartbeat. Creatures spawn on the downbeat. Blood emitters refresh on the chorus arrival. Altar pulses align to phrase boundaries. The lab is running on the music's clock and nobody told it.</p>
-    <p>What this requires: the game needs to know what bar/phrase the music is in, in real time. The audio system would need to send phrase events. Two ways:</p>
-    <ul>
-      <li><strong>Tempo-locked authored music</strong> — you write to a fixed tempo, we read bar positions from a clock</li>
-      <li><strong>Event-marker stems</strong> — you embed event markers in the audio file (chorus enters here, bridge resolves here), we read them</li>
-    </ul>
-    <p>The player may never consciously notice. But the game will feel like it's <em>breathing</em> with the music, and they will feel that.</p>
+    <p>What if every creature spawn, every emitter refresh, every pulse of the altar were silently aligned to the music? The player can't articulate it but they feel that the world is breathing with the song.</p>
+    <p>The way most games work, the gameplay has its own clock and the music sits on top. We could do that. Or the music could be the clock and the gameplay could obey. The world stops being a game with a soundtrack and starts being a music video the player is inside of.</p>
   </div>
 
-  <h3><span class="tag b">B2</span>Chorus as ritual moment</h3>
+  <h3><span class="tag b">B2</span>The altar fires on the chorus</h3>
   <div class="idea">
-    <p>The altar's discharge sequence (the "3, 2, 1, beam of light") happens about eight times a match. What if the altar can only discharge on a chorus downbeat?</p>
-    <p><strong>Quiet variant:</strong> the altar mechanically discharges on its normal schedule but the <strong>visual flame ignition</strong> and the <strong>camera punch</strong> snap to the nearest chorus beat, so the moment lands musically even when the gameplay clock is asynchronous.</p>
-    <p><strong>Loud variant:</strong> the altar's actual fill rate modulates so it tends to complete near chorus arrivals. The music shapes the rhythm of the game's biggest mechanical moments.</p>
+    <p>The altar discharge — flames igniting, the beam landing, the moment of power — is the loudest event in the match. It happens about eight times. What if it always lands <em>on the chorus</em>?</p>
+    <p>The player doesn't know it's been engineered. They just notice that the biggest moments in the game always seem to feel scored. Because they are.</p>
   </div>
 
-  <h3><span class="tag b">B3</span>Bridge as breakdown moment</h3>
+  <h3><span class="tag b">B3</span>The bridge is when the world wobbles</h3>
   <div class="idea">
-    <p>A bridge in the music could trigger a small system event in the game: a subsystem glitch, an ambient anomaly, a brief monitoring layer disturbance. Not a gameplay mechanic — flavour. The bridge is where the world wobbles.</p>
+    <p>A bridge in a song is the part where the song gets to be a little wrong before it resolves. What if the game's world wobbled with it? An overlay glitches. An ambient anomaly drifts past. Nothing functional changes — the world just has a moment of doubt, on cue.</p>
   </div>
 
-  <h3><span class="tag b">B4</span>The Larger Ending as authored sequence</h3>
+  <h3><span class="tag b">B4</span>The ending is your sequence</h3>
   <div class="idea">
-    <p>The endgame sequence isn't designed visually yet. The intent in the music brief is to compose the music first and design the ending visually <em>to it</em>. This is the most extreme version of music-drives-game: every visual beat of the ending is timed against the music's emotional shape.</p>
-    <p>Practical implication: you may want to deliver the Larger Ending piece with a <strong>tempo map and section markers</strong> (rather than just an audio file), so the visual designer (probably me) can hang the sequence on your scaffolding.</p>
+    <p>The endgame — the moment the lab shuts down — isn't designed yet. The plan is to design it <em>to</em> the music, not the other way around. The visual sequence hangs on the structure of your piece. Where it lifts, the camera lifts. Where it lands, the world ends.</p>
+    <p>This is the part of the game where the music is the lead author.</p>
   </div>
 
-  <h3><span class="tag b">B5</span>Music as save-file haunting</h3>
+  <h3><span class="tag b">B5</span>The music remembers</h3>
   <div class="idea">
-    <p>A version we'd never ship in v1 but worth naming: the <em>specific</em> version of music a player hears is shaped by their save file. Long-time players hear a more degraded version. A player who deletes their save and starts over hears the clean version again. Music as a record of the lab's history with this specific player.</p>
+    <p>What if the version of the music a particular player hears is shaped by what they've already done in this save file? A fresh player hears the clean version. A player with fifty hours hears something different. Delete the save and start over — the music is clean again. The music is a record of the lab's history with <em>this</em> player.</p>
+    <p>This one's probably too ambitious for v1. Surfacing it because it's interesting.</p>
   </div>
 
-  <h2 id="family-c"><span class="num c">C</span>Music and SFX as a unified sonic world</h2>
-  <p class="fam-blurb">The reference is <strong>Mick Gordon's Doom (2016)</strong> — a score so tied to the game's sonic identity that the boundary between music and sound effects nearly dissolves. SFX become musical material. This is one of the highest-value things a single audio person can deliver, and it's why the music brief offers SFX work as an optional Tier 4.</p>
+  <h2 id="family-c"><span class="num c">C</span>Where the score and the sound design are the same thing</h2>
+  <p class="fam-blurb">In most games, music sits in one bucket and sound effects sit in another. Here the bucket is one bucket. The reference everyone knows is Mick Gordon's <em>Doom (2016)</em>, where the line between score and SFX nearly stops existing. The same instinct, applied to a much smaller game with a much weirder world.</p>
 
-  <h3><span class="tag c">C1</span>Diegetic-musical SFX</h3>
+  <h3><span class="tag c">C1</span>SFX written inside the song</h3>
   <div class="idea">
-    <p>The high-impact SFX (altar ignition, terminal evolution, altar discharge, evolution tier-up) are written to sit <em>inside</em> the score's harmony and tempo. The altar's three flames lighting becomes a <strong>musical figure</strong> — three pitched chimes in the score's key, ascending toward the discharge.</p>
-    <p class="meta-line"><strong>What the game exposes:</strong>nothing new. The events already exist. The shift is in how the SFX are authored.</p>
+    <p>The altar igniting. A creature evolving. The terminal sting. What if these weren't sound effects sitting on top of the music — what if they were part of it? Pitched to the same key, landing on the same beat, made of the same materials as the score around them.</p>
+    <p>The player isn't supposed to be able to tell where the music ends and the sound effect begins. That's the design.</p>
   </div>
 
-  <h3><span class="tag c">C2</span>The altar as drum machine</h3>
+  <h3><span class="tag c">C2</span>The altar as a drum machine</h3>
   <div class="idea">
-    <p>The altar has a natural pulse — it speeds up before discharge. That's already a musical gesture. The integration question is whether the altar's pulse is <em>its own thing</em> that happens to look musical, or whether it's <strong>literally rhythmically locked to the score's bpm</strong>. The latter is a strong unification.</p>
-    <p>If locked: the altar's accelerating pulse can become a polyrhythm against the score's main pulse, then resolve back to the downbeat at discharge.</p>
+    <p>The altar already has a pulse. It speeds up before discharge — a natural accelerando the game shipped with by accident. What if it were locked to your BPM? The altar's pulse becomes a polyrhythm against the score's pulse, builds tension, then resolves on the downbeat where the beam fires.</p>
+    <p>The biggest mechanic in the game becomes the loudest instrument.</p>
   </div>
 
-  <h3><span class="tag c">C3</span>Degraded SFX as score material</h3>
+  <h3><span class="tag c">C3</span>Sound effects that decay alongside the world</h3>
   <div class="idea">
-    <p>The same source SFX can be authored at multiple degradation levels — clean, drifted, corrupted, glitching. As the lab erodes, the SFX themselves carry the erosion, not just the music. This means the cross-round erosion (A2) and the SFX layer move together as one phenomenon.</p>
+    <p>If the music degrades over a long session (see A2), maybe the sound effects do too. The altar that ignited crisply in match one ignites with a click and a hiss by match fifty. The world is decaying through every sound that's in it, not just the score.</p>
   </div>
 
   <h3><span class="tag c">C4</span>The monitoring layer as percussion</h3>
   <div class="idea">
-    <p>The lab's automated system already produces sound: log entries scrolling, vital readouts ticking, tracking brackets locking. These could be authored as <strong>a generative percussion bed</strong> — not random clicks, but a low-pulse texture that's part of the score's rhythmic foundation. The lab's monitoring <em>is</em> a layer in the track.</p>
-    <p class="meta-line"><strong>What the game exposes:</strong>event frequency from the monitoring layer (already happening as a tickrate).</p>
+    <p>The lab is always observing. Log entries scroll, vital readouts tick, tracking brackets lock onto creatures. Right now those make sound because they're UI. What if they were the percussion bed? The lab's bureaucracy is the rhythm section. The track has a kit made entirely of the system watching itself.</p>
   </div>
 
-  <h3><span class="tag c">C5</span>Terminal form as instrument</h3>
+  <h3><span class="tag c">C5</span>The terminal-form creature has a voice</h3>
   <div class="idea">
-    <p>When a creature reaches terminal form, the creature itself becomes a sound source — its movement, its breathing, its proximity. Authored as a continuous instrument that plays <em>only during terminal</em>, mixed against the terminal cue rather than separate from it. The cosmic horror has a voice that <em>is</em> the score for those thirty seconds.</p>
+    <p>The cosmic-horror form lasts about thirty seconds. It's loud, it's wrong, and it's the most visually distinctive state in the game. What if that creature was an instrument — its own voice mixed into the score for those thirty seconds, only there because it is?</p>
+    <p>Then it's gone, and the music sounds a little emptier for the rest of the match.</p>
   </div>
 
-  <h2 id="family-d"><span class="num d">D</span>Mechanical hooks (the small touchpoints)</h2>
-  <p class="fam-blurb">These are concrete events the game already produces. Each is small. Most are integration <em>decisions</em> (how should the music handle X), not integration <em>concepts</em>.</p>
+  <h2 id="family-d"><span class="num d">D</span>The small decisions that shape the feel</h2>
+  <p class="fam-blurb">Some of the most important sonic decisions are the smallest ones — what happens when the game pauses, what fades into what, how the music handles a moment of silence. They're less concept and more taste. We don't have answers; we have your-call choices.</p>
 
-  <h3><span class="tag d">D1</span>Pause behavior</h3>
+  <h3><span class="tag d">D1</span>When the game pauses</h3>
   <div class="idea">
-    <p>Any player can pause at any time. Options when they do:</p>
-    <ul>
-      <li><strong>Music ducks</strong> — drops in volume, sits low under the pause overlay</li>
-      <li><strong>Music freezes</strong> — literally pauses with the game; resumes from the same sample on unpause</li>
-      <li><strong>Music continues</strong> — runs as if nothing happened; the world keeps going even when the player has stopped</li>
-      <li><strong>Music transforms</strong> — switches to a stripped-down "lab idle" version unique to pause</li>
-    </ul>
-    <p>The lore-friendly default is probably <strong>continues</strong> — the lab doesn't care that you stopped — but I'd want your take.</p>
+    <p>The lab is indifferent. It doesn't care that you stopped playing. Should the music keep running while a player is in the pause menu, like the experiment is still going? Or should it freeze, like the whole world holds its breath? Or duck, or transform? There's a feel for each, and the right one depends on what you want the lab's relationship to the player to be.</p>
   </div>
 
-  <h3><span class="tag d">D2</span>Music ducking under SFX</h3>
+  <h3><span class="tag d">D2</span>The fight between music and sound effects</h3>
   <div class="idea">
-    <p>The big-impact SFX (altar discharge, terminal sting, evolution moment) need to land. Two design schools:</p>
-    <ul>
-      <li><strong>The mix ducks</strong> — we automatically drop music level by N dB when a high-impact SFX fires</li>
-      <li><strong>The music is written to leave space</strong> — the composer authors gaps at the right frequency/dynamic range and the SFX sits in them naturally</li>
-    </ul>
-    <p>The second is more elegant and harder to do. Worth a conversation about which one you want.</p>
+    <p>The altar discharge needs to land. So does the terminal sting. So does a creature dying. If they all happen on top of full music, something has to give. Does the mix automatically duck when these events fire — engineering's call? Or does the score itself leave space for them — your call, harder, more elegant?</p>
   </div>
 
-  <h3><span class="tag d">D3</span>Context transitions</h3>
+  <h3><span class="tag d">D3</span>How tracks meet each other</h3>
   <div class="idea">
-    <p>Match loop → End screen jingle. Menu → Lobby. Lobby → Match. Each transition could be:</p>
-    <ul>
-      <li><strong>Crossfade</strong> (default, safe)</li>
-      <li><strong>Hard cut</strong> (jarring; possibly correct for "experiment terminated")</li>
-      <li><strong>Tail-out + new piece</strong> (each track ends naturally before the next starts)</li>
-      <li><strong>Shared transition stinger</strong> (a 2-second event that bridges any two contexts)</li>
-    </ul>
+    <p>Match ends. The end-screen cue plays. Should the match music crossfade into it, slam-cut, tail out and let silence happen, or get bridged by a 2-second stinger?</p>
+    <p>The right answer depends on what kind of ending we want each match to feel like. There are matches where a hard cut is the only correct option — the experiment ended, here is the log — and matches where it would feel cruel.</p>
   </div>
 
-  <h3><span class="tag d">D4</span>Solo creature state</h3>
+  <h3><span class="tag d">D4</span>When a teammate is down</h3>
   <div class="idea">
-    <p>A team's first creature dies. One creature is left from that team. Does the music acknowledge it (a layer drops, a register thins, the choir loses a voice)? Or does it hold steady? Both are valid; the choice carries meaning.</p>
+    <p>A team starts with two creatures. One dies. The other is still out there. Does the music acknowledge that — drop a layer, thin out the choir, change colour? Or hold steady, because the experiment doesn't notice losses? Both carry meaning.</p>
   </div>
 
-  <h3><span class="tag d">D5</span>First-evolution one-shot</h3>
+  <h3><span class="tag d">D5</span>The first evolution</h3>
   <div class="idea">
-    <p>The very first evolution of a match (or session) could fire a one-shot musical event — a sting, a layer announcement, a chord modulation — that marks "the system has woken up." Or it can just be subsumed into the adaptive band shift.</p>
+    <p>The first creature evolving in a match is when the game first remembers it isn't only cute. Should that be its own moment in the music — a sting, a modulation, a sudden new voice — or should it dissolve into the layered build? You'd be marking, or refusing to mark, the line between "this is a party game" and "this isn't."</p>
   </div>
 
-  <h3><span class="tag d">D6</span>The altar's 3-2-1 as score material</h3>
+  <h3><span class="tag d">D6</span>The altar's 3, 2, 1</h3>
   <div class="idea">
-    <p>Already in the world: three flames light in sequence, the altar pulses faster, the beam fires. This sequence happens about eight times a match.</p>
-    <p>It is <strong>already a musical gesture</strong>. The integration choices:</p>
-    <ul>
-      <li>The score <em>ignores</em> it and lets the SFX carry the moment</li>
-      <li>The score <em>aligns</em> to it — phrase boundaries land near altar discharges</li>
-      <li>The score <em>is</em> it — the three flame ignitions are the downbeats; the discharge is the resolution</li>
-    </ul>
+    <p>Three flames ignite in sequence. The altar pulses faster. A beam of light fires. This happens roughly eight times a match. It's already a musical gesture; the question is what the music does with it.</p>
+    <p>Ignore it and let the SFX carry the moment? Align to it from the side? Make the score <em>be</em> it — the three ignitions are the downbeats, the discharge is the resolution? Three different worlds.</p>
   </div>
 
-  <h3><span class="tag d">D7</span>Match start typewriter sequence</h3>
+  <h3><span class="tag d">D7</span>"Experiment initiating in… 3… 2… 1…"</h3>
   <div class="idea">
-    <p><code>EXPERIMENT INITIATING IN... 3 ... 2 ... 1 ...</code> plays for 6–10 seconds before the match. Options:</p>
-    <ul>
-      <li>The menu music tails out cleanly and the match loop starts on the first downbeat</li>
-      <li>A short bridge piece plays under the typewriter, separate from both menu and match</li>
-      <li>Silence under the typewriter, and the match loop fires hard on <code>INITIATED</code></li>
-      <li>A Tier 3 Match Start countdown bed (per the music brief) plays under it</li>
-    </ul>
+    <p>Every match starts with a six-second typewriter countdown on a phosphor-green overlay. The lab is booting. Should music play under it? Tail out cleanly from the menu and let the match track land on the downbeat? Sit in silence so the typewriter clicks are all you hear? Each is a different feel for what "starting" means.</p>
   </div>
 
-  <h3><span class="tag d">D8</span>End screen flatness</h3>
+  <h3><span class="tag d">D8</span>None of the endings are triumphant</h3>
   <div class="idea">
-    <p>Three end-screen jingles (victory / defeat / draw), 4–8 seconds each. The hardest authorial choice is making <strong>none of them feel triumphant</strong>, even the victory. The victory needs a small flatness — you won the experiment, the lab logged it, that's all.</p>
-    <p>This is one of the places where the music tells the player what this game is. Worth obsessing over.</p>
+    <p>Three short cues at the end of every match: victory, defeat, draw. The hard part: <em>none of them feel triumphant</em>. The victory especially. You won the experiment. The lab logged it. The machine moves on.</p>
+    <p>This might be one of the smallest pieces of music in the whole game and one of the most authorial. It's the moment the score tells the player what kind of game they've been playing.</p>
   </div>
 
-  <h2 id="family-e"><span class="num e">E</span>Things I haven't thought of (your space)</h2>
-  <p class="fam-blurb">The four families above are <em>my</em> mental model. You probably have a different one. The things you'd add to this document — the integrations I missed because I don't think in music — are the most valuable contributions to it.</p>
+  <h2 id="family-e"><span class="num e">E</span>What we haven't thought of</h2>
+  <p class="fam-blurb">The four families above are how we organise this in our head. You probably have a different one. The most useful thing on this page would be the part you'd write that we didn't.</p>
 
-  <p>A few prompts in case useful:</p>
+  <p>A few prompts, in case useful:</p>
 
   <ul>
-    <li>What in the audio brief surprised you, in a way that suggests the game could be doing more with it?</li>
-    <li>Is there a piece of music you've heard (yours or anyone's) where the relationship between sound and context did something you wished a game could do? What would the game-equivalent be here?</li>
-    <li>What's an integration that would be <em>trivial in another medium</em> but seems impossible here? (That's often where the interesting work is.)</li>
-    <li>What's an integration that sounds wildly ambitious but would actually be cheap if the game just exposed <em>one</em> signal you don't see in this doc? Tell me what signal.</li>
+    <li>Is there something a piece of music or sound design you've made (or loved) has done, that you've never seen a game do? Could this game be the one?</li>
+    <li>What's an integration that would be trivial in your medium but seems impossible in a game? That gap is usually where the interesting work is.</li>
+    <li>Is there a single thing the game could tell you about itself — one signal, one hook, one moment — that would make a wildly ambitious idea suddenly cheap? Ask for it.</li>
+    <li>Anything in the briefs that made you think "they don't know what they're asking for" — say so. That's the thing we most need to hear.</li>
   </ul>
-
-  <h2 id="committed"><span class="num">·</span>What's committed vs. what's possible</h2>
-
-  <p>Nothing in this document is committed scope. The brief that defines committed deliverables is the <a class="inline" href="music-brief-full">music brief</a>; the integration touchpoints in that brief's Section IV are the baseline I expect we'll discuss seriously.</p>
-
-  <p>Everything in <em>this</em> doc is one of:</p>
-
-  <ul>
-    <li>A direction the game's systems <em>can</em> support if you want it</li>
-    <li>A signal the game <em>can</em> expose if you want it</li>
-    <li>A design question I haven't answered and want your input on</li>
-  </ul>
-
-  <p>If something in this document excites you, we scope it together. If something feels wrong, push back and tell me why. If something is missing, propose it.</p>
 
   <div class="callout important">
-    <p>Email <a class="inline" href="mailto:collab@playinstigator.com?subject=Audio%20%E2%80%94%20Integration%20Ideas">collab@playinstigator.com</a> with whatever pulls at you — reactions, pushback, ideas this document didn't reach. Subject line: <em>Audio — Integration Ideas</em>.</p>
+    <p>If anything here is interesting, surprising, wrong, or missing — that's the conversation worth having. Email <a class="inline" href="mailto:collab@playinstigator.com?subject=Audio%20%E2%80%94%20Integration%20Ideas">collab@playinstigator.com</a> with whatever pulls at you. No format expected.</p>
   </div>
 
   <footer class="foot">
