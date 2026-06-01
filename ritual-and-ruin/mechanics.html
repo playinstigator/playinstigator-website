@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light" data-lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#F9F5F1" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1C1917" media="(prefers-color-scheme: dark)">
+<title>Mechanics Field Guide — Ritual &amp; Ruin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Figtree:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700;800&family=Noto+Serif+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  /* ---------- Brand tokens ---------- */
+  :root {
+    --cream:        #F9F5F1;
+    --charcoal:     #1C1917;
+    --coral:        #FF3344;
+    --play-blue:    #57E0FF;
+    --ultraviolet:  #974DFF;
+    --lemon:        #FFF066;
+    --mint:         #81FDC1;
+
+    --f-play:       "Fredoka", system-ui, sans-serif;
+    --f-sharp:      "Plus Jakarta Sans", "Noto Sans SC", system-ui, sans-serif;
+    --f-body:       "Figtree", "Noto Sans SC", system-ui, sans-serif;
+
+    --bg:           var(--cream);
+    --bg-2:         #F1ECE5;
+    --ink:          var(--charcoal);
+    --ink-soft:     #3D3834;
+    --quiet:        #6B615B;
+    --rule:         #D8CEC4;
+    --accent:       var(--ultraviolet);
+    --accent-2:     var(--coral);
+    --card:         #FFFFFF;
+    --shadow:       0 6px 24px rgba(28, 25, 23, 0.07);
+    --shape-a:      var(--coral);
+    --shape-b:      var(--ultraviolet);
+    --shape-c:      var(--play-blue);
+  }
+
+  [data-theme="dark"] {
+    --bg:           var(--charcoal);
+    --bg-2:         #2A2622;
+    --ink:          var(--cream);
+    --ink-soft:     #D8CEC4;
+    --quiet:        #9A8F87;
+    --rule:         #3D3834;
+    --accent:       #B47CFF;
+    --accent-2:     #FF5566;
+    --card:         #24201C;
+    --shadow:       0 8px 28px rgba(0, 0, 0, 0.45);
+  }
+
+  /* ---------- Language switching ---------- */
+  [data-lang="en"] .lang-zh { display: none !important; }
+  [data-lang="zh"] .lang-en { display: none !important; }
+  [data-lang="zh"] body {
+    font-family: "Noto Sans SC", "Figtree", system-ui, sans-serif;
+  }
+  [data-lang="zh"] h1,
+  [data-lang="zh"] h2,
+  [data-lang="zh"] h3,
+  [data-lang="zh"] h4 {
+    font-family: "Noto Sans SC", "Plus Jakarta Sans", system-ui, sans-serif;
+    letter-spacing: 0;
+  }
+
+  /* ---------- Reset + base ---------- */
+  *, *::before, *::after { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--f-body);
+    font-size: 17px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    transition: background-color 0.25s ease, color 0.25s ease;
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  /* Decorative shapes */
+  .shape { position: absolute; pointer-events: none; opacity: 0.55; z-index: 0; }
+  .shape-1 { top: -40px; right: -40px; width: 180px; height: 180px; background: var(--shape-a); border-radius: 50%; transform: rotate(13deg); }
+  .shape-2 { top: 280px; left: -80px; width: 140px; height: 140px; background: var(--shape-b); clip-path: polygon(50% 0, 100% 100%, 0 100%); transform: rotate(-7deg); opacity: 0.35; }
+  .shape-3 { bottom: 120px; right: -60px; width: 220px; height: 60px; background: var(--shape-c); border-radius: 100px; transform: rotate(7deg); opacity: 0.3; }
+  [data-theme="dark"] .shape { opacity: 0.22; }
+  [data-theme="dark"] .shape-1 { opacity: 0.3; }
+
+  .page { max-width: 780px; margin: 0 auto; padding: 48px 24px 96px; position: relative; z-index: 1; }
+
+  /* AI disclaimer banner */
+  .ai-disclaimer {
+    background: var(--bg-2);
+    border: 1px solid var(--rule);
+    border-left: 3px solid var(--accent-2);
+    border-radius: 8px;
+    padding: 10px 14px;
+    margin: 0 0 22px 0;
+    font-family: var(--f-body);
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--ink-soft);
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .ai-disclaimer .bang {
+    flex-shrink: 0;
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    background: var(--accent-2);
+    color: #fff;
+    font-family: var(--f-sharp);
+    font-weight: 800;
+    font-size: 12px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    margin-top: 1px;
+  }
+
+  /* ---------- Top bar ---------- */
+  .topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 28px;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .studio-mark {
+    font-family: var(--f-sharp);
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--quiet);
+    display: inline-flex;
+    align-items: baseline;
+    gap: 6px;
+    text-decoration: none;
+  }
+  .studio-mark .play {
+    font-family: var(--f-play);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-size: 12px;
+  }
+  .studio-mark .dot {
+    width: 4px; height: 4px;
+    background: var(--accent-2);
+    border-radius: 50%;
+    display: inline-block;
+    transform: translateY(-2px);
+  }
+  .studio-mark .inst {
+    font-family: var(--f-sharp);
+    font-weight: 800;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    color: var(--ink);
+    font-size: 12px;
+  }
+
+  .toggles { display: inline-flex; gap: 8px; align-items: center; }
+
+  .pill-btn {
+    background: var(--card);
+    border: 1.5px solid var(--rule);
+    border-radius: 999px;
+    padding: 7px 14px 7px 10px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--f-sharp);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--ink-soft);
+    letter-spacing: 0.04em;
+    transition: all 0.2s ease;
+    box-shadow: var(--shadow);
+  }
+  .pill-btn:hover {
+    transform: translateY(-1px);
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  .pill-btn:active { transform: translateY(0); }
+
+  .theme-toggle .icon {
+    width: 16px; height: 16px;
+    display: inline-block;
+    position: relative;
+  }
+  .theme-toggle .icon::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: var(--accent);
+    transition: all 0.3s ease;
+  }
+  [data-theme="dark"] .theme-toggle .icon::before {
+    background: var(--lemon);
+    box-shadow: inset -5px -3px 0 0 var(--charcoal);
+  }
+  .pill-btn .label { min-width: 32px; text-align: left; }
+
+  .lang-toggle .globe {
+    width: 16px; height: 16px;
+    display: inline-block;
+    position: relative;
+    border: 1.8px solid currentColor;
+    border-radius: 50%;
+  }
+  .lang-toggle .globe::before,
+  .lang-toggle .globe::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    border: 1px solid currentColor;
+    border-radius: 50%;
+  }
+  .lang-toggle .globe::before { width: 100%; height: 50%; }
+  .lang-toggle .globe::after { width: 40%; height: 100%; }
+
+  /* ---------- Masthead ---------- */
+  .mast {
+    border-bottom: 2.5px solid var(--ink);
+    padding-bottom: 28px;
+    margin-bottom: 36px;
+  }
+  .eyebrow {
+    font-family: var(--f-sharp);
+    font-weight: 600;
+    font-size: 11.5px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--quiet);
+    margin: 0 0 10px 0;
+  }
+  [data-lang="zh"] .eyebrow { letter-spacing: 0.18em; }
+  .eyebrow::after {
+    content: "";
+    display: inline-block;
+    width: 28px;
+    height: 2px;
+    background: var(--accent-2);
+    margin-left: 10px;
+    transform: translateY(-3px);
+  }
+  h1.title {
+    font-family: var(--f-sharp);
+    font-weight: 800;
+    font-size: clamp(38px, 8vw, 64px);
+    line-height: 1.02;
+    margin: 0;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+  }
+  h1.title .amp {
+    color: var(--accent);
+    font-weight: 500;
+    font-style: italic;
+    margin: 0 0.15em;
+  }
+
+  .lede {
+    font-style: italic;
+    font-size: clamp(16px, 2.2vw, 19px);
+    line-height: 1.55;
+    color: var(--ink-soft);
+    margin: 0 0 24px 0;
+    padding: 20px 22px;
+    border-left: 3px solid var(--accent);
+    background: var(--bg-2);
+    border-radius: 0 12px 12px 0;
+  }
+  [data-lang="zh"] .lede { font-style: normal; }
+
+  /* ---------- Companion link ---------- */
+  .companion {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: var(--card);
+    border: 1px solid var(--rule);
+    border-left: 3px solid var(--accent-2);
+    border-radius: 12px;
+    padding: 15px 20px;
+    margin: 0 0 24px 0;
+    box-shadow: var(--shadow);
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.18s ease, border-color 0.18s ease;
+  }
+  .companion:hover { transform: translateY(-2px); border-color: var(--accent); }
+  .companion .c-body { display: flex; flex-direction: column; }
+  .companion .c-k {
+    font-family: var(--f-sharp);
+    font-weight: 700;
+    font-size: 10.5px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent-2);
+    margin-bottom: 2px;
+  }
+  [data-lang="zh"] .companion .c-k { letter-spacing: 0.08em; text-transform: none; }
+  .companion .c-t { font-family: var(--f-sharp); font-weight: 700; font-size: 15px; color: var(--ink); }
+  .companion .c-arrow {
+    margin-left: auto;
+    font-family: var(--f-sharp);
+    font-weight: 800;
+    color: var(--accent);
+    transition: transform 0.18s ease;
+  }
+  .companion:hover .c-arrow { transform: translateX(3px); }
+
+  /* ---------- Status legend (orientation) ---------- */
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 18px;
+    align-items: center;
+    background: var(--bg-2);
+    border-radius: 12px;
+    padding: 14px 18px;
+    margin: 0 0 44px 0;
+    font-size: 14px;
+    color: var(--ink-soft);
+  }
+  .legend .leg { display: inline-flex; align-items: center; gap: 8px; }
+
+  h2 {
+    font-family: var(--f-sharp);
+    font-weight: 800;
+    font-size: clamp(22px, 3.5vw, 28px);
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    margin: 56px 0 18px 0;
+    padding-bottom: 10px;
+    border-bottom: 1.5px solid var(--rule);
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+  }
+  h2 .num {
+    font-family: var(--f-sharp);
+    font-size: 14px;
+    letter-spacing: 0;
+    font-weight: 700;
+    color: var(--accent-2);
+    background: var(--bg-2);
+    padding: 4px 10px;
+    border-radius: 6px;
+    min-width: 36px;
+    text-align: center;
+    flex-shrink: 0;
+  }
+
+  h3 {
+    font-family: var(--f-sharp);
+    font-weight: 700;
+    font-size: clamp(18px, 2.5vw, 20px);
+    color: var(--ink);
+    margin: 36px 0 10px 0;
+  }
+
+  h4 {
+    font-family: var(--f-sharp);
+    font-weight: 700;
+    font-size: clamp(16px, 2.2vw, 18px);
+    color: var(--ink);
+    margin: 28px 0 8px 0;
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+  }
+  h4 .idx {
+    font-family: var(--f-sharp);
+    font-weight: 800;
+    color: var(--accent);
+    font-size: 14px;
+    background: var(--bg-2);
+    padding: 3px 9px;
+    border-radius: 6px;
+  }
+
+  p { margin: 0 0 16px 0; }
+  strong { color: var(--ink); font-weight: 700; }
+  em { color: var(--ink-soft); }
+  [data-lang="zh"] em { font-style: normal; color: var(--ink-soft); }
+
+  ol, ul { margin: 8px 0 20px 0; padding-left: 0; }
+  li { margin: 0 0 10px 0; }
+
+  /* ---------- Status pills ---------- */
+  .status {
+    display: inline-block;
+    font-family: var(--f-sharp);
+    font-weight: 800;
+    font-size: 9.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 5px;
+    margin-right: 8px;
+    vertical-align: middle;
+    line-height: 1;
+    white-space: nowrap;
+  }
+  [data-lang="zh"] .status { letter-spacing: 0.04em; }
+  .status.live    { background: rgba(129, 253, 193, 0.22); color: #1c7a52; border: 1px solid rgba(129, 253, 193, 0.55); }
+  .status.partial { background: rgba(255, 224, 90, 0.22);  color: #8a6a00; border: 1px solid rgba(255, 224, 90, 0.60); }
+  .status.planned { background: var(--bg-2); color: var(--quiet); border: 1px solid var(--rule); }
+  [data-theme="dark"] .status.live    { color: #81FDC1; }
+  [data-theme="dark"] .status.partial { color: #FFF066; }
+
+  /* Inline code (clip identifiers) */
+  code {
+    font-family: ui-monospace, "SFMono-Regular", "Consolas", monospace;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--accent);
+    background: var(--bg-2);
+    padding: 1.5px 6px;
+    border-radius: 5px;
+    white-space: nowrap;
+  }
+
+  /* Four voices list */
+  .voices ul { list-style: none; padding: 0; margin: 10px 0 8px 0; }
+  .voices li {
+    padding: 12px 0 12px 0;
+    border-top: 1px solid var(--rule);
+  }
+  .voices li:first-child { border-top: none; }
+  .voices li strong {
+    font-family: var(--f-sharp);
+    color: var(--accent);
+  }
+
+  /* SFX inventory */
+  .src-label {
+    font-family: var(--f-sharp);
+    font-weight: 800;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent-2);
+    margin: 28px 0 2px 0;
+  }
+  [data-lang="zh"] .src-label { letter-spacing: 0.04em; text-transform: none; font-size: 13px; }
+  .sfx { list-style: none; padding: 0; margin: 6px 0 8px 0; }
+  .sfx li { padding: 11px 0; border-top: 1px solid var(--rule); margin: 0; }
+  .sfx li:first-child { border-top: none; }
+  .sfx .trig { color: var(--ink-soft); }
+
+  .stages ol {
+    list-style: none;
+    counter-reset: stage;
+    padding: 0;
+  }
+  .stages li {
+    counter-increment: stage;
+    position: relative;
+    padding: 16px 0 16px 56px;
+    border-top: 1px solid var(--rule);
+  }
+  .stages li:first-child { border-top: none; }
+  .stages li::before {
+    content: counter(stage, decimal-leading-zero);
+    position: absolute;
+    left: 0; top: 16px;
+    font-family: var(--f-sharp);
+    font-weight: 800;
+    font-size: 14px;
+    color: var(--accent-2);
+    background: var(--bg-2);
+    padding: 4px 10px;
+    border-radius: 6px;
+    line-height: 1;
+  }
+
+  /* Mechanism callouts */
+  .mechs p {
+    background: var(--card);
+    border: 1px solid var(--rule);
+    border-left: 3px solid var(--accent);
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin-bottom: 14px;
+    box-shadow: var(--shadow);
+  }
+  .mechs p.is-planned { border-left-color: var(--quiet); }
+  .mechs p strong:first-of-type {
+    display: inline;
+    font-family: var(--f-sharp);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--accent);
+    margin-right: 6px;
+  }
+  [data-lang="zh"] .mechs p strong:first-of-type {
+    letter-spacing: 0.05em;
+    text-transform: none;
+    font-size: 13px;
+  }
+
+  .tensions {
+    background: var(--bg-2);
+    border-radius: 12px;
+    padding: 18px 22px;
+    margin: 16px 0 20px 0;
+  }
+  .tensions p { margin: 0; }
+
+  .foot {
+    margin-top: 72px;
+    padding-top: 20px;
+    border-top: 2.5px solid var(--ink);
+    font-family: var(--f-sharp);
+    font-weight: 600;
+    font-size: 11.5px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--quiet);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  [data-lang="zh"] .foot { letter-spacing: 0.1em; text-transform: none; }
+  .foot .dot-row { display: inline-flex; gap: 6px; align-items: center; }
+  .foot .dot-row i { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+  .foot .dot-row .d1 { background: var(--coral); transform: rotate(7deg); }
+  .foot .dot-row .d2 { background: var(--ultraviolet); }
+  .foot .dot-row .d3 { background: var(--play-blue); transform: rotate(-13deg); }
+
+  @media (max-width: 560px) {
+    .page { padding: 32px 18px 64px; }
+    .mast { padding-bottom: 20px; margin-bottom: 28px; }
+    .lede { padding: 16px 18px; }
+    .mechs p { padding: 14px 16px; }
+    .stages li { padding: 14px 0 14px 48px; }
+    .shape-1 { width: 120px; height: 120px; top: -30px; right: -30px; }
+    .shape-2 { width: 100px; height: 100px; top: 220px; left: -60px; }
+    .shape-3 { width: 160px; bottom: 80px; }
+    h2 { margin: 40px 0 14px 0; }
+  }
+  @media (max-width: 420px) {
+    .pill-btn .label { display: none; }
+    .pill-btn { padding: 7px 9px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; }
+    html { scroll-behavior: auto; }
+  }
+
+  @media print {
+    .pill-btn, .shape, .toggles { display: none !important; }
+    body { background: #fff; color: #000; }
+    .page { padding: 0; max-width: 100%; }
+    .mechs p { box-shadow: none; }
+  }
+
+  ::selection { background: var(--accent); color: var(--cream); }
+</style>
+</head>
+<body>
+
+<div class="shape shape-1" aria-hidden="true"></div>
+<div class="shape shape-2" aria-hidden="true"></div>
+<div class="shape shape-3" aria-hidden="true"></div>
+
+<div class="page">
+
+  <div class="topbar">
+    <a class="studio-mark" href="../ritual-and-ruin.html">
+      <span class="play">Play</span>
+      <span class="dot"></span>
+      <span class="inst">Instigator</span>
+    </a>
+    <div class="toggles">
+      <button class="pill-btn lang-toggle" id="langToggle" aria-label="Switch language">
+        <span class="globe" aria-hidden="true"></span>
+        <span class="label" id="langLabel">中文</span>
+      </button>
+      <button class="pill-btn theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+        <span class="icon" aria-hidden="true"></span>
+        <span class="label" id="themeLabel">Dark</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- AI translation disclaimer (Chinese only) -->
+  <div class="ai-disclaimer lang-zh">
+    <span class="bang" aria-hidden="true">!</span>
+    <span>本页中文内容由 AI 翻译，可能存在不准确或不自然的表达。原文以英文版本为准。</span>
+  </div>
+
+  <header class="mast">
+    <p class="eyebrow lang-en">Field Guide · Mechanics</p>
+    <p class="eyebrow lang-zh">实地指南 · 机制</p>
+    <h1 class="title">Ritual <span class="amp">&amp;</span> Ruin</h1>
+  </header>
+
+  <p class="lede lang-en">
+    A companion to the Audio World brief — that one is the world and the feel; this one walks the actual mechanics of a match. For each piece: what it is, why it exists, how it feels, and what to listen for. Every mechanic is tagged with where it stands in the build today, so you know what you can already hear versus what's still on paper. The sounds that fire right now are listed in §VI; what's on the roadmap is in §VII.
+  </p>
+  <p class="lede lang-zh">
+    这是《音频世界简报》的姊妹篇——那一篇讲的是世界与感觉，这一篇走的是一局比赛里真实的机制。每一项都包含：它是什么、为何存在、如何呈现感觉、以及该聆听什么。每个机制都标注了它在当前版本里的状态，让你清楚哪些现在就能听到、哪些还停留在纸面上。当前会触发的声音列在第六节；路线图上的内容列在第七节。
+  </p>
+
+  <a class="companion" href="audio-world.html">
+    <div class="c-body">
+      <span class="c-k lang-en">Companion brief</span>
+      <span class="c-k lang-zh">姊妹简报</span>
+      <span class="c-t lang-en">Audio World — the world &amp; the feel</span>
+      <span class="c-t lang-zh">音频世界简报 — 世界与感觉</span>
+    </div>
+    <span class="c-arrow" aria-hidden="true">→</span>
+  </a>
+
+  <div class="legend">
+    <span class="leg"><span class="status live"><span class="lang-en">In game</span><span class="lang-zh">已实装</span></span><span class="lang-en">plays today</span><span class="lang-zh">现已可玩</span></span>
+    <span class="leg"><span class="status partial"><span class="lang-en">Partial</span><span class="lang-zh">部分</span></span><span class="lang-en">some of it is built</span><span class="lang-zh">部分已实现</span></span>
+    <span class="leg"><span class="status planned"><span class="lang-en">Roadmap</span><span class="lang-zh">路线图</span></span><span class="lang-en">planned — start imagining it</span><span class="lang-zh">已规划——可以开始构思</span></span>
+  </div>
+
+  <main>
+
+    <h2><span class="lang-en">The Game in a Minute</span><span class="lang-zh">一分钟读懂这款游戏</span></h2>
+
+    <p class="lang-en"><em>Ritual &amp; Ruin</em> is a 2v2 local party game, about 5–10 minutes a match. You play a small engineered <strong>jellyfish creature</strong> in a tall, multi-floor arena. The job, on a loop: <strong>harvest blood</strong> from emitters up top, <strong>relay it down</strong> floor by floor, and <strong>pour it into ancient altar-machines</strong> at the bottom. Feeding an altar grows a single bar that is <em>both</em> your health and your progress toward evolving.</p>
+    <p class="lang-en">The catch: that bar is always draining, so you can never sit still — and every evolution makes you stronger <em>and</em> drains you faster, so growing and surviving pull against each other. Evolve twice and you become a <strong>Terminal</strong> form: a powerful, short-lived cosmic-horror that hunts the other team. The last team alive wins, scored by how long they outlasted.</p>
+    <p class="lang-en">Underneath it is a quiet, clinical fiction: a dead civilisation built these creatures and machines to harvest cosmic power, then vanished — and the lab still runs on its own. The creatures aren't heroes; they're replaceable parts, kept alive just long enough to feed the system. So nothing here is triumphant — power is dispensed like a machine output, evolution looks more like corruption than reward, and even winning is only lasting a little longer inside a loop that resets. That tension — <strong>cute but wrong, cooperative but exploited, alive but doomed</strong> — is the thing to score. (The companion <a href="audio-world.html">Audio World</a> brief goes deeper on the world.)</p>
+
+    <p class="lang-zh"><em>Ritual &amp; Ruin</em> 是一款 2v2 本地派对游戏，单局约 5–10 分钟。你扮演一只被改造出来的小小<strong>水母生物</strong>，身处一座高耸的、多楼层的竞技场。核心循环：在顶部从出血口<strong>采集血液</strong>，<strong>一层层往下接力</strong>，再把它<strong>倒入底部的远古祭坛机器</strong>。喂养祭坛会让一条槽增长，而这条槽<em>同时</em>是你的生命与你迈向进化的进度。</p>
+    <p class="lang-zh">关键在于：那条槽一直在流失，所以你永远不能停下来——而且每一次进化都让你更强、<em>也</em>流失得更快，于是"成长"与"生存"彼此拉扯。进化两次，你便成为<strong>终末</strong>形态：一个强大却短命的宇宙级恐怖，去猎杀对方队伍。最后存活的队伍获胜，以"撑了多久"来计分。</p>
+    <p class="lang-zh">它底下是一则安静而冷峻的虚构：一个已死的文明造出这些生物与机器来收割宇宙能量，随后消失了——而实验室仍在自行运转。生物不是英雄；它们是可替换的零件，被维持着活命，仅仅是为了喂养这个系统。所以这里没有任何凯旋——能量像机器产出一样被发放，进化看起来更像腐化而非奖赏，即便赢了，也不过是在一个会重置的循环里多撑了一会。这种张力——<strong>可爱却不对劲、合作却被剥削、活着却注定毁灭</strong>——正是要为之做声音的东西。（姊妹篇《<a href="audio-world.html">音频世界简报</a>》对这个世界讲得更深。）</p>
+
+    <h2><span class="num">I</span><span class="lang-en">The Creature</span><span class="lang-zh">生物</span></h2>
+
+    <div class="mechs">
+      <div class="lang-en">
+        <p><span class="status live">In game</span><strong>Transform — carry or fly, never both.</strong> A creature flips between two mutually exclusive modes: in Mobility it swims and moves freely but can't hold any blood, and in Carrier its body folds into an open vessel that holds blood but can no longer fly. That single restriction is the engine of the whole co-op, because one creature can't both gather blood and carry it to where it's needed, so the team has to share the work — it is the move the game is named around. The switch is quick and happens often, so each one feels like a small decision rather than a ceremony. Spilling isn't a scripted event: because the blood is real fluid, the instant you leave Carrier the vessel is simply gone and whatever you were holding falls under gravity, which means pouring is really just a consequence of transforming and of how you happen to be positioned and tilted. For sound, the switch itself is the moment that matters, and its two directions probably want different timbres — a vessel forming as you fold into Carrier, and wings unlocking as you spring back into Mobility. The cue <code>formTransform</code> already fires, though the clip is a placeholder.</p>
+        <p><span class="status live">In game</span><strong>Flight and the body.</strong> The creature is a jellyfish, and it is meant to move like one: vertical flight is a pulsed, staccato bounce — a contract-and-glide, the way a real jellyfish swims — rather than a smooth thrust, with the bell squishing on each pulse and six tentacles trailing underneath, all of which is built and working. The intent is for it to read as a living jellyfish straining upward rather than a jetpack, a propulsion that looks biological and a little laboured, rhythmic and effortful and somehow both comic and sad. The clearest hook for sound is the per-pulse cue <code>pulse</code>, which fires on every impulse — roughly every 0.35 seconds while you hold position in the air — so it behaves like the heartbeat of the swim and is a natural place to carry the creature's personality.</p>
+      </div>
+      <div class="lang-zh">
+        <p><span class="status live">已实装</span><strong>变形——要么运送，要么飞行，不能两者兼得。</strong>生物在两种互斥的形态之间切换：在"机动形态"下它能自由地游动与移动，却无法携带任何血液；在"运送形态"下它的身体折叠成一只开口的容器，能盛血液，却再也无法飞行。正是这一条限制构成了整个合作玩法的引擎，因为一只生物无法既采集血液、又把它运到需要的地方，于是队伍必须分担工作——这也正是游戏以之命名的那个动作。切换既快又频繁，所以每一次都更像一个小小的决定，而不是一场仪式。洒出并不是被脚本化的事件：因为血液是真实的流体，你一旦离开运送形态，容器就直接消失了，手里盛着的一切都会随重力落下，也就是说，倾倒其实只是变形、加上你恰好所处的站位与倾斜所导致的结果。对声音而言，切换本身才是关键时刻，而它的两个方向大概想要不同的音色——折叠进运送形态时是容器成形，弹回机动形态时是翅膀解锁。提示音 <code>formTransform</code> 已经会触发，只是那段片段还是占位。</p>
+        <p><span class="status live">已实装</span><strong>飞行与身体。</strong>这只生物是一只水母，它也理应像水母那样移动：垂直飞行是一种脉冲式、断奏般的弹跳——一种"收缩—滑行"，正如真实水母的游动——而不是平滑的推进，每一次脉冲钟体都会挤压一下，六条触手在下方拖曳，而这一切都已实现并生效。我们的意图，是让它读起来像一只奋力向上的活水母，而不是喷气背包：一种看上去有生物感、又有点吃力的推进，有节奏、费力，既有点滑稽又有点悲伤。最清晰的声音切入口是逐脉冲音 <code>pulse</code>，它在每一次冲量时触发——空中保持位置时约每 0.35 秒一次——因此它就像这场游动的心跳，也是一个承载生物性格的天然位置。</p>
+      </div>
+    </div>
+
+    <h3><span class="lang-en">The cast</span><span class="lang-zh">角色阵容</span></h3>
+    <p class="lang-en">Today there is one creature, the jellyfish, but more are planned, and what ties them together is a design idea rather than a fixed list: every creature has some form of vertical mobility and can transform into a cup-like vessel to carry blood. The jellyfish does this by inverting its bell into a cup, and its mobility is the pulsing swim described above. A second creature in the works is a spider-scorpion that climbs — webbing the ceiling and walking across ceilings and walls — which gives it a completely different movement language and, for sound, a completely different palette: skittering, web and the patter of wall-walking, where the jellyfish is soft pulses and slosh.</p>
+    <p class="lang-en">There is also a looser, still-conceptual set of four emotional archetypes — Lonely, Playful, Tired and Safety — that the cast might eventually span. The current designs aren't actually built on them yet; if you had to map them, the jellyfish leans Playful and the spider-scorpion maybe Lonely, but treat that as aspiration rather than a brief. The practical takeaway is simply that each creature should get its own movement feel and its own sonic identity.</p>
+    <p class="lang-zh">目前只有一个生物，也就是水母，但还有更多在计划中，而把它们串在一起的，是一条设计思路而非一份固定名单：每个生物都拥有某种形式的垂直机动能力，并且能变形成一只杯状容器来运送血液。水母是通过把自己的钟体翻转成一只杯子来做到这一点的，而它的机动方式就是上文所说的脉冲式游动。正在构思中的第二个生物，是一只会攀爬的蜘蛛—蝎子——在天花板上结网，并在天花板与墙壁上行走——这给了它一套截然不同的移动语言，对声音而言也是一套截然不同的调色板：窸窣的爬行、蛛网、以及在墙上行走的细碎脚步声，而水母则是柔和的脉冲与晃荡。</p>
+    <p class="lang-zh">此外还有一套更松散、目前仍停留在概念层面的四种情感原型——孤独、顽皮、疲惫、安全感——是这个阵容也许最终会去覆盖的。当前的设计其实还没有建立在它们之上；如果非要对应，水母偏向顽皮，蜘蛛—蝎子大概是孤独，但请把这当作一种愿景，而不是一份创作要求。真正实用的结论只是：每个生物都应当拥有自己的移动手感与自己的声音身份。</p>
+
+    <h2><span class="num">II</span><span class="lang-en">The Blood Relay</span><span class="lang-zh">血液接力</span></h2>
+
+    <div class="mechs">
+      <div class="lang-en">
+        <p><span class="status live">In game</span><strong>Blood is real fluid.</strong> The blood is a simulated liquid made of ObiFluid particles, so it genuinely spills and splashes in real time, and movement, drops and hard landings all throw it around. That physicality is the whole point: it makes carrying visibly fallible, so everyone can see the moment you spill, and it lets a well-timed bump matter without the game needing any dedicated combat. It should feel wet, heavy and alive, the one currency that means anything in a dead system. Beyond what gravity does there is no special slosh-on-tilt simulation inside the vessel, so it's best not to over-promise that in the mix. The cue that already exists is <code>bloodImpactClip</code>, which fires when a particle lands on a surface and is throttled so it never machine-guns.</p>
+        <p><span class="status live">In game</span><strong>Harvest — stand to receive.</strong> Blood comes from emitters that hang above the top floor: stand on the marked spot beneath one — a glowing footprint ring on the ground — and it streams down into you, and the moment you step off it stops. The skill is presence rather than aim, since you have to actually be there and stay exposed while you fill, which makes harvesting a commitment instead of a free action. It should sound functional, more like an engine drawing fuel than a gentle drip. Two cues already cover it: <code>emitterFlowLoop</code> runs for as long as blood is dispensing, and <code>emitterBurstFired</code> marks the start and each pulse, though the loop clip is currently a placeholder.</p>
+        <p><span class="status live">In game</span><strong>Relay — pour and catch.</strong> To move blood downward, a carrier reaches a ledge and lets it go by transforming out and tilting, while a teammate waiting below in Carrier mode catches it in their own vessel; that is how blood travels from the top floor to the middle to the bottom toward the altars. There is no dedicated relay system in the code, and there doesn't need to be, because it emerges purely from physics — from positioning, tilt and the catcher's container — and it already happens in play. This is the heart of the co-op, built on repeated handoffs and repeated moments of exposure where the other team can interfere, so a clean catch feels earned while a miss is visible and costly but still recoverable. For now the existing fluid impacts already cover blood that lands or spills, and a dedicated catch-versus-miss distinction would be a worthwhile cue to add later.</p>
+        <p><span class="status live">In game</span><strong>Auto-pour — feeding the altar.</strong> When a carrier gets close to an altar and isn't actively steering, its vessel tips toward the altar on its own and the blood flows in, and any manual input takes control straight back. The point of doing it this way is that the challenge lies in getting there and holding your position against rivals, not in threading the blood into a target. It should feel inevitable and machine-assisted, as though the altar is drawing the blood out of you. There is no dedicated pour cue yet, so today the audible result is simply the altar's meter filling, described next, together with the blood impacts.</p>
+      </div>
+      <div class="lang-zh">
+        <p><span class="status live">已实装</span><strong>血液是真实的流体。</strong>血液是一种由 ObiFluid 粒子构成的模拟液体，因此它会实时地真正洒出、溅开，移动、下落、以及重重的落地都会把它甩得到处都是。这种物理性正是关键所在：它让"运送"在视觉上真的会失手，所有人都看得见你洒出来的那一刻，也让一次拿捏得当的撞击变得有意义，而游戏无需任何专门的战斗。它应当让人感到湿润、沉重、有生命，是这个已死系统里唯一还算数的货币。除了重力本身的作用之外，容器内部并没有专门的、随倾斜而晃动的模拟，所以在混音里最好不要把这一点过度承诺。目前已有的提示音是 <code>bloodImpactClip</code>，它在粒子落到表面时触发，并已节流，不会像机关枪一样连发。</p>
+        <p><span class="status live">已实装</span><strong>采集——站着接收。</strong>血液来自悬在最顶层之上的出血口：站到它下方那个标记好的位置——地面上一圈发光的脚印环——血液就会流进你体内，而你一旦离开，它便立刻停止。这里的技巧是"在场"而非瞄准，因为你必须真的待在那里、在填充时始终暴露，这让采集成为一种投入，而不是一个免费的动作。它应当听起来是功能性的，更像引擎在抽取燃料，而不是温柔的滴落。两个提示音已经覆盖了它：只要血液在分发，<code>emitterFlowLoop</code> 就会持续播放，而 <code>emitterBurstFired</code> 标记开始以及每一次脉冲——只是那段循环片段目前还是占位。</p>
+        <p><span class="status live">已实装</span><strong>接力——倾倒与接住。</strong>为了把血液往下运，运送者来到平台边缘，靠变形出去并倾斜把血液放开，而下方以运送形态等待的队友则用自己的容器接住；血液就这样从顶层、到中层、再到底层，一路朝着祭坛传递。代码里并没有专门的接力系统，也不需要有，因为它纯粹从物理中涌现——来自站位、倾斜与接住方的容器——并且在实际游玩中已经发生。这是合作玩法的核心，建立在一次次交接、以及一次次让对方有机可乘的暴露之上，所以一次干净的接住让人觉得是挣来的，而失手虽然显眼又昂贵，却仍可补救。目前现有的流体撞击声已经覆盖了落地或洒出的血液，而一个专门区分"接住 vs 失手"的提示音，会是日后值得添加的东西。</p>
+        <p><span class="status live">已实装</span><strong>自动倾倒——喂养祭坛。</strong>当运送者靠近祭坛、而又没有主动操控时，它的容器会自行朝祭坛倾斜、把血液倒进去，而任何手动输入都会立刻把控制权夺回。之所以这样设计，是因为难点在于抵达那里、并顶住对手守住位置，而不是把血液对准某个目标。它应当让人感到不可避免、由机器辅助，仿佛是祭坛在把血液从你体内抽出去。目前还没有专门的倾倒音，所以今天可听见的结果，就是接下来要讲的祭坛之槽在填充，再加上血液的撞击声。</p>
+      </div>
+    </div>
+
+    <h2><span class="num">III</span><span class="lang-en">The Altar &amp; The Bar</span><span class="lang-zh">祭坛与那条槽</span></h2>
+
+    <div class="mechs">
+      <div class="lang-en">
+        <p><span class="status live">In game</span><strong>The altar — fill, then discharge.</strong> Blood fills an altar, and once it is full a short countdown runs before it discharges in a burst of energy and hands the power to whichever creature is closest within range; the altar is then spent, and this plays out many times across a match. Tying the reward both to delivering the blood and to standing close is what forces the interesting decision — whether to keep feeding the altar or to break off and position yourself to claim the discharge. The tone is maintenance rather than ceremony: clinical, without fanfare, the power granted as a byproduct rather than a triumph. The fill, the countdown, the energy-burst effect and the closest-creature reward are all built, while the idea of three ritual flames lighting in sequence is a design flourish that isn't in yet. Three cues already fire — <code>altarMeterFull</code> as it tops out, <code>altarCountdownTick</code> through the countdown (throttled to about one tick every 0.75 seconds), and <code>altarRitualComplete</code> on discharge.</p>
+        <p><span class="status live">In game</span><strong>The bar is health and evolution at once.</strong> Each creature has a single bar that is always draining, and that same bar is both its life and its progress toward evolving; feeding altars refills it, and being closest at a discharge gives it a big jump. Fill it all the way and the creature evolves, but from then on it drains faster, which is the deliberate double bind at the centre of the game: you have to keep acting just to stay alive, and reaching for power only raises the pressure, because surviving is not the same as becoming. It should feel like a countdown you fight by taking part in, with a little breathing room early on and a creeping dread later. There is no per-state cue for it yet, since the bar speaks visually, so an audible sting at the moment decay speeds up would be a worthwhile addition.</p>
+        <p><span class="status live">In game</span><strong>Evolution — base, enhanced, terminal.</strong> There are two evolutions, and each is a real visual transformation: the colour shifts from white to blue to gold, the body grows, its squish deepens, and the bar widens and recolours. The base shape always stays underneath, so the terminal form is the same creature carrying far too much rather than a wholly different thing. The feeling to protect is that this is power which is also a curse — a descent dressed up as an ascent, the cute being consumed rather than replaced — so it should never land as a clean upgrade. The cues <code>evolutionTier1</code> and <code>evolutionTier2</code> fire on each step, and the second one in particular should sound distorted and wrong rather than triumphant.</p>
+      </div>
+      <div class="lang-zh">
+        <p><span class="status live">已实装</span><strong>祭坛——先填满，再释放。</strong>血液注入祭坛，一旦填满，便会先跑一段短倒计时，随后以一束能量释放，把力量交给范围内最近的那只生物；祭坛随之耗尽，而这在一局之中会反复上演。把奖励同时绑定在"把血送到"与"站得够近"上，正是逼出那个有趣抉择的原因——是继续喂养祭坛，还是抽身去抢占释放时的位置。它的基调是维护而非典礼：冷峻、没有号角，力量作为副产品被发放，而不是一场凯旋。填充、倒计时、能量爆发特效、以及"最近生物获得奖励"都已实现，而"三道仪式之火依次点亮"则是一个尚未实现的设计点缀。三个提示音已经会触发——填满时的 <code>altarMeterFull</code>、倒计时期间的 <code>altarCountdownTick</code>（节流为约每 0.75 秒一次），以及释放时的 <code>altarRitualComplete</code>。</p>
+        <p><span class="status live">已实装</span><strong>这条槽同时是生命与进化。</strong>每只生物都有一条始终在流失的槽，而这同一条槽既是它的生命，也是它迈向进化的进度；喂养祭坛会把它补满，在释放瞬间站得最近则会让它猛涨一截。把它填到顶，生物就会进化，但从此它流失得更快——这正是游戏核心处那个刻意设计的双重束缚：你必须不停行动才能活着，而伸手去够力量又只会抬高压力，因为活下来并不等于成为。它应当让人感到像一段你只能靠"参与"去对抗的倒计时，前期还有一点喘息，后期则是步步逼近的不安。目前还没有按状态区分的提示音，因为这条槽靠视觉说话，所以在流失加速的那一刻给出一声可被听见的提示，会是一个值得添加的东西。</p>
+        <p><span class="status live">已实装</span><strong>进化——基础、增强、终末。</strong>一共有两次进化，每一次都是一场真实的视觉转变：颜色由白到蓝再到金，身体变大，挤压加深，槽也变宽并改色。基础形态始终留在底下，所以终末形态是同一只生物承担了太多，而不是另一个截然不同的东西。要守护的感觉，是这是一种同时也是诅咒的力量——一场披着"上升"外衣的坠落，可爱被消耗、而非被替换——所以它绝不该落得像一次干净利落的升级。提示音 <code>evolutionTier1</code> 与 <code>evolutionTier2</code> 在每一步触发，而其中第二个尤其应当听起来扭曲而错位，而不是凯旋。</p>
+      </div>
+    </div>
+
+    <h2><span class="num">IV</span><span class="lang-en">The Arena &amp; The End</span><span class="lang-zh">竞技场与结局</span></h2>
+
+    <div class="mechs">
+      <div class="lang-en">
+        <p><span class="status live">In game</span><strong>Scrolling floors — the arena eats itself.</strong> Three floors are visible at once, with emitters at the top, the middle floor acting as transit, and altars at the bottom; once the bottom altars are used up the top floor tears open from its centre, the players fall, and the view descends to a fresh floor, building up from one floor to three and then cycling from there. It exists to kill camping, and because the scroll only happens once the altars are cleared the team effectively decides when it comes, which turns the timing of it into a piece of strategy. It should feel like the system consuming its own ground to keep running, jarring on purpose. Two cues carry it: <code>scrollAlarm</code> the instant the scroll begins, and <code>scrollWhoosh</code> as it settles.</p>
+        <p><span class="status live">In game</span><strong>Terminal phase — sudden death.</strong> When a creature reaches its second evolution the match tips into its endgame, and that creature becomes a cosmic-horror surrounded by a damaging aura that drains the bars of nearby enemies. The aura damage is real and working, and there is no separate fuse timer — the "fuse" is simply the very fast tier-two decay — while the bar stays attached to the creature and follows it like every other one, since we decided against a single big bar across the top of the screen. The feeling is climax and consumption at the same time, hunter and hunted, panic on both sides. <code>evolutionTier2</code> marks the moment it flips, and a dedicated terminal-phase drone is on the wishlist but isn't built yet.</p>
+        <p><span class="status live">In game</span><strong>Resolution — the outlast number.</strong> When one team is wiped out, the survivors hold on through a brief outlast window — time itself even accelerates — and the match records how long they lasted before the end screen shows the winner and that time; win, loss and draw are all detected. It is a concrete and almost cruel way to measure victory, and it carries the idea that even winning is only lasting a little longer inside the loop, so none of the three endings is a celebration. The arc is inevitability followed by a small, bittersweet release. The cues run in sequence: <code>teamEliminatedStab</code> opens the window, <code>outlastTick</code> repeats through it with its pitch ramping up, and then <code>matchVictory</code> or <code>matchDraw</code> lands; each creature's <code>playerDeath</code> fires as it falls, and because that clip is a placeholder it's a strong place to give the creatures real character.</p>
+      </div>
+      <div class="lang-zh">
+        <p><span class="status live">已实装</span><strong>滚动楼层——竞技场吞噬自己。</strong>三层同时可见，出血口在顶部，中层作为过渡，祭坛在底部；一旦底层的祭坛被耗尽，顶层便会从中心撕裂开来，玩家坠落，视角下降到一层全新的地面——它先由一层逐步搭到三层，然后从那里开始循环。它的存在是为了扼杀蹲守，而由于滚动只在祭坛清空后才发生，队伍实际上自己决定了它何时到来，这就把"何时触发"变成了一种策略。它应当让人感到是系统在消耗自己的地面以维持运转，刻意做得令人不适。两个提示音承载着它：滚动开始那一刻的 <code>scrollAlarm</code>，以及落定时的 <code>scrollWhoosh</code>。</p>
+        <p><span class="status live">已实装</span><strong>终末阶段——猝死。</strong>当一只生物抵达第二次进化，比赛便翻入它的终盘，这只生物随之变成一个被伤害光环环绕的宇宙级恐怖，光环会持续削减附近敌人的槽。光环伤害是真实且生效的，也没有单独的引信计时器——所谓"引信"其实就是极快的第二阶流失——而那条槽依然附着在生物身上、像其他每一条一样跟随它移动，因为我们决定不做横在屏幕顶部的那一条大槽。这份感觉是高潮与消耗同时发生，猎手与猎物，双方都陷入恐慌。<code>evolutionTier2</code> 标记它翻转的那一刻，而一段专门的终末阶段低鸣还在愿望清单上，尚未实现。</p>
+        <p><span class="status live">已实装</span><strong>结算——那个"撑了多久"的数字。</strong>当一支队伍被团灭，幸存的一方会熬过一段短暂的"再撑一会"窗口——时间本身甚至会加速——比赛记录下他们撑了多久，随后结算画面显示胜者与那个时间；胜、负、平都会被判定。这是一种具体而近乎残酷的胜利度量，它承载着这样一层意思：即便赢了，也不过是在这个循环里多撑了一会，所以三种结局没有一种是庆祝。整段弧线是先有不可避免，再有一点点苦涩的释然。提示音按顺序响起：<code>teamEliminatedStab</code> 开启窗口，<code>outlastTick</code> 在其间重复、音高逐渐升高，然后是 <code>matchVictory</code> 或 <code>matchDraw</code> 落定；每只生物倒下时会触发逐生物的 <code>playerDeath</code>，而由于那个片段是占位，它正是一个赋予生物真正性格的好位置。</p>
+      </div>
+    </div>
+
+    <h2><span class="num">V</span><span class="lang-en">The Shape of a Match</span><span class="lang-zh">一局的形状</span></h2>
+
+    <p class="lang-en">Treat this as a rough picture of how a match tends to <em>feel</em>, not a fixed set of phases. Teams reach each beat at their own pace, the beats overlap and blur, and any of them can come early or late. What's dependable is the direction: the drain speeds up as it goes, so the pressure keeps tightening under everyone — and shaping that rising curve is audio's biggest job.</p>
+    <p class="lang-en">Early on it's loose and almost playful — gentle decay, mistakes wash out, everyone still finding their feet. As creatures evolve it tightens: decay bites, retreat costs more, a romp becomes a commitment. Somewhere in there a creature tips into terminal and the mood spikes — hunter and hunted, panic, everything at once. Then it resolves, usually faster than anyone's ready for: a team falls, the survivors hold on, and the match lands on a quiet number rather than a fanfare.</p>
+    <p class="lang-zh">请把这一节当作一局比赛<em>感觉</em>上的大致轮廓，而不是固定的几个阶段。各队会以自己的节奏抵达每一个情绪点，它们彼此重叠、相互模糊，任何一个都可能来得早或来得晚。可靠的只有方向：流失越往后越快，所以压力对所有人持续收紧——而塑造这条上扬的曲线，正是音频最重要的工作。</p>
+    <p class="lang-zh">最开始，它松弛、近乎玩闹——流失温和，失误会被冲淡，每个人都还在找感觉。随着生物进化，一切收紧：流失开始啃咬，后退的代价更高，一场嬉闹变成一份承诺。在某个时刻，一只生物翻入终末，情绪骤然拔高——猎手与猎物、恐慌、一切同时发生。然后它收场，通常比任何人准备好的都要快：一队倒下，幸存者死撑，比赛最终落在一个安静的数字上，而不是号角。</p>
+
+    <div class="tensions">
+      <p class="lang-en">The through-line beneath all of it: <strong>isolation → forced cooperation → cosmic consumption → death → reset.</strong> The creatures grow stronger and it only carries them faster toward their end. The system doesn't care — and the sound shouldn't pretend otherwise. Hold the world brief's tensions underneath every cue: <strong>cute versus wrong, relief versus triumph, cooperation versus exploitation, organic versus clinical.</strong></p>
+      <p class="lang-zh">贯穿这一切的主线：<strong>孤立 → 被迫合作 → 宇宙级的消耗 → 死亡 → 重置。</strong>生物变得更强，而这只是把它们更快地带向终点。系统并不在意——声音也不该假装在意。请把世界简报里的那些张力，垫在每一个音效之下：<strong>可爱 vs 不对劲、松一口气 vs 凯旋、合作 vs 剥削、有机 vs 冷酷。</strong></p>
+    </div>
+
+    <h2><span class="num">VI</span><span class="lang-en">The Current Sound List</span><span class="lang-zh">当前的声音清单</span></h2>
+
+    <p class="lang-en">Every cue below is already firing in the build. Each runs through a small per-play variation layer (pitch / volume / start-offset randomised) so repeats don't fatigue. A handful are CC0 placeholders flagged for replacement — those carry a <span class="status partial">Partial</span> tag. The clip names are the actual identifiers in the game's audio data, so you can match a sound to its slot.</p>
+    <p class="lang-zh">下面每一个音都已经在版本里触发。每一个都经过一层小小的"逐次播放变化"（音高 / 音量 / 起始偏移随机化），让重复不至于令人疲劳。其中少数是 CC0 占位、已标记待替换——它们带有 <span class="status partial">部分</span> 标签。片段名就是游戏音频数据里真实的标识符，方便你把一个声音对应到它的槽位。</p>
+
+    <p class="src-label lang-en">Match-wide</p>
+    <p class="src-label lang-zh">全局</p>
+    <ul class="sfx">
+      <li><code>countdownBeep</code><span class="trig lang-en"> — each beat of the 3·2·1 intro countdown.</span><span class="trig lang-zh"> — 3·2·1 入场倒计时的每一拍。</span></li>
+      <li><code>countdownGo</code><span class="trig lang-en"> — the "GO" when the countdown hits zero.</span><span class="trig lang-zh"> — 倒计时归零时的那声"GO"。</span></li>
+      <li><code>scrollAlarm</code><span class="trig lang-en"> — the instant a floor scroll / retraction begins.</span><span class="trig lang-zh"> — 楼层滚动 / 收缩开始的那一刻。</span></li>
+      <li><code>scrollWhoosh</code><span class="trig lang-en"> — after the scroll completes (the camera settle).</span><span class="trig lang-zh"> — 滚动完成之后（镜头落定）。</span></li>
+      <li><code>teamEliminatedStab</code><span class="trig lang-en"> — a team loses its last player; this also starts the outlast window.</span><span class="trig lang-zh"> — 一队失去最后一名玩家；这也会开启"再撑一会"窗口。</span></li>
+      <li><code>matchVictory</code><span class="trig lang-en"> — the match ends with a winner.</span><span class="trig lang-zh"> — 比赛分出胜者时。</span></li>
+      <li><code>matchDraw</code><span class="trig lang-en"> — the match ends with both teams dead.</span><span class="trig lang-zh"> — 双方同归于尽、平局时。</span></li>
+      <li><code>outlastTick</code><span class="trig lang-en"> — repeats through the outlast window (~10/sec), its pitch ramping up as the clock runs.</span><span class="trig lang-zh"> — 在"再撑一会"窗口期间重复（约每秒 10 次），随计时推进音高逐渐升高。</span></li>
+    </ul>
+
+    <p class="src-label lang-en">Per creature</p>
+    <p class="src-label lang-zh">逐生物</p>
+    <ul class="sfx">
+      <li><code>pulse</code><span class="trig lang-en"> — every fly-pulse (~each 0.35s while holding jump airborne).</span><span class="trig lang-zh"> — 每一次飞行脉冲（空中按住跳跃时约每 0.35 秒一次）。</span></li>
+      <li><code>formTransform</code> <span class="status partial"><span class="lang-en">Partial</span><span class="lang-zh">部分</span></span><span class="trig lang-en"> — on a Mobility / Carrier toggle. Placeholder clip.</span><span class="trig lang-zh"> — 切换机动 / 运送形态时。占位片段。</span></li>
+      <li><code>playerDeath</code> <span class="status partial"><span class="lang-en">Partial</span><span class="lang-zh">部分</span></span><span class="trig lang-en"> — when that creature's bar empties. Placeholder clip.</span><span class="trig lang-zh"> — 那只生物的槽清空时。占位片段。</span></li>
+      <li><code>evolutionTier1</code><span class="trig lang-en"> — on the first evolution.</span><span class="trig lang-zh"> — 第一次进化时。</span></li>
+      <li><code>evolutionTier2</code><span class="trig lang-en"> — on the second evolution (entering terminal).</span><span class="trig lang-zh"> — 第二次进化（进入终末）时。</span></li>
+    </ul>
+
+    <p class="src-label lang-en">Per altar</p>
+    <p class="src-label lang-zh">逐祭坛</p>
+    <ul class="sfx">
+      <li><code>altarMeterFull</code><span class="trig lang-en"> — the meter reaches full.</span><span class="trig lang-zh"> — 槽填满时。</span></li>
+      <li><code>altarCountdownTick</code><span class="trig lang-en"> — through the ritual countdown (throttled to ~once per 0.75s).</span><span class="trig lang-zh"> — 仪式倒计时期间（节流为约每 0.75 秒一次）。</span></li>
+      <li><code>altarRitualComplete</code><span class="trig lang-en"> — the ritual fires and discharges.</span><span class="trig lang-zh"> — 仪式触发并释放时。</span></li>
+    </ul>
+
+    <p class="src-label lang-en">Per emitter</p>
+    <p class="src-label lang-zh">逐出血口</p>
+    <ul class="sfx">
+      <li><code>emitterFlowLoop</code> <span class="status partial"><span class="lang-en">Partial</span><span class="lang-zh">部分</span></span><span class="trig lang-en"> — loops the whole time blood is dispensing (i.e. while a creature stands on the mark). Placeholder clip.</span><span class="trig lang-zh"> — 血液分发的整个过程中循环（即生物站在标记上时）。占位片段。</span></li>
+      <li><code>emitterBurstFired</code><span class="trig lang-en"> — each blood burst, plus once when dispensing starts.</span><span class="trig lang-zh"> — 每一次血液喷发，外加分发开始时的一次。</span></li>
+    </ul>
+
+    <p class="src-label lang-en">Floor</p>
+    <p class="src-label lang-zh">地板</p>
+    <ul class="sfx">
+      <li><code>bloodImpactClip</code><span class="trig lang-en"> — a blood particle lands on a surface (throttled ~once per 0.4s per surface).</span><span class="trig lang-zh"> — 血液粒子落在表面上时（每个表面约每 0.4 秒一次，已节流）。</span></li>
+    </ul>
+
+    <p class="src-label lang-en">UI — all placeholders</p>
+    <p class="src-label lang-zh">界面 — 全部为占位</p>
+    <ul class="sfx">
+      <li><code>uiButtonClick</code> <span class="status partial"><span class="lang-en">Partial</span><span class="lang-zh">部分</span></span><span class="trig lang-en"> — a button is clicked.</span><span class="trig lang-zh"> — 按钮被点击。</span></li>
+      <li><code>uiButtonHover</code> <span class="status partial"><span class="lang-en">Partial</span><span class="lang-zh">部分</span></span><span class="trig lang-en"> — the pointer enters a button (plays quieter).</span><span class="trig lang-zh"> — 指针移入按钮（更轻地播放）。</span></li>
+      <li><code>uiPauseToggle</code> <span class="status partial"><span class="lang-en">Partial</span><span class="lang-zh">部分</span></span><span class="trig lang-en"> — pause (full) and resume (quieter).</span><span class="trig lang-zh"> — 暂停（足量）与恢复（更轻）。</span></li>
+      <li><code>uiPlayerJoin</code> <span class="status partial"><span class="lang-en">Partial</span><span class="lang-zh">部分</span></span><span class="trig lang-en"> — a player joins in the lobby.</span><span class="trig lang-zh"> — 玩家在大厅加入。</span></li>
+      <li><code>uiSceneTransition</code> <span class="status partial"><span class="lang-en">Partial</span><span class="lang-zh">部分</span></span><span class="trig lang-en"> — on a scene change.</span><span class="trig lang-zh"> — 场景切换时。</span></li>
+    </ul>
+
+    <h2><span class="num">VII</span><span class="lang-en">On the Roadmap — Start Imagining These</span><span class="lang-zh">路线图——可以开始构思这些</span></h2>
+
+    <p class="lang-en">None of these are in the build yet, but they're on the way — and several lean hard on audio, so it's worth starting to imagine their sound now rather than retrofitting later. What's coming, and what each is meant to add:</p>
+    <p class="lang-zh">以下这些目前都还没进版本，但都在路上——而且其中好几项会重度依赖音频，所以值得现在就开始构思它们的声音，而不是事后再补。即将到来的，以及每一项想带来的东西：</p>
+
+    <ul class="sfx">
+      <li><span class="status planned"><span class="lang-en">Roadmap</span><span class="lang-zh">路线图</span></span><span class="trig lang-en"> <strong>More creatures.</strong> Today there's one, the jellyfish. The plan is a small cast that shares one template — vertical mobility plus a transform into a cup-shaped vessel — expressed through very different bodies. The next idea is a spider-scorpion that webs and climbs across ceilings and walls instead of swimming, a whole different movement and sound world (skitter, web and wall-walk against the jellyfish's soft pulses and slosh). A looser ambition is for the cast to eventually cover four emotional feelings — Lonely, Playful, Tired, Safety — though the designs aren't built on those yet. Either way each creature wants its own movement and sonic identity, ideally so you can hear which teammate just died.</span><span class="trig lang-zh"> <strong>更多生物。</strong>目前只有一个，也就是水母。计划是一支共享同一套模板的小型阵容——垂直机动，加上变形成杯状容器——但通过截然不同的身体来表现。下一个构想是一只蜘蛛—蝎子，它不靠游动，而是结网并在天花板与墙壁上攀爬，是一套全然不同的移动与声音世界（窸窣爬行、蛛网、墙上行走，对比水母柔和的脉冲与晃荡）。一个更松散的愿景，是让阵容最终覆盖四种情感——孤独、顽皮、疲惫、安全感——尽管目前的设计还没有建立在它们之上。无论如何，每个生物都需要自己的移动方式与声音身份，最好做到光凭耳朵就能听出是哪个队友刚刚死去。</span></li>
+      <li><span class="status planned"><span class="lang-en">Roadmap</span><span class="lang-zh">路线图</span></span><span class="trig lang-en"> <strong>More blood types.</strong> Today blood is one "pure" kind. Planned: two by the demo, up to four — light / dense / volatile, with different transport feel and altar-fill speed; mixing the wrong types in one altar fails the ritual and wastes the blood. So blood gains identity, and sabotage gains its own sound language.</span><span class="trig lang-zh"> <strong>更多血液类型。</strong>目前血液只有一种"纯血"。计划中：demo 阶段两种，最多到四种——轻 / 稠 / 易爆，各有不同的运送手感与祭坛填充速度；在同一祭坛里混入错误类型会让仪式失败、血液白费。于是血液有了身份，破坏也有了自己的声音语言。</span></li>
+      <li><span class="status planned"><span class="lang-en">Roadmap</span><span class="lang-zh">路线图</span></span><span class="trig lang-en"> <strong>The lab's monitoring layer.</strong> The match is secretly an experiment being watched by the dead lab's automated system. Today only the CRT / scanline look and manual glitch-bursts exist; planned are tracking frames that lock onto creatures, a scrolling event log, and vital readouts — a cold machine "voice" over the whole thing. This is where the indifferent system gets its sound.</span><span class="trig lang-zh"> <strong>实验室的监控层。</strong>这场比赛其实是一项实验，被那座已死实验室的自动系统观察着。目前只有 CRT / 扫描线的外观和手动的故障爆发；计划中会有锁定生物的追踪框、滚动的事件日志、以及生命读数——一个笼罩一切的、冷冰冰的机器"嗓音"。这正是那个冷漠系统获得声音之处。</span></li>
+      <li><span class="status planned"><span class="lang-en">Roadmap</span><span class="lang-zh">路线图</span></span><span class="trig lang-en"> <strong>System degradation across matches.</strong> Over many matches the lab itself fails — altars misfire, emitters sputter, the scrolling floor hiccups. That slow erosion is the game's larger arc; audio carries it by sounding a little more broken, match after match. (See the Audio World brief — this is its spine.)</span><span class="trig lang-zh"> <strong>逐局累积的系统退化。</strong>在许多局之间，实验室本身开始失灵——祭坛误触发、出血口断断续续、滚动楼层打嗝。这种缓慢的侵蚀是游戏更大的弧线；音频靠"一局比一局更坏一点"来承载它。（参见《音频世界简报》——这正是它的脊柱。）</span></li>
+      <li><span class="status planned"><span class="lang-en">Roadmap</span><span class="lang-zh">路线图</span></span><span class="trig lang-en"> <strong>Near-term cues, hooking into things already in the game:</strong> a pour start / stop, blood splashing into the altar bowl, the three ritual flames lighting in sequence on discharge, the bar's decay-state shifts (calm → caution → near-death), an evolution ambient tail, a terminal-phase drone, and <code>terminalTypingSound</code> (a clip slot that's waiting on a trigger).</span><span class="trig lang-zh"> <strong>近期可接入的音效，挂在游戏里已有的东西上：</strong>倾倒开始 / 结束、血液溅入祭坛盆中、释放时三道仪式之火依次点亮、那条槽的流失状态切换（平静 → 警戒 → 濒死）、进化后的环境余响、终末阶段的低鸣，以及 <code>terminalTypingSound</code>（一个等待触发的片段槽位）。</span></li>
+    </ul>
+
+  </main>
+
+  <footer class="foot">
+    <span>Play Instigator · Ritual &amp; Ruin</span>
+    <span class="dot-row" aria-hidden="true">
+      <i class="d1"></i><i class="d2"></i><i class="d3"></i>
+    </span>
+    <span class="lang-en">Mechanics Field Guide</span>
+    <span class="lang-zh">机制实地指南</span>
+  </footer>
+
+</div>
+
+<script>
+  /* ---------- Theme toggle ---------- */
+  (function () {
+    var root   = document.documentElement;
+    var btn    = document.getElementById("themeToggle");
+    var label  = document.getElementById("themeLabel");
+    var KEY    = "pi-theme";
+
+    function getInitialTheme() {
+      try {
+        var saved = localStorage.getItem(KEY);
+        if (saved === "light" || saved === "dark") return saved;
+      } catch (e) {}
+      if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
+        return "dark";
+      }
+      return "light";
+    }
+
+    function applyTheme(theme) {
+      root.setAttribute("data-theme", theme);
+      var currentLang = root.getAttribute("data-lang") || "en";
+      if (label) label.textContent = labelFor(theme, currentLang);
+      if (btn) btn.setAttribute("aria-label", theme === "dark" ? "Switch to light mode" : "Switch to dark mode");
+      var meta = document.querySelector('meta[name="theme-color"]');
+      if (meta) meta.setAttribute("content", theme === "dark" ? "#1C1917" : "#F9F5F1");
+    }
+
+    function labelFor(theme, lang) {
+      if (lang === "zh") return theme === "dark" ? "浅色" : "深色";
+      return theme === "dark" ? "Light" : "Dark";
+    }
+    window.__piThemeLabelFor = labelFor;
+
+    applyTheme(getInitialTheme());
+
+    if (btn) {
+      btn.addEventListener("click", function () {
+        var current = root.getAttribute("data-theme");
+        var next = current === "dark" ? "light" : "dark";
+        applyTheme(next);
+        try { localStorage.setItem(KEY, next); } catch (e) {}
+      });
+    }
+  })();
+
+  /* ---------- Language toggle ---------- */
+  (function () {
+    var root   = document.documentElement;
+    var btn    = document.getElementById("langToggle");
+    var label  = document.getElementById("langLabel");
+    var themeLabel = document.getElementById("themeLabel");
+    var KEY    = "pi-lang";
+
+    function getInitialLang() {
+      try {
+        var saved = localStorage.getItem(KEY);
+        if (saved === "en" || saved === "zh") return saved;
+      } catch (e) {}
+      var nav = (navigator.language || "en").toLowerCase();
+      if (nav.indexOf("zh") === 0) return "zh";
+      return "en";
+    }
+
+    function applyLang(lang) {
+      root.setAttribute("data-lang", lang);
+      root.setAttribute("lang", lang === "zh" ? "zh-Hans" : "en");
+      if (label) label.textContent = lang === "zh" ? "EN" : "中文";
+      if (btn)   btn.setAttribute("aria-label", lang === "zh" ? "Switch to English" : "切换到中文");
+      /* Keep theme label in sync with active language */
+      if (themeLabel && window.__piThemeLabelFor) {
+        var currentTheme = root.getAttribute("data-theme") || "light";
+        themeLabel.textContent = window.__piThemeLabelFor(currentTheme, lang);
+      }
+      var titleEl = document.querySelector("title");
+      if (titleEl) {
+        titleEl.textContent = lang === "zh"
+          ? "机制实地指南 — Ritual & Ruin"
+          : "Mechanics Field Guide — Ritual & Ruin";
+      }
+    }
+
+    applyLang(getInitialLang());
+
+    if (btn) {
+      btn.addEventListener("click", function () {
+        var current = root.getAttribute("data-lang") || "en";
+        var next = current === "zh" ? "en" : "zh";
+        applyLang(next);
+        try { localStorage.setItem(KEY, next); } catch (e) {}
+      });
+    }
+  })();
+</script>
+
+</body>
+</html>

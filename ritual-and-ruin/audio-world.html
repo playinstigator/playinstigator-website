@@ -552,6 +552,44 @@
   }
   .tensions p { margin: 0; }
 
+  /* ---------- Companion link ---------- */
+  .companion {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: var(--card);
+    border: 1px solid var(--rule);
+    border-left: 3px solid var(--accent-2);
+    border-radius: 12px;
+    padding: 15px 20px;
+    margin: 8px 0 40px 0;
+    box-shadow: var(--shadow);
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.18s ease, border-color 0.18s ease;
+  }
+  .companion:hover { transform: translateY(-2px); border-color: var(--accent); }
+  .companion .c-body { display: flex; flex-direction: column; }
+  .companion .c-k {
+    font-family: var(--f-sharp);
+    font-weight: 700;
+    font-size: 10.5px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent-2);
+    margin-bottom: 2px;
+  }
+  [data-lang="zh"] .companion .c-k { letter-spacing: 0.08em; text-transform: none; }
+  .companion .c-t { font-family: var(--f-sharp); font-weight: 700; font-size: 15px; color: var(--ink); }
+  .companion .c-arrow {
+    margin-left: auto;
+    font-family: var(--f-sharp);
+    font-weight: 800;
+    color: var(--accent);
+    transition: transform 0.18s ease;
+  }
+  .companion:hover .c-arrow { transform: translateX(3px); }
+
   .foot {
     margin-top: 72px;
     padding-top: 20px;
@@ -650,6 +688,16 @@
   <p class="lede lang-zh">
     这是一份关于游戏世界的创意简报，不是规格表，也不是交付清单。读它是为了感受质地，然后相信你自己的耳朵。
   </p>
+
+  <a class="companion" href="mechanics.html">
+    <div class="c-body">
+      <span class="c-k lang-en">Companion brief</span>
+      <span class="c-k lang-zh">姊妹简报</span>
+      <span class="c-t lang-en">Mechanics Field Guide — how a match actually moves</span>
+      <span class="c-t lang-zh">机制实地指南 — 一局比赛实际如何运转</span>
+    </div>
+    <span class="c-arrow" aria-hidden="true">&rarr;</span>
+  </a>
 
   <main>
 
