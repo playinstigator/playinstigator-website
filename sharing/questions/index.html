@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Things to think about — Sharing session menu</title>
+  <meta name="description" content="A menu of prompts and thinking points for invitees to the cross-medium world-building sharing session on 5 July 2026 at IdeasFest. Pick what resonates, ignore the rest.">
+  <meta name="theme-color" content="#F9F5F1" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#1C1917" media="(prefers-color-scheme: dark)">
+  <meta property="og:title" content="Things to think about — Sharing session menu">
+  <meta property="og:description" content="A menu of optional prompts for the cross-medium sharing session at IdeasFest (5 July 2026). Pick what resonates, ignore the rest, or bring something not on the list.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://playinstigator.com/sharing/questions/">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@500;600;700;800&amp;family=Figtree:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --cream:#F9F5F1; --charcoal:#1C1917; --coral:#FF3344;
+      --play-blue:#57E0FF; --ultraviolet:#974DFF; --lemon:#FFF066; --mint:#81FDC1;
+      --f-play:"Fredoka",system-ui,sans-serif;
+      --f-sharp:"Plus Jakarta Sans",system-ui,sans-serif;
+      --f-body:"Figtree",system-ui,sans-serif;
+      --bg:var(--cream); --bg-2:#F1ECE5; --ink:var(--charcoal); --ink-soft:#3D3834;
+      --quiet:#6B615B; --rule:#D8CEC4; --accent:var(--ultraviolet); --accent-2:var(--coral);
+      --card:#FFFFFF; --shadow:0 6px 24px rgba(28,25,23,0.07);
+    }
+    [data-theme="dark"] {
+      --bg:var(--charcoal); --bg-2:#2A2622; --ink:var(--cream); --ink-soft:#D8CEC4;
+      --quiet:#9A8F87; --rule:#3D3834; --accent:#B47CFF; --accent-2:#FF5566;
+      --card:#24201C; --shadow:0 8px 28px rgba(0,0,0,0.45);
+    }
+
+    *,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+    html { scroll-behavior:smooth; }
+    body {
+      background:var(--bg); color:var(--ink);
+      font-family:var(--f-body); font-size:19px; line-height:1.7;
+      -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+      transition:background-color 0.25s ease, color 0.25s ease;
+      min-height:100vh; position:relative; overflow-x:hidden;
+    }
+
+    .shape { position:absolute; pointer-events:none; opacity:0.45; z-index:0; border-radius:50%; }
+    .shape-1 { top:-60px; right:-50px; width:200px; height:200px; background:var(--ultraviolet); transform:rotate(13deg); opacity:0.4; }
+    .shape-2 { top:380px; left:-90px; width:160px; height:160px; background:var(--play-blue); border-radius:50%; transform:rotate(-7deg); opacity:0.32; }
+    .shape-3 { bottom:220px; right:-70px; width:240px; height:70px; background:var(--coral); border-radius:100px; transform:rotate(7deg); opacity:0.25; }
+    [data-theme="dark"] .shape { opacity:0.22; }
+    [data-theme="dark"] .shape-1 { opacity:0.28; }
+
+    .topbar {
+      max-width:760px; margin:0 auto; padding:28px 28px 0;
+      display:flex; align-items:center; justify-content:space-between;
+      gap:12px; flex-wrap:wrap; position:relative; z-index:5;
+    }
+    .studio-mark {
+      display:inline-flex; align-items:baseline; gap:7px; text-decoration:none;
+      font-family:var(--f-sharp); font-weight:700; font-size:12px;
+      letter-spacing:0.24em; text-transform:uppercase; color:var(--quiet);
+    }
+    .studio-mark .play { font-family:var(--f-play); font-weight:600; letter-spacing:0.08em; color:var(--accent); font-size:13px; }
+    .studio-mark .dot { width:4px; height:4px; background:var(--accent-2); border-radius:50%; display:inline-block; transform:translateY(-2px); }
+    .studio-mark .inst { font-family:var(--f-sharp); font-weight:800; letter-spacing:0.02em; color:var(--ink); font-size:13px; }
+
+    .pill-btn {
+      background:var(--card); border:1.5px solid var(--rule); border-radius:999px;
+      padding:7px 14px 7px 10px; cursor:pointer; display:inline-flex; align-items:center; gap:8px;
+      font-family:var(--f-sharp); font-weight:600; font-size:12.5px;
+      letter-spacing:0.04em; color:var(--ink-soft);
+      transition:border-color 0.2s ease, color 0.2s ease;
+    }
+    .pill-btn:hover { border-color:var(--ink-soft); color:var(--ink); }
+    .theme-toggle .icon {
+      width:14px; height:14px; display:inline-block; border-radius:50%;
+      background:currentColor; box-shadow:inset -3px -3px 0 0 var(--card);
+    }
+
+    .reader {
+      max-width:720px; margin:0 auto; padding:56px 28px 96px;
+      position:relative; z-index:3;
+    }
+
+    .eyebrow {
+      font-family:var(--f-sharp); font-size:0.78rem; text-transform:uppercase;
+      letter-spacing:0.18em; color:var(--quiet); margin-bottom:1.5rem; font-weight:600;
+    }
+
+    .title {
+      font-family:var(--f-play); font-weight:600;
+      font-size:clamp(2.4rem,6vw,3.75rem); line-height:1.12;
+      letter-spacing:-0.015em; color:var(--ink); margin-bottom:2rem;
+    }
+    .title .accent { color:var(--accent-2); }
+
+    .subtitle {
+      font-family:var(--f-body); font-size:1.25rem; line-height:1.55;
+      color:var(--quiet); margin-bottom:3rem;
+    }
+
+    .reader p {
+      font-family:var(--f-body); font-size:1.1875rem; line-height:1.78;
+      color:var(--ink-soft); margin-bottom:1.55rem;
+    }
+    .reader p strong { color:var(--ink); font-weight:700; }
+    .reader p .accent { color:var(--accent-2); font-weight:700; }
+    .reader p em { color:var(--quiet); font-style:italic; }
+
+    .how-to {
+      margin:0 0 3rem; padding:1.5rem 1.75rem;
+      background:var(--bg-2); border:1px solid var(--rule);
+      border-left:3px solid var(--accent); border-radius:4px 14px 14px 4px;
+    }
+    .how-to p { margin-bottom:0; font-size:1.0625rem; }
+    .how-to p strong { color:var(--ink); }
+
+    .anchors {
+      margin:2.6rem 0 3.4rem; padding:2rem 2.2rem 2.1rem;
+      background:var(--card); border:1px solid var(--rule);
+      border-top:3px solid var(--accent-2); border-radius:14px;
+      box-shadow:var(--shadow);
+    }
+    .anchors h2 {
+      font-family:var(--f-sharp); font-weight:800; font-size:0.85rem;
+      text-transform:uppercase; letter-spacing:0.18em;
+      color:var(--accent-2); margin-bottom:0.4rem;
+    }
+    .anchors .anchors-sub {
+      font-family:var(--f-body); font-style:italic; font-size:0.98rem;
+      color:var(--quiet); margin-bottom:1.4rem;
+    }
+    .anchors ol {
+      list-style:none; counter-reset:anchor; padding:0; margin:0;
+    }
+    .anchors li {
+      counter-increment:anchor;
+      font-family:var(--f-play); font-weight:400; font-size:1.18rem; line-height:1.5;
+      color:var(--ink); padding:0.85rem 0 0.85rem 2.6rem;
+      position:relative; border-bottom:1px dashed var(--rule);
+    }
+    .anchors li:last-child { border-bottom:none; }
+    .anchors li::before {
+      content:counter(anchor);
+      position:absolute; left:0; top:0.95rem;
+      width:1.8rem; height:1.8rem;
+      background:var(--accent-2); color:#fff;
+      font-family:var(--f-sharp); font-weight:800; font-size:0.82rem;
+      border-radius:50%; display:inline-flex;
+      align-items:center; justify-content:center;
+    }
+
+    .menu-intro {
+      font-family:var(--f-play); font-weight:500;
+      font-size:1.6rem; line-height:1.4; color:var(--ink);
+      margin:3.4rem 0 0.6rem;
+    }
+    .menu-intro-sub {
+      font-family:var(--f-body); color:var(--quiet); font-size:1.0625rem;
+      margin-bottom:2.4rem;
+    }
+
+    .theme-block {
+      margin:0 0 2rem; padding:1.7rem 1.9rem;
+      background:var(--card); border:1px solid var(--rule);
+      border-radius:14px; box-shadow:var(--shadow);
+    }
+    .theme-block h3 {
+      font-family:var(--f-sharp); font-weight:800; font-size:0.82rem;
+      text-transform:uppercase; letter-spacing:0.16em;
+      color:var(--accent); margin-bottom:1.1rem;
+      padding-bottom:0.7rem; border-bottom:1px solid var(--rule);
+    }
+    .theme-block ul {
+      list-style:none; padding:0; margin:0;
+    }
+    .theme-block li {
+      font-family:var(--f-body); font-size:1.0625rem; line-height:1.62;
+      color:var(--ink-soft); padding:0.7rem 0 0.7rem 1.3rem;
+      position:relative; border-bottom:1px dashed var(--rule);
+    }
+    .theme-block li:last-child { border-bottom:none; }
+    .theme-block li::before {
+      content:""; position:absolute; left:0; top:1.18rem;
+      width:6px; height:6px; background:var(--accent-2); border-radius:50%;
+    }
+    .theme-block li em { color:var(--ink); font-style:italic; }
+
+    .closing {
+      margin-top:3.6rem; padding:1.9rem 2rem;
+      background:var(--bg-2); border:1px solid var(--rule); border-radius:14px;
+      text-align:center;
+    }
+    .closing p {
+      font-family:var(--f-play); font-style:italic; font-size:1.15rem;
+      color:var(--ink); margin-bottom:0; line-height:1.55;
+    }
+    .closing .back-link {
+      display:inline-block; margin-top:1.2rem;
+      font-family:var(--f-sharp); font-weight:700; font-size:0.95rem;
+      color:var(--accent-2); text-decoration:none;
+      border-bottom:2px solid transparent; transition:border-color 0.18s ease;
+    }
+    .closing .back-link:hover { border-bottom-color:var(--accent-2); }
+
+    .pg-foot {
+      max-width:720px; margin:0 auto; padding:28px;
+      border-top:1px solid var(--rule);
+      display:flex; gap:1.25rem; flex-wrap:wrap; align-items:center;
+      font-family:var(--f-body); font-size:0.875rem; color:var(--quiet);
+    }
+    .pg-foot a { color:var(--quiet); text-decoration:none; transition:color 0.2s ease; }
+    .pg-foot a:hover { color:var(--ink); }
+
+    @media (max-width:600px) {
+      body { font-size:18px; }
+      .topbar { padding:20px 20px 0; }
+      .reader { padding:36px 20px 72px; }
+      .reader p { font-size:1.0625rem; line-height:1.75; }
+      .subtitle { font-size:1.125rem; margin-bottom:2.5rem; }
+      .anchors { padding:1.5rem 1.4rem 1.6rem; }
+      .anchors li { font-size:1.05rem; padding-left:2.3rem; }
+      .theme-block { padding:1.4rem 1.4rem; }
+      .theme-block li { font-size:1rem; }
+      .menu-intro { font-size:1.35rem; }
+      .closing { padding:1.5rem 1.4rem; }
+      .pg-foot { padding:20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="shape shape-1" aria-hidden="true"></div>
+  <div class="shape shape-2" aria-hidden="true"></div>
+  <div class="shape shape-3" aria-hidden="true"></div>
+
+  <header class="topbar">
+    <a class="studio-mark" href="/">
+      <span class="play">Play</span>
+      <span class="dot" aria-hidden="true"></span>
+      <span class="inst">Instigator</span>
+    </a>
+    <button class="pill-btn theme-toggle" id="themeToggle" type="button" aria-label="Toggle dark mode">
+      <span class="icon" aria-hidden="true"></span>
+      <span class="label" id="themeLabel">Dark</span>
+    </button>
+  </header>
+
+  <main class="reader">
+
+    <p class="eyebrow">Sharing Session · Things to think about</p>
+
+    <h1 class="title">A menu of <span class="accent">prompts</span></h1>
+
+    <p class="subtitle">If you want something to chew on before the <a href="/sharing/" style="color:var(--accent);text-decoration:none;border-bottom:1.5px solid var(--accent)">5 July session</a> — here's a menu. Totally optional fuel.</p>
+
+    <div class="how-to">
+      <p><strong>How to use this:</strong> pick whichever resonate. Ignore the rest. You don't need to answer any of them — they're here to spark thinking, not script your share. The <strong>four anchors</strong> below are what we'll come back to as a group at the end; everything else is just optional fuel. Feel free to bring something not on the list at all.</p>
+    </div>
+
+    <div class="anchors">
+      <h2>The four anchors</h2>
+      <p class="anchors-sub">We'll return to these as a group at the end.</p>
+      <ol>
+        <li>Where does a new world start for you — a feeling, an image, a rule, a character?</li>
+        <li>Show us one thing in your craft that you couldn't have made without a constraint.</li>
+        <li>What's something you've made that you wish another medium could have completed?</li>
+        <li>What part of your process do you think translates across mediums — and what doesn't?</li>
+      </ol>
+    </div>
+
+    <p class="menu-intro">The menu</p>
+    <p class="menu-intro-sub">Browse, pick what resonates, skip the rest.</p>
+
+    <div class="theme-block">
+      <h3>Where worlds begin</h3>
+      <ul>
+        <li>What's the <em>first</em> thing that exists when you start a new world — a mood, a character, a rule, a place, a sound?</li>
+        <li>Do you start from a feeling and reverse-engineer the world, or start from a system and let the feeling emerge?</li>
+        <li>How much of the world is decided before you start making, vs. discovered while making?</li>
+        <li>Is there a moment you can point to when an idea stopped being "an idea" and became "a thing I'm actually making"?</li>
+      </ul>
+    </div>
+
+    <div class="theme-block">
+      <h3>Your medium's superpowers</h3>
+      <ul>
+        <li>What can your medium do that <em>no other medium</em> can?</li>
+        <li>What's the smallest unit of meaning in your craft — a frame, a beat, a panel, a verb, a silhouette?</li>
+        <li>What does your medium let the audience feel that's hard to get elsewhere?</li>
+        <li>What's one thing your medium handles gracefully that others struggle with?</li>
+      </ul>
+    </div>
+
+    <div class="theme-block">
+      <h3>Your medium's limits</h3>
+      <ul>
+        <li>What's a story or feeling you've tried to express in your craft and couldn't?</li>
+        <li>What does your medium <em>force</em> you to leave out, no matter how good you get?</li>
+        <li>Where do you hit the wall of "this would work better as a ___"?</li>
+        <li>What's the most expensive thing to change late in your process?</li>
+      </ul>
+    </div>
+
+    <div class="theme-block">
+      <h3>Constraints as fuel</h3>
+      <ul>
+        <li>Pick one constraint (budget, format, runtime, file size, platform, tool) and show how it shaped the work — for better or worse.</li>
+        <li>A constraint you used to resent and now defend?</li>
+        <li>A constraint you wish other mediums had?</li>
+      </ul>
+    </div>
+
+    <div class="theme-block">
+      <h3>Your actual process</h3>
+      <ul>
+        <li>Walk us through one specific decision: what was on the table, what did you pick, why?</li>
+        <li>What's the part of your process that looks nothing like the polished output?</li>
+        <li>What tools do you reach for in the messy early stage vs. the locked-in late stage?</li>
+        <li>Who else is in the room (literally or figuratively) when you make decisions?</li>
+        <li>What's a habit/ritual/superstition in your process you'd defend even if it's "inefficient"?</li>
+      </ul>
+    </div>
+
+    <div class="theme-block">
+      <h3>Translation across mediums</h3>
+      <ul>
+        <li>When you consume another medium, what makes you think <em>"that should have been a ___"</em>?</li>
+        <li>A piece of work that was adapted across mediums and got <em>better</em> — what did the adaptation understand?</li>
+        <li>A piece of work that was adapted and lost its soul — what did it lose, specifically?</li>
+        <li>If someone handed you the brief <em>"adapt your work into [other medium]"</em> — what's the first thing you'd protect, and the first thing you'd sacrifice?</li>
+      </ul>
+    </div>
+
+    <div class="theme-block">
+      <h3>The audience side</h3>
+      <ul>
+        <li>How much does your audience need to bring to meet the work halfway?</li>
+        <li>What's the difference between an audience and a community for your craft?</li>
+        <li>What kind of attention does your medium ask for — focused, ambient, repeat, social?</li>
+      </ul>
+    </div>
+
+    <div class="theme-block">
+      <h3>Collaboration</h3>
+      <ul>
+        <li>Have you ever made something with someone from a different craft? What did you learn that you couldn't have learned alone?</li>
+        <li>What does "good collaboration" look like for you — and what does the breakdown look like?</li>
+        <li>If you were dropped into a room with the other folks here and told <em>"make one world together,"</em> what would you want decided in the first hour?</li>
+      </ul>
+    </div>
+
+    <div class="theme-block">
+      <h3>Just for fun</h3>
+      <ul>
+        <li>Show one thing you made that you're still proud of years later — and one that didn't work, that you learned from.</li>
+        <li>What's a piece of your own work you'd want to revisit if you had infinite time?</li>
+        <li>What's the most "you" thing you've ever made?</li>
+      </ul>
+    </div>
+
+    <div class="closing">
+      <p>Bring what resonates. Bring something not on the list.<br>Bring nothing prepared at all. All fine.</p>
+      <a class="back-link" href="/sharing/">← Back to the invite</a>
+    </div>
+
+  </main>
+
+  <footer class="pg-foot">
+    <span>Play Instigator · Singapore</span>
+    <span>·</span>
+    <a href="/">Back to site</a>
+    <span>·</span>
+    <a href="/sharing/">Sharing session invite</a>
+    <span>·</span>
+    <a href="/privacy.html">Privacy</a>
+  </footer>
+
+  <script>
+    (function(){
+      var root = document.documentElement;
+      var btn = document.getElementById('themeToggle');
+      var label = document.getElementById('themeLabel');
+      var stored = null;
+      try { stored = localStorage.getItem('pi-theme'); } catch (e) {}
+      if (stored === 'dark' || stored === 'light') {
+        root.setAttribute('data-theme', stored);
+      } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        root.setAttribute('data-theme', 'dark');
+      }
+      function sync(){
+        var t = root.getAttribute('data-theme');
+        if (label) label.textContent = t === 'dark' ? 'Light' : 'Dark';
+      }
+      sync();
+      if (btn) btn.addEventListener('click', function(){
+        var t = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+        root.setAttribute('data-theme', t);
+        try { localStorage.setItem('pi-theme', t); } catch (e) {}
+        sync();
+      });
+    })();
+  </script>
+</body>
+</html>
