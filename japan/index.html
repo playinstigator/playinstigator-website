@@ -171,6 +171,32 @@
   .pop b{font-size:14px}
   .pop .pt{font-size:11px;color:#555;margin:2px 0}
   .pop .pd{font-size:12px;margin:4px 0}
+  /* ---------- cleaner UI pass ---------- */
+  header{padding:9px 16px}
+  .hrow{gap:8px}
+  h1{font-size:16px;white-space:nowrap}
+  .grid{gap:18px}
+  .card{box-shadow:0 1px 2px rgba(20,30,50,.05);border-color:#e8edf4;border-radius:16px}
+  .card:hover{box-shadow:0 6px 20px rgba(20,30,50,.10)}
+  .body{padding:12px 14px;gap:6px}
+  .desc{font-size:12.5px;line-height:1.45;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .meta{font-size:12px;color:#8a93a3}
+  .votes{gap:6px;padding:9px 12px;border-top:1px solid #eef1f6;background:#fbfcfe}
+  .vbtn{border:1px solid #e8edf4;padding:6px 3px;font-size:11px;font-weight:600;gap:1px}
+  .btn{padding:7px 11px}
+  .sel{background:#fff;border:1px solid var(--line);border-radius:9px;padding:8px 9px;font-size:13px;font-weight:700;color:var(--txt);cursor:pointer}
+  .pill{display:inline-flex;align-items:center;max-width:170px}
+  .pill .who{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:700}
+  .moreWrap{position:relative}
+  .menu{position:absolute;right:0;top:calc(100% + 6px);background:#fff;border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);padding:6px;display:none;flex-direction:column;min-width:170px;z-index:80}
+  .menu.show{display:flex}
+  .menu button{background:transparent;border:0;text-align:left;padding:9px 12px;border-radius:8px;font-size:13.5px;cursor:pointer;color:var(--txt);font-weight:600;width:100%}
+  .menu button:hover{background:var(--panel2)}
+  .menu button.admin-on{background:#b91c1c;color:#fff}
+  .filtertoggle{background:#fff;border:1px solid var(--line);border-radius:999px;padding:6px 13px;font-size:12.5px;font-weight:700;cursor:pointer;color:var(--muted)}
+  .filtertoggle:hover{border-color:var(--accent);color:var(--accent)}
+  #morefilters{max-width:1180px;margin:8px auto 0;padding:0 16px}
+  #morefilters .filters{margin-top:8px}
   @media(max-width:600px){ .grid{grid-template-columns:1fr} h1 span{display:none} }
 </style>
 </head>
@@ -189,19 +215,23 @@
       <button data-lang="en" class="on">EN</button>
       <button data-lang="zh">中文</button>
     </div>
-    <div class="seg" id="curSeg">
-      <button data-cur="JPY">¥</button>
-      <button data-cur="SGD" class="on">S$</button>
-      <button data-cur="MYR">RM</button>
-      <button data-cur="USD">US$</button>
+    <select id="curSel" class="sel" title="Currency">
+      <option value="SGD">S$</option>
+      <option value="MYR">RM</option>
+      <option value="USD">US$</option>
+      <option value="JPY">¥</option>
+    </select>
+    <button class="btn ghost pill" id="changeName">👤&nbsp;<span class="who" id="who">—</span>&nbsp;▾</button>
+    <button class="btn add" id="suggestBtn">＋ Add</button>
+    <div class="moreWrap">
+      <button class="btn ghost" id="moreBtn">⋯</button>
+      <div class="menu" id="moreMenu">
+        <button id="resultsBtn">📊 Results</button>
+        <button id="budgetBtn">💰 Budget</button>
+        <button id="adminBtn">🔐 Admin</button>
+        <button id="refreshBtn">↻ Refresh</button>
+      </div>
     </div>
-    <span class="who" id="who"></span>
-    <button class="btn ghost" id="changeName">Switch profile</button>
-    <button class="btn add" id="suggestBtn">＋ Add idea</button>
-    <button class="btn" id="budgetBtn">💰 Budget</button>
-    <button class="btn" id="resultsBtn">📊 Results</button>
-    <button class="btn ghost" id="adminBtn">🔐</button>
-    <button class="btn ghost" id="refreshBtn">↻</button>
   </div>
 </header>
 
@@ -218,20 +248,21 @@
 </div>
 
 <div class="filters" id="filters"></div>
-<div class="filters" id="tagfilters"></div>
-<div class="filters">
-  <span class="flabel" id="statusLabel">Status</span>
-  <div class="seg" id="statusSeg">
-    <button data-mine="all" class="on">All</button>
-    <button data-mine="todo">🕗 To vote</button>
-    <button data-mine="voted">✅ Voted</button>
+<div id="morefilters" style="display:none">
+  <div class="filters" id="tagfilters"></div>
+  <div class="filters">
+    <span class="flabel" id="statusLabel">Status</span>
+    <div class="seg" id="statusSeg">
+      <button data-mine="all" class="on">All</button>
+      <button data-mine="todo">🕗 To vote</button>
+      <button data-mine="voted">✅ Voted</button>
+    </div>
+    <span class="flabel" id="groupLabel" style="margin-left:8px">Group</span>
+    <div class="seg" id="groupSeg">
+      <button data-group="city" class="on">City</button>
+      <button data-group="category">Category</button>
+    </div>
   </div>
-  <span class="flabel" id="groupLabel" style="margin-left:8px">Group</span>
-  <div class="seg" id="groupSeg">
-    <button data-group="city" class="on">City</button>
-    <button data-group="category">Category</button>
-  </div>
-  <span class="stat" id="stat"></span>
 </div>
 
 <main id="main"><div class="loading">Loading activities…</div></main>
@@ -370,8 +401,8 @@ const FALLBACK = {SGD:0.0086, MYR:0.030, USD:0.0064}; // per 1 JPY, used if live
 const CITY_ZH = {"Tokyo":"东京","Osaka":"大阪","Kyoto":"京都","Nagoya":"名古屋","Day Trip":"一日游","Other":"其他"};
 const CAT_ZH = {"Theme Park":"主题乐园","Anime/Games":"动漫·游戏","Food":"美食","Classic":"经典","Art/Books":"艺术·书籍","Art":"艺术","Nature":"自然","View":"观景","Unique":"特色","Entertainment":"娱乐","Nightlife":"夜生活","Shopping":"购物"};
 const T = {
-  en:{sub:"— vote on what to do", cards:"🗂 Cards", list:"≣ List", map:"🗺 Map", switch:"Switch profile", add:"＋ Add idea", budget:"💰 Budget", results:"📊 Results", place:"Place", type:"Type", status:"Status", group:"Group", all:"All", allTypes:"All types", cityG:"City", catG:"Category", toVote:"🕗 To vote", voted:"✅ Voted", save:"Save my votes", discard:"Discard", gotMore:"Got more ideas?", addOwn:"Add your own idea", official:"Official ↗", mapLink:"📍 Map", ratedYou:"you've rated", shown:"shown", voters:"voters", peopleVoted:"people voted", intro:'<b>How this works:</b> Pick your profile, then rate each idea — <b style="color:var(--must)">MUST</b> / <b style="color:var(--yes)">Yes</b> / <b style="color:var(--maybe)">Maybe</b> / <b style="color:var(--nah)">Nah</b> — and hit <b>Save</b>. Use <b>Status → To vote</b> to see what you still haven\'t rated. Missing something? <b>＋ Add idea</b>. Trip tentatively <b>8–22 Jan 2027</b> · Tokyo · (Nagoya) · Kyoto · Osaka.'},
-  zh:{sub:"— 投票决定行程", cards:"🗂 卡片", map:"🗺 地图", switch:"切换用户", add:"＋ 添加", budget:"💰 预算", results:"📊 结果", place:"地区", type:"类型", status:"状态", group:"分组", all:"全部", allTypes:"全部类型", cityG:"城市", catG:"分类", toVote:"🕗 待投", voted:"✅ 已投", save:"保存投票", discard:"放弃", gotMore:"还有想法？", addOwn:"添加你的想法", official:"官网 ↗", mapLink:"📍 地图", ratedYou:"已评", shown:"项", voters:"人投票", peopleVoted:"人已投", intro:'<b>玩法：</b>先选用户，再给每个想法评分——<b style="color:var(--must)">必去</b> / <b style="color:var(--yes)">想去</b> / <b style="color:var(--maybe)">也许</b> / <b style="color:var(--nah)">算了</b>——然后点<b>保存</b>。用<b>状态 → 待投</b>看还没评的。少了什么？点<b>＋ 添加</b>。行程暂定<b>2027年1月8–22日</b>·东京·(名古屋)·京都·大阪。'}
+  en:{sub:"— vote on what to do", cards:"🗂 Cards", list:"≣ List", map:"🗺 Map", switch:"Switch profile", add:"＋ Add idea", budget:"💰 Budget", results:"📊 Results", place:"Place", filters:"Filters", type:"Type", status:"Status", group:"Group", all:"All", allTypes:"All types", cityG:"City", catG:"Category", toVote:"🕗 To vote", voted:"✅ Voted", save:"Save my votes", discard:"Discard", gotMore:"Got more ideas?", addOwn:"Add your own idea", official:"Official ↗", mapLink:"📍 Map", ratedYou:"you've rated", shown:"shown", voters:"voters", peopleVoted:"people voted", intro:'<b>How this works:</b> Pick your profile, then rate each idea — <b style="color:var(--must)">MUST</b> / <b style="color:var(--yes)">Yes</b> / <b style="color:var(--maybe)">Maybe</b> / <b style="color:var(--nah)">Nah</b> — and hit <b>Save</b>. Use <b>Status → To vote</b> to see what you still haven\'t rated. Missing something? <b>＋ Add idea</b>. Trip tentatively <b>8–22 Jan 2027</b> · Tokyo · (Nagoya) · Kyoto · Osaka.'},
+  zh:{sub:"— 投票决定行程", cards:"🗂 卡片", map:"🗺 地图", switch:"切换用户", add:"＋ 添加", budget:"💰 预算", results:"📊 结果", place:"地区", filters:"筛选", type:"类型", status:"状态", group:"分组", all:"全部", allTypes:"全部类型", cityG:"城市", catG:"分类", toVote:"🕗 待投", voted:"✅ 已投", save:"保存投票", discard:"放弃", gotMore:"还有想法？", addOwn:"添加你的想法", official:"官网 ↗", mapLink:"📍 地图", ratedYou:"已评", shown:"项", voters:"人投票", peopleVoted:"人已投", intro:'<b>玩法：</b>先选用户，再给每个想法评分——<b style="color:var(--must)">必去</b> / <b style="color:var(--yes)">想去</b> / <b style="color:var(--maybe)">也许</b> / <b style="color:var(--nah)">算了</b>——然后点<b>保存</b>。用<b>状态 → 待投</b>看还没评的。少了什么？点<b>＋ 添加</b>。行程暂定<b>2027年1月8–22日</b>·东京·(名古屋)·京都·大阪。'}
 };
 function L(k){ return (T[STATE.lang] && T[STATE.lang][k]) || T.en[k] || k; }
 function cityLabel(c){ return STATE.lang==="zh" ? (CITY_ZH[c]||c) : c; }
@@ -468,12 +499,15 @@ function myVoteFor(id){ let v = STATE.dirty[id]!=null ? STATE.dirty[id] : (STATE
 function buildFilters(){
   const cities = ["All"].concat(CITY_ORDER.filter(c=> STATE.activities.some(a=>a.city===c)));
   document.getElementById("filters").innerHTML =
-    `<span class="flabel">${L("place")}</span>` + cities.map(c=>`<div class="chip ${STATE.cityFilter===c?'on':''}" data-city="${c}">${c==='All'?L("all"):esc(cityLabel(c))}</div>`).join("");
+    `<span class="flabel">${L("place")}</span>` + cities.map(c=>`<div class="chip ${STATE.cityFilter===c?'on':''}" data-city="${c}">${c==='All'?L("all"):esc(cityLabel(c))}</div>`).join("")
+    + `<span style="flex:1 0 12px"></span><button class="filtertoggle" id="filterToggle">${L("filters")} ▾</button><span class="stat" id="stat"></span>`;
   const tags = ["All"].concat(allTags());
   document.getElementById("tagfilters").innerHTML =
     `<span class="flabel">${L("type")}</span>` + tags.map(t=>`<div class="chip acc2 ${STATE.tagFilter===t?'on':''}" data-tag="${t}">${t==='All'?L("allTypes"):esc(catLabel(t))}</div>`).join("");
   document.querySelectorAll('[data-city]').forEach(el=>el.onclick=()=>{STATE.cityFilter=el.dataset.city;buildFilters();draw();});
   document.querySelectorAll('[data-tag]').forEach(el=>el.onclick=()=>{STATE.tagFilter=el.dataset.tag;buildFilters();draw();});
+  const ft=document.getElementById("filterToggle");
+  if(ft) ft.onclick=()=>{ const m=document.getElementById("morefilters"); const open=(m.style.display!=="none"&&m.style.display!==""); m.style.display=open?"none":"block"; ft.classList.toggle("on",!open); };
 }
 
 function visible(){
@@ -822,11 +856,11 @@ async function addProfileUI(){
 }
 function setVoter(name){
   STATE.voter=name; STATE.allMode=false; localStorage.setItem("jp_voter", name);
-  document.getElementById("who").innerHTML = "voting as <b>"+esc(name)+"</b>";
+  document.getElementById("who").textContent = name;
 }
 function enterAll(){
   STATE.voter=""; STATE.allMode=true; STATE.mineFilter="all"; localStorage.setItem("jp_voter","__ALL__");
-  document.getElementById("who").innerHTML = "viewing <b>Everyone</b>";
+  document.getElementById("who").textContent = STATE.lang==="zh"?"全体":"Everyone";
   document.querySelectorAll("#statusSeg button").forEach(x=>x.classList.toggle("on",x.dataset.mine==="all"));
 }
 
@@ -906,7 +940,6 @@ function applyLang(){
     q('#viewSeg button[data-view="cards"]').textContent = L('cards');
     q('#viewSeg button[data-view="list"]').textContent = L('list');
     q('#viewSeg button[data-view="map"]').textContent = L('map');
-    q('#changeName').textContent = L('switch');
     q('#suggestBtn').textContent = L('add');
     q('#budgetBtn').textContent = L('budget');
     q('#resultsBtn').textContent = L('results');
@@ -919,6 +952,7 @@ function applyLang(){
     q('#groupSeg button[data-group="category"]').textContent = L('catG');
     q('#saveBtn').textContent = L('save');
     q('#discardBtn').textContent = L('discard');
+    if(STATE.allMode){ const who=q('#who'); if(who) who.textContent = STATE.lang==="zh"?"全体":"Everyone"; }
     const intro=q('.intro .card-note'); if(intro) intro.innerHTML = L('intro');
     const ovb=q('#overviewBanner .card-note'); if(ovb) ovb.innerHTML = STATE.lang==="zh"
       ? '<b>👥 总览模式</b> —— 显示全组的综合投票与统计（只读）。点右上角<b>切换用户</b>选择你的名字来投票。'
@@ -955,7 +989,11 @@ function init(){
   document.getElementById("nameInput").addEventListener("keydown",e=>{ if(e.key==="Enter") addProfileUI(); });
 
   document.querySelectorAll("#viewSeg button").forEach(b=>b.onclick=()=>{ STATE.view=b.dataset.view; document.querySelectorAll("#viewSeg button").forEach(x=>x.classList.toggle("on",x===b)); draw(); });
-  document.querySelectorAll("#curSeg button").forEach(b=>b.onclick=()=>{ STATE.cur=b.dataset.cur; document.querySelectorAll("#curSeg button").forEach(x=>x.classList.toggle("on",x===b)); draw(); });
+  const curSel=document.getElementById("curSel"); curSel.value=STATE.cur; curSel.onchange=()=>{ STATE.cur=curSel.value; draw(); };
+  const moreBtn=document.getElementById("moreBtn"), moreMenu=document.getElementById("moreMenu");
+  moreBtn.onclick=(e)=>{ e.stopPropagation(); moreMenu.classList.toggle("show"); };
+  moreMenu.addEventListener("click",()=>moreMenu.classList.remove("show"));
+  document.addEventListener("click",(e)=>{ if(!e.target.closest(".moreWrap")) moreMenu.classList.remove("show"); });
   document.querySelectorAll("#langSeg button").forEach(b=>b.onclick=()=>{ STATE.lang=b.dataset.lang; localStorage.setItem("jp_lang",STATE.lang); document.querySelectorAll("#langSeg button").forEach(x=>x.classList.toggle("on",x===b)); applyLang(); });
   document.querySelectorAll("#statusSeg button").forEach(b=>b.onclick=()=>{ STATE.mineFilter=b.dataset.mine; document.querySelectorAll("#statusSeg button").forEach(x=>x.classList.toggle("on",x===b)); draw(); });
   document.querySelectorAll("#groupSeg button").forEach(b=>b.onclick=()=>{ STATE.groupBy=b.dataset.group; document.querySelectorAll("#groupSeg button").forEach(x=>x.classList.toggle("on",x===b)); draw(); });
