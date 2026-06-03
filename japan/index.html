@@ -581,6 +581,13 @@ function bindCarousels(){
     const p=bn.querySelector('.cnav.prev'), nx=bn.querySelector('.cnav.next');
     if(p) p.onclick=(e)=>{e.preventDefault();e.stopPropagation();show(idx-1);};
     if(nx) nx.onclick=(e)=>{e.preventDefault();e.stopPropagation();show(idx+1);};
+    // after images settle, drop dots/arrows for any that failed to load
+    setTimeout(()=>{
+      const live=bn.querySelectorAll('.cimg');
+      bn.querySelectorAll('.dot').forEach((d,i)=>{ if(i>=live.length) d.remove(); });
+      if(live.length<2){ bn.querySelectorAll('.cnav,.dots').forEach(x=>x.remove()); }
+      if(live.length && !bn.querySelector('.cimg.on')) live[0].classList.add('on');
+    }, 2500);
   });
 }
 function bindAdminDelete(){
