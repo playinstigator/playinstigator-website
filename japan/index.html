@@ -197,6 +197,10 @@
   .filtertoggle:hover{border-color:var(--accent);color:var(--accent)}
   #morefilters{max-width:1180px;margin:8px auto 0;padding:0 16px}
   #morefilters .filters{margin-top:8px}
+  .intro{position:relative}
+  #introBox .card-note{padding-right:36px}
+  .introclose{position:absolute;top:9px;right:24px;z-index:2;background:transparent;border:0;font-size:20px;line-height:1;color:var(--muted);cursor:pointer;padding:2px 7px;border-radius:6px}
+  .introclose:hover{background:var(--panel2);color:var(--txt)}
   @media(max-width:600px){ .grid{grid-template-columns:1fr} h1 span{display:none} }
 </style>
 </head>
@@ -235,15 +239,10 @@
   </div>
 </header>
 
-<div class="intro">
+<div class="intro" id="introBox">
+  <button class="introclose" id="introClose" title="Dismiss" aria-label="Dismiss">×</button>
   <div class="card-note">
     <b>How this works:</b> Pick your profile, then rate each idea — <b style="color:var(--must)">MUST</b> / <b style="color:var(--yes)">Yes</b> / <b style="color:var(--maybe)">Maybe</b> / <b style="color:var(--nah)">Nah</b> — and hit <b>Save</b> (editable anytime). Use <b>Status → To&nbsp;vote</b> to see what you still haven't rated. Got an idea that's missing? <b>＋ Add idea</b>. Trip tentatively <b>8–22 Jan 2027</b> · Tokyo · (Nagoya) · Kyoto · Osaka.
-  </div>
-</div>
-
-<div class="intro" id="overviewBanner" style="display:none">
-  <div class="card-note" style="border-color:var(--accent2);background:#faf7ff;color:#5b3aa6">
-    <b>👥 Overview mode</b> — showing the group's combined votes &amp; totals (read-only). Tap <b>Switch profile</b> (top-right) to pick your own name and cast votes.
   </div>
 </div>
 
@@ -529,7 +528,6 @@ function gmaps(a){
 }
 
 function draw(){
-  document.getElementById("overviewBanner").style.display = STATE.allMode ? "block" : "none";
   document.getElementById("main").style.display = (STATE.view==="cards"||STATE.view==="list")?"block":"none";
   document.getElementById("map").style.display  = STATE.view==="map"?"block":"none";
   if(STATE.view==="map") renderMap(); else if(STATE.view==="list") renderList(); else render();
@@ -1002,6 +1000,10 @@ function init(){
   // restore admin (per browser session)
   const sa=sessionStorage.getItem("jp_admin");
   if(sa){ STATE.admin=true; STATE.adminPass=sa; document.getElementById("adminBtn").classList.add("admin-on"); }
+
+  // dismissible "How this works"
+  document.getElementById("introClose").onclick=()=>{ document.getElementById("introBox").style.display="none"; localStorage.setItem("jp_intro","hidden"); };
+  if(localStorage.getItem("jp_intro")==="hidden") document.getElementById("introBox").style.display="none";
 
   // restore language preference
   const sl=localStorage.getItem("jp_lang");
