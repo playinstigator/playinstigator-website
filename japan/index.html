@@ -58,9 +58,16 @@
   .banner{height:84px;display:flex;align-items:center;justify-content:center;font-size:42px;position:relative;background-size:cover;background-position:center}
   .banner .city{position:absolute;left:10px;top:8px;font-size:10.5px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#fff;text-shadow:0 1px 4px rgba(0,0,0,.55)}
   .banner .new{position:absolute;right:10px;top:8px;font-size:10px;font-weight:800;background:#fff;color:#161b26;border-radius:999px;padding:2px 7px;box-shadow:0 1px 3px rgba(0,0,0,.3);z-index:2}
-  .banner .city{z-index:2}
-  .banner .bimg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0}
-  .banner .bemoji{position:relative;z-index:0}
+  .banner .city{z-index:3}
+  .banner .cimg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .35s;z-index:0}
+  .banner .cimg.on{opacity:1}
+  .banner .bemoji{position:relative;z-index:1}
+  .cnav{position:absolute;top:50%;transform:translateY(-50%);z-index:4;width:24px;height:24px;border:0;border-radius:50%;background:rgba(0,0,0,.45);color:#fff;font-size:15px;line-height:1;cursor:pointer;display:none;align-items:center;justify-content:center;padding:0}
+  .banner:hover .cnav{display:flex}
+  .cnav.prev{left:6px} .cnav.next{right:6px}
+  .dots{position:absolute;bottom:6px;left:50%;transform:translateX(-50%);z-index:4;display:flex;gap:4px}
+  .dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.5)}
+  .dot.on{background:#fff}
   .body{padding:12px 14px;display:flex;flex-direction:column;gap:8px;flex:1}
   .name{font-weight:800;font-size:14.5px;line-height:1.25}
   .tags{display:flex;gap:5px;flex-wrap:wrap}
@@ -367,6 +374,7 @@ function cityLabel(c){ return STATE.lang==="zh" ? (CITY_ZH[c]||c) : c; }
 function catLabel(c){ return STATE.lang==="zh" ? (CAT_ZH[c]||c) : c; }
 function actName(a){ return STATE.lang==="zh" && a.name_zh ? a.name_zh : a.name; }
 function actDesc(a){ return STATE.lang==="zh" && a.desc_zh ? a.desc_zh : a.description; }
+function actImgs(a){ return String(a.img||"").split("|").map(s=>s.trim()).filter(Boolean); }
 function cityOrCat(g){ return STATE.groupBy==="city" ? cityLabel(g) : catLabel(g); }
 
 let STATE = { activities:[], votes:[], profiles:[], rates:null, myVotes:{}, dirty:{}, voter:"", allMode:false,
@@ -525,6 +533,7 @@ function render(){
     items.forEach(a=>{
       const ct = t[a.id] || {must:0,yes:0,maybe:0,nah:0};
       const grad = CITY_GRAD[a.city] || CITY_GRAD["Other"];
+      const imgs = actImgs(a);
       const tagsHtml = String(a.tags||"").split(",").map(s=>s.trim()).filter(Boolean).map(x=>`<span class="tag">${esc(catLabel(x))}</span>`).join("");
       const isNew = String(a.suggestedBy||"")!=="curated" && String(a.suggestedBy||"")!=="";
       const pc = parseCost(a.cost);
@@ -533,11 +542,12 @@ function render(){
       html += `
       <div class="card">
         <div class="banner" style="background:linear-gradient(135deg,${grad[0]},${grad[1]})">
-          ${a.img?`<img class="bimg" src="${esc(a.img)}" alt="" loading="lazy" onerror="this.remove()">`:""}
+          ${imgs.map((u,i)=>`<img class="cimg ${i===0?'on':''}" src="${esc(u)}" alt="" loading="lazy" onerror="this.remove()">`).join("")}
+          ${imgs.length>1?`<button class="cnav prev" type="button">‹</button><button class="cnav next" type="button">›</button><div class="dots">${imgs.map((u,i)=>`<span class="dot ${i===0?'on':''}"></span>`).join("")}</div>`:""}
           ${STATE.admin?`<input type="checkbox" class="selbox" data-sel="${esc(a.id)}" ${STATE.selected[a.id]?"checked":""}>`:""}
           <span class="city">${esc(cityLabel(a.city))}</span>
           ${isNew?`<span class="new">💡 ${esc(a.suggestedBy)}</span>`:""}
-          <span class="bemoji">${esc(a.emoji||"📍")}</span>
+          ${imgs.length?"":`<span class="bemoji">${esc(a.emoji||"📍")}</span>`}
         </div>
         <div class="body">
           <div class="name">${esc(actName(a))}</div>
@@ -561,7 +571,17 @@ function render(){
     html += `</div>`;
   });
   main.innerHTML = html + `<div class="group-h" style="margin-top:28px">${L("gotMore")}</div><div class="grid">`+addCardHtml()+`</div>`;
-  bindVotes(); bindAdd(); bindAdminDelete(); bindSelect();
+  bindVotes(); bindAdd(); bindAdminDelete(); bindSelect(); bindCarousels();
+}
+function bindCarousels(){
+  document.querySelectorAll('.card .banner').forEach(bn=>{
+    const imgs=bn.querySelectorAll('.cimg'); if(imgs.length<2) return;
+    const dots=bn.querySelectorAll('.dot'); let idx=0;
+    const show=(n)=>{ idx=(n+imgs.length)%imgs.length; imgs.forEach((im,i)=>im.classList.toggle('on',i===idx)); dots.forEach((d,i)=>d.classList.toggle('on',i===idx)); };
+    const p=bn.querySelector('.cnav.prev'), nx=bn.querySelector('.cnav.next');
+    if(p) p.onclick=(e)=>{e.preventDefault();e.stopPropagation();show(idx-1);};
+    if(nx) nx.onclick=(e)=>{e.preventDefault();e.stopPropagation();show(idx+1);};
+  });
 }
 function bindAdminDelete(){
   document.querySelectorAll('[data-del]').forEach(b=> b.onclick=()=>delActivity(b.dataset.del, b.dataset.name));
