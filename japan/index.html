@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Japan Trip · Jan 2027 — Vote on what to do</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<style>
+  :root{
+    --bg:#eef2f8; --panel:#ffffff; --panel2:#f4f7fc; --line:#dde4ee;
+    --txt:#161b26; --muted:#5d6675; --accent:#2f6df6; --accent2:#8b5cf6;
+    --must:#00b14f; --yes:#2f6df6; --maybe:#f59e0b; --nah:#ef4444;
+    --tokyo1:#2563eb; --tokyo2:#38bdf8;
+    --osaka1:#f97316; --osaka2:#ef4444;
+    --kyoto1:#059669; --kyoto2:#34d399;
+    --nagoya1:#7c3aed; --nagoya2:#db2777;
+    --day1:#475569; --day2:#94a3b8;
+    --other1:#64748b; --other2:#94a3b8;
+    --shadow:0 1px 3px rgba(20,30,50,.08),0 4px 14px rgba(20,30,50,.06);
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--txt);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;line-height:1.5}
+  a{color:var(--accent)}
+  header{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.94);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);padding:11px 16px;box-shadow:var(--shadow)}
+  .wrap{max-width:1180px;margin:0 auto}
+  .hrow{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+  h1{font-size:18px;margin:0;font-weight:800}
+  h1 span{color:var(--muted);font-weight:400;font-size:13px}
+  .grow{flex:1}
+  .seg{display:flex;border:1px solid var(--line);border-radius:9px;overflow:hidden;background:#fff}
+  .seg button{background:transparent;color:var(--muted);border:0;padding:7px 11px;font-size:13px;cursor:pointer;font-weight:600}
+  .seg button.on{background:var(--accent);color:#fff}
+  .btn{background:#fff;color:var(--txt);border:1px solid var(--line);border-radius:9px;padding:8px 12px;font-size:13px;cursor:pointer;transition:.15s;font-weight:600}
+  .btn:hover{border-color:var(--accent);color:var(--accent)}
+  .btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+  .btn.primary:hover{filter:brightness(1.07);color:#fff}
+  .btn.add{background:var(--accent2);border-color:var(--accent2);color:#fff}
+  .btn.add:hover{filter:brightness(1.07);color:#fff}
+  .btn.ghost{background:transparent}
+  .who{font-size:13px;color:var(--muted)}
+  .who b{color:var(--txt)}
+  .intro{max-width:1180px;margin:16px auto 0;padding:0 16px}
+  .card-note{background:#fff;border:1px solid var(--line);border-radius:12px;padding:13px 16px;font-size:13.5px;color:var(--muted);box-shadow:var(--shadow)}
+  .card-note b{color:var(--txt)}
+  .filters{max-width:1180px;margin:12px auto 0;padding:0 16px;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+  .flabel{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;font-weight:700;margin-right:2px}
+  .chip{background:#fff;border:1px solid var(--line);border-radius:999px;padding:6px 12px;font-size:12.5px;cursor:pointer;color:var(--muted);transition:.15s;white-space:nowrap;font-weight:600}
+  .chip:hover{color:var(--txt);border-color:var(--accent)}
+  .chip.on{background:var(--accent);border-color:var(--accent);color:#fff}
+  .chip.acc2.on{background:var(--accent2);border-color:var(--accent2)}
+  .stat{font-size:12px;color:var(--muted);margin-left:auto;font-weight:600}
+  main{max-width:1180px;margin:16px auto 130px;padding:0 16px}
+  #map{max-width:1180px;height:70vh;margin:16px auto 130px;border:1px solid var(--line);border-radius:14px;display:none;box-shadow:var(--shadow)}
+  .group-h{font-size:15px;font-weight:800;margin:24px 0 12px;display:flex;align-items:center;gap:10px}
+  .group-h .pill{font-size:11px;color:var(--muted);font-weight:600;background:#fff;border:1px solid var(--line);padding:2px 8px;border-radius:999px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:14px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;box-shadow:var(--shadow)}
+  .banner{height:84px;display:flex;align-items:center;justify-content:center;font-size:42px;position:relative;background-size:cover;background-position:center}
+  .banner .city{position:absolute;left:10px;top:8px;font-size:10.5px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#fff;text-shadow:0 1px 4px rgba(0,0,0,.55)}
+  .banner .new{position:absolute;right:10px;top:8px;font-size:10px;font-weight:800;background:#fff;color:#161b26;border-radius:999px;padding:2px 7px;box-shadow:0 1px 3px rgba(0,0,0,.3);z-index:2}
+  .banner .city{z-index:2}
+  .banner .bimg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0}
+  .banner .bemoji{position:relative;z-index:0}
+  .body{padding:12px 14px;display:flex;flex-direction:column;gap:8px;flex:1}
+  .name{font-weight:800;font-size:14.5px;line-height:1.25}
+  .tags{display:flex;gap:5px;flex-wrap:wrap}
+  .tag{font-size:10.5px;color:var(--muted);background:var(--panel2);border:1px solid var(--line);border-radius:6px;padding:2px 7px;font-weight:600}
+  .desc{font-size:12.5px;color:var(--muted)}
+  .meta{font-size:11.5px;color:var(--muted);display:flex;flex-wrap:wrap;gap:4px 12px}
+  .meta b{color:var(--txt);font-weight:700}
+  .conv{color:var(--must);font-weight:700}
+  .book{font-size:11.5px;color:#9a6700;background:#fff8e1;border:1px solid #f6d365;border-radius:7px;padding:5px 8px;font-weight:600}
+  .links{margin-top:auto;display:flex;gap:14px;align-items:center;padding-top:4px}
+  .links a{font-size:12px;text-decoration:none;font-weight:700}
+  .votes{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;padding:10px 12px;border-top:1px solid var(--line);background:var(--panel2)}
+  .vbtn{border:1.5px solid var(--line);background:#fff;color:var(--muted);border-radius:9px;padding:7px 2px;font-size:11.5px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:1px;transition:.12s;font-weight:700}
+  .vbtn .ct{font-size:11px;font-weight:800;opacity:.85}
+  .vbtn:hover{border-color:#aab4c4}
+  .vbtn.on{color:#fff;border-color:transparent}
+  .vbtn.on.must{background:var(--must)}
+  .vbtn.on.yes{background:var(--yes)}
+  .vbtn.on.maybe{background:var(--maybe)}
+  .vbtn.on.nah{background:var(--nah)}
+  .addcard{border:2px dashed var(--accent2);border-radius:14px;background:#faf7ff;color:var(--accent2);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;min-height:200px;cursor:pointer;font-weight:800;font-size:15px}
+  .addcard:hover{background:#f3ecff}
+  .addcard .big{font-size:34px}
+  .savebar{position:fixed;bottom:0;left:0;right:0;z-index:60;background:#fff;border-top:1px solid var(--line);padding:12px 16px;transform:translateY(120%);transition:.25s;box-shadow:0 -4px 16px rgba(20,30,50,.1)}
+  .savebar.show{transform:none}
+  .savebar .wrap{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+  .savebar .msg{font-size:13px;color:var(--muted);font-weight:600}
+  .modal-bg{position:fixed;inset:0;background:rgba(20,28,45,.5);z-index:100;display:none;align-items:center;justify-content:center;padding:16px}
+  .modal-bg.show{display:flex}
+  .modal{background:#fff;border:1px solid var(--line);border-radius:16px;max-width:520px;width:100%;max-height:90vh;overflow:auto;padding:20px;box-shadow:0 12px 48px rgba(20,30,50,.25)}
+  .modal h2{margin:0 0 14px;font-size:17px}
+  .field{margin-bottom:12px}
+  .field label{display:block;font-size:12.5px;color:var(--muted);margin-bottom:5px;font-weight:600}
+  .field input,.field select,.field textarea{width:100%;background:#fff;border:1px solid var(--line);border-radius:9px;color:var(--txt);padding:9px 11px;font-size:13.5px;font-family:inherit}
+  .field textarea{resize:vertical;min-height:60px}
+  .modal-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:8px}
+  .profiles{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+  .pbtn{background:var(--panel2);border:1px solid var(--line);border-radius:999px;padding:8px 14px;font-size:14px;cursor:pointer;color:var(--txt);font-weight:600}
+  .pbtn:hover{border-color:var(--accent);color:var(--accent)}
+  .pbtn.last{border-color:var(--accent);color:var(--accent)}
+  .pbtn.everyone{background:var(--accent2);border-color:var(--accent2);color:#fff;width:100%;text-align:center;padding:11px}
+  .vbtn.ro{cursor:default;opacity:.92}
+  .results-list{display:flex;flex-direction:column;gap:8px}
+  .rrow{display:flex;align-items:center;gap:10px;background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:9px 12px}
+  .rrow .rank{font-size:13px;color:var(--muted);width:26px;text-align:center;font-weight:800}
+  .rrow .rname{flex:1;font-size:13.5px;font-weight:600}
+  .rrow .rname small{color:var(--muted);font-weight:400}
+  .bars{display:flex;gap:3px;align-items:center;font-size:11px;font-weight:700}
+  .bars span{padding:2px 6px;border-radius:6px}
+  .bars .m{background:rgba(0,177,79,.15);color:var(--must)}
+  .bars .y{background:rgba(47,109,246,.15);color:var(--yes)}
+  .bars .b{background:rgba(245,158,11,.18);color:#b4730a}
+  .bars .n{background:rgba(239,68,68,.15);color:var(--nah)}
+  .score{font-weight:800;font-size:14px;width:38px;text-align:right}
+  .budget-total{display:flex;justify-content:space-between;align-items:center;margin-top:14px;padding-top:12px;border-top:2px solid var(--line);font-weight:800;font-size:16px}
+  .btn.admin-on{background:#b91c1c;border-color:#b91c1c;color:#fff}
+  .card.is-hidden{opacity:.5}
+  .adminbar{display:flex;gap:6px;align-items:center;padding:7px 12px;border-top:1px dashed #f0b4b4;background:#fff6f6;flex-wrap:wrap}
+  .adminbar button{font-size:11px;font-weight:700;border:1px solid var(--line);background:#fff;border-radius:7px;padding:4px 8px;cursor:pointer;color:var(--txt)}
+  .adminbar button:hover{border-color:#b91c1c;color:#b91c1c}
+  .adminbar .hidden-tag{font-size:10.5px;font-weight:800;color:#b91c1c;background:#fde8e8;border-radius:6px;padding:2px 7px}
+  .adminpanel{background:#fff6f6;border:1px solid #f0b4b4;border-radius:10px;padding:12px;margin-bottom:14px}
+  .adminpanel h3{margin:0 0 8px;font-size:13px}
+  .prow{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:5px 0;border-bottom:1px solid #f3dcdc;font-size:13px}
+  .prow button{font-size:11px;font-weight:700;border:1px solid #f0b4b4;background:#fff;color:#b91c1c;border-radius:6px;padding:3px 8px;cursor:pointer}
+  .loading{text-align:center;color:var(--muted);padding:60px 0;font-size:14px}
+  .err{background:#fde8e8;border:1px solid #f5b5b5;color:#9b1c1c;border-radius:10px;padding:12px 14px;font-size:13px;margin:16px;font-weight:600}
+  .tabs{display:flex;gap:8px;margin-bottom:4px}
+  .tab{padding:7px 14px;border-radius:9px 9px 0 0;cursor:pointer;font-size:13.5px;color:var(--muted);border:1px solid transparent;font-weight:700}
+  .tab.on{color:var(--txt);background:#fff;border-color:var(--line);border-bottom-color:#fff}
+  .pin{display:flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);border:2px solid #fff;box-shadow:0 1px 5px rgba(0,0,0,.4)}
+  .pin span{transform:rotate(45deg);font-size:15px}
+  .pop b{font-size:14px}
+  .pop .pt{font-size:11px;color:#555;margin:2px 0}
+  .pop .pd{font-size:12px;margin:4px 0}
+  @media(max-width:600px){ .grid{grid-template-columns:1fr} h1 span{display:none} }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap hrow">
+    <h1>🗾 Japan · Jan 2027 <span>— vote on what to do</span></h1>
+    <div class="grow"></div>
+    <div class="seg" id="viewSeg">
+      <button data-view="cards" class="on">🗂 Cards</button>
+      <button data-view="map">🗺 Map</button>
+    </div>
+    <div class="seg" id="langSeg">
+      <button data-lang="en" class="on">EN</button>
+      <button data-lang="zh">中文</button>
+    </div>
+    <div class="seg" id="curSeg">
+      <button data-cur="JPY">¥</button>
+      <button data-cur="SGD" class="on">S$</button>
+      <button data-cur="MYR">RM</button>
+      <button data-cur="USD">US$</button>
+    </div>
+    <span class="who" id="who"></span>
+    <button class="btn ghost" id="changeName">Switch profile</button>
+    <button class="btn add" id="suggestBtn">＋ Add idea</button>
+    <button class="btn" id="budgetBtn">💰 Budget</button>
+    <button class="btn" id="resultsBtn">📊 Results</button>
+    <button class="btn ghost" id="adminBtn">🔐</button>
+    <button class="btn ghost" id="refreshBtn">↻</button>
+  </div>
+</header>
+
+<div class="intro">
+  <div class="card-note">
+    <b>How this works:</b> Pick your profile, then rate each idea — <b style="color:var(--must)">MUST</b> / <b style="color:var(--yes)">Yes</b> / <b style="color:var(--maybe)">Maybe</b> / <b style="color:var(--nah)">Nah</b> — and hit <b>Save</b> (editable anytime). Use <b>Status → To&nbsp;vote</b> to see what you still haven't rated. Got an idea that's missing? <b>＋ Add idea</b>. Trip tentatively <b>8–22 Jan 2027</b> · Tokyo · (Nagoya) · Kyoto · Osaka.
+  </div>
+</div>
+
+<div class="intro" id="overviewBanner" style="display:none">
+  <div class="card-note" style="border-color:var(--accent2);background:#faf7ff;color:#5b3aa6">
+    <b>👥 Overview mode</b> — showing the group's combined votes &amp; totals (read-only). Tap <b>Switch profile</b> (top-right) to pick your own name and cast votes.
+  </div>
+</div>
+
+<div class="filters" id="filters"></div>
+<div class="filters" id="tagfilters"></div>
+<div class="filters">
+  <span class="flabel" id="statusLabel">Status</span>
+  <div class="seg" id="statusSeg">
+    <button data-mine="all" class="on">All</button>
+    <button data-mine="todo">🕗 To vote</button>
+    <button data-mine="voted">✅ Voted</button>
+  </div>
+  <span class="flabel" id="groupLabel" style="margin-left:8px">Group</span>
+  <div class="seg" id="groupSeg">
+    <button data-group="city" class="on">City</button>
+    <button data-group="category">Category</button>
+  </div>
+  <span class="stat" id="stat"></span>
+</div>
+
+<main id="main"><div class="loading">Loading activities…</div></main>
+<div id="map"></div>
+
+<div class="savebar" id="savebar">
+  <div class="wrap">
+    <span class="msg" id="saveMsg">You have unsaved changes.</span>
+    <div class="grow"></div>
+    <button class="btn ghost" id="discardBtn">Discard</button>
+    <button class="btn primary" id="saveBtn">Save my votes</button>
+  </div>
+</div>
+
+<!-- Add idea modal -->
+<div class="modal-bg" id="suggestModal">
+  <div class="modal">
+    <h2>💡 Add your own idea</h2>
+    <div class="field"><label>Name *</label><input id="s_name" placeholder="e.g. Nabana no Sato winter illumination"></div>
+    <div class="field"><label>City / area</label>
+      <select id="s_city">
+        <option>Tokyo</option><option>Osaka</option><option>Kyoto</option><option>Nagoya</option><option>Day Trip</option><option>Other</option>
+      </select>
+    </div>
+    <div class="field"><label>Tags (comma-separated — first one = category)</label><input id="s_tags" placeholder="Food, Classic, Anime/Games…"></div>
+    <div class="field"><label>What is it / why?</label><textarea id="s_desc" placeholder="Short description"></textarea></div>
+    <div class="field"><label>Rough cost (optional)</label><input id="s_cost" placeholder="e.g. ¥2,000 or Free"></div>
+    <div class="field"><label>Link (website)</label><input id="s_link" placeholder="https://…"></div>
+    <div class="field"><label>Exact place to pin on map (optional)</label><input id="s_place" placeholder="e.g. Nabana no Sato, Kuwana — blank = auto-locate by name"></div>
+    <div class="modal-actions">
+      <button class="btn ghost" id="s_cancel">Cancel</button>
+      <button class="btn add" id="s_submit">Add it</button>
+    </div>
+  </div>
+</div>
+
+<!-- Budget modal -->
+<div class="modal-bg" id="budgetModal">
+  <div class="modal">
+    <h2>💰 My budget estimate</h2>
+    <p style="color:var(--muted);font-size:13px;margin-top:0">Rough cost of activities you rated. Toggle what to include:</p>
+    <div class="filters" style="margin:0 0 12px;padding:0">
+      <label style="font-size:13px;font-weight:600"><input type="checkbox" id="bMust" checked> MUST</label>
+      <label style="font-size:13px;font-weight:600"><input type="checkbox" id="bYes" checked> Yes</label>
+      <label style="font-size:13px;font-weight:600"><input type="checkbox" id="bMaybe"> Maybe</label>
+    </div>
+    <div id="budgetBody"></div>
+    <div class="modal-actions"><button class="btn ghost" id="b_close">Close</button></div>
+  </div>
+</div>
+
+<!-- Results modal -->
+<div class="modal-bg" id="resultsModal">
+  <div class="modal" style="max-width:660px">
+    <div class="tabs">
+      <div class="tab on" data-rtab="rank">🏆 Ranked</div>
+      <div class="tab" data-rtab="voters">🧑‍🤝‍🧑 Voters</div>
+    </div>
+    <div id="resultsBody"></div>
+    <div class="modal-actions"><button class="btn ghost" id="r_close">Close</button></div>
+  </div>
+</div>
+
+<!-- Profile picker modal -->
+<div class="modal-bg" id="nameModal">
+  <div class="modal" style="max-width:460px">
+    <h2>👋 Who are you?</h2>
+    <p style="color:var(--muted);font-size:13px;margin-top:0">Pick your profile so your votes are saved under you (and editable later).</p>
+    <div class="profiles" id="profileList"></div>
+    <div class="field"><label>…or add a new profile</label><input id="nameInput" placeholder="Your name" autocomplete="off"></div>
+    <div class="modal-actions"><button class="btn primary" id="nameSave">Add & start</button></div>
+  </div>
+</div>
+
+<!-- Admin modal -->
+<div class="modal-bg" id="adminModal">
+  <div class="modal" style="max-width:480px">
+    <h2>🔐 Admin</h2>
+    <div id="adminLogin">
+      <p style="color:var(--muted);font-size:13px;margin-top:0">Enter the admin passcode to curate the activity list (delete activities) and manage profiles/votes.</p>
+      <div class="field"><input id="adminPass" type="password" placeholder="Admin passcode" autocomplete="off"></div>
+      <div class="modal-actions"><button class="btn ghost" id="admin_cancel">Cancel</button><button class="btn primary" id="admin_unlock">Unlock</button></div>
+    </div>
+    <div id="adminPanel" style="display:none">
+      <div class="adminpanel">
+        <h3>🗑️ Curate (delete)</h3>
+        <p style="color:var(--muted);font-size:12px;margin:0 0 8px">Each card now has a <b>Delete</b> button. To trim fast: filter (by city/type), then delete the whole shown set.</p>
+        <button class="btn" id="admin_delShown" style="background:#b91c1c;border-color:#b91c1c;color:#fff">Delete all shown (<span id="shownCount">0</span>)</button>
+      </div>
+      <div class="adminpanel">
+        <h3>🧑‍🤝‍🧑 Profiles &amp; votes</h3>
+        <div id="adminProfiles"></div>
+        <button class="btn" id="admin_resetVotes" style="margin-top:8px">Reset ALL votes</button>
+      </div>
+      <div class="modal-actions">
+        <button class="btn ghost" id="admin_logout">Lock admin</button>
+        <button class="btn primary" id="admin_close">Done</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+/* ============================================================
+   CONFIG — paste your deployed Apps Script Web App URL here
+   (ending in /exec). Until then the page runs in DEMO mode.
+   ============================================================ */
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxJXpaAl8yMOpo4GpyK8CYBJrz3ic-86YnKR5NxV8xGQHialqZFu_hnstBQBDbqog9p/exec";
+
+const CITY_ORDER = ["Tokyo","Osaka","Kyoto","Nagoya","Day Trip","Other"];
+const CITY_GRAD = {
+  "Tokyo":["var(--tokyo1)","var(--tokyo2)"], "Osaka":["var(--osaka1)","var(--osaka2)"],
+  "Kyoto":["var(--kyoto1)","var(--kyoto2)"], "Nagoya":["var(--nagoya1)","var(--nagoya2)"],
+  "Day Trip":["var(--day1)","var(--day2)"], "Other":["var(--other1)","var(--other2)"]
+};
+const CITY_HEX = {"Tokyo":"#2563eb","Osaka":"#f97316","Kyoto":"#059669","Nagoya":"#7c3aed","Day Trip":"#475569","Other":"#64748b"};
+const CAT_ORDER = ["Theme Park","Anime/Games","Food","Classic","Art/Books","Art","Nature","View","Unique","Entertainment","Nightlife","Shopping"];
+const VOTES = [
+  {k:"must", label:"MUST",  zh:"必去", emoji:"⭐", cls:"must",  score:3},
+  {k:"yes",  label:"Yes",   zh:"想去", emoji:"👍", cls:"yes",   score:2},
+  {k:"maybe",label:"Maybe", zh:"也许", emoji:"🤔", cls:"maybe", score:1},
+  {k:"nah",  label:"Nah",   zh:"算了", emoji:"👎", cls:"nah",   score:0}
+];
+const SYM = {JPY:"¥", SGD:"S$", MYR:"RM", USD:"US$"};
+const FALLBACK = {SGD:0.0086, MYR:0.030, USD:0.0064}; // per 1 JPY, used if live rates unavailable
+const CITY_ZH = {"Tokyo":"东京","Osaka":"大阪","Kyoto":"京都","Nagoya":"名古屋","Day Trip":"一日游","Other":"其他"};
+const CAT_ZH = {"Theme Park":"主题乐园","Anime/Games":"动漫·游戏","Food":"美食","Classic":"经典","Art/Books":"艺术·书籍","Art":"艺术","Nature":"自然","View":"观景","Unique":"特色","Entertainment":"娱乐","Nightlife":"夜生活","Shopping":"购物"};
+const T = {
+  en:{sub:"— vote on what to do", cards:"🗂 Cards", map:"🗺 Map", switch:"Switch profile", add:"＋ Add idea", budget:"💰 Budget", results:"📊 Results", place:"Place", type:"Type", status:"Status", group:"Group", all:"All", allTypes:"All types", cityG:"City", catG:"Category", toVote:"🕗 To vote", voted:"✅ Voted", save:"Save my votes", discard:"Discard", gotMore:"Got more ideas?", addOwn:"Add your own idea", official:"Official ↗", mapLink:"📍 Map", ratedYou:"you've rated", shown:"shown", voters:"voters", peopleVoted:"people voted", intro:'<b>How this works:</b> Pick your profile, then rate each idea — <b style="color:var(--must)">MUST</b> / <b style="color:var(--yes)">Yes</b> / <b style="color:var(--maybe)">Maybe</b> / <b style="color:var(--nah)">Nah</b> — and hit <b>Save</b>. Use <b>Status → To vote</b> to see what you still haven\'t rated. Missing something? <b>＋ Add idea</b>. Trip tentatively <b>8–22 Jan 2027</b> · Tokyo · (Nagoya) · Kyoto · Osaka.'},
+  zh:{sub:"— 投票决定行程", cards:"🗂 卡片", map:"🗺 地图", switch:"切换用户", add:"＋ 添加", budget:"💰 预算", results:"📊 结果", place:"地区", type:"类型", status:"状态", group:"分组", all:"全部", allTypes:"全部类型", cityG:"城市", catG:"分类", toVote:"🕗 待投", voted:"✅ 已投", save:"保存投票", discard:"放弃", gotMore:"还有想法？", addOwn:"添加你的想法", official:"官网 ↗", mapLink:"📍 地图", ratedYou:"已评", shown:"项", voters:"人投票", peopleVoted:"人已投", intro:'<b>玩法：</b>先选用户，再给每个想法评分——<b style="color:var(--must)">必去</b> / <b style="color:var(--yes)">想去</b> / <b style="color:var(--maybe)">也许</b> / <b style="color:var(--nah)">算了</b>——然后点<b>保存</b>。用<b>状态 → 待投</b>看还没评的。少了什么？点<b>＋ 添加</b>。行程暂定<b>2027年1月8–22日</b>·东京·(名古屋)·京都·大阪。'}
+};
+function L(k){ return (T[STATE.lang] && T[STATE.lang][k]) || T.en[k] || k; }
+function cityLabel(c){ return STATE.lang==="zh" ? (CITY_ZH[c]||c) : c; }
+function catLabel(c){ return STATE.lang==="zh" ? (CAT_ZH[c]||c) : c; }
+function actName(a){ return STATE.lang==="zh" && a.name_zh ? a.name_zh : a.name; }
+function actDesc(a){ return STATE.lang==="zh" && a.desc_zh ? a.desc_zh : a.description; }
+function cityOrCat(g){ return STATE.groupBy==="city" ? cityLabel(g) : catLabel(g); }
+
+let STATE = { activities:[], votes:[], profiles:[], rates:null, myVotes:{}, dirty:{}, voter:"", allMode:false,
+              cityFilter:"All", tagFilter:"All", mineFilter:"all", groupBy:"city", view:"cards", cur:"SGD",
+              admin:false, adminPass:"", lang:"en" };
+let MAP=null, MARKERS=null;
+
+const DEMO = [
+  {id:"t04",name:"Shibuya Crossing & Hachiko",city:"Tokyo",tags:"Classic",emoji:"🚦",description:"The iconic scramble crossing + loyal-dog statue.",area:"Shibuya",cost:"Free",time:"30m",booking:"",link:"https://www.gotokyo.org/en/spot/24/index.html",lat:35.6595,lng:139.7005,suggestedBy:"curated"},
+  {id:"o01",name:"USJ — Super Nintendo World",city:"Osaka",tags:"Theme Park,Anime/Games",emoji:"🍄",description:"Mario + Donkey Kong land at Universal Studios Japan.",area:"Osaka",cost:"¥8,600+",time:"Full day",booking:"Book pass; grab timed-entry early",link:"https://www.usj.co.jp/web/en/",lat:34.6654,lng:135.4323,suggestedBy:"curated"},
+  {id:"n01",name:"Ghibli Park",city:"Nagoya",tags:"Theme Park,Anime",emoji:"🌳",description:"Walk-through Studio Ghibli world.",area:"Aichi",cost:"¥3,300–7,800",time:"Full day",booking:"Book the instant tickets drop",link:"https://ghibli-park.jp/en/",lat:35.1832,lng:137.0780,suggestedBy:"curated"}
+];
+
+/* ---------------------- networking ---------------------- */
+async function api(action, payload){
+  if(!SCRIPT_URL){
+    if(action==="getData") return {ok:true, activities:DEMO, votes:[], profiles:[], rates:null};
+    return {ok:true, demo:true};
+  }
+  try{
+    if(action==="getData"){
+      const r = await fetch(SCRIPT_URL + "?action=getData", {method:"GET"});
+      return await r.json();
+    } else {
+      const r = await fetch(SCRIPT_URL, {method:"POST", body: JSON.stringify(Object.assign({action}, payload))});
+      return await r.json();
+    }
+  }catch(err){ return {ok:false, error:String(err)}; }
+}
+async function geocode(q){
+  try{
+    const r = await fetch("https://nominatim.openstreetmap.org/search?format=json&limit=1&q="+encodeURIComponent(q));
+    const j = await r.json();
+    if(j && j[0]) return {lat:parseFloat(j[0].lat), lng:parseFloat(j[0].lon)};
+  }catch(e){}
+  return {};
+}
+
+/* ---------------------- money helpers ---------------------- */
+function rate(cur){ if(cur==="JPY") return 1; return (STATE.rates && STATE.rates[cur]) || FALLBACK[cur] || 0; }
+function fmtMoney(jpy, cur){
+  cur = cur || STATE.cur;
+  if(cur==="JPY") return "¥"+Math.round(jpy).toLocaleString();
+  const v = jpy*rate(cur);
+  return SYM[cur] + (v>=100 ? Math.round(v).toLocaleString() : v.toFixed(1));
+}
+function parseCost(txt){
+  const s = String(txt||"");
+  if(/free/i.test(s) && !/\d/.test(s.replace(/free/ig,""))) return {type:"free", mid:0};
+  const nums = (s.match(/\d[\d,]*/g)||[]).map(n=>parseInt(n.replace(/,/g,""),10)).filter(n=>!isNaN(n));
+  if(!nums.length) return {type:"varies", mid:0};
+  if(nums.length===1) return {type:"fixed", mid:nums[0]};
+  const min=Math.min.apply(null,nums), max=Math.max.apply(null,nums);
+  return {type:"range", mid:(min+max)/2};
+}
+
+/* ---------------------- load + render ---------------------- */
+async function load(){
+  const res = await api("getData");
+  if(!res || !res.ok){ document.getElementById("main").innerHTML = '<div class="err">Could not load data: '+((res&&res.error)||"unknown")+'<br>Check SCRIPT_URL and that the web app is deployed with access = Anyone.</div>'; return; }
+  STATE.activities = res.activities || [];
+  STATE.votes = res.votes || [];
+  STATE.profiles = res.profiles || [];
+  STATE.rates = res.rates || null;
+  STATE.myVotes = {};
+  STATE.votes.forEach(v=>{ if(v.voter && v.voter.toLowerCase()===STATE.voter.toLowerCase()) STATE.myVotes[v.activityId]=v.vote; });
+  STATE.dirty = {};
+  buildFilters(); draw(); updateSaveBar();
+}
+
+function tallies(){
+  const t = {};
+  STATE.votes.forEach(v=>{
+    if(!t[v.activityId]) t[v.activityId]={must:0,yes:0,maybe:0,nah:0};
+    if(t[v.activityId][v.vote]!=null) t[v.activityId][v.vote]++;
+  });
+  return t;
+}
+function allTags(){
+  const set = new Set();
+  STATE.activities.forEach(a=> String(a.tags||"").split(",").map(s=>s.trim()).filter(Boolean).forEach(t=>set.add(t)));
+  return Array.from(set).sort();
+}
+function primaryCat(a){ return (String(a.tags||"").split(",")[0]||"Other").trim() || "Other"; }
+function myVoteFor(id){ let v = STATE.dirty[id]!=null ? STATE.dirty[id] : (STATE.myVotes[id]||""); return v==="__clear__"?"":v; }
+
+function buildFilters(){
+  const cities = ["All"].concat(CITY_ORDER.filter(c=> STATE.activities.some(a=>a.city===c)));
+  document.getElementById("filters").innerHTML =
+    `<span class="flabel">${L("place")}</span>` + cities.map(c=>`<div class="chip ${STATE.cityFilter===c?'on':''}" data-city="${c}">${c==='All'?L("all"):esc(cityLabel(c))}</div>`).join("");
+  const tags = ["All"].concat(allTags());
+  document.getElementById("tagfilters").innerHTML =
+    `<span class="flabel">${L("type")}</span>` + tags.map(t=>`<div class="chip acc2 ${STATE.tagFilter===t?'on':''}" data-tag="${t}">${t==='All'?L("allTypes"):esc(catLabel(t))}</div>`).join("");
+  document.querySelectorAll('[data-city]').forEach(el=>el.onclick=()=>{STATE.cityFilter=el.dataset.city;buildFilters();draw();});
+  document.querySelectorAll('[data-tag]').forEach(el=>el.onclick=()=>{STATE.tagFilter=el.dataset.tag;buildFilters();draw();});
+}
+
+function visible(){
+  return STATE.activities.filter(a=>{
+    if(STATE.cityFilter!=="All" && a.city!==STATE.cityFilter) return false;
+    if(STATE.tagFilter!=="All"){
+      const tags = String(a.tags||"").split(",").map(s=>s.trim());
+      if(!tags.includes(STATE.tagFilter)) return false;
+    }
+    if(STATE.mineFilter==="todo" && myVoteFor(a.id)) return false;
+    if(STATE.mineFilter==="voted" && !myVoteFor(a.id)) return false;
+    return true;
+  });
+}
+function esc(s){ return String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])); }
+function gmaps(a){
+  if(a.lat && a.lng) return "https://www.google.com/maps/search/?api=1&query="+a.lat+","+a.lng;
+  return "https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(a.name+" "+(a.area||"")+" Japan");
+}
+
+function draw(){
+  document.getElementById("overviewBanner").style.display = STATE.allMode ? "block" : "none";
+  document.getElementById("main").style.display = STATE.view==="cards"?"block":"none";
+  document.getElementById("map").style.display  = STATE.view==="map"?"block":"none";
+  if(STATE.view==="map") renderMap(); else render();
+  const total=STATE.activities.length, voted=STATE.activities.filter(a=>myVoteFor(a.id)).length;
+  const stat=document.getElementById("stat");
+  if(stat) stat.textContent = STATE.allMode
+    ? (visible().length+" "+L("shown")+" · "+new Set(STATE.votes.map(v=>v.voter)).size+" "+L("peopleVoted"))
+    : (visible().length+" "+L("shown")+" · "+L("ratedYou")+" "+voted+"/"+total);
+}
+
+function voteButtonsHtml(a, ct){
+  const myv = myVoteFor(a.id);
+  const ro = STATE.allMode ? " ro" : "";
+  return VOTES.map(v=>`<button class="vbtn ${v.cls}${ro} ${myv===v.k?'on':''}" data-v="${v.k}">${v.emoji} ${STATE.lang==="zh"?v.zh:v.label}<span class="ct">${ct[v.k]||0}</span></button>`).join("");
+}
+
+function render(){
+  const t = tallies();
+  const vis = visible();
+  const main = document.getElementById("main");
+  if(!vis.length){ main.innerHTML='<div class="loading">No ideas match this filter.</div>'+addCardHtml(); bindAdd(); return; }
+
+  let groups, groupOf;
+  if(STATE.groupBy==="city"){
+    groups = (STATE.cityFilter==="All"?CITY_ORDER:[STATE.cityFilter]);
+    groupOf = a=>a.city;
+  } else {
+    const present = Array.from(new Set(vis.map(primaryCat)));
+    groups = CAT_ORDER.filter(c=>present.includes(c)).concat(present.filter(c=>!CAT_ORDER.includes(c)).sort());
+    groupOf = primaryCat;
+  }
+
+  let html = "";
+  groups.forEach(g=>{
+    const items = vis.filter(a=>groupOf(a)===g);
+    if(!items.length) return;
+    html += `<div class="group-h">${esc(cityOrCat(g))} <span class="pill">${items.length}</span></div><div class="grid">`;
+    items.forEach(a=>{
+      const ct = t[a.id] || {must:0,yes:0,maybe:0,nah:0};
+      const grad = CITY_GRAD[a.city] || CITY_GRAD["Other"];
+      const tagsHtml = String(a.tags||"").split(",").map(s=>s.trim()).filter(Boolean).map(x=>`<span class="tag">${esc(catLabel(x))}</span>`).join("");
+      const isNew = String(a.suggestedBy||"")!=="curated" && String(a.suggestedBy||"")!=="";
+      const pc = parseCost(a.cost);
+      let costHtml = a.cost ? esc(a.cost) : "";
+      if(pc.mid>0 && STATE.cur!=="JPY") costHtml += ` <span class="conv">≈ ${fmtMoney(pc.mid)}</span>`;
+      html += `
+      <div class="card">
+        <div class="banner" style="background:linear-gradient(135deg,${grad[0]},${grad[1]})">
+          ${a.img?`<img class="bimg" src="${esc(a.img)}" alt="" loading="lazy" onerror="this.remove()">`:""}
+          <span class="city">${esc(cityLabel(a.city))}</span>
+          ${isNew?`<span class="new">💡 ${esc(a.suggestedBy)}</span>`:""}
+          <span class="bemoji">${esc(a.emoji||"📍")}</span>
+        </div>
+        <div class="body">
+          <div class="name">${esc(actName(a))}</div>
+          ${tagsHtml?`<div class="tags">${tagsHtml}</div>`:""}
+          ${actDesc(a)?`<div class="desc">${esc(actDesc(a))}</div>`:""}
+          <div class="meta">
+            ${a.area?`<span><b>📍</b> ${esc(a.area)}</span>`:""}
+            ${costHtml?`<span><b>💴</b> ${costHtml}</span>`:""}
+            ${a.time?`<span><b>⏱</b> ${esc(a.time)}</span>`:""}
+          </div>
+          ${a.booking?`<div class="book">⏰ ${esc(a.booking)}</div>`:""}
+          <div class="links">
+            ${a.link?`<a href="${esc(a.link)}" target="_blank" rel="noopener">${L("official")}</a>`:""}
+            <a href="${gmaps(a)}" target="_blank" rel="noopener">${L("mapLink")}</a>
+          </div>
+        </div>
+        <div class="votes" data-id="${esc(a.id)}">${voteButtonsHtml(a, ct)}</div>
+        ${STATE.admin?`<div class="adminbar"><button data-del="${esc(a.id)}" data-name="${esc(a.name)}">🗑️ Delete</button>${isNew?`<span class="hidden-tag">suggested by ${esc(a.suggestedBy)}</span>`:""}</div>`:""}
+      </div>`;
+    });
+    html += `</div>`;
+  });
+  main.innerHTML = html + `<div class="group-h" style="margin-top:28px">${L("gotMore")}</div><div class="grid">`+addCardHtml()+`</div>`;
+  bindVotes(); bindAdd(); bindAdminDelete();
+}
+function bindAdminDelete(){
+  document.querySelectorAll('[data-del]').forEach(b=> b.onclick=()=>delActivity(b.dataset.del, b.dataset.name));
+}
+
+function addCardHtml(){ return `<div class="addcard" id="addCard"><div class="big">＋</div>${L("addOwn")}</div>`; }
+function bindAdd(){ const el=document.getElementById("addCard"); if(el) el.onclick=()=>openModal("suggestModal"); }
+function bindVotes(){
+  document.querySelectorAll(".votes").forEach(box=>{
+    const id = box.dataset.id;
+    box.querySelectorAll(".vbtn").forEach(b=>{
+      b.onclick=()=>{
+        if(STATE.allMode || !STATE.voter){ openProfilePicker(); return; }
+        const v=b.dataset.v;
+        const cur = myVoteFor(id);
+        STATE.dirty[id] = (cur===v) ? "__clear__" : v;
+        applyDirtyUI(); updateSaveBar(); draw();
+      };
+    });
+  });
+}
+function applyDirtyUI(){
+  document.querySelectorAll(".votes").forEach(box=>{
+    const my = myVoteFor(box.dataset.id);
+    box.querySelectorAll(".vbtn").forEach(b=> b.classList.toggle("on", b.dataset.v===my));
+  });
+}
+function pendingCount(){ return Object.keys(STATE.dirty).length; }
+function updateSaveBar(){
+  const bar=document.getElementById("savebar"); const n=pendingCount();
+  if(n>0){ bar.classList.add("show"); document.getElementById("saveMsg").textContent = n+" change"+(n>1?"s":"")+" not saved yet."; }
+  else bar.classList.remove("show");
+}
+
+/* ---------------------- map ---------------------- */
+function renderMap(){
+  if(!MAP){
+    MAP = L.map("map",{scrollWheelZoom:true}).setView([35.4,137.5],6);
+    L.tileLayer("https://{s}.basemaps.cartocdn.com/voyager/{z}/{x}/{y}{r}.png",{
+      attribution:'&copy; OpenStreetMap &copy; CARTO', maxZoom:19, subdomains:"abcd"
+    }).addTo(MAP);
+    MARKERS = L.layerGroup().addTo(MAP);
+  }
+  setTimeout(()=>MAP.invalidateSize(),50);
+  MARKERS.clearLayers();
+  const t = tallies(); const pts=[];
+  visible().forEach(a=>{
+    const lat=parseFloat(a.lat), lng=parseFloat(a.lng);
+    if(isNaN(lat)||isNaN(lng)) return;
+    const hex = CITY_HEX[a.city]||CITY_HEX.Other;
+    const icon = L.divIcon({className:"", html:`<div class="pin" style="background:${hex}"><span>${esc(a.emoji||"📍")}</span></div>`, iconSize:[30,30], iconAnchor:[15,30], popupAnchor:[0,-30]});
+    const ct = t[a.id]||{must:0,yes:0,maybe:0,nah:0};
+    const pc = parseCost(a.cost); const costLine = a.cost ? esc(a.cost)+(pc.mid>0&&STATE.cur!=="JPY"?" ≈ "+fmtMoney(pc.mid):"") : "";
+    const pop = `<div class="pop"><b>${esc(actName(a))}</b><div class="pt">${esc(cityLabel(a.city))}${a.area?" · "+esc(a.area):""}</div>`+
+      (actDesc(a)?`<div class="pd">${esc(actDesc(a))}</div>`:"")+
+      (costLine?`<div class="pt">💴 ${costLine}</div>`:"")+
+      `<div class="pt">⭐ ${ct.must||0} · 👍 ${ct.yes||0} · 🤔 ${ct.maybe||0} · 👎 ${ct.nah||0}</div>`+
+      (a.link?`<a href="${esc(a.link)}" target="_blank" rel="noopener">${L("official")}</a> · `:"")+
+      `<a href="${gmaps(a)}" target="_blank" rel="noopener">Google Maps ↗</a></div>`;
+    L.marker([lat,lng],{icon}).bindPopup(pop).addTo(MARKERS);
+    pts.push([lat,lng]);
+  });
+  if(pts.length){ try{ MAP.fitBounds(pts,{padding:[40,40],maxZoom:13}); }catch(e){} }
+}
+
+/* ---------------------- save ---------------------- */
+async function saveVotes(){
+  if(!STATE.voter){ openProfilePicker(); return; }
+  Object.keys(STATE.dirty).forEach(id=>{
+    if(STATE.dirty[id]==="__clear__") delete STATE.myVotes[id];
+    else STATE.myVotes[id]=STATE.dirty[id];
+  });
+  const btn=document.getElementById("saveBtn"); btn.disabled=true; btn.textContent="Saving…";
+  const res = await api("submitVotes", {voter:STATE.voter, votes:STATE.myVotes});
+  btn.disabled=false; btn.textContent=L("save");
+  if(res && res.ok){
+    STATE.dirty={};
+    if(res.demo){ document.getElementById("saveMsg").textContent="(demo mode — set SCRIPT_URL to save for real)"; }
+    await load();
+  } else { alert("Save failed: "+((res&&res.error)||"unknown")); }
+}
+
+/* ---------------------- add idea ---------------------- */
+async function submitSuggestion(){
+  const name=document.getElementById("s_name").value.trim();
+  if(!name){ alert("Give it a name"); return; }
+  const city=document.getElementById("s_city").value;
+  const place=document.getElementById("s_place").value.trim();
+  const btn=document.getElementById("s_submit"); btn.disabled=true; btn.textContent="Locating…";
+  const geo = await geocode((place || (name+" "+city)) + " Japan");
+  btn.textContent="Adding…";
+  const payload={
+    name, city,
+    tags:document.getElementById("s_tags").value.trim(),
+    description:document.getElementById("s_desc").value.trim(),
+    cost:document.getElementById("s_cost").value.trim(),
+    link:document.getElementById("s_link").value.trim(),
+    lat:geo.lat||"", lng:geo.lng||"",
+    suggestedBy:STATE.voter||"someone"
+  };
+  const res=await api("addActivity", payload);
+  btn.disabled=false; btn.textContent="Add it";
+  if(res && res.ok){
+    closeModal("suggestModal");
+    ["s_name","s_tags","s_desc","s_cost","s_link","s_place"].forEach(i=>document.getElementById(i).value="");
+    if(res.demo){ alert("Added (demo only — deploy backend to share it)"); }
+    await load();
+  } else { alert("Could not add: "+((res&&res.error)||"unknown")); }
+}
+
+/* ---------------------- budget ---------------------- */
+function showBudget(){
+  const inc = {must:document.getElementById("bMust").checked, yes:document.getElementById("bYes").checked, maybe:document.getElementById("bMaybe").checked};
+  const picks = STATE.activities.filter(a=>{ const v=myVoteFor(a.id); return v && inc[v]; });
+  const body=document.getElementById("budgetBody");
+  if(!STATE.voter){ body.innerHTML='<div class="loading">Pick your profile first to see your budget.</div>'; return; }
+  if(!picks.length){ body.innerHTML='<div class="loading">No matching picks yet — rate some activities!</div>'; return; }
+  let totalJpy=0, variesN=0;
+  const rows = picks.map(a=>{
+    const pc=parseCost(a.cost); let cell;
+    if(pc.type==="free"){ cell="Free"; }
+    else if(pc.mid>0){ totalJpy+=pc.mid; cell=fmtMoney(pc.mid); }
+    else { variesN++; cell='<span style="color:var(--muted)">varies</span>'; }
+    const badge = myVoteFor(a.id)==="must"?"⭐":myVoteFor(a.id)==="yes"?"👍":"🤔";
+    return `<div class="rrow"><div class="rname">${badge} ${esc(a.emoji||"")} ${esc(actName(a))} <small>· ${esc(cityLabel(a.city))}</small></div><div class="score" style="width:auto">${cell}</div></div>`;
+  }).join("");
+  body.innerHTML = '<div class="results-list">'+rows+'</div>'+
+    `<div class="budget-total"><span>Estimated total${variesN?` <small style="font-weight:400;color:var(--muted)">(+${variesN} "varies")</small>`:""}</span><span style="color:var(--must)">${fmtMoney(totalJpy)}</span></div>`+
+    `<p style="color:var(--muted);font-size:12px;margin-top:10px">Per-person activity cost only — excludes flights, hotels, rail & food. Ranges use the midpoint.</p>`;
+}
+
+/* ---------------------- results ---------------------- */
+function showResults(tab){
+  const t=tallies();
+  const body=document.getElementById("resultsBody");
+  document.querySelectorAll('[data-rtab]').forEach(el=>el.classList.toggle('on', el.dataset.rtab===tab));
+  if(tab==="rank"){
+    const ranked = STATE.activities.map(a=>{
+      const c=t[a.id]||{must:0,yes:0,maybe:0,nah:0};
+      const score = c.must*3 + c.yes*2 + c.maybe*1;
+      return {a,c,score,total:c.must+c.yes+c.maybe+c.nah};
+    }).filter(x=>x.total>0).sort((x,y)=> y.score-x.score);
+    if(!ranked.length){ body.innerHTML='<div class="loading">No votes yet — be the first!</div>'; return; }
+    body.innerHTML='<div class="results-list">'+ranked.map((x,i)=>`
+      <div class="rrow">
+        <div class="rank">${i+1}</div>
+        <div class="rname">${esc(x.a.emoji||"")} ${esc(actName(x.a))} <small>· ${esc(cityLabel(x.a.city))}</small></div>
+        <div class="bars"><span class="m">${x.c.must}⭐</span><span class="y">${x.c.yes}👍</span><span class="b">${x.c.maybe}🤔</span><span class="n">${x.c.nah}👎</span></div>
+        <div class="score">${x.score}</div>
+      </div>`).join("")+'</div><p style="color:var(--muted);font-size:12px;margin-top:12px">Score = MUST×3 + Yes×2 + Maybe×1. Only items with ≥1 vote shown.</p>';
+  } else {
+    const byVoter={};
+    STATE.votes.forEach(v=>{ (byVoter[v.voter]=byVoter[v.voter]||{must:0,yes:0,maybe:0,nah:0})[v.vote]++; });
+    const names=Object.keys(byVoter);
+    if(!names.length){ body.innerHTML='<div class="loading">No voters yet.</div>'; return; }
+    body.innerHTML='<div class="results-list">'+names.map(n=>`
+      <div class="rrow"><div class="rname"><b>${esc(n)}</b></div>
+      <div class="bars"><span class="m">${byVoter[n].must}⭐</span><span class="y">${byVoter[n].yes}👍</span><span class="b">${byVoter[n].maybe}🤔</span><span class="n">${byVoter[n].nah}👎</span></div></div>`).join("")+'</div>';
+  }
+}
+
+/* ---------------------- profiles + modals ---------------------- */
+function openModal(id){ document.getElementById(id).classList.add("show"); }
+function closeModal(id){ document.getElementById(id).classList.remove("show"); }
+function openProfilePicker(){
+  const list=document.getElementById("profileList");
+  const last=localStorage.getItem("jp_voter")||"";
+  let html = `<button class="pbtn everyone" data-p="__ALL__">👥 Everyone — totals &amp; overview (read-only)</button>`;
+  if(STATE.profiles.length){
+    html += STATE.profiles.map(p=>`<button class="pbtn ${last===p?'last':''}" data-p="${esc(p)}">${esc(p)}${last===p?' · last':''}</button>`).join("");
+  } else { html += '<span style="color:var(--muted);font-size:13px;align-self:center">No profiles yet — add the first one below.</span>'; }
+  list.innerHTML = html;
+  list.querySelectorAll("[data-p]").forEach(b=> b.onclick=()=>chooseProfile(b.dataset.p));
+  document.getElementById("nameInput").value="";
+  openModal("nameModal");
+}
+async function chooseProfile(name){
+  if(name==="__ALL__") enterAll();
+  else setVoter(name);
+  closeModal("nameModal"); await load();
+}
+async function addProfileUI(){
+  const n=document.getElementById("nameInput").value.trim();
+  if(!n){ alert("Enter a name"); return; }
+  await api("addProfile", {name:n});
+  await chooseProfile(n);
+}
+function setVoter(name){
+  STATE.voter=name; STATE.allMode=false; localStorage.setItem("jp_voter", name);
+  document.getElementById("who").innerHTML = "voting as <b>"+esc(name)+"</b>";
+}
+function enterAll(){
+  STATE.voter=""; STATE.allMode=true; STATE.mineFilter="all"; localStorage.setItem("jp_voter","__ALL__");
+  document.getElementById("who").innerHTML = "viewing <b>Everyone</b>";
+  document.querySelectorAll("#statusSeg button").forEach(x=>x.classList.toggle("on",x.dataset.mine==="all"));
+}
+
+/* ---------------------- admin ---------------------- */
+function adminApi(action, extra){ return api(action, Object.assign({ pass: STATE.adminPass }, extra || {})); }
+function openAdmin(){
+  if(STATE.admin){
+    document.getElementById('adminLogin').style.display='none';
+    document.getElementById('adminPanel').style.display='block';
+    document.getElementById('shownCount').textContent = visible().length;
+    renderAdminProfiles();
+  } else {
+    document.getElementById('adminLogin').style.display='block';
+    document.getElementById('adminPanel').style.display='none';
+    document.getElementById('adminPass').value='';
+  }
+  openModal('adminModal');
+}
+async function unlockAdmin(){
+  const p=document.getElementById('adminPass').value.trim();
+  if(!p) return;
+  const res=await api('checkAdmin',{pass:p});
+  if(res && res.ok && res.admin){
+    STATE.admin=true; STATE.adminPass=p; sessionStorage.setItem('jp_admin',p);
+    document.getElementById('adminBtn').classList.add('admin-on');
+    openAdmin(); draw();
+  } else { alert('Wrong passcode.'); }
+}
+function lockAdmin(){
+  STATE.admin=false; STATE.adminPass=''; sessionStorage.removeItem('jp_admin');
+  document.getElementById('adminBtn').classList.remove('admin-on');
+  closeModal('adminModal'); draw();
+}
+async function delActivity(id, name){
+  if(!STATE.admin) return;
+  if(!confirm('Delete "'+(name||id)+'" permanently? This removes it for everyone.')) return;
+  const res=await adminApi('deleteActivity',{id});
+  if(res && res.ok){ await load(); if(document.getElementById('adminModal').classList.contains('show')) openAdmin(); }
+  else alert('Delete failed: '+((res&&res.error)||'?'));
+}
+async function delShown(){
+  const ids=visible().map(a=>a.id);
+  if(!ids.length) return;
+  if(!confirm('Delete ALL '+ids.length+' currently-shown activities permanently? (Tip: filter by city/type first to target a subset.)')) return;
+  const res=await adminApi('deleteActivity',{ids});
+  if(res && res.ok){ await load(); openAdmin(); } else alert('Delete failed: '+((res&&res.error)||'?'));
+}
+function renderAdminProfiles(){
+  const box=document.getElementById('adminProfiles');
+  if(!STATE.profiles.length){ box.innerHTML='<span style="color:var(--muted);font-size:13px">No profiles yet.</span>'; return; }
+  box.innerHTML=STATE.profiles.map(p=>`<div class="prow"><span>${esc(p)}</span><button data-delp="${esc(p)}">Delete</button></div>`).join('');
+  box.querySelectorAll('[data-delp]').forEach(b=> b.onclick=()=>delProfile(b.dataset.delp));
+}
+async function delProfile(name){
+  if(!confirm('Delete profile "'+name+'" and all their votes?')) return;
+  const res=await adminApi('deleteProfile',{name});
+  if(res && res.ok){ await load(); renderAdminProfiles(); } else alert('Failed: '+((res&&res.error)||'?'));
+}
+async function resetAllVotes(){
+  if(!confirm('Reset ALL votes from everyone? This cannot be undone.')) return;
+  const res=await adminApi('resetVotes',{});
+  if(res && res.ok){ await load(); renderAdminProfiles(); alert('All votes cleared.'); } else alert('Failed: '+((res&&res.error)||'?'));
+}
+
+function applyLang(){
+  const q=(s)=>document.querySelector(s);
+  try{
+    q('h1 span').textContent = L('sub');
+    q('#viewSeg button[data-view="cards"]').textContent = L('cards');
+    q('#viewSeg button[data-view="map"]').textContent = L('map');
+    q('#changeName').textContent = L('switch');
+    q('#suggestBtn').textContent = L('add');
+    q('#budgetBtn').textContent = L('budget');
+    q('#resultsBtn').textContent = L('results');
+    q('#statusLabel').textContent = L('status');
+    q('#groupLabel').textContent = L('group');
+    q('#statusSeg button[data-mine="all"]').textContent = L('all');
+    q('#statusSeg button[data-mine="todo"]').textContent = L('toVote');
+    q('#statusSeg button[data-mine="voted"]').textContent = L('voted');
+    q('#groupSeg button[data-group="city"]').textContent = L('cityG');
+    q('#groupSeg button[data-group="category"]').textContent = L('catG');
+    q('#saveBtn').textContent = L('save');
+    q('#discardBtn').textContent = L('discard');
+    const intro=q('.intro .card-note'); if(intro) intro.innerHTML = L('intro');
+    const ovb=q('#overviewBanner .card-note'); if(ovb) ovb.innerHTML = STATE.lang==="zh"
+      ? '<b>👥 总览模式</b> —— 显示全组的综合投票与统计（只读）。点右上角<b>切换用户</b>选择你的名字来投票。'
+      : "<b>👥 Overview mode</b> — showing the group's combined votes &amp; totals (read-only). Tap <b>Switch profile</b> (top-right) to pick your own name and cast votes.";
+  }catch(e){}
+  buildFilters(); draw();
+}
+
+function init(){
+  document.getElementById("saveBtn").onclick=saveVotes;
+  document.getElementById("discardBtn").onclick=()=>{ STATE.dirty={}; updateSaveBar(); draw(); };
+  document.getElementById("suggestBtn").onclick=()=>openModal("suggestModal");
+  document.getElementById("s_cancel").onclick=()=>closeModal("suggestModal");
+  document.getElementById("s_submit").onclick=submitSuggestion;
+  document.getElementById("budgetBtn").onclick=()=>{ openModal("budgetModal"); showBudget(); };
+  document.getElementById("b_close").onclick=()=>closeModal("budgetModal");
+  ["bMust","bYes","bMaybe"].forEach(i=>document.getElementById(i).onchange=showBudget);
+  document.getElementById("resultsBtn").onclick=()=>{ openModal("resultsModal"); showResults("rank"); };
+  document.getElementById("r_close").onclick=()=>closeModal("resultsModal");
+  document.querySelectorAll('[data-rtab]').forEach(el=>el.onclick=()=>showResults(el.dataset.rtab));
+  document.getElementById("refreshBtn").onclick=load;
+  document.getElementById("adminBtn").onclick=openAdmin;
+  document.getElementById("admin_cancel").onclick=()=>closeModal("adminModal");
+  document.getElementById("admin_unlock").onclick=unlockAdmin;
+  document.getElementById("adminPass").addEventListener("keydown",e=>{ if(e.key==="Enter") unlockAdmin(); });
+  document.getElementById("admin_close").onclick=()=>closeModal("adminModal");
+  document.getElementById("admin_logout").onclick=lockAdmin;
+  document.getElementById("admin_delShown").onclick=delShown;
+  document.getElementById("admin_resetVotes").onclick=resetAllVotes;
+  document.getElementById("changeName").onclick=openProfilePicker;
+  document.getElementById("nameSave").onclick=addProfileUI;
+  document.getElementById("nameInput").addEventListener("keydown",e=>{ if(e.key==="Enter") addProfileUI(); });
+
+  document.querySelectorAll("#viewSeg button").forEach(b=>b.onclick=()=>{ STATE.view=b.dataset.view; document.querySelectorAll("#viewSeg button").forEach(x=>x.classList.toggle("on",x===b)); draw(); });
+  document.querySelectorAll("#curSeg button").forEach(b=>b.onclick=()=>{ STATE.cur=b.dataset.cur; document.querySelectorAll("#curSeg button").forEach(x=>x.classList.toggle("on",x===b)); draw(); });
+  document.querySelectorAll("#langSeg button").forEach(b=>b.onclick=()=>{ STATE.lang=b.dataset.lang; localStorage.setItem("jp_lang",STATE.lang); document.querySelectorAll("#langSeg button").forEach(x=>x.classList.toggle("on",x===b)); applyLang(); });
+  document.querySelectorAll("#statusSeg button").forEach(b=>b.onclick=()=>{ STATE.mineFilter=b.dataset.mine; document.querySelectorAll("#statusSeg button").forEach(x=>x.classList.toggle("on",x===b)); draw(); });
+  document.querySelectorAll("#groupSeg button").forEach(b=>b.onclick=()=>{ STATE.groupBy=b.dataset.group; document.querySelectorAll("#groupSeg button").forEach(x=>x.classList.toggle("on",x===b)); draw(); });
+  document.querySelectorAll(".modal-bg").forEach(bg=>bg.addEventListener("click",e=>{ if(e.target===bg && bg.id!=="nameModal") bg.classList.remove("show"); }));
+
+  // restore admin (per browser session)
+  const sa=sessionStorage.getItem("jp_admin");
+  if(sa){ STATE.admin=true; STATE.adminPass=sa; document.getElementById("adminBtn").classList.add("admin-on"); }
+
+  // restore language preference
+  const sl=localStorage.getItem("jp_lang");
+  if(sl){ STATE.lang=sl; document.querySelectorAll("#langSeg button").forEach(x=>x.classList.toggle("on",x.dataset.lang===sl)); }
+
+  // Entry gate: everyone picks/creates a profile (or Everyone) on every visit.
+  load().then(()=>{ applyLang(); openProfilePicker(); });
+}
+init();
+</script>
+</body>
+</html>
