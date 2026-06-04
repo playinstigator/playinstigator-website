@@ -289,6 +289,7 @@
 <div class="modal-bg" id="suggestModal">
   <div class="modal">
     <h2>💡 Add your own idea</h2>
+    <div class="field"><label>📍 Paste a Google Maps link (auto-fills name + map pin)</label><input id="s_maps" placeholder="https://www.google.com/maps/place/..."><div style="font-size:11px;color:var(--muted);margin-top:4px">Use the full desktop link (the one with <b>@lat,lng</b>), not a short <i>maps.app.goo.gl</i> link.</div></div>
     <div class="field"><label>Name *</label><input id="s_name" placeholder="e.g. Nabana no Sato winter illumination"></div>
     <div class="field"><label>City / area</label>
       <select id="s_city">
@@ -748,13 +749,27 @@ async function saveVotes(){
 }
 
 /* ---------------------- add idea ---------------------- */
+function parseMapsLink(u){
+  const r={};
+  if(!u) return r;
+  try{
+    const dec=decodeURIComponent(u);
+    let m=dec.match(/\/place\/([^\/@?]+)/); if(m) r.name=m[1].replace(/\+/g," ").replace(/\s+/g," ").trim();
+    m=dec.match(/!3d(-?\d+\.\d+)!4d(-?\d+\.\d+)/); if(m){ r.lat=parseFloat(m[1]); r.lng=parseFloat(m[2]); }
+    if(r.lat==null){ m=dec.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/); if(m){ r.lat=parseFloat(m[1]); r.lng=parseFloat(m[2]); } }
+    if(r.lat==null){ m=dec.match(/[?&]q=(-?\d+\.\d+),(-?\d+\.\d+)/); if(m){ r.lat=parseFloat(m[1]); r.lng=parseFloat(m[2]); } }
+  }catch(e){}
+  return r;
+}
 async function submitSuggestion(){
-  const name=document.getElementById("s_name").value.trim();
-  if(!name){ alert("Give it a name"); return; }
+  const ml = parseMapsLink((document.getElementById("s_maps").value||"").trim());
+  const name=document.getElementById("s_name").value.trim() || ml.name || "";
+  if(!name){ alert("Give it a name (or paste a Google Maps link)"); return; }
   const city=document.getElementById("s_city").value;
   const place=document.getElementById("s_place").value.trim();
   const btn=document.getElementById("s_submit"); btn.disabled=true; btn.textContent="Locating…";
-  const geo = await geocode((place || (name+" "+city)) + " Japan");
+  let lat=(ml.lat!=null?ml.lat:""), lng=(ml.lng!=null?ml.lng:"");
+  if(lat===""){ const geo = await geocode((place || (name+" "+city)) + " Japan"); lat=geo.lat||""; lng=geo.lng||""; }
   btn.textContent="Adding…";
   const payload={
     name, city,
@@ -762,14 +777,14 @@ async function submitSuggestion(){
     description:document.getElementById("s_desc").value.trim(),
     cost:document.getElementById("s_cost").value.trim(),
     link:document.getElementById("s_link").value.trim(),
-    lat:geo.lat||"", lng:geo.lng||"",
+    lat, lng,
     suggestedBy:STATE.voter||"someone"
   };
   const res=await api("addActivity", payload);
   btn.disabled=false; btn.textContent="Add it";
   if(res && res.ok){
     closeModal("suggestModal");
-    ["s_name","s_tags","s_desc","s_cost","s_link","s_place"].forEach(i=>document.getElementById(i).value="");
+    ["s_maps","s_name","s_tags","s_desc","s_cost","s_link","s_place"].forEach(i=>document.getElementById(i).value="");
     if(res.demo){ alert("Added (demo only — deploy backend to share it)"); }
     await load();
   } else { alert("Could not add: "+((res&&res.error)||"unknown")); }
@@ -965,6 +980,7 @@ function init(){
   document.getElementById("suggestBtn").onclick=()=>openModal("suggestModal");
   document.getElementById("s_cancel").onclick=()=>closeModal("suggestModal");
   document.getElementById("s_submit").onclick=submitSuggestion;
+  document.getElementById("s_maps").oninput=()=>{ const p=parseMapsLink(document.getElementById("s_maps").value); const n=document.getElementById("s_name"); if(p.name && !n.value) n.value=p.name; };
   document.getElementById("budgetBtn").onclick=()=>{ openModal("budgetModal"); showBudget(); };
   document.getElementById("b_close").onclick=()=>closeModal("budgetModal");
   ["bMust","bYes","bMaybe"].forEach(i=>document.getElementById(i).onchange=showBudget);
