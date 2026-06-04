@@ -389,7 +389,7 @@ const CITY_GRAD = {
   "Day Trip":["var(--day1)","var(--day2)"], "Other":["var(--other1)","var(--other2)"]
 };
 const CITY_HEX = {"Tokyo":"#2563eb","Osaka":"#f97316","Kyoto":"#059669","Nagoya":"#7c3aed","Day Trip":"#475569","Other":"#64748b"};
-const CAT_ORDER = ["Theme Park","Anime/Games","Food","Classic","Art/Books","Art","Nature","View","Unique","Entertainment","Nightlife","Shopping"];
+const CAT_ORDER = ["Theme Park","Anime/Games","Food","Animals","Classic","Art/Books","Art","Nature","View","Unique","Entertainment","Nightlife","Shopping"];
 const VOTES = [
   {k:"must", label:"MUST",  zh:"必去", emoji:"⭐", cls:"must",  score:3},
   {k:"yes",  label:"Yes",   zh:"想去", emoji:"👍", cls:"yes",   score:2},
@@ -399,7 +399,7 @@ const VOTES = [
 const SYM = {JPY:"¥", SGD:"S$", MYR:"RM", USD:"US$"};
 const FALLBACK = {SGD:0.0086, MYR:0.030, USD:0.0064}; // per 1 JPY, used if live rates unavailable
 const CITY_ZH = {"Tokyo":"东京","Osaka":"大阪","Kyoto":"京都","Nagoya":"名古屋","Day Trip":"一日游","Other":"其他"};
-const CAT_ZH = {"Theme Park":"主题乐园","Anime/Games":"动漫·游戏","Food":"美食","Classic":"经典","Art/Books":"艺术·书籍","Art":"艺术","Nature":"自然","View":"观景","Unique":"特色","Entertainment":"娱乐","Nightlife":"夜生活","Shopping":"购物"};
+const CAT_ZH = {"Theme Park":"主题乐园","Anime/Games":"动漫·游戏","Food":"美食","Classic":"经典","Art/Books":"艺术·书籍","Art":"艺术","Nature":"自然","View":"观景","Unique":"特色","Entertainment":"娱乐","Nightlife":"夜生活","Shopping":"购物","Animals":"动物"};
 const T = {
   en:{sub:"— vote on what to do", cards:"🗂 Cards", list:"≣ List", map:"🗺 Map", switch:"Switch profile", add:"＋ Add idea", budget:"💰 Budget", results:"📊 Results", place:"Place", filters:"Filters", type:"Type", status:"Status", group:"Group", all:"All", allTypes:"All types", cityG:"City", catG:"Category", toVote:"🕗 To vote", voted:"✅ Voted", save:"Save my votes", discard:"Discard", gotMore:"Got more ideas?", addOwn:"Add your own idea", official:"Official ↗", mapLink:"📍 Map", ratedYou:"you've rated", shown:"shown", voters:"voters", peopleVoted:"people voted", intro:'<b>How this works:</b> Pick your profile, then rate each idea — <b style="color:var(--must)">MUST</b> / <b style="color:var(--yes)">Yes</b> / <b style="color:var(--maybe)">Maybe</b> / <b style="color:var(--nah)">Nah</b> — and hit <b>Save</b>. Use <b>Status → To vote</b> to see what you still haven\'t rated. Missing something? <b>＋ Add idea</b>. Trip tentatively <b>8–22 Jan 2027</b> · Tokyo · (Nagoya) · Kyoto · Osaka.'},
   zh:{sub:"— 投票决定行程", cards:"🗂 卡片", map:"🗺 地图", switch:"切换用户", add:"＋ 添加", budget:"💰 预算", results:"📊 结果", place:"地区", filters:"筛选", type:"类型", status:"状态", group:"分组", all:"全部", allTypes:"全部类型", cityG:"城市", catG:"分类", toVote:"🕗 待投", voted:"✅ 已投", save:"保存投票", discard:"放弃", gotMore:"还有想法？", addOwn:"添加你的想法", official:"官网 ↗", mapLink:"📍 地图", ratedYou:"已评", shown:"项", voters:"人投票", peopleVoted:"人已投", intro:'<b>玩法：</b>先选用户，再给每个想法评分——<b style="color:var(--must)">必去</b> / <b style="color:var(--yes)">想去</b> / <b style="color:var(--maybe)">也许</b> / <b style="color:var(--nah)">算了</b>——然后点<b>保存</b>。用<b>状态 → 待投</b>看还没评的。少了什么？点<b>＋ 添加</b>。行程暂定<b>2027年1月8–22日</b>·东京·(名古屋)·京都·大阪。'}
