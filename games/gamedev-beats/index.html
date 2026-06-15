@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Game Dev Beats — A 4-Player Rhythm Icebreaker</title>
+<title>Game Dev Beats — A 2–6 Player Rhythm Icebreaker</title>
 <style>
   :root {
     --bg: #0a0a14;
@@ -14,6 +14,8 @@
     --p2: #ff4081;
     --p3: #ffd54f;
     --p4: #69f0ae;
+    --p5: #b388ff;
+    --p6: #ff9e57;
     --accent: #b388ff;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -75,10 +77,9 @@
   /* SETUP */
   .player-slots {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
     gap: 16px;
     width: 100%;
-    max-width: 800px;
+    max-width: 900px;
     margin: 24px 0;
   }
   .slot {
@@ -93,6 +94,8 @@
   .slot.p2 { border-color: var(--p2); }
   .slot.p3 { border-color: var(--p3); }
   .slot.p4 { border-color: var(--p4); }
+  .slot.p5 { border-color: var(--p5); }
+  .slot.p6 { border-color: var(--p6); }
   .slot.binding { animation: pulse 1s infinite; }
   @keyframes pulse {
     0%, 100% { box-shadow: 0 0 0 0 currentColor; }
@@ -111,6 +114,8 @@
   .slot.p2 .key { color: var(--p2); }
   .slot.p3 .key { color: var(--p3); }
   .slot.p4 .key { color: var(--p4); }
+  .slot.p5 .key { color: var(--p5); }
+  .slot.p6 .key { color: var(--p6); }
   .slot .key.empty { color: var(--dim); font-size: 18px; font-weight: normal; }
 
   /* PLAY */
@@ -132,6 +137,8 @@
   .note.p2 { background: var(--p2); color: var(--p2); }
   .note.p3 { background: var(--p3); color: var(--p3); }
   .note.p4 { background: var(--p4); color: var(--p4); }
+  .note.p5 { background: var(--p5); color: var(--p5); }
+  .note.p6 { background: var(--p6); color: var(--p6); }
 
   .target {
     position: absolute;
@@ -151,6 +158,8 @@
   .target.p2 { color: var(--p2); }
   .target.p3 { color: var(--p3); }
   .target.p4 { color: var(--p4); }
+  .target.p5 { color: var(--p5); }
+  .target.p6 { color: var(--p6); }
   .target.hit { transform: translate(-50%, -50%) scale(1.2); box-shadow: 0 0 32px currentColor; }
 
   .score-hud {
@@ -173,6 +182,8 @@
   .score-hud .ps.p2 .val { color: var(--p2); }
   .score-hud .ps.p3 .val { color: var(--p3); }
   .score-hud .ps.p4 .val { color: var(--p4); }
+  .score-hud .ps.p5 .val { color: var(--p5); }
+  .score-hud .ps.p6 .val { color: var(--p6); }
 
   #countdown {
     position: absolute;
@@ -185,35 +196,6 @@
     z-index: 20;
     text-shadow: 0 0 32px var(--accent);
   }
-  #speedup-warning {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 64px;
-    font-weight: bold;
-    letter-spacing: 6px;
-    color: var(--p3);
-    z-index: 20;
-    text-shadow: 0 0 32px var(--p3);
-    text-align: center;
-    animation: speedupPulse 0.4s ease-out;
-  }
-  #speedup-warning .sub {
-    display: block;
-    font-size: 20px;
-    letter-spacing: 4px;
-    color: var(--text);
-    margin-top: 12px;
-    text-shadow: none;
-    opacity: 0.85;
-  }
-  @keyframes speedupPulse {
-    0%   { transform: translate(-50%, -50%) scale(0.6); opacity: 0; }
-    50%  { transform: translate(-50%, -50%) scale(1.15); opacity: 1; }
-    100% { transform: translate(-50%, -50%) scale(1);    opacity: 1; }
-  }
-
   .feedback {
     position: absolute;
     font-size: 16px;
@@ -266,10 +248,14 @@
   .rank-row.p2 { border-color: var(--p2); }
   .rank-row.p3 { border-color: var(--p3); }
   .rank-row.p4 { border-color: var(--p4); }
+  .rank-row.p5 { border-color: var(--p5); }
+  .rank-row.p6 { border-color: var(--p6); }
   .rank-row.p1 .who { color: var(--p1); }
   .rank-row.p2 .who { color: var(--p2); }
   .rank-row.p3 .who { color: var(--p3); }
   .rank-row.p4 .who { color: var(--p4); }
+  .rank-row.p5 .who { color: var(--p5); }
+  .rank-row.p6 .who { color: var(--p6); }
 
   /* QUESTION */
   .question-card {
@@ -291,6 +277,8 @@
   .question-card .who-now.p2 .name { color: var(--p2); }
   .question-card .who-now.p3 .name { color: var(--p3); }
   .question-card .who-now.p4 .name { color: var(--p4); }
+  .question-card .who-now.p5 .name { color: var(--p5); }
+  .question-card .who-now.p6 .name { color: var(--p6); }
   .question-card .q-text {
     font-size: 32px;
     line-height: 1.4;
@@ -419,6 +407,51 @@
   .dim { color: var(--dim); }
   button:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
   button:disabled:hover { transform: none; }
+
+  /* PLAYER-COUNT PICKER (title screen) */
+  .count-picker {
+    width: 100%;
+    max-width: 560px;
+    margin: 4px 0 12px;
+    text-align: center;
+  }
+  .count-picker .count-label {
+    font-size: 13px;
+    color: var(--dim);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .count-options {
+    display: inline-flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .count-opt {
+    width: 56px;
+    height: 56px;
+    border: 2px solid var(--dim);
+    border-radius: 10px;
+    background: var(--panel);
+    color: var(--text);
+    font-family: inherit;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: border-color 0.15s, color 0.15s, transform 0.1s, box-shadow 0.15s;
+    padding: 0;
+    margin: 0;
+  }
+  .count-opt:hover { transform: scale(1.06); border-color: var(--text); }
+  .count-opt.selected {
+    border-color: var(--accent);
+    color: var(--accent);
+    box-shadow: 0 0 16px rgba(179,136,255,0.35);
+  }
 
   /* Beat-indicator (debug mode) */
   #beat-indicator {
@@ -591,8 +624,12 @@
   <div id="screen-title" class="screen active">
     <h1>GAME DEV BEATS</h1>
     <h2>an icebreaker for game devs</h2>
-    <p>Four devs. Four keys. One rhythm.</p>
-    <p>Four levels, four questions. Get to know each other and the work happening around you.</p>
+    <p>2–6 devs. One key each. One rhythm.</p>
+    <p>A song per level, a question per level. Get to know each other and the work happening around you.</p>
+    <div class="count-picker" id="count-picker">
+      <div class="count-label">How many players?</div>
+      <div class="count-options" id="count-options"></div>
+    </div>
     <div class="track-config" id="track-config" style="display:none">
       <label class="file-drop" id="file-drop">
         <input type="file" id="file-input" accept="audio/*">
@@ -634,7 +671,7 @@
     <div class="player-slots" id="player-slots"></div>
     <button id="btn-confirm">CONFIRM</button>
     <button id="btn-reset-keys" class="secondary">RESET</button>
-    <p class="hint">defaults: A · F · J · ] — press your key to override</p>
+    <p class="hint" id="setup-hint">press your key to override the defaults</p>
   </div>
 
   <!-- PLAY -->
@@ -647,7 +684,6 @@
       <div class="lane"><span class="lbl">HIGH</span><div class="dot high" id="beat-dot-high"></div></div>
     </div>
     <div id="countdown" style="display:none"></div>
-    <div id="speedup-warning" style="display:none"></div>
     <div id="pause-overlay">
       <h1>PAUSED</h1>
       <p class="dim">press ESC to resume</p>
@@ -713,28 +749,83 @@
 // -----------------------------------------------------------------------------
 // CONFIG
 // -----------------------------------------------------------------------------
-const TRACK_AUDIO_URL = 'https://gamedev-beats-audio.reconunpro.workers.dev/26.5.10.mp3';  // null disables track / synth fallback
-const TRACK_BEATS_URL = './gamedev-beats.csv?v=5'; // authored beats CSV; null to fall back to runtime onset detection. Bump ?v= when CSV changes to bust browser cache.
+// Audio files are served from a Cloudflare Worker; CSV beat sheets are local
+// next to this page. Each LEVELS entry names a file inside each base. To play a
+// fully external URL instead, just put the absolute URL in `audio` / `beats`.
+const AUDIO_BASE_URL = 'https://gamedev-beats-audio.reconunpro.workers.dev/';
+const BEATS_BASE_URL = './';
+const BEATS_CACHE_BUST = '?v=6'; // bump when a CSV changes to bust the browser cache
 
-const PLAYERS = [
-  { id: 0, name: 'PLAYER 1', color: 'p1', defaultKey: 'a' },
-  { id: 1, name: 'PLAYER 2', color: 'p2', defaultKey: 'f' },
-  { id: 2, name: 'PLAYER 3', color: 'p3', defaultKey: 'j' },
-  { id: 3, name: 'PLAYER 4', color: 'p4', defaultKey: ']' },
+// Full roster (max 6). The active game uses the first `state.playerCount` of these.
+// Colours are on-palette: cyan, pink, yellow, green, purple, orange.
+const ALL_PLAYERS = [
+  { id: 0, name: 'PLAYER 1', color: 'p1' },
+  { id: 1, name: 'PLAYER 2', color: 'p2' },
+  { id: 2, name: 'PLAYER 3', color: 'p3' },
+  { id: 3, name: 'PLAYER 4', color: 'p4' },
+  { id: 4, name: 'PLAYER 5', color: 'p5' },
+  { id: 5, name: 'PLAYER 6', color: 'p6' },
 ];
 
-// Level = { layers, speed, question }
-// Each level uses the authored CSV beats filtered to specific layer(s) and plays the
-// audio at a fixed speed multiplier. Layers in the CSV:
-//   1 = downbeats (8, ~1.7s apart)
-//   2 = mid pulse (23)
-//   3 = ornament accents (4)
-//   4 = combined preview (recorder-only reference, not played in any level)
+const PLAYER_COUNT_MIN = 2;
+const PLAYER_COUNT_MAX = 6;
+const DEFAULT_PLAYER_COUNT = 4;
+
+// Ergonomic key spreads, left-to-right across one keyboard so players can sit
+// side-by-side. Index by player count. The 4-player set preserves the original
+// A · F · J · ] bindings exactly.
+const DEFAULT_KEY_SETS = {
+  2: ['a', 'l'],
+  3: ['a', 'g', 'l'],
+  4: ['a', 'f', 'j', ']'],
+  5: ['a', 'f', 'h', 'j', 'l'],
+  6: ['a', 'f', 'g', 'h', 'j', 'l'],
+};
+
+// The active roster — first N players. Rebuilt whenever playerCount changes.
+let PLAYERS = ALL_PLAYERS.slice(0, DEFAULT_PLAYER_COUNT);
+
+function defaultKeysFor(count) {
+  return (DEFAULT_KEY_SETS[count] || DEFAULT_KEY_SETS[DEFAULT_PLAYER_COUNT]).slice();
+}
+
+// Set the active player count: rebuilds PLAYERS and resets score arrays to length N.
+function setPlayerCount(count) {
+  count = Math.max(PLAYER_COUNT_MIN, Math.min(PLAYER_COUNT_MAX, count | 0));
+  state.playerCount = count;
+  PLAYERS = ALL_PLAYERS.slice(0, count);
+  state.bindings = defaultKeysFor(count);
+  state.scores = new Array(count).fill(0);
+  state.cumulativeScores = new Array(count).fill(0);
+}
+
+// Level = { title, audio, beats, question }
+// Each level is ONE song + ONE beat sheet, played at its natural tempo (1.0×).
+// Difficulty comes from the music and the density of the beat sheet itself — there
+// are no layers and no speed ramps. `audio` is resolved against AUDIO_BASE_URL and
+// `beats` against BEATS_BASE_URL (use an absolute URL to bypass the base).
+//
+// To add a composer's level for the co-working event, append an entry like:
+//   { title: 'Song name — Composer', audio: 'their-song.mp3', beats: 'their-song.csv',
+//     question: "Your level's question?" },
+//
+// Beat sheets are produced by the composer tool in the canonical layer-free format:
+//   tSec,band,strength
 const LEVELS = [
-  { layers: [1],       speed: 0.8, question: "What's your name and what are you currently working on?" },
-  { layers: [1, 2],    speed: 0.8, question: "What's a small thing in your project you're secretly proud of?" },
-  { layers: [1, 2, 3], speed: 0.8, question: "What's a game you think is underrated and more people should know about?" },
-  { layers: [1, 2, 3], speed: 1.0, question: "A year from now, what do you want to be working on?" },
+  {
+    title: 'Game Dev Beats — qwq404',
+    audio: '26.5.10.mp3',
+    beats: 'gamedev-beats.csv',
+    question: "What's your name and what are you currently working on?",
+  },
+  // Second song is wired but has no beat sheet yet — add one (e.g. '26.5.9.csv')
+  // and uncomment to enable it as level 2:
+  // {
+  //   title: 'Untitled — qwq404',
+  //   audio: '26.5.9.mp3',
+  //   beats: '26.5.9.csv',
+  //   question: "What's a small thing in your project you're secretly proud of?",
+  // },
 ];
 
 const HIT_WINDOW_MS = 180;     // ± window for a successful hit
@@ -744,14 +835,15 @@ const NOTE_TRAVEL_MS = 1800;   // visual travel time from spawn to target
 // STATE
 // -----------------------------------------------------------------------------
 const state = {
-  bindings: PLAYERS.map(p => p.defaultKey),
+  playerCount: DEFAULT_PLAYER_COUNT,
+  bindings: defaultKeysFor(DEFAULT_PLAYER_COUNT),
   bindingIndex: 0,         // which slot is currently being rebound (-1 = done)
   currentRound: 0,
-  scores: [0, 0, 0, 0],
+  scores: new Array(DEFAULT_PLAYER_COUNT).fill(0),
   totalNotesThisRound: 0,
   rankingThisRound: [],    // [{playerId, score}, ...] lowest to highest
   answerCursor: 0,         // which player in ranking is answering now
-  cumulativeScores: [0, 0, 0, 0],
+  cumulativeScores: new Array(DEFAULT_PLAYER_COUNT).fill(0),
 };
 
 // -----------------------------------------------------------------------------
@@ -778,24 +870,16 @@ function tick(time, freq = 440, dur = 0.05) {
 // -----------------------------------------------------------------------------
 // TRACK ANALYSIS + PLAYBACK (real audio mode)
 // -----------------------------------------------------------------------------
-// Per-level config: each level plays the full track once at a fixed speed.
-// Sections are derived from LEVELS so adjusting LEVELS speed flows through.
-// startSec/endSec get clamped to actual buffer duration when the track loads.
-const DEFAULT_SECTIONS = LEVELS.map(l => ({
-  startSec: 0, endSec: 9999,        // clamped to buffer.duration on load
-  startMult: l.speed, endMult: l.speed,
-}));
-
+// One song + one beat sheet per level. Each level's audio buffer and onsets are
+// decoded/parsed up front into `track.levels[r]`, then turned into a per-level
+// beatmap (notes routed across the active players) when the level starts. Songs
+// play at their natural tempo — no speed ramps, no layers.
 const track = {
-  buffer: null,
-  detectedBpm: null,
-  onsets: [],          // [{tSec, band: 0|3, strength}] — raw detector output
-  beatmaps: null,      // per-round [{hits, sectionOnsets, startMult, endMult, audioStartSec, audioDurationSec, wallDurationMs}]
-  laneMode: 'unison',
-  density: 80,
-  sections: DEFAULT_SECTIONS.map(s => ({ ...s })),
+  levels: [],          // per-level { buffer, onsets:[{tSec,band,strength}], beatmap }
   debug: false,
-  beatFilter: 'raw',       // 'raw' | 'musical' — authored CSV beats use 'raw' (already curated)
+  density: 200,        // safety cap on notes per level (rarely hit with authored sheets)
+  laneMode: 'unison',  // 'unison' | 'sequential' | 'musical' — how beats route to players
+  beatFilter: 'raw',   // 'raw' | 'musical' — authored CSV beats use 'raw' (already curated)
 };
 let currentSource = null;
 
@@ -804,21 +888,28 @@ function setTrackStatus(text) {
   if (el) el.textContent = text;
 }
 
+// Drag-and-drop custom track: decode the file, detect onsets at runtime, and
+// run it as a single-level game (overrides LEVELS for this session).
 async function loadTrackFile(file) {
   ensureAudio();
   setTrackStatus('Decoding audio…');
   try {
     const arr = await file.arrayBuffer();
     const buf = await audioCtx.decodeAudioData(arr);
-    track.buffer = buf;
     setTrackStatus('Analyzing onsets…');
     // Yield to the UI before heavy work so the status text can paint
     await new Promise(r => setTimeout(r, 30));
-    const { onsets, bpm } = await analyzeTrack(buf);
-    track.detectedBpm = bpm;
-    track.onsets = onsets;
-    rebuildBeatmaps();
-    setTrackStatus(`✓ ${file.name} · ${bpm.toFixed(0)} BPM detected · ${onsets.length} onsets · ${buf.duration.toFixed(0)}s`);
+    const { onsets } = await analyzeTrack(buf);
+    // Replace the level set with this one custom song.
+    LEVELS.length = 0;
+    LEVELS.push({
+      title: file.name,
+      audio: null,
+      beats: null,
+      question: "What's your name and what are you currently working on?",
+    });
+    track.levels = [{ buffer: buf, onsets, beatmap: null }];
+    setTrackStatus(`✓ ${file.name} · ${onsets.length} onsets · ${buf.duration.toFixed(0)}s`);
     setTitleHint('huddle around the laptop · pick your keys · play together');
     enableStartButton();
   } catch (err) {
@@ -945,17 +1036,6 @@ function estimateBpm(onsets) {
   return bestBpm;
 }
 
-// Convert audio-local time t_a (s) to wall-clock time (s) under a linear rate ramp
-// r(wall) that goes from r0 at wall=0 to r1 at wall=D_w. D_w is derived from D_a.
-// Audio consumed: A(wall) = r0*wall + (r1-r0)/(2*D_w) * wall². Solve A = t_a.
-function audioToWallSec(tAudioSec, r0, r1, dWallSec) {
-  if (Math.abs(r1 - r0) < 1e-6) return tAudioSec / r0;
-  const a = (r1 - r0) / (2 * dWallSec);
-  // wall = (-r0 + sqrt(r0² + 4*a*t_a)) / (2*a)
-  const disc = r0 * r0 + 4 * a * tAudioSec;
-  return (-r0 + Math.sqrt(Math.max(0, disc))) / (2 * a);
-}
-
 // Filter raw onsets to "musical" beats: merge tight pairs, suppress fills,
 // drop high-band ornaments that decorate a kick groove, cap density per second.
 // Tunable; defaults match the analysis we did against the player tap log.
@@ -1066,86 +1146,84 @@ function selectMusicalBeats(rawOnsets, opts = {}) {
   return beats.map(b => ({ tSec: b.tSec, band: b.band, strength: b.strength }));
 }
 
-function effectiveOnsets() {
-  if (!track.onsets || !track.onsets.length) return [];
-  return track.beatFilter === 'raw'
-    ? track.onsets
-    : selectMusicalBeats(track.onsets);
+function effectiveOnsets(onsets) {
+  if (!onsets || !onsets.length) return [];
+  return track.beatFilter === 'raw' ? onsets : selectMusicalBeats(onsets);
 }
 
-function rebuildBeatmaps() {
-  if (!track.buffer || !track.onsets.length) { track.beatmaps = null; return; }
-  const dur = track.buffer.duration;
-  const sourceOnsets = effectiveOnsets();
-  const beatmaps = [];
-  for (let r = 0; r < LEVELS.length; r++) {
-    const sec = track.sections[r];
-    const startSec = Math.max(0, Math.min(sec.startSec, dur));
-    const endSec   = Math.max(startSec + 0.5, Math.min(sec.endSec, dur));
-    const r0 = Math.max(0.1, sec.startMult);
-    const r1 = Math.max(0.1, sec.endMult);
-    const audioDur = endSec - startSec;
-    // Wall-clock duration: D_w = 2*D_a / (r0 + r1)  (avg-rate identity)
-    const wallDurSec = 2 * audioDur / (r0 + r1);
-
-    const allowedLayers = (LEVELS[r] && LEVELS[r].layers) || null;
-    let inSec = sourceOnsets
-      .filter(o => o.tSec >= startSec && o.tSec < endSec)
-      .filter(o => !allowedLayers || allowedLayers.includes(o.layer ?? 1))
-      .map(o => ({ ...o, tSecLocal: o.tSec - startSec }));
-    if (inSec.length > track.density) {
-      inSec = [...inSec].sort((a, b) => b.strength - a.strength).slice(0, track.density);
-      inSec.sort((a, b) => a.tSecLocal - b.tSecLocal);
-    }
-
-    const hits = assignLanes(inSec, track.laneMode);
-    const wallHits = hits.map(h => ({
-      tMs: audioToWallSec(h.tSecLocal, r0, r1, wallDurSec) * 1000,
-      lane: h.lane,
-    }));
-    const sectionOnsets = inSec.map(o => ({
-      tSecLocal: o.tSecLocal,
-      tSecAudio: o.tSec,
-      tMsWall: audioToWallSec(o.tSecLocal, r0, r1, wallDurSec) * 1000,
-      band: o.band,
-      strength: o.strength,
-    }));
-    beatmaps.push({
-      hits: wallHits,
-      sectionOnsets,
-      startMult: r0,
-      endMult: r1,
-      audioStartSec: startSec,
-      audioDurationSec: audioDur,
-      wallDurationMs: wallDurSec * 1000,
-    });
+// Build the beatmap for one level. Songs play at their natural tempo (1.0×), so
+// audio time equals wall time and we just route each onset across the active
+// players via assignLanes. Returns null if the level has no buffer/onsets yet.
+function buildLevelBeatmap(level) {
+  if (!level || !level.buffer || !level.onsets || !level.onsets.length) return null;
+  const dur = level.buffer.duration;
+  let inSec = effectiveOnsets(level.onsets)
+    .filter(o => o.tSec >= 0 && o.tSec < dur)
+    .map(o => ({ ...o, tSecLocal: o.tSec }));
+  if (inSec.length > track.density) {
+    inSec = [...inSec].sort((a, b) => b.strength - a.strength).slice(0, track.density);
   }
-  track.beatmaps = beatmaps;
+  inSec.sort((a, b) => a.tSecLocal - b.tSecLocal);
+
+  const hits = assignLanes(inSec, track.laneMode).map(h => ({
+    tMs: h.tSecLocal * 1000,
+    lane: h.lane,
+  }));
+  const sectionOnsets = inSec.map(o => ({
+    tSecLocal: o.tSecLocal,
+    tSecAudio: o.tSec,
+    tMsWall: o.tSecLocal * 1000,
+    band: o.band,
+    strength: o.strength,
+  }));
+  const lastHitMs = hits.length ? Math.max(...hits.map(h => h.tMs)) : 0;
+  return {
+    hits,
+    sectionOnsets,
+    audioDurationSec: dur,
+    songDurationMs: dur * 1000,
+    lastHitMs,
+  };
+}
+
+// Build (or rebuild) the beatmap for whichever level is currently loaded.
+function ensureLevelBeatmap(roundIndex) {
+  const level = track.levels[roundIndex];
+  if (level && !level.beatmap) level.beatmap = buildLevelBeatmap(level);
+  return level ? level.beatmap : null;
 }
 
 function assignLanes(onsets, mode) {
+  const N = state.playerCount;
   if (mode === 'unison') {
     const out = [];
-    for (const o of onsets) for (let l = 0; l < 4; l++) out.push({ tSecLocal: o.tSecLocal, lane: l });
+    for (const o of onsets) for (let l = 0; l < N; l++) out.push({ tSecLocal: o.tSecLocal, lane: l });
     return out;
   }
   if (mode === 'sequential') {
-    return onsets.map((o, i) => ({ tSecLocal: o.tSecLocal, lane: i % 4 }));
+    return onsets.map((o, i) => ({ tSecLocal: o.tSecLocal, lane: i % N }));
   }
-  // musical: low-band (kicks) → P1/P3, high-band (hats/snares) → P2/P4. Then balance counts.
-  const counts = [0,0,0,0];
+  // musical: split lanes into a "low" group (left half) and a "high" group
+  // (right half) so low-band kicks and high-band hats route to different players.
+  // For odd N the centre lane belongs to both groups so it always gets notes.
+  const mid = Math.floor(N / 2);
+  const lowLanes  = []; for (let l = 0; l < Math.max(1, Math.ceil(N / 2)); l++) lowLanes.push(l);
+  const highLanes = []; for (let l = mid; l < N; l++) highLanes.push(l);
+  const counts = new Array(N).fill(0);
   const out = [];
   for (const o of onsets) {
-    const pref = (o.band === 0) ? [0, 2] : [1, 3];
-    const lane = counts[pref[0]] <= counts[pref[1]] ? pref[0] : pref[1];
+    const group = (o.band === 0) ? lowLanes : highLanes;
+    // pick the least-loaded lane within the preferred group
+    let lane = group[0];
+    for (const l of group) if (counts[l] < counts[lane]) lane = l;
     out.push({ tSecLocal: o.tSecLocal, lane });
     counts[lane]++;
   }
-  // Rebalance until any two lanes differ by at most 1
-  let safety = 4 * onsets.length;
+  // Rebalance until any two lanes differ by at most 1 (keeps every player busy)
+  let safety = N * onsets.length + 1;
   while (safety-- > 0) {
     let maxL = 0, minL = 0;
-    for (let i = 1; i < 4; i++) {
+    for (let i = 1; i < N; i++) {
       if (counts[i] > counts[maxL]) maxL = i;
       if (counts[i] < counts[minL]) minL = i;
     }
@@ -1159,16 +1237,17 @@ function assignLanes(onsets, mode) {
 }
 
 function beginPlayWithTrack() {
-  const bm = track.beatmaps[state.currentRound];
+  const bm = ensureLevelBeatmap(state.currentRound);
+  const source0 = track.levels[state.currentRound];
+  if (!bm || !source0 || !source0.buffer) { beginPlay(true); return; }
+
   const startWall = performance.now();
+  // Each onset's tMs is measured from the start of the song. The first note must
+  // have NOTE_LEAD_IN_MS of travel before its hit lands, so the whole timeline is
+  // offset by leadInMs and the song itself starts leadInMs after now.
   const NOTE_LEAD_IN_MS = NOTE_TRAVEL_MS + 400;
-  const PRE_ROLL_MS = 2500;   // music starts this many ms before the first hittable note
-  const POST_ROLL_MS = 2500;  // music keeps playing this long after the last hittable note
-  const FADE_MS = 1500;       // gain ramp duration on either end
-  // First-note hit happens at startWall + effectiveLeadInMs. We need at least
-  // NOTE_LEAD_IN_MS for the first note's travel, and PRE_ROLL_MS so the music
-  // can fade in and breathe before the section.
-  const effectiveLeadInMs = Math.max(NOTE_LEAD_IN_MS, PRE_ROLL_MS);
+  const FADE_MS = 1200;       // gentle gain ramp on either end
+  const leadInMs = NOTE_LEAD_IN_MS;
 
   // HUD label
   document.getElementById('round-indicator').textContent =
@@ -1176,61 +1255,38 @@ function beginPlayWithTrack() {
 
   if (currentSource) { try { currentSource.stop(); } catch(e){} currentSource = null; }
 
-  const r0 = bm.startMult, r1 = bm.endMult;
-  const wallDurSec = bm.wallDurationMs / 1000;
+  const songDurSec = bm.songDurationMs / 1000;
 
-  // Pre-roll plays at the section's start rate; post-roll continues at end rate.
-  const wantPreAudioSec = (PRE_ROLL_MS / 1000) * r0;
-  const wantPostAudioSec = (POST_ROLL_MS / 1000) * r1;
-  const bufferStart = Math.max(0, bm.audioStartSec - wantPreAudioSec);
-  const actualPreAudioSec = bm.audioStartSec - bufferStart;
-  const remainingAudioSec = Math.max(0, track.buffer.duration - (bm.audioStartSec + bm.audioDurationSec));
-  const actualPostAudioSec = Math.min(wantPostAudioSec, remainingAudioSec);
-  const actualPreWallMs  = (actualPreAudioSec  / r0) * 1000;
-  const actualPostWallMs = (actualPostAudioSec / r1) * 1000;
-  const bufferDur = actualPreAudioSec + bm.audioDurationSec + actualPostAudioSec;
-
-  // Audio-context time anchors
-  const musicStartCtx   = audioCtx.currentTime + (effectiveLeadInMs - actualPreWallMs) / 1000;
-  const sectionStartCtx = musicStartCtx + actualPreWallMs / 1000;
-  const sectionEndCtx   = sectionStartCtx + wallDurSec;
-  const musicEndCtx     = sectionEndCtx + actualPostWallMs / 1000;
+  // Audio-context time anchors: the song plays at its natural tempo (rate 1.0).
+  const musicStartCtx = audioCtx.currentTime + leadInMs / 1000;
+  const musicEndCtx   = musicStartCtx + songDurSec;
 
   // Source + gain
   const source = audioCtx.createBufferSource();
-  source.buffer = track.buffer;
+  source.buffer = source0.buffer;
   const gain = audioCtx.createGain();
   source.connect(gain).connect(audioCtx.destination);
 
-  // Playback rate: hold r0 through pre-roll + section-start, ramp r0→r1 across
-  // the section, hold r1 through post-roll.
-  source.playbackRate.cancelScheduledValues(musicStartCtx);
-  source.playbackRate.setValueAtTime(r0, musicStartCtx);
-  source.playbackRate.setValueAtTime(r0, sectionStartCtx);
-  source.playbackRate.linearRampToValueAtTime(r1, sectionEndCtx);
-
-  // Fades: clip fade durations to actual roll lengths if the song boundaries truncate.
-  const fadeIn  = Math.min(FADE_MS / 1000, Math.max(0.01, actualPreWallMs / 1000));
-  const fadeOut = Math.min(FADE_MS / 1000, Math.max(0.01, actualPostWallMs / 1000));
+  // Gentle fade-in / fade-out so songs start and end softly.
+  const fadeIn  = Math.min(FADE_MS / 1000, songDurSec / 2);
+  const fadeOut = Math.min(FADE_MS / 1000, songDurSec / 2);
   gain.gain.cancelScheduledValues(musicStartCtx);
-  gain.gain.setValueAtTime(actualPreWallMs > 50 ? 0 : 1, musicStartCtx);
-  if (actualPreWallMs > 50) gain.gain.linearRampToValueAtTime(1, musicStartCtx + fadeIn);
-  if (actualPostWallMs > 50) {
-    gain.gain.setValueAtTime(1, musicEndCtx - fadeOut);
-    gain.gain.linearRampToValueAtTime(0.0001, musicEndCtx);
-  }
+  gain.gain.setValueAtTime(0.0001, musicStartCtx);
+  gain.gain.linearRampToValueAtTime(1, musicStartCtx + fadeIn);
+  gain.gain.setValueAtTime(1, musicEndCtx - fadeOut);
+  gain.gain.linearRampToValueAtTime(0.0001, musicEndCtx);
 
-  source.start(musicStartCtx, bufferStart, bufferDur + 0.05);
+  source.start(musicStartCtx);
   try { source.stop(musicEndCtx + 0.1); } catch (e) {}
   currentSource = source;
 
   state.totalNotesThisRound = bm.hits.length;
   for (const h of bm.hits) {
-    scheduleNote(h.lane, startWall + effectiveLeadInMs + h.tMs);
+    scheduleNote(h.lane, startWall + leadInMs + h.tMs);
   }
 
   // Debug instrumentation
-  roundStartWall = startWall + effectiveLeadInMs;
+  roundStartWall = startWall + leadInMs;
   currentSectionOnsets = bm.sectionOnsets;
   pressLog = [];
   pendingBeats = bm.sectionOnsets
@@ -1239,9 +1295,9 @@ function beginPlayWithTrack() {
   beatCursor = 0;
   document.getElementById('beat-indicator').classList.toggle('active', !!track.debug);
 
-  // End round after both notes have exited AND post-roll has finished.
-  const noteFinishMs  = effectiveLeadInMs + bm.wallDurationMs + NOTE_TRAVEL_MS + 400;
-  const audioFinishMs = effectiveLeadInMs + bm.wallDurationMs + actualPostWallMs + 200;
+  // End the round once the song has finished AND the last note has exited.
+  const noteFinishMs  = leadInMs + bm.lastHitMs + NOTE_TRAVEL_MS + 400;
+  const audioFinishMs = leadInMs + bm.songDurationMs + 200;
   scheduleRoundEnd(Math.max(noteFinishMs, audioFinishMs));
   playLoop = requestAnimationFrame(tickPlayLoop);
 }
@@ -1308,6 +1364,9 @@ function showScreen(id) {
 function renderSlots() {
   const wrap = document.getElementById('player-slots');
   wrap.innerHTML = '';
+  // Up to 4 in a row; 5-6 players wrap onto a balanced grid.
+  const cols = Math.min(PLAYERS.length, PLAYERS.length <= 4 ? PLAYERS.length : Math.ceil(PLAYERS.length / 2));
+  wrap.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
   PLAYERS.forEach((p, i) => {
     const div = document.createElement('div');
     div.className = `slot ${p.color}` + (i === state.bindingIndex ? ' binding' : '');
@@ -1326,9 +1385,31 @@ function displayKey(k) {
   return k.toUpperCase();
 }
 
+// Title-screen player-count picker: renders one button per allowed count and
+// highlights the active selection. Persists through the session via state.playerCount.
+function renderCountPicker() {
+  const wrap = document.getElementById('count-options');
+  if (!wrap) return;
+  wrap.innerHTML = '';
+  for (let n = PLAYER_COUNT_MIN; n <= PLAYER_COUNT_MAX; n++) {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'count-opt' + (n === state.playerCount ? ' selected' : '');
+    btn.textContent = String(n);
+    btn.setAttribute('aria-pressed', n === state.playerCount ? 'true' : 'false');
+    btn.addEventListener('click', () => {
+      setPlayerCount(n);
+      renderCountPicker();
+    });
+    wrap.appendChild(btn);
+  }
+}
+
 function startSetup() {
   state.bindingIndex = 0;
-  state.bindings = PLAYERS.map(p => p.defaultKey);
+  state.bindings = defaultKeysFor(state.playerCount);
+  const hint = document.getElementById('setup-hint');
+  if (hint) hint.textContent = `defaults: ${state.bindings.map(displayKey).join(' · ')} — press your key to override`;
   document.getElementById('setup-prompt').textContent = 'Player 1, press a key to override (or CONFIRM to accept defaults)';
   renderSlots();
   showScreen('screen-setup');
@@ -1348,7 +1429,7 @@ function captureKey(e) {
 
 function advanceBinding() {
   state.bindingIndex++;
-  if (state.bindingIndex >= 4) {
+  if (state.bindingIndex >= state.playerCount) {
     state.bindingIndex = -1;
     document.getElementById('setup-prompt').textContent = 'All set. Press CONFIRM or hit ENTER.';
   } else {
@@ -1362,15 +1443,19 @@ function advanceBinding() {
 // PLAY SCREEN
 // -----------------------------------------------------------------------------
 function targetPos(lane, w, h) {
-  // Targets fan out toward the screen edges in a semi-circle "smile":
-  // outer lanes hug the side edges, inner lanes sit lower-center.
-  const positions = [
-    { x: 0.10, y: 0.78 },  // P1 — bottom-left edge
-    { x: 0.36, y: 0.90 },  // P2 — lower-mid-left
-    { x: 0.64, y: 0.90 },  // P3 — lower-mid-right
-    { x: 0.90, y: 0.78 },  // P4 — bottom-right edge
-  ];
-  return { x: positions[lane].x * w, y: positions[lane].y * h };
+  // Distribute N targets evenly along the bottom semi-circle "smile" arc:
+  // they span left→right edges, dipping lower toward the centre. The shape is
+  // identical to the original 4-target layout when playerCount === 4.
+  const N = state.playerCount;
+  const X_LEFT = 0.10, X_RIGHT = 0.90;   // horizontal extent of the arc
+  const Y_EDGE = 0.78, Y_DEEP = 0.90;    // higher at the edges, lower in the centre
+  // u: 0 at left edge → 1 at right edge. For N === 1 keep it centred.
+  const u = N > 1 ? lane / (N - 1) : 0.5;
+  const x = X_LEFT + (X_RIGHT - X_LEFT) * u;
+  // Parabolic dip: 0 at the edges (u=0 or 1), 1 at the centre (u=0.5).
+  const dip = 1 - Math.pow(2 * u - 1, 2);
+  const y = Y_EDGE + (Y_DEEP - Y_EDGE) * dip;
+  return { x: x * w, y: y * h };
 }
 
 function spawnPos(w, h) {
@@ -1424,41 +1509,22 @@ function buildTargets() {
 
 function startRound() {
   ensureAudio();
-  state.scores = [0, 0, 0, 0];
+  state.scores = new Array(state.playerCount).fill(0);
   activeNotes = [];
 
   document.getElementById('round-indicator').textContent = `LEVEL ${state.currentRound + 1} / ${LEVELS.length}`;
   buildScoreHud();
   showScreen('screen-play');
-  // Targets need the playfield to have real dimensions, which only happens after the
-  // screen is visible. requestAnimationFrame ensures the layout has resolved.
-  requestAnimationFrame(() => {
-    buildTargets();
-    // If this level is faster than the previous one, flash a speed-up warning
-    // before the standard 3-2-1-GO countdown.
-    const i    = state.currentRound;
-    const prev = i > 0 ? (LEVELS[i - 1].speed || 1.0) : null;
-    const curr = LEVELS[i].speed || 1.0;
-    const speedup = prev !== null && curr > prev + 0.001;
-    if (speedup) {
-      const pct = Math.round(((curr - prev) / prev) * 100);
-      runSpeedupWarning(pct, () => runCountdown(() => beginPlay()));
-    } else {
+  // Make sure this level's song + beat sheet are loaded before the countdown.
+  // (They are normally preloaded at startup; this awaits any still in flight.)
+  loadLevel(state.currentRound).finally(() => {
+    // Targets need the playfield to have real dimensions, which only happens after
+    // the screen is visible. requestAnimationFrame ensures layout has resolved.
+    requestAnimationFrame(() => {
+      buildTargets();
       runCountdown(() => beginPlay());
-    }
+    });
   });
-}
-
-function runSpeedupWarning(percent, done) {
-  const el = document.getElementById('speedup-warning');
-  el.style.animation = 'none';
-  el.innerHTML = `SPEED UP +${percent}%<span class="sub">brace yourself</span>`;
-  // Force reflow so the animation replays on each show.
-  // eslint-disable-next-line no-unused-expressions
-  el.offsetWidth;
-  el.style.animation = '';
-  el.style.display = '';
-  setTimeout(() => { el.style.display = 'none'; done(); }, 1400);
 }
 
 function runCountdown(done) {
@@ -1477,12 +1543,14 @@ function runCountdown(done) {
   }, 700);
 }
 
-function beginPlay() {
-  if (track.buffer && track.beatmaps) return beginPlayWithTrack();
-  // Synth fallback (no track loaded): play a steady metronome at the level's
-  // intended tempo so the level still "ends" rather than crashing.
-  const level = LEVELS[state.currentRound];
-  const bpm = 140 * (level.speed || 1.0);     // 26.5.10.mp3 native tempo ≈ 140
+function beginPlay(forceSynth) {
+  const level = track.levels[state.currentRound];
+  if (!forceSynth && level && level.buffer && ensureLevelBeatmap(state.currentRound)) {
+    return beginPlayWithTrack();
+  }
+  // Synth fallback (level audio/beats failed to load): play a steady metronome so
+  // the level still "ends" rather than crashing.
+  const bpm = 140;     // 26.5.10.mp3 native tempo ≈ 140
   const beatMs = 60000 / bpm;
   const startTime = performance.now();
   const audioStart = audioCtx.currentTime;
@@ -1494,7 +1562,7 @@ function beginPlay() {
     const hitTimeMs = startTime + beatIdx * beatMs + LEAD_IN_MS;
     const audioTime = audioStart + (hitTimeMs - startTime) / 1000;
     tick(audioTime, 440);
-    for (let lane = 0; lane < 4; lane++) {
+    for (let lane = 0; lane < state.playerCount; lane++) {
       state.totalNotesThisRound++;
       scheduleNote(lane, hitTimeMs);
     }
@@ -1759,12 +1827,12 @@ function renderAnswerCursor() {
   });
   // button label
   const btn = document.getElementById('btn-next-answer');
-  btn.textContent = state.answerCursor < 3 ? 'NEXT' : (state.currentRound < LEVELS.length - 1 ? 'NEXT LEVEL' : 'FINISH');
+  btn.textContent = state.answerCursor < state.playerCount - 1 ? 'NEXT' : (state.currentRound < LEVELS.length - 1 ? 'NEXT LEVEL' : 'FINISH');
 }
 
 function advanceAnswer() {
   state.answerCursor++;
-  if (state.answerCursor < 4) {
+  if (state.answerCursor < state.playerCount) {
     renderAnswerCursor();
   } else {
     // round done; advance
@@ -1815,7 +1883,7 @@ window.addEventListener('keydown', (e) => {
 // -----------------------------------------------------------------------------
 function confirmSetup() {
   state.currentRound = 0;
-  state.cumulativeScores = [0,0,0,0];
+  state.cumulativeScores = new Array(state.playerCount).fill(0);
   startRound();
 }
 
@@ -1845,80 +1913,101 @@ function applyUrlParamOverrides() {
   if (lanes && ['unison','sequential','musical'].includes(lanes)) track.laneMode = lanes;
   const density = parseInt(p.get('density') || '', 10);
   if (Number.isFinite(density) && density >= 20 && density <= 200) track.density = density;
+  const players = parseInt(p.get('players') || '', 10);
+  if (Number.isFinite(players) && players >= PLAYER_COUNT_MIN && players <= PLAYER_COUNT_MAX) setPlayerCount(players);
 }
 
-// Authored-beats loader: parses a CSV with header `tSec,band,strength,layer`.
-// Lines with non-numeric tSec are skipped. Returns onsets sorted by time.
+// Resolve a level's `audio`/`beats` field against its base. Absolute URLs
+// (http(s):// or starting with /) are used as-is.
+function resolveAudioUrl(name) {
+  if (!name) return null;
+  if (/^(https?:)?\/\//i.test(name) || name.startsWith('/')) return name;
+  return AUDIO_BASE_URL + name;
+}
+function resolveBeatsUrl(name) {
+  if (!name) return null;
+  if (/^(https?:)?\/\//i.test(name) || name.startsWith('/')) return name;
+  return BEATS_BASE_URL + name + BEATS_CACHE_BUST;
+}
+
+// Authored-beats loader. The canonical format is layer-free:
+//     tSec,band,strength
+// The parser reads tSec from column 0 and tolerates rows with ONLY tSec, with
+// tSec,band, with tSec,band,strength, OR a legacy 4th `layer` column (which is
+// simply ignored along with anything beyond strength). band defaults to 0 and
+// strength to 1.0 when absent. A layer column is never required.
 async function loadAuthoredBeats(url) {
   const res = await fetch(url);
   if (!res.ok) throw new Error(`beats fetch ${res.status}`);
   const text = await res.text();
   const onsets = [];
   for (const raw of text.trim().split(/\r?\n/)) {
-    if (/^\s*tSec/i.test(raw)) continue;
+    if (/^\s*tSec/i.test(raw)) continue;   // header row
     const parts = raw.split(',').map(s => s.trim());
     const tSec = parseFloat(parts[0]);
     if (!Number.isFinite(tSec)) continue;
-    const band     = parseInt(parts[1] ?? '0',   10);
-    const strength = parseFloat(parts[2] ?? '1.0');
-    const layer    = parseInt(parts[3] ?? '1',   10);
+    const band     = parts.length > 1 ? parseInt(parts[1], 10)   : 0;
+    const strength = parts.length > 2 ? parseFloat(parts[2])     : 1.0;
+    // Any column beyond strength (e.g. a legacy `layer`) is intentionally ignored.
     onsets.push({
       tSec,
       band:     Number.isFinite(band)     ? band     : 0,
       strength: Number.isFinite(strength) ? strength : 1.0,
-      layer:    (layer >= 1 && layer <= 5) ? layer    : 1,
     });
   }
   onsets.sort((a, b) => a.tSec - b.tSec);
   return onsets;
 }
 
-function estimateBpmFromAuthored(onsets) {
-  // Median inter-onset interval among layer-1 beats (the steady pulse).
-  const pulse = onsets.filter(o => o.layer === 1).map(o => o.tSec).sort((a, b) => a - b);
-  if (pulse.length < 2) return 120;
-  const gaps = [];
-  for (let i = 1; i < pulse.length; i++) gaps.push(pulse[i] - pulse[i-1]);
-  gaps.sort((a, b) => a - b);
-  const median = gaps[Math.floor(gaps.length / 2)];
-  return median > 0 ? 60 / median : 120;
+// Load one level's song + beat sheet into track.levels[index]. Idempotent and
+// cached: the in-flight promise is stored so concurrent callers share it. When a
+// beats CSV is missing/unavailable, falls back to runtime onset detection so the
+// song is still playable. Resolves whether or not loading fully succeeded.
+const levelLoadPromises = [];
+function loadLevel(index) {
+  if (levelLoadPromises[index]) return levelLoadPromises[index];
+  const level = LEVELS[index];
+  levelLoadPromises[index] = (async () => {
+    if (track.levels[index] && track.levels[index].buffer) return;  // custom/preloaded
+    if (!level || !level.audio) return;
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const audioUrl = resolveAudioUrl(level.audio);
+    const res = await fetch(audioUrl);
+    if (!res.ok) throw new Error(`audio fetch ${res.status} for ${audioUrl}`);
+    const buf = await audioCtx.decodeAudioData(await res.arrayBuffer());
+    let onsets = null;
+    if (level.beats) {
+      try {
+        onsets = await loadAuthoredBeats(resolveBeatsUrl(level.beats));
+      } catch (e) {
+        console.warn(`beats load failed for "${level.beats}", detecting onsets:`, e);
+      }
+    }
+    if (!onsets || !onsets.length) {
+      const detected = await analyzeTrack(buf);
+      onsets = detected.onsets;
+    }
+    track.levels[index] = { buffer: buf, onsets, beatmap: null };
+  })().catch(err => {
+    console.error(`Level ${index + 1} load failed:`, err);
+  });
+  return levelLoadPromises[index];
 }
 
-async function loadEmbeddedTrack() {
-  if (!TRACK_AUDIO_URL) {
-    setTitleHint('huddle around the laptop · pick your keys · play together');
-    enableStartButton();
-    return;
-  }
+// Preload every configured level's assets. Returns true if at least one level is
+// playable with real audio.
+async function loadAllLevels() {
+  if (!LEVELS.length) return false;
   setTitleHint('loading…');
-  try {
-    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    const res = await fetch(TRACK_AUDIO_URL);
-    if (!res.ok) throw new Error(`fetch ${res.status}`);
-    const arr = await res.arrayBuffer();
-    const buf = await audioCtx.decodeAudioData(arr);
-    track.buffer = buf;
-    // Clamp default section windows to actual buffer duration.
-    track.sections.forEach(s => { if (s.endSec > buf.duration) s.endSec = buf.duration; });
-
-    if (TRACK_BEATS_URL) {
-      const onsets = await loadAuthoredBeats(TRACK_BEATS_URL);
-      track.onsets = onsets;
-      track.detectedBpm = estimateBpmFromAuthored(onsets);
-      rebuildBeatmaps();
-    } else {
-      await new Promise(r => setTimeout(r, 30));
-      const { onsets, bpm } = await analyzeTrack(buf);
-      track.detectedBpm = bpm;
-      track.onsets = onsets;
-      rebuildBeatmaps();
-    }
+  await Promise.all(LEVELS.map((_, i) => loadLevel(i)));
+  const anyAudio = track.levels.some(l => l && l.buffer);
+  if (anyAudio) {
     setTitleHint('huddle around the laptop · pick your keys · play together');
-    enableStartButton();
-  } catch (err) {
-    console.error('Track load failed:', err);
+  } else {
     showTrackDropZone('drop your mp3 to use a custom track · or START for synth mode');
   }
+  enableStartButton();
+  return anyAudio;
 }
 
 function setTitleHint(text) {
@@ -1941,7 +2030,8 @@ function enableStartButton() {
 
 window.addEventListener('DOMContentLoaded', () => {
   applyUrlParamOverrides();
-  loadEmbeddedTrack();
+  renderCountPicker();
+  loadAllLevels();
 
   // File drop zone
   const fileInput = document.getElementById('file-input');

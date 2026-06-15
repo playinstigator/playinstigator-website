@@ -1,0 +1,1311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Game Dev Beats — Beat Recorder (for composers)</title>
+<style>
+  :root {
+    --bg: #0a0a14;
+    --panel: #14142a;
+    --panel-2: #1b1b38;
+    --text: #e8e8f0;
+    --dim: #888;
+    --accent: #b388ff;
+    --note: #00e5ff;
+    --ok: #69f0ae;
+    --warn: #ffd54f;
+    --danger: #ff4081;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: var(--bg); color: var(--text);
+    font-family: 'JetBrains Mono', 'Consolas', monospace;
+    font-size: 14px; min-height: 100vh;
+  }
+  body { display: flex; flex-direction: column; min-height: 100vh; }
+
+  a { color: var(--note); }
+  kbd {
+    background: var(--bg); border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 4px; padding: 1px 7px; font-family: inherit; font-size: 12px; color: var(--text);
+  }
+  em { color: var(--note); font-style: italic; }
+  .muted { color: var(--dim); }
+
+  /* ---------- header ---------- */
+  header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 24px; border-bottom: 1px solid rgba(255,255,255,0.06);
+    max-width: 980px; width: 100%; margin: 0 auto;
+  }
+  .brand .t { font-size: 16px; letter-spacing: 3px; }
+  .brand .s { font-size: 11px; color: var(--dim); letter-spacing: 2px; margin-top: 2px; }
+  #btn-lang {
+    background: transparent; color: var(--dim);
+    border: 1px solid rgba(255,255,255,0.15); border-radius: 4px;
+    padding: 5px 12px; font-family: inherit; font-size: 12px;
+    cursor: pointer; letter-spacing: 1px; transition: color 0.15s, border-color 0.15s;
+  }
+  #btn-lang:hover { color: var(--text); border-color: rgba(255,255,255,0.35); }
+
+  /* ---------- stepper ---------- */
+  .stepper-wrap { max-width: 980px; width: 100%; margin: 0 auto; padding: 18px 24px 0; }
+  .stepper { display: flex; gap: 6px; }
+  .step-node {
+    flex: 1; display: flex; flex-direction: column; gap: 7px; cursor: default;
+  }
+  .step-node.clickable { cursor: pointer; }
+  .step-node .bar {
+    height: 3px; border-radius: 3px; background: rgba(255,255,255,0.1);
+    transition: background 0.3s;
+  }
+  .step-node.done .bar    { background: var(--ok); }
+  .step-node.active .bar  { background: var(--note); box-shadow: 0 0 10px rgba(0,229,255,0.6); }
+  .step-node .lbl {
+    font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--dim);
+    display: flex; align-items: center; gap: 6px;
+  }
+  .step-node.active .lbl { color: var(--note); }
+  .step-node.done .lbl   { color: var(--ok); }
+  .step-node .num {
+    display: inline-grid; place-items: center;
+    width: 18px; height: 18px; border-radius: 50%; font-size: 10px; line-height: 1;
+    border: 1px solid currentColor;
+  }
+  .step-node.done .num { font-size: 0; }
+  .step-node.done .num::after { content: '✓'; font-size: 11px; line-height: 1; }
+  .step-counter { text-align: right; font-size: 10px; color: var(--dim); letter-spacing: 2px; margin-top: 8px; }
+
+  /* ---------- main / panels ---------- */
+  main {
+    flex: 1; max-width: 980px; width: 100%; margin: 0 auto;
+    padding: 28px 24px 40px; width: 100%;
+  }
+  .panel { display: none; animation: fade 0.35s ease; }
+  .panel.active { display: block; }
+  @keyframes fade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+  .eyebrow { font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: var(--note); margin-bottom: 10px; }
+  h1 { font-size: 30px; letter-spacing: 2px; margin-bottom: 14px; line-height: 1.2; }
+  h2 { font-size: 20px; letter-spacing: 1px; margin-bottom: 14px; }
+  .lede { color: var(--text); line-height: 1.75; font-size: 14px; max-width: 640px; margin-bottom: 22px; }
+  .lede.dim { color: var(--dim); }
+  .one-line { color: var(--note); font-size: 13px; letter-spacing: 1px; margin-bottom: 16px; }
+  .ask {
+    background: rgba(0,229,255,0.06); border: 1px solid rgba(0,229,255,0.25);
+    border-radius: 10px; padding: 15px 18px; margin-bottom: 26px;
+    font-size: 13px; line-height: 1.75; color: var(--text);
+  }
+  .ask b { color: var(--note); }
+
+  /* cards */
+  .cards { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 26px; }
+  .card {
+    background: var(--panel); border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 10px; padding: 18px 20px;
+  }
+  .card .k { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--note); margin-bottom: 8px; }
+  .card .v { line-height: 1.6; font-size: 13px; }
+  .card.deliv .num { font-size: 26px; color: var(--accent); margin-bottom: 6px; }
+
+  /* how-it-works mini timeline */
+  .flow { display: flex; gap: 0; margin-bottom: 28px; flex-wrap: wrap; }
+  .flow .f {
+    flex: 1; min-width: 120px; border-top: 2px solid rgba(255,255,255,0.08);
+    padding: 12px 16px 0 0;
+  }
+  .flow .f .n { color: var(--note); font-size: 11px; letter-spacing: 2px; }
+  .flow .f .t { font-size: 12px; margin-top: 5px; line-height: 1.5; color: var(--text); }
+
+  /* instructional trailer */
+  .trailer-wrap {
+    background: var(--panel); border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px; overflow: hidden; margin-bottom: 26px;
+  }
+  .trailer-label {
+    font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--dim);
+    padding: 10px 14px 0; display: flex; align-items: center; gap: 8px;
+  }
+  .trailer-label .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--danger); animation: rec 1.4s infinite; }
+  @keyframes rec { 0%,100% { opacity: 1; } 50% { opacity: 0.25; } }
+  #trailer { display: block; width: 100%; height: 230px; }
+  .trailer-cap {
+    text-align: center; font-size: 12px; letter-spacing: 0.5px; color: var(--text);
+    padding: 11px 14px; border-top: 1px solid rgba(255,255,255,0.06); min-height: 40px;
+  }
+  .trailer-cap b { color: var(--note); margin-right: 4px; }
+
+  details.resume { margin-top: 8px; }
+  details.resume summary {
+    cursor: pointer; color: var(--dim); font-size: 12px; letter-spacing: 1px;
+    list-style: none; user-select: none;
+  }
+  details.resume summary::-webkit-details-marker { display: none; }
+  details.resume summary:hover { color: var(--text); }
+  details.resume[open] summary { margin-bottom: 12px; }
+  .resume textarea {
+    width: 100%; height: 80px; background: var(--panel); color: var(--text);
+    border: 1px solid rgba(255,255,255,0.1); border-radius: 6px;
+    font-family: inherit; font-size: 12px; padding: 10px 14px; resize: vertical; margin-bottom: 8px;
+  }
+  .resume textarea:focus { outline: 1px solid var(--accent); }
+  #resume-status { font-size: 12px; min-height: 16px; }
+
+  /* ---------- drop-zone (4 states) ---------- */
+  .file-drop {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    border: 2px dashed var(--accent); border-radius: 12px;
+    padding: 50px 22px; text-align: center; cursor: pointer; min-height: 200px;
+    transition: background 0.12s, border-color 0.12s, transform 0.12s;
+  }
+  .file-drop:hover { background: rgba(179,136,255,0.06); }
+  .file-drop.drag { background: rgba(0,229,255,0.1); border-color: var(--note); transform: scale(1.01); }
+  .file-drop input { display: none; }
+  .file-drop .icon { font-size: 34px; margin-bottom: 12px; opacity: 0.8; }
+  .file-drop .label { color: var(--accent); font-weight: bold; letter-spacing: 2px; font-size: 15px; }
+  .file-drop.drag .label { color: var(--note); }
+  .file-drop .sub { color: var(--dim); font-size: 12px; margin-top: 8px; letter-spacing: 1px; }
+
+  .loaded-card {
+    display: none; align-items: center; gap: 16px; flex-wrap: wrap;
+    background: var(--panel); border: 1px solid rgba(105,240,174,0.3);
+    border-radius: 12px; padding: 18px 22px; margin-top: 4px;
+  }
+  .loaded-card .check { color: var(--ok); font-size: 22px; }
+  .loaded-card .meta { flex: 1; min-width: 160px; }
+  .loaded-card .meta .fn { font-size: 14px; color: var(--text); word-break: break-all; }
+  .loaded-card .meta .du { font-size: 12px; color: var(--dim); letter-spacing: 1px; margin-top: 3px; }
+  #file-error { color: var(--danger); font-size: 12px; letter-spacing: 1px; min-height: 16px; margin-top: 12px; }
+
+  /* ---------- buttons ---------- */
+  .btn {
+    background: var(--accent); color: var(--bg); border: none;
+    padding: 9px 18px; font-family: inherit; font-size: 13px; font-weight: bold;
+    letter-spacing: 2px; cursor: pointer; border-radius: 6px; transition: transform 0.1s, background 0.12s;
+  }
+  .btn:hover { transform: scale(1.03); }
+  .btn:disabled { opacity: 0.35; cursor: default; transform: none; }
+  .btn.ghost { background: transparent; color: var(--accent); border: 1px solid var(--accent); }
+  .btn.ghost:hover { background: rgba(179,136,255,0.1); }
+  .btn.note { background: var(--note); color: var(--bg); }
+  .btn.ok { background: var(--ok); color: var(--bg); }
+  .btn.ok:hover { background: #8affc0; }
+  .btn.sm { padding: 6px 14px; font-size: 12px; }
+
+  /* ---------- transport ---------- */
+  .transport {
+    display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+    background: var(--panel); border-radius: 10px; padding: 14px 18px; margin-bottom: 18px;
+  }
+  .transport .time { font-size: 20px; letter-spacing: 2px; min-width: 80px; }
+  .speed-group { display: flex; align-items: center; gap: 6px; }
+  .speed-group .lbl { font-size: 11px; color: var(--dim); letter-spacing: 2px; }
+  #speed-input {
+    background: var(--bg); color: var(--text); border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 4px; padding: 5px 8px; font-family: inherit; font-size: 12px;
+    letter-spacing: 1px; width: 60px; text-align: center;
+  }
+  #speed-input:focus { outline: 1px solid var(--accent); }
+  #speed-input::-webkit-outer-spin-button, #speed-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+  #speed-input { -moz-appearance: textfield; }
+  .speed-group .suffix { color: var(--dim); font-size: 12px; }
+
+  /* ---------- tap step ---------- */
+  .tap-stage { display: flex; gap: 24px; align-items: stretch; }
+  .tap-main { flex: 1; min-width: 0; }
+  .viz-col { flex: 0 0 130px; text-align: center; }
+  .viz-col .vl { font-size: 10px; color: var(--dim); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px; }
+  #viz-canvas { display: block; width: 130px; border-radius: 8px; background: var(--panel); margin: 0 auto; }
+
+  #btn-tap {
+    width: 100%; background: rgba(0,229,255,0.08); border: 2px solid var(--note); color: var(--note);
+    padding: 30px; margin-bottom: 16px; font-family: inherit; font-size: 18px; font-weight: bold;
+    letter-spacing: 5px; cursor: pointer; border-radius: 12px; transition: background 0.06s, transform 0.06s;
+  }
+  #btn-tap:hover { background: rgba(0,229,255,0.16); }
+  #btn-tap:active { background: rgba(0,229,255,0.34); transform: scale(0.99); }
+  #btn-tap:disabled { opacity: 0.3; cursor: default; }
+  .counter { text-align: center; font-size: 13px; color: var(--dim); letter-spacing: 1px; margin-bottom: 8px; }
+  .counter b { color: var(--ok); font-size: 22px; }
+
+  #tap-flash { position: fixed; inset: 0; pointer-events: none; background: rgba(0,229,255,0.12); opacity: 0; z-index: 999; }
+  #tap-flash.on { opacity: 1; }
+
+  /* ---------- warm-up / pulse ---------- */
+  .pulse-stage { text-align: center; background: var(--panel); border-radius: 12px; padding: 26px; margin-bottom: 18px; }
+  #pulse-canvas { display: block; margin: 0 auto 6px; }
+  .pulse-feedback { font-size: 18px; letter-spacing: 2px; min-height: 26px; font-weight: bold; }
+  .pulse-acc { font-size: 12px; color: var(--dim); letter-spacing: 1px; margin-top: 4px; min-height: 16px; }
+  .pulse-controls { display: flex; gap: 10px; justify-content: center; margin-top: 16px; flex-wrap: wrap; }
+
+  /* ---------- review ---------- */
+  .chips { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 18px; }
+  .chip {
+    background: var(--panel); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px;
+    padding: 10px 16px; min-width: 90px;
+  }
+  .chip .k { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--dim); }
+  .chip .v { font-size: 18px; margin-top: 4px; color: var(--text); }
+  .chip .v.note { color: var(--note); }
+
+  .practice-lane { background: var(--panel); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; overflow: hidden; margin-bottom: 10px; }
+  #review-viz { display: block; width: 100%; height: 150px; }
+  .practice-bar { display: flex; align-items: center; gap: 14px; margin-bottom: 18px; min-height: 22px; flex-wrap: wrap; }
+  .practice-bar .pf { font-weight: bold; letter-spacing: 1px; font-size: 14px; min-width: 110px; }
+  .practice-bar .hint { color: var(--dim); font-size: 12px; letter-spacing: 1px; }
+
+  #waveform-wrap {
+    position: relative; background: var(--panel); border-radius: 10px;
+    margin-bottom: 14px; overflow: hidden; cursor: crosshair;
+  }
+  #waveform { display: block; width: 100%; height: 120px; }
+  #waveform-hint, #waveform-time-tip { position: absolute; top: 6px; font-size: 11px; color: var(--dim); pointer-events: none; letter-spacing: 1px; }
+  #waveform-hint { left: 10px; } #waveform-time-tip { right: 10px; }
+  #waveform-scroll { position: relative; height: 10px; background: rgba(255,255,255,0.04); cursor: pointer; }
+  #waveform-scroll-thumb { position: absolute; top: 1px; bottom: 1px; background: rgba(179,136,255,0.55); border-radius: 4px; min-width: 16px; }
+  #waveform-scroll-thumb:hover { background: rgba(179,136,255,0.8); }
+  #waveform-scroll-thumb.dragging { background: rgba(179,136,255,0.9); }
+
+  .review-tools { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 16px; }
+
+  #tap-list-wrap { background: var(--panel); border-radius: 10px; max-height: 280px; overflow-y: auto; margin-bottom: 8px; }
+  #tap-list { width: 100%; border-collapse: collapse; }
+  #tap-list th {
+    position: sticky; top: 0; background: var(--panel); color: var(--dim);
+    font-size: 11px; letter-spacing: 1px; text-align: left; padding: 10px 14px 6px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  #tap-list td { padding: 6px 14px; font-size: 13px; border-bottom: 1px solid rgba(255,255,255,0.03); }
+  #tap-list tr:last-child td { border-bottom: none; }
+  .tap-del { background: none; border: none; color: var(--danger); cursor: pointer; font-size: 13px; padding: 0 4px; font-family: inherit; }
+  .tap-del:hover { color: var(--text); }
+  .tsec-input {
+    background: none; border: none; border-bottom: 1px solid transparent; color: inherit;
+    font-family: inherit; font-size: 13px; width: 80px; padding: 1px 2px; transition: border-color 0.15s;
+  }
+  .tsec-input:focus { outline: none; border-bottom-color: var(--accent); color: var(--text); }
+  .tsec-input:hover { border-bottom-color: var(--dim); }
+  .gap-cell { color: var(--dim); font-size: 12px; }
+  #empty-msg { padding: 22px 14px; color: var(--dim); font-size: 12px; letter-spacing: 1px; }
+  .retap-link { color: var(--dim); font-size: 12px; text-decoration: underline; cursor: pointer; letter-spacing: 1px; }
+  .retap-link:hover { color: var(--text); }
+
+  /* ---------- send / done ---------- */
+  .done-hero { text-align: center; padding: 12px 0 24px; }
+  .done-hero .big { font-size: 48px; margin-bottom: 8px; animation: pop 0.5s ease; }
+  @keyframes pop { 0% { transform: scale(0.3); opacity: 0; } 70% { transform: scale(1.15); } 100% { transform: scale(1); opacity: 1; } }
+  .send-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 22px; }
+  @media (max-width: 680px) { .send-grid, .cards { grid-template-columns: 1fr; } .tap-stage { flex-direction: column; } .viz-col { display: none; } }
+  .send-card { background: var(--panel); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 22px; }
+  .send-card .k { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--note); margin-bottom: 10px; }
+  .send-card.discord { border-color: rgba(0,229,255,0.3); }
+  .send-card .files { font-size: 13px; line-height: 1.9; }
+  .send-card .files .fcode { color: var(--ok); }
+  .discord-btn {
+    display: inline-block; margin: 12px 0; text-decoration: none;
+    background: #5865F2; color: #fff; border: none; border-radius: 6px;
+    padding: 10px 18px; font-family: inherit; font-size: 13px; font-weight: bold;
+    letter-spacing: 1px; transition: transform 0.1s, background 0.12s;
+  }
+  .discord-btn:hover { transform: scale(1.03); background: #6975f5; }
+  .deadline-banner {
+    background: rgba(255,213,79,0.08); border: 1px solid rgba(255,213,79,0.3);
+    border-radius: 10px; padding: 14px 18px; text-align: center; letter-spacing: 1px; margin-bottom: 20px;
+  }
+  .deadline-banner b { color: var(--warn); }
+  .send-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 8px; }
+  #export-note { font-size: 12px; color: var(--ok); min-height: 16px; letter-spacing: 1px; }
+
+  /* ---------- footer nav ---------- */
+  footer {
+    position: sticky; bottom: 0; background: rgba(10,10,20,0.92);
+    border-top: 1px solid rgba(255,255,255,0.08); backdrop-filter: blur(6px);
+  }
+  .nav { max-width: 980px; margin: 0 auto; padding: 14px 24px;
+    display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  .nav .hint { flex: 1; text-align: center; font-size: 11px; color: var(--dim); letter-spacing: 1px; }
+  .nav .btn.back { background: transparent; color: var(--dim); border: 1px solid rgba(255,255,255,0.15); }
+  .nav .btn.back:hover { color: var(--text); border-color: var(--text); transform: none; }
+  .nav .btn.back.hidden { visibility: hidden; }
+
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 3px; }
+</style>
+</head>
+<body>
+<div id="tap-flash"></div>
+
+<header>
+  <div class="brand">
+    <div class="t" id="brand-t">BEAT RECORDER</div>
+    <div class="s" id="brand-s">game dev beats · for composers</div>
+  </div>
+  <button id="btn-lang">简体中文</button>
+</header>
+
+<div class="stepper-wrap" id="stepper-wrap" style="display:none">
+  <div class="stepper" id="stepper">
+    <div class="step-node" data-step="1"><div class="bar"></div><div class="lbl"><span class="num">1</span><span class="t" id="sn-1">Song</span></div></div>
+    <div class="step-node" data-step="2"><div class="bar"></div><div class="lbl"><span class="num">2</span><span class="t" id="sn-2">Warm-up</span></div></div>
+    <div class="step-node" data-step="3"><div class="bar"></div><div class="lbl"><span class="num">3</span><span class="t" id="sn-3">Tap</span></div></div>
+    <div class="step-node" data-step="4"><div class="bar"></div><div class="lbl"><span class="num">4</span><span class="t" id="sn-4">Review</span></div></div>
+    <div class="step-node" data-step="5"><div class="bar"></div><div class="lbl"><span class="num">5</span><span class="t" id="sn-5">Send</span></div></div>
+  </div>
+  <div class="step-counter" id="step-counter">STEP 1 / 5</div>
+</div>
+
+<main>
+
+  <!-- ===== STEP 0 · WELCOME ===== -->
+  <section class="panel" data-step="0">
+    <div class="eyebrow" id="w-eye">a 90-second walkthrough</div>
+    <h1 id="w-title">Turn your track into a playable level.</h1>
+    <p class="lede" id="w-lede">This is <strong>Game Dev Beats</strong> — the little rhythm game we throw on to break the ice at our co-working sessions. 2–6 of us tap along to a track, and whoever does the worst answers the icebreaker question first. Here's the ask: we'd love the music to come from <em>you</em>. Send us one track and it becomes a level — your song, played to a room full of game devs.</p>
+    <div class="trailer-wrap">
+      <div class="trailer-label"><span class="dot"></span><span id="trailer-label-t">how it plays</span></div>
+      <canvas id="trailer"></canvas>
+      <div class="trailer-cap" id="trailer-cap"></div>
+    </div>
+    <div class="cards">
+      <div class="card deliv"><div class="num">①</div><div class="k" id="w-d1k">Your song</div><div class="v" id="w-d1v">One finished track — the music players hear. mp3 / wav / m4a.</div></div>
+      <div class="card deliv"><div class="num">②</div><div class="k" id="w-d2k">A beat sheet</div><div class="v" id="w-d2v">The exact moments players should tap. You'll make it here by tapping along to your own song.</div></div>
+    </div>
+    <div class="ask" id="w-need"><b>So here's what we need:</b> one finished track (keep it under 2 min) plus a beat sheet you'll make right here — then just DM me both. One song each, first come first served (only a handful of slots). Takes about 90 seconds.</div>
+    <div class="flow" id="w-flow">
+      <div class="f"><div class="n">01</div><div class="t">Load your song</div></div>
+      <div class="f"><div class="n">02</div><div class="t">Warm up your timing</div></div>
+      <div class="f"><div class="n">03</div><div class="t">Tap the beats</div></div>
+      <div class="f"><div class="n">04</div><div class="t">Review &amp; send it back</div></div>
+    </div>
+    <details class="resume">
+      <summary id="w-resume-sum">Already started? Resume a saved beat sheet ▾</summary>
+      <p class="muted" style="font-size:12px;line-height:1.6;margin-bottom:10px" id="w-resume-help">Paste a CSV you exported earlier to jump straight to Review.</p>
+      <textarea id="resume-textarea" placeholder="paste CSV here — one row per beat"></textarea>
+      <button class="btn ghost sm" id="btn-resume">RESUME ›</button>
+      <span id="resume-status"></span>
+    </details>
+  </section>
+
+  <!-- ===== STEP 1 · UPLOAD ===== -->
+  <section class="panel" data-step="1">
+    <div class="eyebrow">STEP 1</div>
+    <h2 id="u-title">Load your song</h2>
+    <p class="one-line" id="u-line">It plays locally in your browser — nothing is uploaded anywhere.</p>
+    <label class="file-drop" id="file-drop">
+      <input type="file" id="file-input" accept="audio/*,.csv,text/csv">
+      <div class="icon">♪</div>
+      <div class="label" id="drop-label">Drop your track here</div>
+      <div class="sub" id="drop-sub">or click to browse · mp3 / wav / m4a</div>
+    </label>
+    <div class="loaded-card" id="loaded-card">
+      <span class="check">✓</span>
+      <div class="meta"><div class="fn" id="loaded-name"></div><div class="du" id="loaded-dur"></div></div>
+      <button class="btn ghost sm" data-role="play" id="u-play">PLAY</button>
+      <button class="btn ghost sm" data-role="stop" id="u-stop" disabled>STOP</button>
+      <span class="muted" style="font-size:12px" data-role="time">0.000</span>
+    </div>
+    <div id="file-error"></div>
+  </section>
+
+  <!-- ===== STEP 2 · WARM-UP ===== -->
+  <section class="panel" data-step="2">
+    <div class="eyebrow">STEP 2</div>
+    <h2 id="wu-title">Warm up your timing</h2>
+    <p class="lede dim" id="wu-lede">In the next step you'll tap <kbd>Space</kbd> on every beat you want players to hit. Here's a steady pulse to get the feel — tap along and watch the feedback. (You can skip this, but it makes for tighter beat sheets.)</p>
+    <div class="pulse-stage">
+      <canvas id="pulse-canvas" width="220" height="220"></canvas>
+      <div class="pulse-feedback" id="pulse-feedback" style="color:var(--dim)">press START</div>
+      <div class="pulse-acc" id="pulse-acc"></div>
+      <div class="pulse-controls">
+        <button class="btn note" id="btn-practice">START PULSE</button>
+        <button class="btn ghost" id="btn-practice-tap" disabled>TAP · SPACE</button>
+      </div>
+    </div>
+    <p class="muted" style="font-size:12px;letter-spacing:1px" id="wu-foot">Tip: tap where you <em>feel</em> the beat land, not where you see it. The game gives players a generous ±180 ms window.</p>
+  </section>
+
+  <!-- ===== STEP 3 · TAP ===== -->
+  <section class="panel" data-step="3">
+    <div class="eyebrow">STEP 3</div>
+    <h2 id="t-title">Tap the beats</h2>
+    <p class="one-line" id="t-line">Press PLAY, then tap SPACE on every beat you want a player to hit.</p>
+    <div class="tap-stage">
+      <div class="tap-main">
+        <div class="transport">
+          <button class="btn" data-role="play" id="t-play" disabled>PLAY</button>
+          <button class="btn ghost" data-role="stop" id="t-stop" disabled>STOP</button>
+          <span class="time" data-role="time">0.000</span>
+          <div class="speed-group">
+            <span class="lbl" id="lbl-speed">SPEED</span>
+            <input type="number" id="speed-input" min="0.1" max="4" step="0.05" value="1">
+            <span class="suffix">×</span>
+          </div>
+        </div>
+        <button id="btn-tap" disabled>TAP · SPACE</button>
+        <div class="counter"><span id="t-counter-label">beats marked</span> · <b id="tap-count">0</b></div>
+      </div>
+      <div class="viz-col">
+        <div class="vl" id="viz-label">falling note preview</div>
+        <canvas id="viz-canvas"></canvas>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== STEP 4 · REVIEW ===== -->
+  <section class="panel" data-step="4">
+    <div class="eyebrow">STEP 4</div>
+    <h2 id="r-title">Review &amp; fine-tune</h2>
+    <p class="one-line" id="r-line">Drag any line to nudge it, edit times in the list, or play it back to check.</p>
+    <div class="chips" id="chips">
+      <div class="chip"><div class="k" id="chip-song-k">song</div><div class="v" id="chip-song"></div></div>
+      <div class="chip"><div class="k" id="chip-dur-k">duration</div><div class="v" id="chip-dur"></div></div>
+      <div class="chip"><div class="k" id="chip-beats-k">beats</div><div class="v note" id="chip-beats">0</div></div>
+      <div class="chip"><div class="k" id="chip-dens-k">density</div><div class="v" id="chip-dens">—</div></div>
+    </div>
+    <div class="practice-lane"><canvas id="review-viz"></canvas></div>
+    <div class="practice-bar"><span class="pf" id="review-fb"></span><span class="hint" id="review-hint">Press PLAY TO VERIFY, then tap SPACE on each beat to practice — just like the game.</span></div>
+    <div id="waveform-wrap">
+      <canvas id="waveform"></canvas>
+      <div id="waveform-hint">scroll = zoom · shift+scroll = pan · drag a line to nudge</div>
+      <div id="waveform-time-tip"></div>
+      <div id="waveform-scroll"><div id="waveform-scroll-thumb"></div></div>
+    </div>
+    <div class="review-tools">
+      <button class="btn note sm" data-role="play" id="r-play" disabled>PLAY TO VERIFY</button>
+      <button class="btn ghost sm" data-role="stop" id="r-stop" disabled>STOP</button>
+      <span class="muted" style="font-size:12px" data-role="time">0.000</span>
+      <span style="flex:1"></span>
+      <span class="retap-link" id="retap-link" data-goto="3">↺ re-tap from scratch</span>
+    </div>
+    <div id="tap-list-wrap">
+      <div id="empty-msg">no beats yet — go back and tap some</div>
+      <table id="tap-list" style="display:none">
+        <thead><tr><th id="th-num">#</th><th id="th-tsec">time (s)</th><th id="th-gap">gap</th><th></th></tr></thead>
+        <tbody id="tap-tbody"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ===== STEP 5 · SEND ===== -->
+  <section class="panel" data-step="5">
+    <div class="done-hero">
+      <div class="big">🎵</div>
+      <div class="eyebrow" id="s-eye" style="color:var(--ok)">beat sheet locked in</div>
+      <h2 id="s-title" style="margin-bottom:6px">Nice timing. You're done.</h2>
+      <p class="muted" id="s-sub" style="letter-spacing:1px"></p>
+    </div>
+    <div class="send-grid">
+      <div class="send-card">
+        <div class="k" id="s-export-k">① Export your beat sheet</div>
+        <p class="muted" style="font-size:13px;line-height:1.6;margin-bottom:14px" id="s-export-v">Downloads <span class="fcode" style="color:var(--ok)">gamedev-beats.csv</span>. You can re-download any time.</p>
+        <div class="send-actions">
+          <button class="btn ok" id="btn-export">⬇ EXPORT CSV</button>
+          <button class="btn ghost" id="btn-copy">COPY CSV</button>
+        </div>
+        <div id="export-note"></div>
+      </div>
+      <div class="send-card discord">
+        <div class="k" id="s-send-k">② Send both files to us</div>
+        <div class="files" id="s-files">
+          Send both files our way — DM <strong>PlayInstigator</strong> on Discord:<br>
+          <a class="discord-btn" href="https://discord.com/users/1119292455016202260" target="_blank" rel="noopener">✉ Message on Discord</a><br>
+          <span class="fcode">your audio file</span> &nbsp;+&nbsp; <span class="fcode">gamedev-beats.csv</span>
+        </div>
+      </div>
+    </div>
+    <div class="deadline-banner" id="deadline"><b>Due Fri 19 June · first come, first served</b> — we'll drop it into the game live at the co-working session.</div>
+    <button class="btn ghost" id="btn-restart">↺ <span id="s-restart">Map another song</span></button>
+  </section>
+
+</main>
+
+<footer>
+  <div class="nav">
+    <button class="btn back hidden" id="btn-back">‹ BACK</button>
+    <span class="hint" id="nav-hint"></span>
+    <button class="btn" id="btn-next">LET'S GO ›</button>
+  </div>
+</footer>
+
+<script>
+// ===========================================================================
+// Audio engine (shared across steps)
+// ===========================================================================
+let audioCtx = null, audioBuffer = null, audioFileName = '';
+let playSource = null, playStartCtxTime = 0, playStartOffset = 0, isPlaying = false, playbackRate = 1.0;
+
+function ensureCtx() {
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  if (audioCtx.state === 'suspended') audioCtx.resume();
+}
+function currentAudioTime() {
+  if (!isPlaying) return playStartOffset;
+  return playStartOffset + (audioCtx.currentTime - playStartCtxTime) * playbackRate;
+}
+const NOTE_COLOR = '#00e5ff';
+function hexToRgb(hex) {
+  return `${parseInt(hex.slice(1,3),16)},${parseInt(hex.slice(3,5),16)},${parseInt(hex.slice(5,7),16)}`;
+}
+
+// taps: [ {tSec} ] — band/strength/layer auto-filled on export
+let taps = [];
+
+// ===========================================================================
+// Transport (data-role driven, works on every step)
+// ===========================================================================
+function startPlay(fromSec) {
+  if (!audioBuffer) return;
+  ensureCtx();
+  stopPlay();
+  playSource = audioCtx.createBufferSource();
+  playSource.buffer = audioBuffer;
+  playSource.playbackRate.value = playbackRate;
+  playSource.connect(audioCtx.destination);
+  playStartOffset = Math.max(0, fromSec ?? playStartOffset);
+  playStartCtxTime = audioCtx.currentTime;
+  playSource.start(0, playStartOffset);
+  playSource.onended = () => { if (isPlaying) { isPlaying = false; syncTransport(); } };
+  isPlaying = true;
+  syncTransport();
+}
+function stopPlay() {
+  if (playSource) { try { playSource.stop(); } catch (_) {} playSource = null; }
+  if (isPlaying) { playStartOffset = currentAudioTime(); isPlaying = false; }
+  syncTransport();
+}
+function syncTransport() {
+  const s = STRINGS[lang];
+  document.querySelectorAll('[data-role=play]').forEach(b => {
+    b.textContent = isPlaying ? s.btnPause : (b.id === 'r-play' ? s.btnVerify : s.btnPlay);
+    b.disabled = !audioBuffer;
+  });
+  document.querySelectorAll('[data-role=stop]').forEach(b => { b.disabled = !isPlaying && playStartOffset === 0; });
+}
+document.querySelectorAll('[data-role=play]').forEach(b => b.addEventListener('click', () => {
+  ensureCtx(); if (isPlaying) stopPlay(); else startPlay(playStartOffset); b.blur();
+}));
+document.querySelectorAll('[data-role=stop]').forEach(b => b.addEventListener('click', () => {
+  stopPlay(); playStartOffset = 0; updateTimes(); syncTransport(); b.blur();
+}));
+
+const speedInput = document.getElementById('speed-input');
+function applySpeed() {
+  const r = parseFloat(speedInput.value);
+  if (!Number.isFinite(r) || r <= 0) { speedInput.value = playbackRate; return; }
+  const c = Math.max(0.1, Math.min(4, r));
+  if (c !== r) speedInput.value = c;
+  if (c === playbackRate) return;
+  const was = isPlaying; if (isPlaying) stopPlay();
+  playbackRate = c; if (was) startPlay(playStartOffset);
+}
+speedInput.addEventListener('change', applySpeed);
+speedInput.addEventListener('keydown', e => { if (e.key === 'Enter') { applySpeed(); speedInput.blur(); } if (e.key === ' ') e.stopPropagation(); });
+
+function updateTimes() {
+  const t = Math.max(0, currentAudioTime()).toFixed(3);
+  document.querySelectorAll('[data-role=time]').forEach(el => el.textContent = t);
+}
+
+// ===========================================================================
+// File loading
+// ===========================================================================
+const fileDropEl = document.getElementById('file-drop');
+const fileInputEl = document.getElementById('file-input');
+const loadedCard = document.getElementById('loaded-card');
+const fileError = document.getElementById('file-error');
+
+async function loadAudioFile(file) {
+  ensureCtx();
+  fileError.style.color = 'var(--danger)'; fileError.textContent = '';
+  fileDropEl.querySelector('.label').textContent = STRINGS[lang].decoding;
+  try {
+    const buf = await audioCtx.decodeAudioData(await file.arrayBuffer());
+    audioBuffer = buf; audioFileName = file.name;
+    document.getElementById('loaded-name').textContent = file.name;
+    document.getElementById('loaded-dur').textContent = buf.duration.toFixed(1) + 's';
+    loadedCard.style.display = 'flex';
+    fileDropEl.querySelector('.label').textContent = STRINGS[lang].dropLabel;
+    playStartOffset = 0; updateTimes(); syncTransport();
+    setNextEnabled(true);
+  } catch (err) {
+    fileDropEl.querySelector('.label').textContent = STRINGS[lang].dropLabel;
+    fileError.textContent = STRINGS[lang].badAudio + ' (' + err.message + ')';
+  }
+}
+function isCsvFile(f) { return f && (/^text\/csv$/i.test(f.type) || /\.(csv|txt)$/i.test(f.name)); }
+async function loadCsvAsResume(file) {
+  const parsed = fromCsv(await file.text());
+  if (!parsed.length) { fileError.style.color = 'var(--warn)'; fileError.textContent = STRINGS[lang].noRows; return; }
+  taps = parsed; renderReview();
+  fileError.style.color = 'var(--ok)'; fileError.textContent = STRINGS[lang].imported(parsed.length);
+}
+function loadDropped(f) { if (!f) return; if (isCsvFile(f)) loadCsvAsResume(f); else loadAudioFile(f); }
+
+fileInputEl.addEventListener('change', () => { if (fileInputEl.files[0]) loadDropped(fileInputEl.files[0]); });
+fileDropEl.addEventListener('dragover', e => { e.preventDefault(); fileDropEl.classList.add('drag'); });
+fileDropEl.addEventListener('dragleave', () => fileDropEl.classList.remove('drag'));
+fileDropEl.addEventListener('drop', e => { e.preventDefault(); fileDropEl.classList.remove('drag'); if (e.dataTransfer.files[0]) loadDropped(e.dataTransfer.files[0]); });
+
+// ===========================================================================
+// Tap recording
+// ===========================================================================
+const tapFlash = document.getElementById('tap-flash');
+function flashScreen() { tapFlash.classList.remove('on'); void tapFlash.offsetWidth; tapFlash.classList.add('on'); setTimeout(() => tapFlash.classList.remove('on'), 80); }
+function recordTap() {
+  if (!isPlaying) return;
+  taps = [...taps, { tSec: parseFloat(currentAudioTime().toFixed(4)) }];
+  flashScreen();
+  document.getElementById('tap-count').textContent = taps.length;
+  setNextEnabled(taps.length > 0);
+}
+document.getElementById('btn-tap').addEventListener('click', () => {
+  ensureCtx(); if (isPlaying) recordTap(); else if (audioBuffer) startPlay(playStartOffset);
+});
+
+// ===========================================================================
+// Warm-up metronome (practice with live feedback)
+// ===========================================================================
+const PRACTICE_BPM = 100, PERIOD = 60 / PRACTICE_BPM;
+let practiceActive = false, practiceStart = 0, nextClickTime = 0, practiceTimer = null;
+let practiceHits = 0, practiceGood = 0;
+const pulseCanvas = document.getElementById('pulse-canvas');
+const pulseFeedback = document.getElementById('pulse-feedback');
+const pulseAcc = document.getElementById('pulse-acc');
+const btnPractice = document.getElementById('btn-practice');
+const btnPracticeTap = document.getElementById('btn-practice-tap');
+
+function scheduleClicks() {
+  while (nextClickTime < audioCtx.currentTime + 0.12) {
+    const o = audioCtx.createOscillator(), g = audioCtx.createGain();
+    o.frequency.value = 1100; o.connect(g); g.connect(audioCtx.destination);
+    g.gain.setValueAtTime(0.0001, nextClickTime);
+    g.gain.exponentialRampToValueAtTime(0.4, nextClickTime + 0.001);
+    g.gain.exponentialRampToValueAtTime(0.0001, nextClickTime + 0.05);
+    o.start(nextClickTime); o.stop(nextClickTime + 0.06);
+    nextClickTime += PERIOD;
+  }
+}
+function startPractice() {
+  ensureCtx(); stopPlay();
+  practiceActive = true; practiceHits = 0; practiceGood = 0;
+  practiceStart = audioCtx.currentTime + 0.15; nextClickTime = practiceStart;
+  practiceTimer = setInterval(scheduleClicks, 25);
+  btnPractice.textContent = STRINGS[lang].btnPracticeStop;
+  btnPracticeTap.disabled = false;
+  pulseFeedback.style.color = 'var(--dim)'; pulseFeedback.textContent = STRINGS[lang].feelIt;
+  pulseAcc.textContent = '';
+}
+function stopPractice() {
+  practiceActive = false; clearInterval(practiceTimer); practiceTimer = null;
+  btnPractice.textContent = STRINGS[lang].btnPractice;
+  btnPracticeTap.disabled = true;
+}
+btnPractice.addEventListener('click', () => { practiceActive ? stopPractice() : startPractice(); btnPractice.blur(); });
+btnPracticeTap.addEventListener('click', () => { practiceTap(); btnPracticeTap.blur(); });
+
+function practiceTap() {
+  if (!practiceActive) return;
+  const t = audioCtx.currentTime - practiceStart;
+  if (t < 0) return;
+  const off = (t - Math.round(t / PERIOD) * PERIOD) * 1000; // ms from nearest click
+  const a = Math.abs(off);
+  practiceHits++;
+  const s = STRINGS[lang];
+  if (a < 55)      { pulseFeedback.style.color = 'var(--ok)';   pulseFeedback.textContent = s.fbPerfect; practiceGood++; }
+  else if (a < 110){ pulseFeedback.style.color = 'var(--note)'; pulseFeedback.textContent = (off < 0 ? s.fbEarlyBit : s.fbLateBit); practiceGood++; }
+  else             { pulseFeedback.style.color = 'var(--warn)'; pulseFeedback.textContent = (off < 0 ? s.fbEarly : s.fbLate); }
+  pulseAcc.textContent = s.acc(practiceGood, practiceHits);
+  flashScreen();
+}
+function drawPulse() {
+  const dpr = window.devicePixelRatio || 1, W = 220, H = 220;
+  if (pulseCanvas.width !== W * dpr) { pulseCanvas.width = W * dpr; pulseCanvas.height = H * dpr; pulseCanvas.style.width = W + 'px'; pulseCanvas.style.height = H + 'px'; }
+  const ctx = pulseCanvas.getContext('2d'); ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, W, H);
+  const cx = W / 2, cy = H / 2, base = 30, rgb = hexToRgb(NOTE_COLOR);
+  // target ring
+  ctx.strokeStyle = 'rgba(0,229,255,0.4)'; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.arc(cx, cy, base, 0, Math.PI * 2); ctx.stroke();
+  if (practiceActive && audioCtx) {
+    let phase = ((audioCtx.currentTime - practiceStart) % PERIOD) / PERIOD;
+    if (phase < 0) phase += 1;
+    // approach ring shrinks toward the beat (phase→1), snaps out at the hit
+    const approach = base + (90 * (1 - phase));
+    ctx.strokeStyle = `rgba(${rgb},${(0.25 + 0.6 * phase).toFixed(2)})`; ctx.lineWidth = 3;
+    ctx.beginPath(); ctx.arc(cx, cy, approach, 0, Math.PI * 2); ctx.stroke();
+    const flashR = base * (1 + 0.5 * Math.max(0, 1 - phase * 6));
+    const grd = ctx.createRadialGradient(cx, cy, 0, cx, cy, flashR);
+    grd.addColorStop(0, `rgba(${rgb},0.9)`); grd.addColorStop(1, `rgba(${rgb},0.1)`);
+    ctx.fillStyle = grd; ctx.beginPath(); ctx.arc(cx, cy, flashR, 0, Math.PI * 2); ctx.fill();
+  } else {
+    ctx.fillStyle = 'rgba(136,136,136,0.5)'; ctx.font = '11px Consolas, monospace'; ctx.textAlign = 'center';
+    ctx.fillText(STRINGS[lang].pulseIdle, cx, cy + 4);
+  }
+}
+
+// ===========================================================================
+// Waveform (review step)
+// ===========================================================================
+const waveWrap = document.getElementById('waveform-wrap');
+const waveCanvas = document.getElementById('waveform');
+const waveTimeTip = document.getElementById('waveform-time-tip');
+let waveformPeaks = null, peaksWidthPx = 0, viewStartSec = 0, viewSpanSec = 0;
+const ZOOM_MIN = 0.05;
+function clampView() { const d = audioBuffer.duration; viewSpanSec = Math.max(ZOOM_MIN, Math.min(d, viewSpanSec)); viewStartSec = Math.max(0, Math.min(d - viewSpanSec, viewStartSec)); }
+function rebuildPeaks(pw) {
+  if (!audioBuffer || pw <= 0) { waveformPeaks = null; return; }
+  const ch = audioBuffer.getChannelData(0), sr = audioBuffer.sampleRate;
+  const s0 = Math.max(0, Math.floor(viewStartSec * sr)), e0 = Math.min(ch.length, Math.ceil((viewStartSec + viewSpanSec) * sr));
+  const span = e0 - s0, peaks = new Float32Array(pw);
+  if (span <= 0) { waveformPeaks = peaks; peaksWidthPx = pw; return; }
+  for (let px = 0; px < pw; px++) {
+    const a = s0 + Math.floor((px / pw) * span), b = s0 + Math.floor(((px + 1) / pw) * span);
+    let m = 0; for (let i = a; i < b; i++) { const v = Math.abs(ch[i]); if (v > m) m = v; }
+    peaks[px] = m;
+  }
+  waveformPeaks = peaks; peaksWidthPx = pw;
+}
+function secToX(t, W) { return ((t - viewStartSec) / viewSpanSec) * W; }
+function xToSec(x, W) { return viewStartSec + (x / W) * viewSpanSec; }
+function drawWaveform(playhead) {
+  if (!audioBuffer || waveCanvas.clientWidth === 0) return;
+  const dpr = window.devicePixelRatio || 1, W = waveCanvas.clientWidth, H = waveCanvas.clientHeight;
+  if (waveCanvas.width !== W * dpr || waveCanvas.height !== H * dpr) { waveCanvas.width = W * dpr; waveCanvas.height = H * dpr; }
+  if (!waveformPeaks || peaksWidthPx !== W) rebuildPeaks(W);
+  const ctx = waveCanvas.getContext('2d'); ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, W, H);
+  const mid = H / 2;
+  ctx.fillStyle = 'rgba(179,136,255,0.35)';
+  for (let px = 0; px < waveformPeaks.length; px++) { const amp = waveformPeaks[px] * (mid - 4); ctx.fillRect(px, mid - amp, 1, amp * 2); }
+  for (const tp of taps) { const x = secToX(tp.tSec, W); if (x < -1 || x > W + 1) continue; ctx.fillStyle = NOTE_COLOR + 'cc'; ctx.fillRect(x - 0.5, 0, 1, H); }
+  if (playhead >= 0) { const x = secToX(playhead, W); if (x >= 0 && x <= W) { ctx.fillStyle = '#ff4081'; ctx.fillRect(x - 1, 0, 2, H); } }
+}
+function setupWaveform() {
+  if (!audioBuffer) return;
+  viewStartSec = 0; viewSpanSec = audioBuffer.duration;
+  rebuildPeaks(waveCanvas.clientWidth || 712); drawWaveform(currentAudioTime()); updateScrollbar();
+}
+const TAP_HIT_PX = 8; let seekDragging = false, tapDragIndex = -1;
+function evToSec(e) { const r = waveCanvas.getBoundingClientRect(); const x = Math.max(0, Math.min(r.width, e.clientX - r.left)); return Math.max(0, Math.min(audioBuffer.duration, xToSec(x, r.width))); }
+function nearestTap(e) {
+  if (!audioBuffer || !taps.length) return -1;
+  const r = waveCanvas.getBoundingClientRect(), mx = e.clientX - r.left; let best = -1, bd = TAP_HIT_PX;
+  for (let i = 0; i < taps.length; i++) { const tx = secToX(taps[i].tSec, r.width); if (tx < -TAP_HIT_PX || tx > r.width + TAP_HIT_PX) continue; const d = Math.abs(mx - tx); if (d < bd) { bd = d; best = i; } }
+  return best;
+}
+waveWrap.addEventListener('mousedown', e => {
+  const idx = nearestTap(e);
+  if (idx !== -1) { tapDragIndex = idx; waveWrap.style.cursor = 'ew-resize'; }
+  else { seekDragging = true; const t = evToSec(e); playStartOffset = t; if (isPlaying) startPlay(t); else updateTimes(); }
+});
+window.addEventListener('mousemove', e => {
+  if (tapDragIndex !== -1) { const t = evToSec(e); taps = taps.map((tp, i) => i === tapDragIndex ? { ...tp, tSec: parseFloat(t.toFixed(4)) } : tp); renderReview(); waveTimeTip.textContent = taps[tapDragIndex].tSec.toFixed(3) + 's'; }
+  else if (seekDragging) { const t = evToSec(e); playStartOffset = t; if (isPlaying) startPlay(t); else updateTimes(); }
+});
+window.addEventListener('mouseup', () => {
+  if (tapDragIndex !== -1) { const mv = taps[tapDragIndex].tSec; taps = [...taps].sort((a, b) => a.tSec - b.tSec); tapDragIndex = taps.findIndex(t => t.tSec === mv); renderReview(); tapDragIndex = -1; waveWrap.style.cursor = 'crosshair'; }
+  seekDragging = false;
+});
+waveWrap.addEventListener('mousemove', e => {
+  if (tapDragIndex !== -1 || seekDragging || !audioBuffer) return;
+  const idx = nearestTap(e); waveWrap.style.cursor = idx !== -1 ? 'ew-resize' : 'crosshair';
+  const t = evToSec(e); waveTimeTip.textContent = `${t.toFixed(3)}s · ${(audioBuffer.duration / viewSpanSec).toFixed(1)}×`;
+});
+waveWrap.addEventListener('mouseleave', () => { waveTimeTip.textContent = ''; if (tapDragIndex === -1) waveWrap.style.cursor = 'crosshair'; });
+waveWrap.addEventListener('wheel', e => {
+  if (!audioBuffer) return; e.preventDefault();
+  const r = waveCanvas.getBoundingClientRect();
+  if (e.shiftKey) { viewStartSec += (e.deltaY / r.width) * viewSpanSec; clampView(); }
+  else { const mf = Math.max(0, Math.min(1, (e.clientX - r.left) / r.width)); const tc = viewStartSec + mf * viewSpanSec; viewSpanSec = Math.max(ZOOM_MIN, Math.min(audioBuffer.duration, viewSpanSec * (e.deltaY < 0 ? 0.85 : 1.18))); viewStartSec = tc - mf * viewSpanSec; clampView(); }
+  rebuildPeaks(waveCanvas.clientWidth || 712); drawWaveform(currentAudioTime()); updateScrollbar();
+}, { passive: false });
+waveWrap.addEventListener('dblclick', e => { if (!audioBuffer || nearestTap(e) !== -1) return; viewStartSec = 0; viewSpanSec = audioBuffer.duration; rebuildPeaks(waveCanvas.clientWidth || 712); drawWaveform(currentAudioTime()); updateScrollbar(); });
+window.addEventListener('resize', () => { if (audioBuffer) { rebuildPeaks(waveCanvas.clientWidth || 712); drawWaveform(currentAudioTime()); updateScrollbar(); } });
+const scrollTrack = document.getElementById('waveform-scroll'), scrollThumb = document.getElementById('waveform-scroll-thumb');
+function updateScrollbar() {
+  if (!audioBuffer) { scrollThumb.style.display = 'none'; return; }
+  scrollThumb.style.display = ''; const d = audioBuffer.duration, tw = scrollTrack.clientWidth || 1;
+  const thw = Math.max(16, (viewSpanSec / d) * tw), ml = Math.max(0, tw - thw);
+  scrollThumb.style.left = ((d > viewSpanSec ? viewStartSec / (d - viewSpanSec) : 0) * ml) + 'px'; scrollThumb.style.width = thw + 'px';
+}
+function panThumb(lp) { const d = audioBuffer.duration, tw = scrollTrack.clientWidth || 1, thw = Math.max(16, (viewSpanSec / d) * tw), ml = Math.max(1, tw - thw); viewStartSec = (Math.max(0, Math.min(ml, lp)) / ml) * (d - viewSpanSec); clampView(); rebuildPeaks(waveCanvas.clientWidth || 712); drawWaveform(currentAudioTime()); updateScrollbar(); }
+let sdo = 0;
+scrollThumb.addEventListener('mousedown', e => { e.preventDefault(); scrollThumb.classList.add('dragging'); const r = scrollTrack.getBoundingClientRect(), tr = scrollThumb.getBoundingClientRect(); sdo = e.clientX - tr.left; function mv(ev) { panThumb(ev.clientX - r.left - sdo); } function up() { scrollThumb.classList.remove('dragging'); window.removeEventListener('mousemove', mv); window.removeEventListener('mouseup', up); } window.addEventListener('mousemove', mv); window.addEventListener('mouseup', up); });
+scrollTrack.addEventListener('mousedown', e => { if (e.target === scrollThumb) return; const r = scrollTrack.getBoundingClientRect(); panThumb(e.clientX - r.left - scrollThumb.clientWidth / 2); });
+
+// ===========================================================================
+// Vertical note viz (tap step)
+// ===========================================================================
+const VIZ_TRAVEL = 1.8, vizCanvas = document.getElementById('viz-canvas');
+function resizeViz() { const dpr = window.devicePixelRatio || 1, W = 130, H = Math.round(window.innerHeight * 0.5); vizCanvas.style.height = H + 'px'; if (vizCanvas.width !== W * dpr) { vizCanvas.width = W * dpr; vizCanvas.height = H * dpr; } }
+function drawViz() {
+  if (vizCanvas.clientWidth === 0) return;
+  resizeViz();
+  const dpr = window.devicePixelRatio || 1, W = vizCanvas.width / dpr, H = vizCanvas.height / dpr, ctx = vizCanvas.getContext('2d');
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, W, H);
+  const cx = W / 2, spawnY = H * 0.08, hitY = H * 0.85, now = currentAudioTime(), rgb = hexToRgb(NOTE_COLOR);
+  ctx.strokeStyle = 'rgba(255,255,255,0.06)'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(cx, spawnY); ctx.lineTo(cx, hitY); ctx.stroke();
+  ctx.strokeStyle = 'rgba(0,229,255,0.4)'; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(cx, hitY, 32, 0, Math.PI * 2); ctx.stroke();
+  for (const tp of taps) {
+    const t = 1 - (tp.tSec - now) / VIZ_TRAVEL; if (t < 0 || t > 1.35) continue;
+    const y = spawnY + (hitY - spawnY) * Math.min(t, 1);
+    let size, alpha;
+    if (t <= 1) { size = 6 + 46 * t; alpha = 0.4 + 0.6 * t; } else { const k = (t - 1) / 0.35; size = 52 + 24 * k; alpha = 1 - k * 0.8; }
+    const r = size / 2;
+    if (t <= 1) { const g = ctx.createRadialGradient(cx, y, 0, cx, y, r * 1.6); g.addColorStop(0, `rgba(${rgb},${(alpha * 0.5).toFixed(2)})`); g.addColorStop(1, `rgba(${rgb},0)`); ctx.fillStyle = g; ctx.beginPath(); ctx.arc(cx, y, r * 1.6, 0, Math.PI * 2); ctx.fill(); ctx.fillStyle = `rgba(${rgb},${alpha.toFixed(2)})`; ctx.beginPath(); ctx.arc(cx, y, r, 0, Math.PI * 2); ctx.fill(); }
+    else { ctx.strokeStyle = `rgba(${rgb},${alpha.toFixed(2)})`; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(cx, y, r, 0, Math.PI * 2); ctx.stroke(); }
+  }
+}
+
+// ===========================================================================
+// Review practice highway — watch your beats fly into the hit ring, tap to practice
+// ===========================================================================
+const reviewViz = document.getElementById('review-viz');
+const REVIEW_LEAD = 2.4;            // seconds of lookahead on the highway
+let lastFb = { t: -10, hex: '#00e5ff' };
+
+function reviewPracticeTap() {
+  if (!isPlaying || !taps.length) return;
+  const now = currentAudioTime();
+  let nb = taps[0].tSec, best = Infinity;
+  for (const tp of taps) { const d = Math.abs(tp.tSec - now); if (d < best) { best = d; nb = tp.tSec; } }
+  const off = (now - nb) * 1000, a = Math.abs(off), s = STRINGS[lang], fb = document.getElementById('review-fb');
+  let hex;
+  if (a < 60) { hex = '#69f0ae'; fb.textContent = s.fbPerfect; fb.style.color = 'var(--ok)'; }
+  else if (a < 120) { hex = '#00e5ff'; fb.textContent = off < 0 ? s.fbEarlyBit : s.fbLateBit; fb.style.color = 'var(--note)'; }
+  else { hex = '#ffd54f'; fb.textContent = off < 0 ? s.fbEarly : s.fbLate; fb.style.color = 'var(--warn)'; }
+  lastFb = { t: performance.now(), hex };
+  flashScreen();
+}
+
+function drawReviewHighway() {
+  if (!reviewViz || reviewViz.clientWidth === 0) return;
+  const dpr = window.devicePixelRatio || 1, W = reviewViz.clientWidth, H = 150;
+  if (reviewViz.width !== W * dpr || reviewViz.height !== H * dpr) { reviewViz.width = W * dpr; reviewViz.height = H * dpr; }
+  const ctx = reviewViz.getContext('2d'); ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, W, H);
+  const hitX = Math.max(64, W * 0.16), midY = H / 2, now = currentAudioTime(), rgb = hexToRgb(NOTE_COLOR);
+  const pxps = (W - hitX) / REVIEW_LEAD;
+  ctx.strokeStyle = 'rgba(255,255,255,0.06)'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(hitX, midY); ctx.lineTo(W, midY); ctx.stroke();
+  ctx.strokeStyle = 'rgba(255,255,255,0.1)'; ctx.beginPath(); ctx.moveTo(hitX, 10); ctx.lineTo(hitX, H - 10); ctx.stroke();
+  ctx.strokeStyle = `rgba(${rgb},0.5)`; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(hitX, midY, 18, 0, Math.PI * 2); ctx.stroke();
+  for (const tp of taps) {
+    const dt = tp.tSec - now;
+    if (dt > REVIEW_LEAD + 0.1 || dt < -0.7) continue;
+    const x = hitX + dt * pxps;
+    if (dt >= 0) {
+      // approaching the hit ring — filled, glowing
+      const p = 1 - dt / REVIEW_LEAD, r = 5 + 9 * p, alpha = 0.3 + 0.7 * p;
+      const g = ctx.createRadialGradient(x, midY, 0, x, midY, r * 1.8);
+      g.addColorStop(0, `rgba(${rgb},${(alpha * 0.5).toFixed(2)})`); g.addColorStop(1, `rgba(${rgb},0)`);
+      ctx.fillStyle = g; ctx.beginPath(); ctx.arc(x, midY, r * 1.8, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = `rgba(${rgb},${alpha.toFixed(2)})`; ctx.beginPath(); ctx.arc(x, midY, r, 0, Math.PI * 2); ctx.fill();
+    } else {
+      // activated (past the hit line) — goes hollow and expands as it fades, like the game
+      const k = Math.min(1, -dt / 0.7), alpha = 1 - k, r = 14 + 10 * k;
+      if (alpha <= 0.02) continue;
+      ctx.strokeStyle = `rgba(${rgb},${alpha.toFixed(2)})`; ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.arc(x, midY, r, 0, Math.PI * 2); ctx.stroke();
+    }
+  }
+  const age = (performance.now() - lastFb.t) / 1000;
+  if (age < 0.5) { const fr = hexToRgb(lastFb.hex); ctx.strokeStyle = `rgba(${fr},${(1 - age * 2).toFixed(2)})`; ctx.lineWidth = 3; ctx.beginPath(); ctx.arc(hitX, midY, 18 + 26 * age * 2, 0, Math.PI * 2); ctx.stroke(); }
+  if (!isPlaying && playStartOffset < 0.05) { ctx.fillStyle = 'rgba(136,136,136,0.55)'; ctx.font = '11px JetBrains Mono, monospace'; ctx.textAlign = 'center'; ctx.fillText(taps.length ? STRINGS[lang].reviewPlayHint : STRINGS[lang].emptyMsg, W / 2, midY + 36); }
+}
+
+// ===========================================================================
+// Instructional trailer (welcome step) — a looping re-creation of the actual
+// game loop: notes tapped to the beat → scores → worst performer answers first.
+// ===========================================================================
+const trailerCanvas = document.getElementById('trailer');
+const PCOL = ['#00e5ff', '#ff4081', '#ffd54f', '#69f0ae'];
+const PKEYS = ['A', 'F', 'J', ']'];
+const DEMO_SCORES = [920, 850, 610, 780];   // P1..P4 — P3 (index 2) is lowest
+const TR_PLAY = 5.1, TR_RESULT = 3.1, TR_Q = 3.9, TR_LOOP = TR_PLAY + TR_RESULT + TR_Q;
+let trailerStart = 0, trailerScene = -1;
+
+function roundRect(ctx, x, y, w, h, r) {
+  r = Math.min(r, h / 2, w / 2);
+  ctx.beginPath();
+  ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r);
+  ctx.arcTo(x + w, y + h, x, y + h, r); ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r);
+  ctx.closePath();
+}
+function drawTrailer() {
+  if (!trailerCanvas) return;
+  const now = performance.now();
+  if (!trailerStart) trailerStart = now;
+  const t = ((now - trailerStart) / 1000) % TR_LOOP;
+  const dpr = window.devicePixelRatio || 1, W = trailerCanvas.clientWidth, H = 230;
+  if (!W) return;
+  if (trailerCanvas.width !== W * dpr || trailerCanvas.height !== H * dpr) { trailerCanvas.width = W * dpr; trailerCanvas.height = H * dpr; }
+  const ctx = trailerCanvas.getContext('2d'); ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, W, H);
+
+  let scene, lt;
+  if (t < TR_PLAY) { scene = 0; lt = t; }
+  else if (t < TR_PLAY + TR_RESULT) { scene = 1; lt = t - TR_PLAY; }
+  else { scene = 2; lt = t - TR_PLAY - TR_RESULT; }
+  if (scene !== trailerScene) { trailerScene = scene; html('trailer-cap', STRINGS[lang].trailerCaps[scene]); }
+  const fade = Math.min(1, lt / 0.35) * Math.min(1, ((scene === 0 ? TR_PLAY : scene === 1 ? TR_RESULT : TR_Q) - lt) / 0.35);
+  ctx.globalAlpha = Math.max(0, fade);
+
+  if (scene === 0) {
+    const spawnX = W / 2, spawnY = 24, n = 4, targets = [];
+    for (let i = 0; i < n; i++) {
+      const fx = 0.2 + 0.6 * (i / (n - 1)), dip = 1 - Math.pow((fx - 0.5) / 0.5, 2);
+      targets.push({ x: fx * W, y: H * 0.6 + (1 - dip) * H * 0.18, c: PCOL[i] });
+    }
+    targets.forEach(tg => { ctx.strokeStyle = 'rgba(255,255,255,0.05)'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(spawnX, spawnY); ctx.lineTo(tg.x, tg.y); ctx.stroke(); });
+    targets.forEach(tg => { ctx.strokeStyle = tg.c + '66'; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(tg.x, tg.y, 15, 0, Math.PI * 2); ctx.stroke(); });
+    const beat = 0.46, travel = 0.92;
+    for (let k = Math.max(0, Math.floor((lt - travel) / beat)); k * beat <= lt + 0.02; k++) {
+      const prog = (lt - k * beat) / travel; if (prog < 0 || prog > 1.2) continue;
+      const tg = targets[k % n], rgb = hexToRgb(tg.c);
+      if (prog <= 1) {
+        const x = spawnX + (tg.x - spawnX) * prog, y = spawnY + (tg.y - spawnY) * prog, r = 5 + 9 * prog;
+        const g = ctx.createRadialGradient(x, y, 0, x, y, r * 1.8); g.addColorStop(0, `rgba(${rgb},0.5)`); g.addColorStop(1, `rgba(${rgb},0)`);
+        ctx.fillStyle = g; ctx.beginPath(); ctx.arc(x, y, r * 1.8, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = tg.c; ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill();
+      } else {
+        const k2 = (prog - 1) / 0.2;
+        ctx.strokeStyle = `rgba(${rgb},${(1 - k2).toFixed(2)})`; ctx.lineWidth = 3;
+        ctx.beginPath(); ctx.arc(tg.x, tg.y, 15 + 14 * k2, 0, Math.PI * 2); ctx.stroke();
+      }
+    }
+    ctx.fillStyle = '#888'; ctx.font = '11px JetBrains Mono, monospace'; ctx.textAlign = 'center';
+    targets.forEach((tg, i) => ctx.fillText(PKEYS[i], tg.x, tg.y + 30));
+  } else if (scene === 1) {
+    const names = ['P1', 'P2', 'P3', 'P4'], max = Math.max(...DEMO_SCORES);
+    const order = [0, 1, 2, 3].sort((a, b) => DEMO_SCORES[b] - DEMO_SCORES[a]);
+    const e = 1 - Math.pow(1 - Math.min(1, lt / 0.9), 3);
+    ctx.fillStyle = '#888'; ctx.font = '11px JetBrains Mono, monospace'; ctx.textAlign = 'left'; ctx.fillText('SCORES', 22, 26);
+    const barH = 26, gap = 12, top = 42, leftLabel = 56, barMaxW = W - leftLabel - 110;
+    order.forEach((p, row) => {
+      const y = top + row * (barH + gap), w = Math.max(2, barMaxW * (DEMO_SCORES[p] / max) * e);
+      ctx.fillStyle = PCOL[p]; ctx.textAlign = 'left'; ctx.font = '13px JetBrains Mono, monospace'; ctx.fillText(names[p], 22, y + barH - 7);
+      ctx.fillStyle = PCOL[p]; roundRect(ctx, leftLabel, y, w, barH, 5); ctx.fill();
+      ctx.fillStyle = '#e8e8f0'; ctx.fillText(String(Math.round(DEMO_SCORES[p] * e)), leftLabel + w + 8, y + barH - 7);
+      if (p === 2 && lt > 0.9) { ctx.fillStyle = '#ffd54f'; ctx.textAlign = 'right'; ctx.fillText('↓ ' + STRINGS[lang].trailerLowest, W - 20, y + barH - 7); }
+    });
+  } else {
+    const pad = 26, x = pad, y = pad, cw = W - pad * 2, chh = H - pad * 2;
+    ctx.fillStyle = 'rgba(255,255,255,0.03)'; roundRect(ctx, x, y, cw, chh, 12); ctx.fill();
+    ctx.strokeStyle = 'rgba(255,213,79,0.4)'; ctx.lineWidth = 1; roundRect(ctx, x, y, cw, chh, 12); ctx.stroke();
+    ctx.textAlign = 'center';
+    ctx.fillStyle = PCOL[2]; ctx.font = 'bold 15px JetBrains Mono, monospace'; ctx.fillText(STRINGS[lang].trailerAnswers, W / 2, y + 42);
+    ctx.fillStyle = '#e8e8f0'; ctx.font = '15px JetBrains Mono, monospace'; ctx.fillText(STRINGS[lang].trailerQ, W / 2, y + chh / 2 + 16);
+  }
+  ctx.globalAlpha = 1;
+}
+
+// ===========================================================================
+// Master RAF
+// ===========================================================================
+function raf() {
+  updateTimes();
+  if (currentStep === 0) drawTrailer();
+  if (currentStep === 2) drawPulse();
+  if (currentStep === 3) drawViz();
+  if (currentStep === 4) { drawWaveform(currentAudioTime()); drawReviewHighway(); }
+  requestAnimationFrame(raf);
+}
+requestAnimationFrame(raf);
+
+// ===========================================================================
+// Review render
+// ===========================================================================
+function renderReview() {
+  const empty = document.getElementById('empty-msg'), table = document.getElementById('tap-list'), tbody = document.getElementById('tap-tbody');
+  document.getElementById('chip-song').textContent = audioFileName || '—';
+  document.getElementById('chip-dur').textContent = audioBuffer ? audioBuffer.duration.toFixed(1) + 's' : '—';
+  document.getElementById('chip-beats').textContent = taps.length;
+  if (audioBuffer && audioBuffer.duration > 0 && taps.length) document.getElementById('chip-dens').textContent = (taps.length / audioBuffer.duration).toFixed(1) + '/s';
+  else document.getElementById('chip-dens').textContent = '—';
+  document.getElementById('tap-count').textContent = taps.length;
+
+  if (!taps.length) { empty.style.display = ''; table.style.display = 'none'; drawWaveform(currentAudioTime()); return; }
+  empty.style.display = 'none'; table.style.display = '';
+  tbody.innerHTML = '';
+  taps.forEach((tap, i) => {
+    const tr = document.createElement('tr');
+    const numTd = document.createElement('td'); numTd.textContent = i + 1;
+    const secTd = document.createElement('td');
+    const inp = document.createElement('input'); inp.type = 'text'; inp.className = 'tsec-input'; inp.value = tap.tSec.toFixed(4); inp.dataset.i = i;
+    inp.addEventListener('change', e => { const v = parseFloat(e.target.value); if (isNaN(v) || v < 0) { e.target.value = taps[i].tSec.toFixed(4); return; } taps = taps.map((t, idx) => idx === +e.target.dataset.i ? { ...t, tSec: parseFloat(v.toFixed(4)) } : t); taps.sort((a, b) => a.tSec - b.tSec); renderReview(); });
+    inp.addEventListener('keydown', e => { if (e.key === 'Enter') inp.blur(); if (e.key === ' ') e.stopPropagation(); });
+    secTd.appendChild(inp);
+    const gapTd = document.createElement('td'); gapTd.className = 'gap-cell'; gapTd.textContent = i === 0 ? '—' : '+' + (taps[i].tSec - taps[i - 1].tSec).toFixed(3);
+    const delTd = document.createElement('td'); const del = document.createElement('button'); del.className = 'tap-del'; del.dataset.i = i; del.textContent = '×'; delTd.appendChild(del);
+    tr.append(numTd, secTd, gapTd, delTd); tbody.appendChild(tr);
+  });
+  drawWaveform(currentAudioTime());
+}
+document.getElementById('tap-tbody').addEventListener('click', e => {
+  const del = e.target.closest('.tap-del'); if (!del) return;
+  taps = taps.filter((_, idx) => idx !== +del.dataset.i); renderReview();
+});
+
+// ===========================================================================
+// CSV — layer-free beat sheet: one song = one stream of beats.
+// Columns: tSec,band,strength  (band/strength auto-filled; no layer column).
+// ===========================================================================
+function toCsv() {
+  const sorted = [...taps].sort((a, b) => a.tSec - b.tSec);
+  return ['tSec,band,strength', ...sorted.map(t => `${t.tSec},0,1.0`)].join('\n');
+}
+function fromCsv(text) {
+  const out = [];
+  for (const line of text.trim().split(/\r?\n/).filter(Boolean)) {
+    if (/^tSec/i.test(line)) continue;
+    const t = parseFloat(line.split(',')[0]); if (isNaN(t)) continue; out.push({ tSec: t });
+  }
+  return out.sort((a, b) => a.tSec - b.tSec);
+}
+document.getElementById('btn-export').addEventListener('click', () => {
+  const blob = new Blob([toCsv()], { type: 'text/csv' }), url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href = url; a.download = 'gamedev-beats.csv'; a.click(); URL.revokeObjectURL(url);
+  const n = document.getElementById('export-note'); n.textContent = STRINGS[lang].exported; setTimeout(() => n.textContent = '', 2500);
+});
+document.getElementById('btn-copy').addEventListener('click', async () => {
+  try { await navigator.clipboard.writeText(toCsv()); const n = document.getElementById('export-note'); n.textContent = STRINGS[lang].copied; setTimeout(() => n.textContent = '', 2000); } catch (_) {}
+});
+document.getElementById('btn-resume').addEventListener('click', () => {
+  const parsed = fromCsv(document.getElementById('resume-textarea').value);
+  const st = document.getElementById('resume-status');
+  if (!parsed.length) { st.style.color = 'var(--warn)'; st.textContent = ' ' + STRINGS[lang].noRows; return; }
+  taps = parsed; renderReview(); goToStep(4);
+});
+
+// ===========================================================================
+// Wizard navigation
+// ===========================================================================
+const STEP_COUNT = 6;            // 0..5
+let currentStep = 0, maxReached = 0, nextEnabled = true;
+const panels = [...document.querySelectorAll('.panel')];
+const stepNodes = [...document.querySelectorAll('.step-node')];
+const btnBack = document.getElementById('btn-back'), btnNext = document.getElementById('btn-next');
+const navHint = document.getElementById('nav-hint');
+
+function setNextEnabled(v) { nextEnabled = v; updateNav(); }
+function stepRequirementMet(step) {
+  if (step === 1) return !!audioBuffer;   // must load a song
+  if (step === 3) return taps.length > 0; // must mark at least one beat
+  return true;
+}
+function updateNav() {
+  const s = STRINGS[lang];
+  // stepper visible from step 1+
+  document.getElementById('stepper-wrap').style.display = currentStep >= 1 ? 'block' : 'none';
+  stepNodes.forEach(n => {
+    const st = +n.dataset.step;
+    n.classList.toggle('active', st === currentStep);
+    n.classList.toggle('done', st < currentStep || (st <= maxReached && st !== currentStep));
+    n.classList.toggle('clickable', st <= maxReached && st < currentStep);
+  });
+  document.getElementById('step-counter').textContent = `STEP ${Math.max(1, currentStep)} / 5`;
+  // back button
+  btnBack.classList.toggle('hidden', currentStep === 0);
+  // next button label + enabled
+  btnNext.textContent = s.cta[currentStep];
+  const met = stepRequirementMet(currentStep);
+  btnNext.disabled = (currentStep === 5) ? true : !met;
+  btnNext.style.display = currentStep === 5 ? 'none' : '';
+  navHint.textContent = met ? '' : s.hint[currentStep] || '';
+}
+function goToStep(n) {
+  n = Math.max(0, Math.min(STEP_COUNT - 1, n));
+  // leaving a step: stop any audio/practice
+  stopPlay(); if (practiceActive) stopPractice();
+  currentStep = n; maxReached = Math.max(maxReached, n);
+  panels.forEach(p => p.classList.toggle('active', +p.dataset.step === n));
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  if (n === 4) { renderReview(); setupWaveform(); }
+  if (n === 5) document.getElementById('s-sub').textContent = STRINGS[lang].doneSub(taps.length);
+  updateNav();
+}
+btnNext.addEventListener('click', () => {
+  if (currentStep === 5) return;
+  if (!stepRequirementMet(currentStep)) return;
+  goToStep(currentStep + 1);
+});
+btnBack.addEventListener('click', () => goToStep(currentStep - 1));
+stepNodes.forEach(n => n.addEventListener('click', () => { const st = +n.dataset.step; if (st <= maxReached && st < currentStep) goToStep(st); }));
+document.getElementById('retap-link').addEventListener('click', () => { if (confirm(STRINGS[lang].confirmRetap)) { taps = []; goToStep(3); } });
+document.getElementById('btn-restart').addEventListener('click', () => {
+  if (!confirm(STRINGS[lang].confirmRestart)) return;
+  taps = []; audioBuffer = null; audioFileName = ''; loadedCard.style.display = 'none'; fileError.textContent = '';
+  document.getElementById('tap-count').textContent = '0'; maxReached = 0; goToStep(0);
+});
+
+// ===========================================================================
+// Keyboard — context-aware SPACE
+// ===========================================================================
+document.addEventListener('keydown', e => {
+  const tag = e.target.tagName; if (tag === 'INPUT' || tag === 'TEXTAREA') return;
+  if (e.code === 'Space' && !e.repeat) {
+    e.preventDefault();
+    if (currentStep === 2) { if (!practiceActive) startPractice(); else practiceTap(); }
+    else if (currentStep === 3) { ensureCtx(); if (isPlaying) recordTap(); else if (audioBuffer) startPlay(playStartOffset); }
+    else if (currentStep === 4 && audioBuffer) { ensureCtx(); if (isPlaying) reviewPracticeTap(); else startPlay(playStartOffset); }
+  }
+  if (e.key === 'ArrowRight' && !btnNext.disabled && currentStep < 5) goToStep(currentStep + 1);
+  if (e.key === 'ArrowLeft' && currentStep > 0) goToStep(currentStep - 1);
+});
+
+// ===========================================================================
+// i18n
+// ===========================================================================
+let lang = 'en';
+const STRINGS = {
+  en: {
+    btnLang: '简体中文', brandT: 'BEAT RECORDER', brandS: 'game dev beats · for composers',
+    sn: ['Song', 'Warm-up', 'Tap', 'Review', 'Send'],
+    cta: ["LET'S GO ›", 'CONTINUE ›', "I'VE GOT THE FEEL ›", 'DONE — REVIEW ›', 'LOOKS GOOD — EXPORT ›', ''],
+    hint: ['', 'load a song to continue', '', 'tap at least one beat to continue', '', ''],
+    // welcome
+    wEye: 'a 90-second walkthrough',
+    wTitle: 'Turn your track into a playable level.',
+    wLede: "This is <strong>Game Dev Beats</strong> — the little rhythm game we throw on to break the ice at our co-working sessions. 2–6 of us tap along to a track, and whoever does the worst answers the icebreaker question first. Here's the ask: we'd love the music to come from <em>you</em>. Send us one track and it becomes a level — your song, played to a room full of game devs.",
+    wD1k: 'Your song', wD1v: 'One finished track — the music players hear. Under 2 minutes. mp3 / wav / m4a.',
+    wNeed: "<b>So here's what we need:</b> one finished track (keep it under 2 min) plus a beat sheet you'll make right here — then just DM me both. One song each, first come first served (only a handful of slots). Takes about 90 seconds.",
+    wD2k: 'A beat sheet', wD2v: "The exact moments players should tap. You'll make it here by tapping along to your own song.",
+    wFlow: ['Load your song', 'Warm up your timing', 'Tap the beats', 'Review & send it back'],
+    wResumeSum: 'Already started? Resume a saved beat sheet ▾',
+    wResumeHelp: 'Paste a CSV you exported earlier to jump straight to Review.',
+    trailerLabel: 'how it plays',
+    trailerCaps: [
+      '<b>①</b> Notes fall — everyone taps their key in time with your music',
+      '<b>②</b> Each round, everyone\'s timing is scored',
+      '<b>③</b> The worst performer answers the icebreaker question first',
+    ],
+    trailerLowest: 'lowest', trailerAnswers: 'P3 had the lowest score — answers first',
+    trailerQ: '"What are you working on right now?"',
+    // upload
+    uTitle: 'Load your song', uLine: 'It plays locally in your browser — nothing is uploaded anywhere.',
+    dropLabel: 'Drop your track here', dropSub: 'or click to browse · mp3 / wav / m4a',
+    decoding: 'decoding…', badAudio: "couldn't read that audio — try mp3 / wav / m4a", noRows: 'no valid rows found',
+    // warmup
+    wuTitle: 'Warm up your timing',
+    wuLede: "In the next step you'll tap <kbd>Space</kbd> on every beat you want players to hit. Here's a steady pulse to get the feel — tap along and watch the feedback. (You can skip this, but it makes for tighter beat sheets.)",
+    wuFoot: 'Tip: tap where you <em>feel</em> the beat land, not where you see it. The game gives players a generous ±180 ms window.',
+    btnPractice: 'START PULSE', btnPracticeStop: 'STOP PULSE',
+    pulseIdle: 'press START', feelIt: 'feel the pulse…',
+    fbPerfect: 'PERFECT', fbEarlyBit: 'good · a hair early', fbLateBit: 'good · a hair late', fbEarly: 'too early', fbLate: 'too late',
+    acc: (g, n) => `on-beat: ${g}/${n}`,
+    // tap
+    tTitle: 'Tap the beats', tLine: 'Press PLAY, then tap SPACE on every beat you want a player to hit. Aim for a steady 1–3 taps per second.',
+    tCounter: 'beats marked', vizLabel: 'falling note preview',
+    btnPlay: 'PLAY', btnPause: 'PAUSE', btnVerify: 'PLAY TO VERIFY', btnStop: 'STOP', lblSpeed: 'SPEED',
+    // review
+    rTitle: 'Review & fine-tune', rLine: 'Drag any line to nudge it, edit times in the list, or play it back to check.',
+    chipSong: 'song', chipDur: 'duration', chipBeats: 'beats', chipDens: 'density',
+    thNum: '#', thTsec: 'time (s)', thGap: 'gap', emptyMsg: 'no beats yet — go back and tap some',
+    retap: '↺ re-tap from scratch', confirmRetap: 'Clear all beats and re-tap from scratch?',
+    reviewHint: 'Press PLAY TO VERIFY, then tap SPACE on each beat to practice — just like the game.',
+    reviewPlayHint: 'press play — watch your beats fly into the ring',
+    // send
+    sEye: 'beat sheet locked in', sTitle: "Nice timing. You're done.",
+    doneSub: n => `${n} beats ready to drop into the game.`,
+    sExportK: '① Export your beat sheet', sExportV: 'Downloads <span class="fcode" style="color:var(--ok)">gamedev-beats.csv</span>. You can re-download any time.',
+    btnExport: '⬇ EXPORT CSV', btnCopy: 'COPY CSV', exported: '✓ downloaded gamedev-beats.csv', copied: '✓ copied to clipboard',
+    sSendK: '② Send both files to us',
+    sFiles: 'Send both files our way — DM <strong>PlayInstigator</strong> on Discord:<br><a class="discord-btn" href="https://discord.com/users/1119292455016202260" target="_blank" rel="noopener">✉ Message on Discord</a><br><span class="fcode">your audio file</span> &nbsp;+&nbsp; <span class="fcode">gamedev-beats.csv</span>',
+    deadline: "<b>Due Fri 19 June · first come, first served</b> — we'll drop it into the game live at the co-working session.",
+    sRestart: 'Map another song', confirmRestart: 'Start over with a new song? Your current beats will be cleared.',
+  },
+  zh: {
+    btnLang: 'English', brandT: '节拍录制器', brandS: 'Game Dev Beats · 作曲者专用',
+    sn: ['歌曲', '热身', '录拍', '检查', '发送'],
+    cta: ['开始 ›', '继续 ›', '我找到感觉了 ›', '完成 — 检查 ›', '没问题 — 导出 ›', ''],
+    hint: ['', '请先加载歌曲', '', '至少录入一个节拍才能继续', '', ''],
+    wEye: '90 秒上手指引',
+    wTitle: '把你的曲子变成可玩的关卡。',
+    wLede: '这就是 <strong>Game Dev Beats</strong>——我们在协作聚会上用来破冰的小型节奏游戏。2–6 个人跟着一首曲子按拍，谁最手忙脚乱，谁就第一个回答破冰问题。我们想请你帮个忙：让音乐来自<em>你</em>。给我们一首曲子，它就会变成一个关卡——你的歌，放给满屋子的游戏开发者听。',
+    wD1k: '你的歌曲', wD1v: '一首完成的曲子——玩家听到的音乐。请控制在 2 分钟以内。mp3 / wav / m4a。',
+    wNeed: '<b>所以我们需要的是：</b>一首完成的曲子（2 分钟以内），再加上你在这里做好的一份节拍表——然后直接私信发我就行。每人一首，先到先得（名额不多）。大约 90 秒就能搞定。',
+    wD2k: '一份节拍表', wD2v: '玩家应该敲击的精确时刻。你将在这里跟着自己的曲子按拍来制作它。',
+    wFlow: ['加载歌曲', '热身找感觉', '录入节拍', '检查并交回'],
+    wResumeSum: '已经开始过了？继续之前保存的节拍表 ▾',
+    wResumeHelp: '粘贴你之前导出的 CSV，可直接跳到「检查」步骤。',
+    trailerLabel: '游戏怎么玩',
+    trailerCaps: [
+      '<b>①</b> 音符落下——大家跟着你的音乐按各自的键',
+      '<b>②</b> 每一关都会根据踩点准度计分',
+      '<b>③</b> 表现最差的人先回答破冰问题',
+    ],
+    trailerLowest: '最低', trailerAnswers: 'P3 得分最低——由他先回答',
+    trailerQ: '"你现在在做什么项目？"',
+    uTitle: '加载你的歌曲', uLine: '它只在你的浏览器中本地播放——不会上传到任何地方。',
+    dropLabel: '把你的曲子拖到此处', dropSub: '或点击浏览 · mp3 / wav / m4a',
+    decoding: '解码中…', badAudio: '无法读取该音频——请用 mp3 / wav / m4a', noRows: '未找到有效行',
+    wuTitle: '热身找感觉',
+    wuLede: '下一步你将在每个希望玩家敲击的节拍上按 <kbd>空格</kbd>。这里有一个稳定的脉冲帮你找感觉——跟着按，看看反馈。（可以跳过，但热身能让节拍表更准。）',
+    wuFoot: '小贴士：在你<em>感觉</em>到节拍落下的位置按，而不是看到的位置。游戏给玩家 ±180 毫秒的宽松判定。',
+    btnPractice: '开始脉冲', btnPracticeStop: '停止脉冲',
+    pulseIdle: '按开始', feelIt: '感受脉冲…',
+    fbPerfect: '完美', fbEarlyBit: '不错 · 略早', fbLateBit: '不错 · 略晚', fbEarly: '太早了', fbLate: '太晚了',
+    acc: (g, n) => `踩点：${g}/${n}`,
+    tTitle: '录入节拍', tLine: '按播放，然后在每个希望玩家敲击的节拍上按空格。保持每秒约 1–3 拍的稳定节奏。',
+    tCounter: '已录节拍', vizLabel: '落音预览',
+    btnPlay: '播放', btnPause: '暂停', btnVerify: '播放检查', btnStop: '停止', lblSpeed: '速度',
+    rTitle: '检查与微调', rLine: '拖动竖线微调、在列表里编辑时间，或回放检查。',
+    chipSong: '歌曲', chipDur: '时长', chipBeats: '节拍', chipDens: '密度',
+    thNum: '#', thTsec: '时间 (秒)', thGap: '间隔', emptyMsg: '暂无节拍——返回上一步录入',
+    retap: '↺ 重新录制', confirmRetap: '清除所有节拍并重新录制？',
+    reviewHint: '点「播放检查」，然后在每个节拍上按空格来练习——就像在游戏里一样。',
+    reviewPlayHint: '点击播放——看你的节拍飞向圆环',
+    sEye: '节拍表已锁定', sTitle: '节奏不错，完成啦。',
+    doneSub: n => `${n} 个节拍，准备好导入游戏了。`,
+    sExportK: '① 导出你的节拍表', sExportV: '下载 <span class="fcode" style="color:var(--ok)">gamedev-beats.csv</span>，可随时重新下载。',
+    btnExport: '⬇ 导出 CSV', btnCopy: '复制 CSV', exported: '✓ 已下载 gamedev-beats.csv', copied: '✓ 已复制到剪贴板',
+    sSendK: '② 把两个文件发给我们',
+    sFiles: '把两个文件发给我们——在 Discord 私信 <strong>PlayInstigator</strong>：<br><a class="discord-btn" href="https://discord.com/users/1119292455016202260" target="_blank" rel="noopener">✉ 在 Discord 私信</a><br><span class="fcode">你的音频文件</span> &nbsp;+&nbsp; <span class="fcode">gamedev-beats.csv</span>',
+    deadline: '<b>截止 6 月 19 日（周五）· 先到先得</b>——我们会在协作活动现场把它导入游戏。',
+    sRestart: '制作另一首', confirmRestart: '用新歌曲重新开始？当前的节拍会被清除。',
+  },
+};
+
+function txt(id, v) { const el = document.getElementById(id); if (el) el.textContent = v; }
+function html(id, v) { const el = document.getElementById(id); if (el) el.innerHTML = v; }
+function applyLang(l) {
+  const s = STRINGS[l]; document.documentElement.lang = l === 'zh' ? 'zh-CN' : 'en';
+  txt('btn-lang', s.btnLang); txt('brand-t', s.brandT); txt('brand-s', s.brandS);
+  s.sn.forEach((t, i) => txt('sn-' + (i + 1), t));
+  // welcome
+  txt('w-eye', s.wEye); txt('w-title', s.wTitle); html('w-lede', s.wLede); html('w-need', s.wNeed);
+  txt('trailer-label-t', s.trailerLabel); trailerScene = -1;
+  txt('w-d1k', s.wD1k); txt('w-d1v', s.wD1v); txt('w-d2k', s.wD2k); txt('w-d2v', s.wD2v);
+  [...document.querySelectorAll('#w-flow .f .t')].forEach((el, i) => el.textContent = s.wFlow[i]);
+  txt('w-resume-sum', s.wResumeSum); txt('w-resume-help', s.wResumeHelp);
+  // upload
+  txt('u-title', s.uTitle); txt('u-line', s.uLine);
+  if (!audioBuffer) fileDropEl.querySelector('.label').textContent = s.dropLabel;
+  fileDropEl.querySelector('.sub').textContent = s.dropSub;
+  // warmup
+  txt('wu-title', s.wuTitle); html('wu-lede', s.wuLede); html('wu-foot', s.wuFoot);
+  btnPractice.textContent = practiceActive ? s.btnPracticeStop : s.btnPractice;
+  if (!practiceActive) pulseFeedback.textContent = s.pulseIdle;
+  btnPracticeTap.textContent = s.btnPlay === '播放' ? '敲击 · 空格' : 'TAP · SPACE';
+  // tap
+  txt('t-title', s.tTitle); txt('t-line', s.tLine); txt('t-counter-label', s.tCounter); txt('viz-label', s.vizLabel);
+  txt('lbl-speed', s.lblSpeed);
+  // review
+  txt('r-title', s.rTitle); txt('r-line', s.rLine);
+  txt('chip-song-k', s.chipSong); txt('chip-dur-k', s.chipDur); txt('chip-beats-k', s.chipBeats); txt('chip-dens-k', s.chipDens);
+  txt('th-num', s.thNum); txt('th-tsec', s.thTsec); txt('th-gap', s.thGap); txt('empty-msg', s.emptyMsg);
+  txt('retap-link', s.retap); txt('review-hint', s.reviewHint);
+  // send
+  txt('s-eye', s.sEye); txt('s-title', s.sTitle);
+  txt('s-export-k', s.sExportK); html('s-export-v', s.sExportV); txt('btn-export', s.btnExport); txt('btn-copy', s.btnCopy);
+  txt('s-send-k', s.sSendK); html('s-files', s.sFiles); html('deadline', s.deadline); txt('s-restart', s.sRestart);
+  if (currentStep === 5) txt('s-sub', s.doneSub(taps.length));
+  syncTransport(); updateNav();
+}
+document.getElementById('btn-lang').addEventListener('click', () => { lang = lang === 'en' ? 'zh' : 'en'; applyLang(lang); document.getElementById('btn-lang').blur(); });
+
+// init
+resizeViz();
+applyLang('en');
+goToStep(0);
+</script>
+</body>
+</html>
