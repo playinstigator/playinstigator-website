@@ -630,14 +630,6 @@
       <div class="count-label">How many players?</div>
       <div class="count-options" id="count-options"></div>
     </div>
-    <div class="track-config" id="track-config" style="display:none">
-      <label class="file-drop" id="file-drop">
-        <input type="file" id="file-input" accept="audio/*">
-        <span>DROP MP3 HERE · or click to browse</span>
-      </label>
-      <div class="track-status" id="track-status"></div>
-      <div class="track-options" id="track-options" style="display:none"></div>
-    </div>
     <button id="btn-start" disabled>LOADING…</button>
     <p class="hint" id="title-hint">loading…</p>
     <div class="credits">
@@ -887,40 +879,8 @@ const track = {
 };
 let currentSource = null;
 
-function setTrackStatus(text) {
-  const el = document.getElementById('track-status');
-  if (el) el.textContent = text;
-}
-
-// Drag-and-drop custom track: decode the file, detect onsets at runtime, and
-// run it as a single-level game (overrides LEVELS for this session).
-async function loadTrackFile(file) {
-  ensureAudio();
-  setTrackStatus('Decoding audio…');
-  try {
-    const arr = await file.arrayBuffer();
-    const buf = await audioCtx.decodeAudioData(arr);
-    setTrackStatus('Analyzing onsets…');
-    // Yield to the UI before heavy work so the status text can paint
-    await new Promise(r => setTimeout(r, 30));
-    const { onsets } = await analyzeTrack(buf);
-    // Replace the level set with this one custom song.
-    LEVELS.length = 0;
-    LEVELS.push({
-      title: file.name,
-      audio: null,
-      beats: null,
-      question: QUESTIONS[0],
-    });
-    track.levels = [{ buffer: buf, onsets, beatmap: null }];
-    setTrackStatus(`✓ ${file.name} · ${onsets.length} onsets · ${buf.duration.toFixed(0)}s`);
-    setTitleHint('huddle around the laptop · pick your keys · play together');
-    enableStartButton();
-  } catch (err) {
-    console.error(err);
-    setTrackStatus('Error: ' + err.message);
-  }
-}
+// Songs are configured in LEVELS only (added from the repo) — there is no
+// player-facing MP3 upload on the public game.
 
 async function analyzeTrack(buffer) {
   const sr = buffer.sampleRate;
@@ -2005,11 +1965,7 @@ async function loadAllLevels() {
   setTitleHint('loading…');
   await Promise.all(LEVELS.map((_, i) => loadLevel(i)));
   const anyAudio = track.levels.some(l => l && l.buffer);
-  if (anyAudio) {
-    setTitleHint('huddle around the laptop · pick your keys · play together');
-  } else {
-    showTrackDropZone('drop your mp3 to use a custom track · or START for synth mode');
-  }
+  setTitleHint('huddle around the laptop · pick your keys · play together');
   enableStartButton();
   return anyAudio;
 }
@@ -2017,13 +1973,6 @@ async function loadAllLevels() {
 function setTitleHint(text) {
   const el = document.getElementById('title-hint');
   if (el) el.textContent = text;
-}
-
-function showTrackDropZone(hint) {
-  const cfg = document.getElementById('track-config');
-  if (cfg) cfg.style.display = '';
-  setTitleHint(hint || '');
-  enableStartButton();
 }
 
 function enableStartButton() {
@@ -2036,21 +1985,6 @@ window.addEventListener('DOMContentLoaded', () => {
   applyUrlParamOverrides();
   renderCountPicker();
   loadAllLevels();
-
-  // File drop zone
-  const fileInput = document.getElementById('file-input');
-  const fileDrop  = document.getElementById('file-drop');
-  fileInput.addEventListener('change', () => {
-    if (fileInput.files[0]) loadTrackFile(fileInput.files[0]);
-  });
-  fileDrop.addEventListener('dragover', e => { e.preventDefault(); fileDrop.classList.add('drag'); });
-  fileDrop.addEventListener('dragleave', () => fileDrop.classList.remove('drag'));
-  fileDrop.addEventListener('drop', e => {
-    e.preventDefault();
-    fileDrop.classList.remove('drag');
-    const f = e.dataTransfer.files[0];
-    if (f) loadTrackFile(f);
-  });
 });
 </script>
 </body>
