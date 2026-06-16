@@ -799,15 +799,25 @@ function setPlayerCount(count) {
   state.cumulativeScores = new Array(count).fill(0);
 }
 
-// Level = { title, audio, beats, question }
+// Icebreaker questions, one per level in order. A level may set its own `question`
+// to override; otherwise it uses QUESTIONS[levelIndex]. Single source of truth, so
+// adding a composer's song (audio + beats only) auto-assigns the next question.
+const QUESTIONS = [
+  "What's your name and what are you working on right now?",
+  "What made you want to make games in the first place?",
+  "Hot take: a beloved game you think is overrated.",
+  "What's one skill you want to level up next?",
+];
+
+// Level = { title, audio, beats, question? }
 // Each level is ONE song + ONE beat sheet, played at its natural tempo (1.0×).
 // Difficulty comes from the music and the density of the beat sheet itself — there
 // are no layers and no speed ramps. `audio` is resolved against AUDIO_BASE_URL and
 // `beats` against BEATS_BASE_URL (use an absolute URL to bypass the base).
 //
 // To add a composer's level for the co-working event, append an entry like:
-//   { title: 'Song name — Composer', audio: 'their-song.mp3', beats: 'their-song.csv',
-//     question: "Your level's question?" },
+//   { title: 'Song name — Composer', audio: 'their-song.mp3', beats: 'their-song.csv' },
+// The question is taken from QUESTIONS by position; add `question: "..."` to override.
 //
 // Beat sheets are produced by the composer tool in the canonical layer-free format:
 //   tSec,band,strength
@@ -816,16 +826,10 @@ const LEVELS = [
     title: 'Game Dev Beats — qwq404',
     audio: '26.5.10.mp3',
     beats: 'gamedev-beats.csv',
-    question: "What's your name and what are you currently working on?",
+    // question omitted → uses QUESTIONS[0]
   },
-  // Second song is wired but has no beat sheet yet — add one (e.g. '26.5.9.csv')
-  // and uncomment to enable it as level 2:
-  // {
-  //   title: 'Untitled — qwq404',
-  //   audio: '26.5.9.mp3',
-  //   beats: '26.5.9.csv',
-  //   question: "What's a small thing in your project you're secretly proud of?",
-  // },
+  // Add composer songs here as they arrive (question auto-fills from QUESTIONS):
+  //   { title: 'Song name — Composer', audio: 'their-song.mp3', beats: 'their-song.csv' },
 ];
 
 const HIT_WINDOW_MS = 180;     // ± window for a successful hit
@@ -906,7 +910,7 @@ async function loadTrackFile(file) {
       title: file.name,
       audio: null,
       beats: null,
-      question: "What's your name and what are you currently working on?",
+      question: QUESTIONS[0],
     });
     track.levels = [{ buffer: buf, onsets, beatmap: null }];
     setTrackStatus(`✓ ${file.name} · ${onsets.length} onsets · ${buf.duration.toFixed(0)}s`);
@@ -1801,7 +1805,7 @@ function showRevealScreen() {
 // -----------------------------------------------------------------------------
 function showQuestionScreen() {
   document.getElementById('question-round').textContent = `LEVEL ${state.currentRound + 1} / ${LEVELS.length}`;
-  document.getElementById('q-text').textContent = LEVELS[state.currentRound].question;
+  document.getElementById('q-text').textContent = LEVELS[state.currentRound].question || QUESTIONS[state.currentRound] || '';
   renderAnswerCursor();
   showScreen('screen-question');
 }

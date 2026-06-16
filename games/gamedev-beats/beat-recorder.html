@@ -349,9 +349,8 @@
   <div class="stepper" id="stepper">
     <div class="step-node" data-step="1"><div class="bar"></div><div class="lbl"><span class="num">1</span><span class="t" id="sn-1">Song</span></div></div>
     <div class="step-node" data-step="2"><div class="bar"></div><div class="lbl"><span class="num">2</span><span class="t" id="sn-2">Warm-up</span></div></div>
-    <div class="step-node" data-step="3"><div class="bar"></div><div class="lbl"><span class="num">3</span><span class="t" id="sn-3">Tap</span></div></div>
-    <div class="step-node" data-step="4"><div class="bar"></div><div class="lbl"><span class="num">4</span><span class="t" id="sn-4">Review</span></div></div>
-    <div class="step-node" data-step="5"><div class="bar"></div><div class="lbl"><span class="num">5</span><span class="t" id="sn-5">Send</span></div></div>
+    <div class="step-node" data-step="3"><div class="bar"></div><div class="lbl"><span class="num">3</span><span class="t" id="sn-3">Tap &amp; tune</span></div></div>
+    <div class="step-node" data-step="4"><div class="bar"></div><div class="lbl"><span class="num">4</span><span class="t" id="sn-4">Send</span></div></div>
   </div>
   <div class="step-counter" id="step-counter">STEP 1 / 5</div>
 </div>
@@ -429,35 +428,20 @@
   <!-- ===== STEP 3 · TAP ===== -->
   <section class="panel" data-step="3">
     <div class="eyebrow">STEP 3</div>
-    <h2 id="t-title">Tap the beats</h2>
-    <p class="one-line" id="t-line">Press PLAY, then tap SPACE on every beat you want a player to hit.</p>
-    <div class="tap-stage">
-      <div class="tap-main">
-        <div class="transport">
-          <button class="btn" data-role="play" id="t-play" disabled>PLAY</button>
-          <button class="btn ghost" data-role="stop" id="t-stop" disabled>STOP</button>
-          <span class="time" data-role="time">0.000</span>
-          <div class="speed-group">
-            <span class="lbl" id="lbl-speed">SPEED</span>
-            <input type="number" id="speed-input" min="0.1" max="4" step="0.05" value="1">
-            <span class="suffix">×</span>
-          </div>
-        </div>
-        <button id="btn-tap" disabled>TAP · SPACE</button>
-        <div class="counter"><span id="t-counter-label">beats marked</span> · <b id="tap-count">0</b></div>
-      </div>
-      <div class="viz-col">
-        <div class="vl" id="viz-label">falling note preview</div>
-        <canvas id="viz-canvas"></canvas>
+    <h2 id="t-title">Tap &amp; tune your beats</h2>
+    <p class="one-line" id="t-line">Press PLAY and tap SPACE on every beat. They land on the waveform below — drag, edit, or delete to fine-tune.</p>
+    <div class="transport">
+      <button class="btn" data-role="play" id="t-play" disabled>PLAY</button>
+      <button class="btn ghost" data-role="stop" id="t-stop" disabled>STOP</button>
+      <span class="time" data-role="time">0.000</span>
+      <div class="speed-group">
+        <span class="lbl" id="lbl-speed">SPEED</span>
+        <input type="number" id="speed-input" min="0.1" max="4" step="0.05" value="1">
+        <span class="suffix">×</span>
       </div>
     </div>
-  </section>
-
-  <!-- ===== STEP 4 · REVIEW ===== -->
-  <section class="panel" data-step="4">
-    <div class="eyebrow">STEP 4</div>
-    <h2 id="r-title">Review &amp; fine-tune</h2>
-    <p class="one-line" id="r-line">Drag any line to nudge it, edit times in the list, or play it back to check.</p>
+    <button id="btn-tap" disabled>TAP · SPACE</button>
+    <div class="counter"><span id="t-counter-label">beats marked</span> · <b id="tap-count">0</b></div>
     <div class="chips" id="chips">
       <div class="chip"><div class="k" id="chip-song-k">song</div><div class="v" id="chip-song"></div></div>
       <div class="chip"><div class="k" id="chip-dur-k">duration</div><div class="v" id="chip-dur"></div></div>
@@ -465,7 +449,6 @@
       <div class="chip"><div class="k" id="chip-dens-k">density</div><div class="v" id="chip-dens">—</div></div>
     </div>
     <div class="practice-lane"><canvas id="review-viz"></canvas></div>
-    <div class="practice-bar"><span class="pf" id="review-fb"></span><span class="hint" id="review-hint">Press PLAY TO VERIFY, then tap SPACE on each beat to practice — just like the game.</span></div>
     <div id="waveform-wrap">
       <canvas id="waveform"></canvas>
       <div id="waveform-hint">scroll = zoom · shift+scroll = pan · drag a line to nudge</div>
@@ -473,14 +456,12 @@
       <div id="waveform-scroll"><div id="waveform-scroll-thumb"></div></div>
     </div>
     <div class="review-tools">
-      <button class="btn note sm" data-role="play" id="r-play" disabled>PLAY TO VERIFY</button>
-      <button class="btn ghost sm" data-role="stop" id="r-stop" disabled>STOP</button>
-      <span class="muted" style="font-size:12px" data-role="time">0.000</span>
+      <span id="review-hint" style="color:var(--dim);font-size:12px;letter-spacing:1px">Play it back to check — your beats fly into the ring. Tap to add more, drag a line to nudge.</span>
       <span style="flex:1"></span>
-      <span class="retap-link" id="retap-link" data-goto="3">↺ re-tap from scratch</span>
+      <span class="retap-link" id="retap-link">↺ clear all &amp; start over</span>
     </div>
     <div id="tap-list-wrap">
-      <div id="empty-msg">no beats yet — go back and tap some</div>
+      <div id="empty-msg">no beats yet — press play and tap SPACE</div>
       <table id="tap-list" style="display:none">
         <thead><tr><th id="th-num">#</th><th id="th-tsec">time (s)</th><th id="th-gap">gap</th><th></th></tr></thead>
         <tbody id="tap-tbody"></tbody>
@@ -488,8 +469,8 @@
     </div>
   </section>
 
-  <!-- ===== STEP 5 · SEND ===== -->
-  <section class="panel" data-step="5">
+  <!-- ===== STEP 4 · SEND ===== -->
+  <section class="panel" data-step="4">
     <div class="done-hero">
       <div class="big">🎵</div>
       <div class="eyebrow" id="s-eye" style="color:var(--ok)">beat sheet locked in</div>
@@ -657,7 +638,8 @@ function recordTap() {
   if (!isPlaying) return;
   taps = [...taps, { tSec: parseFloat(currentAudioTime().toFixed(4)) }];
   flashScreen();
-  document.getElementById('tap-count').textContent = taps.length;
+  lastFb = { t: performance.now(), hex: NOTE_COLOR };  // pulse the highway hit ring
+  renderReview();                                       // live: waveform markers, list, chips, count
   setNextEnabled(taps.length > 0);
 }
 document.getElementById('btn-tap').addEventListener('click', () => {
@@ -837,9 +819,9 @@ scrollTrack.addEventListener('mousedown', e => { if (e.target === scrollThumb) r
 // Vertical note viz (tap step)
 // ===========================================================================
 const VIZ_TRAVEL = 1.8, vizCanvas = document.getElementById('viz-canvas');
-function resizeViz() { const dpr = window.devicePixelRatio || 1, W = 130, H = Math.round(window.innerHeight * 0.5); vizCanvas.style.height = H + 'px'; if (vizCanvas.width !== W * dpr) { vizCanvas.width = W * dpr; vizCanvas.height = H * dpr; } }
+function resizeViz() { if (!vizCanvas) return; const dpr = window.devicePixelRatio || 1, W = 130, H = Math.round(window.innerHeight * 0.5); vizCanvas.style.height = H + 'px'; if (vizCanvas.width !== W * dpr) { vizCanvas.width = W * dpr; vizCanvas.height = H * dpr; } }
 function drawViz() {
-  if (vizCanvas.clientWidth === 0) return;
+  if (!vizCanvas || vizCanvas.clientWidth === 0) return;
   resizeViz();
   const dpr = window.devicePixelRatio || 1, W = vizCanvas.width / dpr, H = vizCanvas.height / dpr, ctx = vizCanvas.getContext('2d');
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, W, H);
@@ -1004,8 +986,7 @@ function raf() {
   updateTimes();
   if (currentStep === 0) drawTrailer();
   if (currentStep === 2) drawPulse();
-  if (currentStep === 3) drawViz();
-  if (currentStep === 4) { drawWaveform(currentAudioTime()); drawReviewHighway(); }
+  if (currentStep === 3) { drawWaveform(currentAudioTime()); drawReviewHighway(); }
   requestAnimationFrame(raf);
 }
 requestAnimationFrame(raf);
@@ -1072,13 +1053,13 @@ document.getElementById('btn-resume').addEventListener('click', () => {
   const parsed = fromCsv(document.getElementById('resume-textarea').value);
   const st = document.getElementById('resume-status');
   if (!parsed.length) { st.style.color = 'var(--warn)'; st.textContent = ' ' + STRINGS[lang].noRows; return; }
-  taps = parsed; renderReview(); goToStep(4);
+  taps = parsed; renderReview(); goToStep(3);
 });
 
 // ===========================================================================
 // Wizard navigation
 // ===========================================================================
-const STEP_COUNT = 6;            // 0..5
+const STEP_COUNT = 5;            // 0..4
 let currentStep = 0, maxReached = 0, nextEnabled = true;
 const panels = [...document.querySelectorAll('.panel')];
 const stepNodes = [...document.querySelectorAll('.step-node')];
@@ -1101,14 +1082,14 @@ function updateNav() {
     n.classList.toggle('done', st < currentStep || (st <= maxReached && st !== currentStep));
     n.classList.toggle('clickable', st <= maxReached && st < currentStep);
   });
-  document.getElementById('step-counter').textContent = `STEP ${Math.max(1, currentStep)} / 5`;
+  document.getElementById('step-counter').textContent = `STEP ${Math.max(1, currentStep)} / 4`;
   // back button
   btnBack.classList.toggle('hidden', currentStep === 0);
   // next button label + enabled
   btnNext.textContent = s.cta[currentStep];
   const met = stepRequirementMet(currentStep);
-  btnNext.disabled = (currentStep === 5) ? true : !met;
-  btnNext.style.display = currentStep === 5 ? 'none' : '';
+  btnNext.disabled = (currentStep === 4) ? true : !met;
+  btnNext.style.display = currentStep === 4 ? 'none' : '';
   navHint.textContent = met ? '' : s.hint[currentStep] || '';
 }
 function goToStep(n) {
@@ -1118,18 +1099,18 @@ function goToStep(n) {
   currentStep = n; maxReached = Math.max(maxReached, n);
   panels.forEach(p => p.classList.toggle('active', +p.dataset.step === n));
   window.scrollTo({ top: 0, behavior: 'smooth' });
-  if (n === 4) { renderReview(); setupWaveform(); }
-  if (n === 5) document.getElementById('s-sub').textContent = STRINGS[lang].doneSub(taps.length);
+  if (n === 3) { renderReview(); setupWaveform(); }
+  if (n === 4) document.getElementById('s-sub').textContent = STRINGS[lang].doneSub(taps.length);
   updateNav();
 }
 btnNext.addEventListener('click', () => {
-  if (currentStep === 5) return;
+  if (currentStep === 4) return;
   if (!stepRequirementMet(currentStep)) return;
   goToStep(currentStep + 1);
 });
 btnBack.addEventListener('click', () => goToStep(currentStep - 1));
 stepNodes.forEach(n => n.addEventListener('click', () => { const st = +n.dataset.step; if (st <= maxReached && st < currentStep) goToStep(st); }));
-document.getElementById('retap-link').addEventListener('click', () => { if (confirm(STRINGS[lang].confirmRetap)) { taps = []; goToStep(3); } });
+document.getElementById('retap-link').addEventListener('click', () => { if (confirm(STRINGS[lang].confirmRetap)) { stopPlay(); playStartOffset = 0; taps = []; renderReview(); setNextEnabled(false); } });
 document.getElementById('btn-restart').addEventListener('click', () => {
   if (!confirm(STRINGS[lang].confirmRestart)) return;
   taps = []; audioBuffer = null; audioFileName = ''; loadedCard.style.display = 'none'; fileError.textContent = '';
@@ -1145,9 +1126,8 @@ document.addEventListener('keydown', e => {
     e.preventDefault();
     if (currentStep === 2) { if (!practiceActive) startPractice(); else practiceTap(); }
     else if (currentStep === 3) { ensureCtx(); if (isPlaying) recordTap(); else if (audioBuffer) startPlay(playStartOffset); }
-    else if (currentStep === 4 && audioBuffer) { ensureCtx(); if (isPlaying) reviewPracticeTap(); else startPlay(playStartOffset); }
   }
-  if (e.key === 'ArrowRight' && !btnNext.disabled && currentStep < 5) goToStep(currentStep + 1);
+  if (e.key === 'ArrowRight' && !btnNext.disabled && currentStep < 4) goToStep(currentStep + 1);
   if (e.key === 'ArrowLeft' && currentStep > 0) goToStep(currentStep - 1);
 });
 
@@ -1158,9 +1138,9 @@ let lang = 'en';
 const STRINGS = {
   en: {
     btnLang: '简体中文', brandT: 'BEAT RECORDER', brandS: 'game dev beats · for composers',
-    sn: ['Song', 'Warm-up', 'Tap', 'Review', 'Send'],
-    cta: ["LET'S GO ›", 'CONTINUE ›', "I'VE GOT THE FEEL ›", 'DONE — REVIEW ›', 'LOOKS GOOD — EXPORT ›', ''],
-    hint: ['', 'load a song to continue', '', 'tap at least one beat to continue', '', ''],
+    sn: ['Song', 'Warm-up', 'Tap & tune', 'Send'],
+    cta: ["LET'S GO ›", 'CONTINUE ›', "I'VE GOT THE FEEL ›", 'LOOKS GOOD ›', ''],
+    hint: ['', 'load a song to continue', '', 'tap at least one beat to continue', ''],
     // welcome
     wEye: 'a 90-second walkthrough',
     wTitle: 'Turn your track into a playable level.',
@@ -1192,15 +1172,15 @@ const STRINGS = {
     fbPerfect: 'PERFECT', fbEarlyBit: 'good · a hair early', fbLateBit: 'good · a hair late', fbEarly: 'too early', fbLate: 'too late',
     acc: (g, n) => `on-beat: ${g}/${n}`,
     // tap
-    tTitle: 'Tap the beats', tLine: 'Press PLAY, then tap SPACE on every beat you want a player to hit. Aim for a steady 1–3 taps per second.',
+    tTitle: 'Tap & tune your beats', tLine: 'Press PLAY and tap SPACE on every beat. They land on the waveform below — drag, edit, or delete to fine-tune. Aim for a steady 1–3 taps per second.',
     tCounter: 'beats marked', vizLabel: 'falling note preview',
     btnPlay: 'PLAY', btnPause: 'PAUSE', btnVerify: 'PLAY TO VERIFY', btnStop: 'STOP', lblSpeed: 'SPEED',
     // review
     rTitle: 'Review & fine-tune', rLine: 'Drag any line to nudge it, edit times in the list, or play it back to check.',
     chipSong: 'song', chipDur: 'duration', chipBeats: 'beats', chipDens: 'density',
     thNum: '#', thTsec: 'time (s)', thGap: 'gap', emptyMsg: 'no beats yet — go back and tap some',
-    retap: '↺ re-tap from scratch', confirmRetap: 'Clear all beats and re-tap from scratch?',
-    reviewHint: 'Press PLAY TO VERIFY, then tap SPACE on each beat to practice — just like the game.',
+    retap: '↺ clear all & start over', confirmRetap: 'Clear all beats and start over?',
+    reviewHint: 'Play it back to check — your beats fly into the ring. Tap to add more, drag a line to nudge.',
     reviewPlayHint: 'press play — watch your beats fly into the ring',
     // send
     sEye: 'beat sheet locked in', sTitle: "Nice timing. You're done.",
@@ -1214,9 +1194,9 @@ const STRINGS = {
   },
   zh: {
     btnLang: 'English', brandT: '节拍录制器', brandS: 'Game Dev Beats · 作曲者专用',
-    sn: ['歌曲', '热身', '录拍', '检查', '发送'],
-    cta: ['开始 ›', '继续 ›', '我找到感觉了 ›', '完成 — 检查 ›', '没问题 — 导出 ›', ''],
-    hint: ['', '请先加载歌曲', '', '至少录入一个节拍才能继续', '', ''],
+    sn: ['歌曲', '热身', '录制 & 微调', '发送'],
+    cta: ['开始 ›', '继续 ›', '我找到感觉了 ›', '没问题 ›', ''],
+    hint: ['', '请先加载歌曲', '', '至少录入一个节拍才能继续', ''],
     wEye: '90 秒上手指引',
     wTitle: '把你的曲子变成可玩的关卡。',
     wLede: '这就是 <strong>Game Dev Beats</strong>——我们在协作聚会上用来破冰的小型节奏游戏。2–6 个人跟着一首曲子按拍，谁最手忙脚乱，谁就第一个回答破冰问题。我们想请你帮个忙：让音乐来自<em>你</em>。给我们一首曲子，它就会变成一个关卡——你的歌，放给满屋子的游戏开发者听。',
@@ -1244,14 +1224,14 @@ const STRINGS = {
     pulseIdle: '按开始', feelIt: '感受脉冲…',
     fbPerfect: '完美', fbEarlyBit: '不错 · 略早', fbLateBit: '不错 · 略晚', fbEarly: '太早了', fbLate: '太晚了',
     acc: (g, n) => `踩点：${g}/${n}`,
-    tTitle: '录入节拍', tLine: '按播放，然后在每个希望玩家敲击的节拍上按空格。保持每秒约 1–3 拍的稳定节奏。',
+    tTitle: '录制并微调', tLine: '按播放，在每个节拍上按空格。它们会落在下方的波形上——拖动、编辑或删除来微调。保持每秒约 1–3 拍。',
     tCounter: '已录节拍', vizLabel: '落音预览',
     btnPlay: '播放', btnPause: '暂停', btnVerify: '播放检查', btnStop: '停止', lblSpeed: '速度',
     rTitle: '检查与微调', rLine: '拖动竖线微调、在列表里编辑时间，或回放检查。',
     chipSong: '歌曲', chipDur: '时长', chipBeats: '节拍', chipDens: '密度',
     thNum: '#', thTsec: '时间 (秒)', thGap: '间隔', emptyMsg: '暂无节拍——返回上一步录入',
-    retap: '↺ 重新录制', confirmRetap: '清除所有节拍并重新录制？',
-    reviewHint: '点「播放检查」，然后在每个节拍上按空格来练习——就像在游戏里一样。',
+    retap: '↺ 全部清除，重新开始', confirmRetap: '清除所有节拍并重新开始？',
+    reviewHint: '回放检查——你的节拍会飞向圆环。可继续按空格添加，拖动竖线来微调。',
     reviewPlayHint: '点击播放——看你的节拍飞向圆环',
     sEye: '节拍表已锁定', sTitle: '节奏不错，完成啦。',
     doneSub: n => `${n} 个节拍，准备好导入游戏了。`,
