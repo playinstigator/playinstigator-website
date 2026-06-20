@@ -643,6 +643,63 @@
   }
   .collab-note a { color: var(--accent); text-decoration: none; }
   .collab-note a:hover { text-decoration: underline; }
+
+  /* Submit-your-music CTA on the GG screen */
+  #screen-end .submit-music {
+    margin: 48px auto 0;
+    max-width: 480px;
+    padding: 24px 28px;
+    background: var(--panel);
+    border: 1px solid rgba(179,136,255,0.25);
+    border-radius: 14px;
+    text-align: center;
+  }
+  #screen-end .submit-music h3 {
+    color: var(--accent);
+    font-size: 15px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  #screen-end .submit-music p {
+    font-size: 15px;
+    opacity: 0.9;
+    line-height: 1.6;
+    margin-bottom: 14px;
+  }
+  #screen-end .submit-music .submit-btn {
+    display: inline-block;
+    padding: 12px 24px;
+    border: 1px solid var(--accent);
+    border-radius: 10px;
+    color: var(--accent);
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    transition: background 0.15s, color 0.15s;
+  }
+  #screen-end .submit-music .submit-btn:hover { background: var(--accent); color: var(--bg); }
+  #screen-end .submit-music ul {
+    list-style: none;
+    margin: 18px auto 0;
+    padding: 0;
+    max-width: 420px;
+    text-align: left;
+    font-size: 13px;
+    color: var(--dim);
+    line-height: 1.7;
+  }
+  #screen-end .submit-music li { position: relative; padding-left: 18px; margin-bottom: 6px; }
+  #screen-end .submit-music li::before { content: "•"; position: absolute; left: 4px; color: var(--accent); }
+  #screen-end .submit-music code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 12px;
+    color: var(--text);
+    background: rgba(255,255,255,0.06);
+    padding: 1px 5px;
+    border-radius: 4px;
+  }
 </style>
 </head>
 <body>
@@ -737,6 +794,16 @@
     <h2>nice to meet you</h2>
     <p>Now go make games.</p>
     <button id="btn-restart">PLAY AGAIN</button>
+    <div class="submit-music">
+      <h3>Want your track in the next session?</h3>
+      <p>Submit your music + beats and fellow game devs will tap along to <em>your</em> song next time.</p>
+      <a class="submit-btn" href="./beat-recorder.html">Open the beat recorder →</a>
+      <ul>
+        <li>Keep songs under ~2 minutes.</li>
+        <li>Build the beat sheet in the tool, then DM me both files: your audio + the exported <code>gamedev-beats.csv</code>.</li>
+        <li>Only a few slots per session — first come, first served.</li>
+      </ul>
+    </div>
     <div class="credits">
       <div class="credits-tagline">Credits:</div>
       <div class="credit-card">
@@ -750,7 +817,6 @@
           collab@playinstigator.com
         </a>
         <div class="collab-note">
-          <a href="../../music-brief.html">I'm looking for a music collaborator.</a><br>
           I'd also love to bring creators across mediums together to <span style="white-space:nowrap">co-create</span> worlds. hmu
         </div>
       </div>
