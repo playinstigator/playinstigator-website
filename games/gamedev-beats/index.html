@@ -196,6 +196,34 @@
     z-index: 20;
     text-shadow: 0 0 32px var(--accent);
   }
+  #speedup-warning {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 64px;
+    font-weight: bold;
+    letter-spacing: 6px;
+    color: var(--p3);
+    z-index: 20;
+    text-shadow: 0 0 32px var(--p3);
+    text-align: center;
+    animation: speedupPulse 0.4s ease-out;
+  }
+  #speedup-warning .sub {
+    display: block;
+    font-size: 20px;
+    letter-spacing: 4px;
+    color: var(--text);
+    margin-top: 12px;
+    text-shadow: none;
+    opacity: 0.85;
+  }
+  @keyframes speedupPulse {
+    0%   { transform: translate(-50%, -50%) scale(0.6); opacity: 0; }
+    50%  { transform: translate(-50%, -50%) scale(1.15); opacity: 1; }
+    100% { transform: translate(-50%, -50%) scale(1);    opacity: 1; }
+  }
   .feedback {
     position: absolute;
     font-size: 16px;
@@ -625,7 +653,7 @@
     <h1>GAME DEV BEATS</h1>
     <h2>an icebreaker for game devs</h2>
     <p>2–6 devs. One key each. One rhythm.</p>
-    <p>A song per level, a question per level. Get to know each other and the work happening around you.</p>
+    <p>One track that builds across four levels, a question after each. Get to know each other and the work happening around you.</p>
     <div class="count-picker" id="count-picker">
       <div class="count-label">How many players?</div>
       <div class="count-options" id="count-options"></div>
@@ -676,6 +704,7 @@
       <div class="lane"><span class="lbl">HIGH</span><div class="dot high" id="beat-dot-high"></div></div>
     </div>
     <div id="countdown" style="display:none"></div>
+    <div id="speedup-warning" style="display:none"></div>
     <div id="pause-overlay">
       <h1>PAUSED</h1>
       <p class="dim">press ESC to resume</p>
@@ -801,27 +830,23 @@ const QUESTIONS = [
   "What's one skill you want to level up next?",
 ];
 
-// Level = { title, audio, beats, question? }
-// Each level is ONE song + ONE beat sheet, played at its natural tempo (1.0×).
-// Difficulty comes from the music and the density of the beat sheet itself — there
-// are no layers and no speed ramps. `audio` is resolved against AUDIO_BASE_URL and
-// `beats` against BEATS_BASE_URL (use an absolute URL to bypass the base).
+// Level = { title, audio, beats, layers, speed, question? }
+// All four levels play the SAME song — one track that builds across the round. Each
+// level reveals more of the beat sheet via `layers` and plays the audio at a fixed
+// `speed` multiplier, so the track starts slow + sparse and ends full-tempo + dense.
+// `audio` resolves against AUDIO_BASE_URL and `beats` against BEATS_BASE_URL.
 //
-// To add a composer's level for the co-working event, append an entry like:
-//   { title: 'Song name — Composer', audio: 'their-song.mp3', beats: 'their-song.csv' },
+// Beat-sheet layers in gamedev-beats.csv (4th CSV column):
+//   1 = downbeats (steady pulse) · 2 = mid pulse · 3 = ornament accents
+//
 // The question is taken from QUESTIONS by position; add `question: "..."` to override.
-//
-// Beat sheets are produced by the composer tool in the canonical layer-free format:
-//   tSec,band,strength
+const SONG_AUDIO = '26.5.10.mp3';
+const SONG_BEATS = 'gamedev-beats.csv';
 const LEVELS = [
-  {
-    title: 'Game Dev Beats — qwq404',
-    audio: '26.5.10.mp3',
-    beats: 'gamedev-beats.csv',
-    // question omitted → uses QUESTIONS[0]
-  },
-  // Add composer songs here as they arrive (question auto-fills from QUESTIONS):
-  //   { title: 'Song name — Composer', audio: 'their-song.mp3', beats: 'their-song.csv' },
+  { title: 'Game Dev Beats — qwq404', audio: SONG_AUDIO, beats: SONG_BEATS, layers: [1],       speed: 0.8 },
+  { title: 'Game Dev Beats — qwq404', audio: SONG_AUDIO, beats: SONG_BEATS, layers: [1, 2],    speed: 0.8 },
+  { title: 'Game Dev Beats — qwq404', audio: SONG_AUDIO, beats: SONG_BEATS, layers: [1, 2, 3], speed: 0.8 },
+  { title: 'Game Dev Beats — qwq404', audio: SONG_AUDIO, beats: SONG_BEATS, layers: [1, 2, 3], speed: 1.0 },
 ];
 
 const HIT_WINDOW_MS = 180;     // ± window for a successful hit
@@ -1115,14 +1140,18 @@ function effectiveOnsets(onsets) {
   return track.beatFilter === 'raw' ? onsets : selectMusicalBeats(onsets);
 }
 
-// Build the beatmap for one level. Songs play at their natural tempo (1.0×), so
-// audio time equals wall time and we just route each onset across the active
-// players via assignLanes. Returns null if the level has no buffer/onsets yet.
+// Build the beatmap for one level. Every level plays the SAME song, but filtered to
+// this level's `layers` and at a fixed `speed` multiplier. At playbackRate r, audio
+// time t maps to wall time t / r — so all hit/section/duration times below are
+// divided by speed. Returns null if the level has no buffer/onsets yet.
 function buildLevelBeatmap(level) {
   if (!level || !level.buffer || !level.onsets || !level.onsets.length) return null;
   const dur = level.buffer.duration;
+  const speed = level.speed || 1.0;
+  const allowedLayers = level.layers || null;
   let inSec = effectiveOnsets(level.onsets)
     .filter(o => o.tSec >= 0 && o.tSec < dur)
+    .filter(o => !allowedLayers || allowedLayers.includes(o.layer ?? 1))
     .map(o => ({ ...o, tSecLocal: o.tSec }));
   if (inSec.length > track.density) {
     inSec = [...inSec].sort((a, b) => b.strength - a.strength).slice(0, track.density);
@@ -1130,13 +1159,13 @@ function buildLevelBeatmap(level) {
   inSec.sort((a, b) => a.tSecLocal - b.tSecLocal);
 
   const hits = assignLanes(inSec, track.laneMode).map(h => ({
-    tMs: h.tSecLocal * 1000,
+    tMs: (h.tSecLocal / speed) * 1000,
     lane: h.lane,
   }));
   const sectionOnsets = inSec.map(o => ({
     tSecLocal: o.tSecLocal,
     tSecAudio: o.tSec,
-    tMsWall: o.tSecLocal * 1000,
+    tMsWall: (o.tSecLocal / speed) * 1000,
     band: o.band,
     strength: o.strength,
   }));
@@ -1144,8 +1173,9 @@ function buildLevelBeatmap(level) {
   return {
     hits,
     sectionOnsets,
+    speed,
     audioDurationSec: dur,
-    songDurationMs: dur * 1000,
+    songDurationMs: (dur / speed) * 1000,
     lastHitMs,
   };
 }
@@ -1228,6 +1258,7 @@ function beginPlayWithTrack() {
   // Source + gain
   const source = audioCtx.createBufferSource();
   source.buffer = source0.buffer;
+  source.playbackRate.value = bm.speed || 1.0;   // play this level at its fixed tempo
   const gain = audioCtx.createGain();
   source.connect(gain).connect(audioCtx.destination);
 
@@ -1486,9 +1517,29 @@ function startRound() {
     // the screen is visible. requestAnimationFrame ensures layout has resolved.
     requestAnimationFrame(() => {
       buildTargets();
-      runCountdown(() => beginPlay());
+      // If this level is faster than the previous one, flash a speed-up warning
+      // before the standard 3-2-1-GO countdown.
+      const i    = state.currentRound;
+      const prev = i > 0 ? (LEVELS[i - 1].speed || 1.0) : null;
+      const curr = LEVELS[i].speed || 1.0;
+      if (prev !== null && curr > prev + 0.001) {
+        const pct = Math.round(((curr - prev) / prev) * 100);
+        runSpeedupWarning(pct, () => runCountdown(() => beginPlay()));
+      } else {
+        runCountdown(() => beginPlay());
+      }
     });
   });
+}
+
+function runSpeedupWarning(percent, done) {
+  const el = document.getElementById('speedup-warning');
+  el.style.animation = 'none';
+  el.innerHTML = `SPEED UP +${percent}%<span class="sub">brace yourself</span>`;
+  el.offsetWidth;            // force reflow so the animation replays on each show
+  el.style.animation = '';
+  el.style.display = '';
+  setTimeout(() => { el.style.display = 'none'; done(); }, 1400);
 }
 
 function runCountdown(done) {
@@ -1514,7 +1565,7 @@ function beginPlay(forceSynth) {
   }
   // Synth fallback (level audio/beats failed to load): play a steady metronome so
   // the level still "ends" rather than crashing.
-  const bpm = 140;     // 26.5.10.mp3 native tempo ≈ 140
+  const bpm = 140 * (LEVELS[state.currentRound].speed || 1.0);     // 26.5.10.mp3 native tempo ≈ 140
   const beatMs = 60000 / bpm;
   const startTime = performance.now();
   const audioStart = audioCtx.currentTime;
@@ -1894,12 +1945,10 @@ function resolveBeatsUrl(name) {
   return BEATS_BASE_URL + name + BEATS_CACHE_BUST;
 }
 
-// Authored-beats loader. The canonical format is layer-free:
-//     tSec,band,strength
-// The parser reads tSec from column 0 and tolerates rows with ONLY tSec, with
-// tSec,band, with tSec,band,strength, OR a legacy 4th `layer` column (which is
-// simply ignored along with anything beyond strength). band defaults to 0 and
-// strength to 1.0 when absent. A layer column is never required.
+// Authored-beats loader. Format:
+//     tSec,band,strength,layer
+// tSec is required; band defaults to 0, strength to 1.0, layer to 1 when absent.
+// `layer` (1–5) drives the per-level layered build-up — levels filter onsets by it.
 async function loadAuthoredBeats(url) {
   const res = await fetch(url);
   if (!res.ok) throw new Error(`beats fetch ${res.status}`);
@@ -1912,11 +1961,12 @@ async function loadAuthoredBeats(url) {
     if (!Number.isFinite(tSec)) continue;
     const band     = parts.length > 1 ? parseInt(parts[1], 10)   : 0;
     const strength = parts.length > 2 ? parseFloat(parts[2])     : 1.0;
-    // Any column beyond strength (e.g. a legacy `layer`) is intentionally ignored.
+    const layer    = parts.length > 3 ? parseInt(parts[3], 10)   : 1;
     onsets.push({
       tSec,
       band:     Number.isFinite(band)     ? band     : 0,
       strength: Number.isFinite(strength) ? strength : 1.0,
+      layer:    (Number.isFinite(layer) && layer >= 1 && layer <= 5) ? layer : 1,
     });
   }
   onsets.sort((a, b) => a.tSec - b.tSec);
@@ -1927,6 +1977,25 @@ async function loadAuthoredBeats(url) {
 // cached: the in-flight promise is stored so concurrent callers share it. When a
 // beats CSV is missing/unavailable, falls back to runtime onset detection so the
 // song is still playable. Resolves whether or not loading fully succeeded.
+// Per-URL caches so levels that share a song (all four here) fetch + decode + parse
+// it exactly once. Keyed by resolved URL; the in-flight promise is shared.
+const audioBufferPromises = {};
+const beatsOnsetPromises = {};
+function fetchAudioBuffer(audioUrl) {
+  if (!audioBufferPromises[audioUrl]) {
+    audioBufferPromises[audioUrl] = (async () => {
+      const res = await fetch(audioUrl);
+      if (!res.ok) throw new Error(`audio fetch ${res.status} for ${audioUrl}`);
+      return audioCtx.decodeAudioData(await res.arrayBuffer());
+    })();
+  }
+  return audioBufferPromises[audioUrl];
+}
+function fetchBeatsOnsets(beatsUrl) {
+  if (!beatsOnsetPromises[beatsUrl]) beatsOnsetPromises[beatsUrl] = loadAuthoredBeats(beatsUrl);
+  return beatsOnsetPromises[beatsUrl];
+}
+
 const levelLoadPromises = [];
 function loadLevel(index) {
   if (levelLoadPromises[index]) return levelLoadPromises[index];
@@ -1935,14 +2004,11 @@ function loadLevel(index) {
     if (track.levels[index] && track.levels[index].buffer) return;  // custom/preloaded
     if (!level || !level.audio) return;
     if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    const audioUrl = resolveAudioUrl(level.audio);
-    const res = await fetch(audioUrl);
-    if (!res.ok) throw new Error(`audio fetch ${res.status} for ${audioUrl}`);
-    const buf = await audioCtx.decodeAudioData(await res.arrayBuffer());
+    const buf = await fetchAudioBuffer(resolveAudioUrl(level.audio));
     let onsets = null;
     if (level.beats) {
       try {
-        onsets = await loadAuthoredBeats(resolveBeatsUrl(level.beats));
+        onsets = await fetchBeatsOnsets(resolveBeatsUrl(level.beats));
       } catch (e) {
         console.warn(`beats load failed for "${level.beats}", detecting onsets:`, e);
       }
@@ -1951,7 +2017,7 @@ function loadLevel(index) {
       const detected = await analyzeTrack(buf);
       onsets = detected.onsets;
     }
-    track.levels[index] = { buffer: buf, onsets, beatmap: null };
+    track.levels[index] = { buffer: buf, onsets, beatmap: null, layers: level.layers, speed: level.speed };
   })().catch(err => {
     console.error(`Level ${index + 1} load failed:`, err);
   });
