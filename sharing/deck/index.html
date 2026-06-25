@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Sample deck structure · Creation x Mediums</title>
+  <meta name="description" content="A 5-slide scaffold for your share at the Creation x Mediums session on 5 July 2026. Use it exactly as-is, or just take the bits that help.">
+  <meta name="theme-color" content="#F9F5F1" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#1C1917" media="(prefers-color-scheme: dark)">
+  <meta property="og:title" content="Sample deck structure · Creation x Mediums">
+  <meta property="og:description" content="A 5-slide scaffold for your short share. Use it, ignore it, or borrow from it. Whatever helps.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://playinstigator.com/sharing/deck/">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --cream:#F9F5F1; --charcoal:#1C1917; --coral:#FF3344;
+      --play-blue:#57E0FF; --ultraviolet:#974DFF; --lemon:#FFF066; --mint:#81FDC1;
+      --f-play:"Fredoka",system-ui,sans-serif;
+      --f-sharp:"Plus Jakarta Sans",system-ui,sans-serif;
+      --f-body:"Figtree",system-ui,sans-serif;
+      --bg:var(--cream); --bg-2:#F1ECE5; --ink:var(--charcoal); --ink-soft:#3D3834;
+      --quiet:#6B615B; --rule:#D8CEC4; --accent:var(--ultraviolet); --accent-2:var(--coral);
+      --card:#FFFFFF; --shadow:0 6px 24px rgba(28,25,23,0.07);
+    }
+    [data-theme="dark"] {
+      --bg:var(--charcoal); --bg-2:#2A2622; --ink:var(--cream); --ink-soft:#D8CEC4;
+      --quiet:#9A8F87; --rule:#3D3834; --accent:#B47CFF; --accent-2:#FF5566;
+      --card:#24201C; --shadow:0 8px 28px rgba(0,0,0,0.45);
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:19px;line-height:1.7;-webkit-font-smoothing:antialiased;transition:background-color .25s ease,color .25s ease;min-height:100vh;overflow-x:hidden}
+
+    .topbar{max-width:760px;margin:0 auto;padding:28px 28px 0;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+    .studio-mark{display:inline-flex;align-items:baseline;gap:7px;text-decoration:none;font-family:var(--f-sharp);font-weight:700;font-size:12px;letter-spacing:.24em;text-transform:uppercase;color:var(--quiet)}
+    .studio-mark .play{font-family:var(--f-play);font-weight:600;letter-spacing:.08em;color:var(--accent);font-size:13px}
+    .studio-mark .dot{width:4px;height:4px;background:var(--accent-2);border-radius:50%;display:inline-block;transform:translateY(-2px)}
+    .studio-mark .inst{font-family:var(--f-sharp);font-weight:800;letter-spacing:.02em;color:var(--ink);font-size:13px}
+    .pill-btn{background:var(--card);border:1.5px solid var(--rule);border-radius:999px;padding:7px 14px 7px 10px;cursor:pointer;display:inline-flex;align-items:center;gap:8px;font-family:var(--f-sharp);font-weight:600;font-size:12.5px;letter-spacing:.04em;color:var(--ink-soft);transition:border-color .2s ease,color .2s ease}
+    .pill-btn:hover{border-color:var(--ink-soft);color:var(--ink)}
+    .theme-toggle .icon{width:14px;height:14px;display:inline-block;border-radius:50%;background:currentColor;box-shadow:inset -3px -3px 0 0 var(--card)}
+
+    .reader{max-width:760px;margin:0 auto;padding:52px 28px 96px}
+    .eyebrow{font-family:var(--f-sharp);font-size:.78rem;text-transform:uppercase;letter-spacing:.18em;color:var(--quiet);margin-bottom:1.4rem;font-weight:600}
+    .title{font-family:var(--f-play);font-weight:600;font-size:clamp(2rem,5vw,3.1rem);line-height:1.12;letter-spacing:-.015em;color:var(--ink);margin-bottom:1.4rem}
+    .title .accent{color:var(--accent-2)}
+    .subtitle{font-family:var(--f-body);font-size:1.15rem;line-height:1.6;color:var(--quiet);margin-bottom:1rem}
+
+    .format-note{margin:1.6rem 0 2.8rem;padding:1.3rem 1.6rem;background:var(--bg-2);border:1px solid var(--rule);border-left:3px solid var(--accent);border-radius:4px 14px 14px 4px;font-family:var(--f-body);font-size:1rem;color:var(--ink-soft);line-height:1.65}
+    .format-note strong{color:var(--ink)}
+
+    .deck{display:flex;flex-direction:column;gap:28px;margin-bottom:3.6rem}
+    .slide-card{background:var(--card);border:1px solid var(--rule);border-radius:16px;box-shadow:var(--shadow);overflow:hidden}
+    .slide-header{padding:14px 20px 12px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--rule);background:var(--bg-2)}
+    .slide-num{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;background:var(--accent-2);color:#fff;font-family:var(--f-sharp);font-weight:800;font-size:.78rem;border-radius:50%;flex-shrink:0}
+    .slide-title{font-family:var(--f-sharp);font-weight:700;font-size:.95rem;color:var(--ink);letter-spacing:.01em}
+    .slide-hint{font-family:var(--f-body);font-size:.82rem;color:var(--quiet);margin-left:auto;flex-shrink:0}
+
+    .slide-body{padding:20px 22px 22px;display:flex;flex-direction:column;gap:10px}
+    .field{padding:12px 14px;border:1.5px dashed var(--rule);border-radius:10px;position:relative}
+    .field-label{font-family:var(--f-sharp);font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:var(--accent);margin-bottom:4px}
+    .field-prompt{font-family:var(--f-body);font-size:.97rem;line-height:1.55;color:var(--ink-soft)}
+    .field-example{font-family:var(--f-body);font-style:italic;font-size:.87rem;color:var(--quiet);margin-top:4px}
+    .field.visual{border-color:var(--accent-2);border-style:dashed;min-height:72px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;background:rgba(255,51,68,.03)}
+    [data-theme="dark"] .field.visual{background:rgba(255,85,102,.05)}
+    .field.visual .field-prompt{color:var(--quiet);font-style:italic;font-size:.92rem}
+    .field-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    @media(max-width:540px){.field-row{grid-template-columns:1fr}}
+
+    .cross-q{margin-top:6px;padding:14px 16px;background:rgba(151,77,255,.06);border:1.5px solid rgba(151,77,255,.25);border-radius:10px}
+    [data-theme="dark"] .cross-q{background:rgba(180,124,255,.07);border-color:rgba(180,124,255,.3)}
+    .cross-q .field-label{color:var(--accent)}
+
+    .nav-links{margin-top:.8rem;padding:1.7rem 1.9rem;background:var(--bg-2);border:1px solid var(--rule);border-radius:14px;display:flex;flex-wrap:wrap;gap:.6rem 2rem;align-items:center}
+    .nav-links p{font-family:var(--f-body);font-size:.97rem;color:var(--ink-soft);line-height:1.5;flex:1 1 260px}
+    .nav-links p a{color:var(--accent);text-decoration:none;border-bottom:1.5px solid transparent;transition:border-color .2s}
+    .nav-links p a:hover{border-bottom-color:var(--accent)}
+    .nav-links p a.coral{color:var(--accent-2)}
+    .nav-links p a.coral:hover{border-bottom-color:var(--accent-2)}
+
+    .pg-foot{max-width:760px;margin:0 auto;padding:28px;border-top:1px solid var(--rule);display:flex;gap:1.2rem;flex-wrap:wrap;align-items:center;font-family:var(--f-body);font-size:.875rem;color:var(--quiet)}
+    .pg-foot a{color:var(--quiet);text-decoration:none}
+    .pg-foot a:hover{color:var(--ink)}
+
+    @media(max-width:600px){
+      body{font-size:18px}
+      .topbar{padding:20px 20px 0}
+      .reader{padding:36px 20px 72px}
+      .slide-header{flex-wrap:wrap}
+      .slide-hint{margin-left:0}
+    }
+  </style>
+</head>
+<body>
+
+  <header class="topbar">
+    <a class="studio-mark" href="/">
+      <span class="play">Play</span><span class="dot" aria-hidden="true"></span><span class="inst">Instigator</span>
+    </a>
+    <button class="pill-btn theme-toggle" id="themeToggle" type="button" aria-label="Toggle dark mode">
+      <span class="icon" aria-hidden="true"></span><span class="label" id="themeLabel">Dark</span>
+    </button>
+  </header>
+
+  <main class="reader">
+
+    <p class="eyebrow">Creation × Mediums · for sharers</p>
+    <h1 class="title">Sample <span class="accent">deck structure</span></h1>
+    <p class="subtitle">A 5-slide scaffold for your ~8 min share. Use it exactly as-is, borrow from it, or <span style="color:var(--accent-2);font-weight:600">ignore it entirely and do your own thing.</span></p>
+
+    <div class="format-note">
+      <strong>Format is open.</strong> Slides, a sketchbook, screenshots, WIP photos, voice notes, a Notion doc, printed pages on the table. Whatever best shows how you actually work. The slides below are a scaffold, not a script. The real value is the discussion after, so keep the share loose enough to invite reactions.
+    </div>
+
+    <div class="deck">
+
+      <!-- SLIDE 1 -->
+      <div class="slide-card">
+        <div class="slide-header">
+          <span class="slide-num">1</span>
+          <span class="slide-title">Who you are</span>
+          <span class="slide-hint">~1 min</span>
+        </div>
+        <div class="slide-body">
+          <div class="field-row">
+            <div class="field">
+              <div class="field-label">Name + medium</div>
+              <div class="field-prompt">Your name. One word for your medium.</div>
+              <div class="field-example">e.g. "Suren / tabletop games" or "Ann / music &amp; composition"</div>
+            </div>
+            <div class="field">
+              <div class="field-label">What you've made</div>
+              <div class="field-prompt">1 or 2 things you've built or released. Just the names.</div>
+              <div class="field-example">e.g. "Burnout (board game) · 1,200 Kickstarter backers"</div>
+            </div>
+          </div>
+          <div class="field">
+            <div class="field-label">What drew you here</div>
+            <div class="field-prompt">One sentence: what is it about this medium that keeps pulling you back? Not why you're good at it. Why you can't seem to leave it alone.</div>
+            <div class="field-example">e.g. "Games are the only medium where the audience makes the story happen."</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SLIDE 2 -->
+      <div class="slide-card">
+        <div class="slide-header">
+          <span class="slide-num">2</span>
+          <span class="slide-title">A project you want to walk us through</span>
+          <span class="slide-hint">~2 min</span>
+        </div>
+        <div class="slide-body">
+          <div class="field visual">
+            <div class="field-label">Show it</div>
+            <div class="field-prompt">A screenshot, photo, sketch, audio clip, video clip. Whatever it looks or sounds like. Not a logo. Show the work itself.</div>
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <div class="field-label">What it is</div>
+              <div class="field-prompt">One or two lines on what the project is and what it does or asks of an audience.</div>
+            </div>
+            <div class="field">
+              <div class="field-label">The thinking behind it</div>
+              <div class="field-prompt">Why this? What were you trying to do or say? What drew you to this particular form?</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SLIDE 3 -->
+      <div class="slide-card">
+        <div class="slide-header">
+          <span class="slide-num">3</span>
+          <span class="slide-title">What makes it distinctly yours</span>
+          <span class="slide-hint">~2 min</span>
+        </div>
+        <div class="slide-body">
+          <div class="field">
+            <div class="field-label">A constraint that shaped it</div>
+            <div class="field-prompt">Budget, format, tool, platform, time: a real limit that pushed the work somewhere it wouldn't have gone otherwise. What did it force you to discover?</div>
+            <div class="field-example">e.g. "No dialogue budget, so we made silence part of the experience." / "Printed to a single A5, which meant ruthless cutting."</div>
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <div class="field-label">The smallest unit of meaning in your craft</div>
+              <div class="field-prompt">A brushstroke, a beat, a panel, a mechanic, a chord, a word: the atom your medium is built from. Show an example of it working.</div>
+            </div>
+            <div class="field">
+              <div class="field-label">A move you're proud of</div>
+              <div class="field-prompt">Something specific in this project you'd point at and say "that one works." Show it, don't just describe it.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SLIDE 4 -->
+      <div class="slide-card">
+        <div class="slide-header">
+          <span class="slide-num">4</span>
+          <span class="slide-title">How you actually build</span>
+          <span class="slide-hint">~2 min</span>
+        </div>
+        <div class="slide-body">
+          <div class="field-row">
+            <div class="field">
+              <div class="field-label">Where a project starts</div>
+              <div class="field-prompt">What is the first thing that exists when you begin? A feeling, an image, a rule, a character, a sound, a constraint. What comes first and why?</div>
+            </div>
+            <div class="field">
+              <div class="field-label">What you figure out last</div>
+              <div class="field-prompt">What's the last thing to get decided? What can't you know at the start?</div>
+            </div>
+          </div>
+          <div class="field">
+            <div class="field-label">The categories you always think about</div>
+            <div class="field-prompt">Every medium has its own building blocks. What are yours? What are the areas or elements that any project in your craft has to answer, whether you tackle them consciously or not?</div>
+            <div class="field-example">
+              Examples by medium:<br>
+              <strong>Games:</strong> feel / mechanics / loop / narrative / player psychology<br>
+              <strong>Music:</strong> mood / key / instrumentation / structure / texture / reference<br>
+              <strong>Illustration:</strong> palette / medium / composition / line / concept / audience<br>
+              <strong>Space / play design:</strong> flow / safety / discovery / material / age range / intent<br>
+              <strong>Writing / fiction:</strong> voice / structure / stakes / world rules / what's unsaid
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SLIDE 5 -->
+      <div class="slide-card">
+        <div class="slide-header">
+          <span class="slide-num">5</span>
+          <span class="slide-title">The cross-medium question</span>
+          <span class="slide-hint">~1 min · this one fuels the discussion</span>
+        </div>
+        <div class="slide-body">
+          <div class="cross-q">
+            <div class="field-label">What your medium can do that no other can</div>
+            <div class="field-prompt">Not "what it's good at". What is only possible here? What experience or feeling can your medium create that no other medium can replicate?</div>
+            <div class="field-example">e.g. "Music can bypass the thinking brain and hit the body directly." / "Games are the only form where the audience can fail and have to try again."</div>
+          </div>
+          <div class="cross-q" style="margin-top:10px">
+            <div class="field-label">If you were building one world across multiple crafts from day 1</div>
+            <div class="field-prompt">What would your medium need from the other crafts, upfront, before you start? What would you want to establish together, and what would you want to discover as you build? Where would you lead, and where would you follow?</div>
+            <div class="field-example">e.g. "I'd need the world's emotional tone locked first, everything else I can derive. But I'd want the mechanics to stay open so the music can react to gameplay states."</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="nav-links">
+      <p>Full session guide (what to expect, the run-of-show, ground rules): <a href="/sharing/prep/" class="coral">playinstigator.com/sharing/prep/</a></p>
+      <p>Optional thinking prompts to prep beforehand: <a href="/sharing/questions/">playinstigator.com/sharing/questions/</a></p>
+    </div>
+
+  </main>
+
+  <footer class="pg-foot">
+    <span>Play Instigator · Singapore</span>
+    <span>·</span>
+    <span>5 July 2026 · 12 to 2pm · *SCAPE Level 5</span>
+    <span>·</span>
+    <a href="/sharing/prep/">Session prep guide</a>
+    <span>·</span>
+    <a href="/sharing/">Back to invite</a>
+  </footer>
+
+  <script>
+    (function(){
+      var root=document.documentElement,btn=document.getElementById('themeToggle'),label=document.getElementById('themeLabel'),stored=null;
+      try{stored=localStorage.getItem('pi-theme')}catch(e){}
+      if(stored==='dark'||stored==='light'){root.setAttribute('data-theme',stored)}
+      else if(window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches){root.setAttribute('data-theme','dark')}
+      function sync(){var t=root.getAttribute('data-theme');if(label)label.textContent=t==='dark'?'Light':'Dark'}
+      sync();
+      if(btn)btn.addEventListener('click',function(){var t=root.getAttribute('data-theme')==='dark'?'light':'dark';root.setAttribute('data-theme',t);try{localStorage.setItem('pi-theme',t)}catch(e){}sync()});
+    })();
+  </script>
+</body>
+</html>
